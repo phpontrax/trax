@@ -1,0 +1,166 @@
+== Welcome to Trax
+
+Trax is a web-application and persistance framework that includes everything
+needed to create database-backed web-applications according to the
+Model-View-Control pattern of separation. This pattern splits the view (also
+called the presentation) into "dumb" templates that are primarily responsible
+for inserting pre-build data in between HTML tags. The model contains the
+"smart" domain objects (such as Account, Product, Person, Post) that holds all
+the business logic and knows how to persist themselves to a database. The
+controller handles the incoming requests (such as Save New Account, Update
+Product, Show Post) by manipulating the model and directing data to the view.
+
+In Trax, the model is handled by what's called a object-relational mapping
+layer entitled Active Record. This layer allows you to present the data from
+database rows as objects and embellish these data objects with business logic
+methods. 
+
+The controller and view is handled by the Action Controller
+
+== Requirements
+
+* Database (MySQL, PostgreSQL, etc) (uses Pear::DB)
+* PHP 5.x
+* PEAR::DB, PEAR::Mail / PEAR::Mail_mime
+* Apache 1.3.x or 2.x 
+
+== Getting Started
+
+1. edit config/environment.php
+    set if its development/test/production environment
+2. edit config/database.ini
+    set database parameters
+3. edit public_html/.htaccess
+    set the path to your pear installation (/usr/local/lib/php - on my box) 
+    set the path to the config dir for trax (/home/<username>/trax/config)
+    example: .htaccess - php_value include_path .:/usr/local/lib/php:/home/<username>/trax/config   
+4. create your database and use script/generator.php to 
+   generate model, controller, and view files
+   ./generate.php model user (singular names must be used)
+   ./generate.php controller [controller name] [view1 view2 view3 ...]
+5. main site layouts should be in app/views/layouts
+   default: public.phtml
+   content from view files are displayed in the layout phtml file
+   by using the variable <?= $content_for_layout ?>
+
+== Naming Schema
+
+* controller names should be Camelized (MyClass). 
+* models should be use singular names such as customer not customers.
+* table names should always be plural.
+* foriegn keys should always be singular with _id on the end.
+
+
+== ActiveRecord
+
+*Table Relationships
+
+In each model class you can define table relationships.
+Allowed relationships in model classes are: 
+* belongs_to: means that there is a foreign key from another table in in this table.
+    public $belongs_to = array("foreign_table_name" => null);
+    - foreign table name is always singular.
+* has_one: means that there is a foreign key in another table to this table
+    public $belongs_to = array("foreign_table_name" => null);
+     - foreign table name is always singular.
+* has_many: means that there is a foreign key in another table to this table
+    public $belongs_to = array("foreign_table_name" => null);
+     - foreign table name is always plural.
+* has_and_belongs_to_many: means there is a join with another table into a third joining table
+    public $belongs_to = array("foreign_table_name" => null);
+     - foreign table name is always plural.
+     - joining table must be named table1_table2 (plural names for both)
+
+In place of the null you can specify an array of parameters such as "foreign_key".
+    public $belongs_to = array("table_name" => array("foreign_key" => "otherkey_id")); 
+
+If the models name isn't the singular name of the corresponding table it goes with, you can in
+the model specify the table name.  (public $table_name = "different_name";) 
+
+* Functions
+  
+    * find_all([conditions], [orderings], [limit], [joins])
+        $array_of_objects = $model->find_all(); // everything
+        $array_of_objects = $model->find_all("id > 10"); // everyone with id > 10
+
+    * find(id, [conditions])
+        $object = $model->find($id); // one object where id=$id
+
+    * find_first([conditions])
+        $object = $model->find_first("last_name = 'Smith'"); // one object , first row in result set where last_name='Smith'
+
+    * find_all_by_[param1]_or|and_[param2]...(param1,param2,etc...,[ordering])
+        $array_of_objects = $model->find_all_by_lastname_and_firstname_or_last_name("Smith","John","Jones","last_name DESC"); // everything
+        - lastname and firstname are fields in the table. 
+        - the function params are the matching order for the fields in the function name
+        - optional last param is the ordering.
+
+    for aggregrations you can do the following: ("count","sum","avg","max","min")
+        $model->count_all("field",[conditions]); (sum_all, avg_all, etc)
+    
+for auto updating datetime fields there are 2 arrays defined. Any table with fields with these names
+will be auto updated when inserting or updating. If you want to turn off auto updating you can set the
+class var $auto_timestamps = false;    
+    protected $auto_update_timestamps = array("updated_at","updated_on");
+    protected $auto_create_timestamps = array("created_at","created_on");  
+
+== Notes
+
+Any thing set as a class variable in the controller with become a regular variable in the view file.
+example: ($this->users becomes $users in the view file as with any class ($this->xxx) variable)
+    url: /browse/show_all
+
+    controller (browse_controller.php):
+        function show_all() {    
+            $user = new User();
+            $this->users = user->find_all();
+        }
+        
+    view file (show_all.phtml):
+        <? if(count($users) > 0): ?>
+            <? foreach($users as $user): ?>
+                <?=$user->first_name?> <?=$user->last_name?><br>
+            <? endforeach; ?>
+        <? endif; ?>         
+
+    view results:
+        john smith
+        joe smith
+        larry king
+        ...
+    
+== Description of contents
+
+trax/app
+  Holds all the code that's specific to this particular application.
+
+trax/app/controllers
+  Holds controllers that should be named like weblog_controller.php for
+  automated URL mapping. All controllers should descend from
+  ActionController.
+
+trax/app/models
+  Holds models that should be named like post.rb.
+  Most models will descent from ActiveRecord.
+  
+trax/app/views
+  Holds the template files for the view that should be named like
+  weblog/index.phtml for the WeblogController->index action.
+
+trax/app/helpers
+  Holds view helpers that should be named like weblog_helper.php.
+ 
+trax/config
+  Configuration files for the Trax environment, the routing map, the database, and other dependencies.
+
+trax/lib
+  Application specific libraries. Basically, any kind of custom code that doesn't
+  belong controllers, models, or helpers. This directory is in the includes path.
+
+trax/script
+  Helper scripts for automation and generation.
+    
+public / public_html
+  The directory available for the web server. Contains sub-directories for images, stylesheets,
+  and javascripts. Also contains the .htaccess, dispatcher, and default HTML files.
+
