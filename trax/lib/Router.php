@@ -56,15 +56,12 @@ class Router {
             $route_regexp = $this->build_route_regexp($route['path']); 
                        
 	        if($url == "" && $route_regexp == "") {
-	            //echo "$i - found route1<br>";
 	            $this->selected_route = $route;  
 	            break; 	                
 	        } elseif(preg_match("/$route_regexp/",$url) && $route_regexp != "") {
-	            //echo "$i - found route2<br>";
 	            $this->selected_route = $route;  
 	            break; 
 	        } elseif($route['path'] == $this->default_route_path) {
-	            //echo "$i - found route3<br>";
 	            $this->selected_route = $route;
 	            break;        
 	        }                                                         
@@ -90,7 +87,7 @@ class Router {
                 }
             }
             if(is_array($reg_exp)) {
-                $route_regexp = implode("\/",$reg_exp);    
+                $route_regexp = "^".implode("\/",$reg_exp)."$";    
             }
         }	
         

@@ -49,7 +49,10 @@ function __autoload($class_name) {
     if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file")) {
         // Include Model Classes
         require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file");
-    } 
+    } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file")) {
+        // Include Extra Controller Classes
+        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file");
+	}
 }
 
 ?>

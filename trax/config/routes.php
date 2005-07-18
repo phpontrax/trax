@@ -7,7 +7,7 @@
 
 # You can have the root of your site routed by hooking up "".
 # Just remember to delete public_html/index.html.
-# $route->connect( "", array(":controller" => "welcome") );
+# $router->connect( "", array(":controller" => "welcome") );
 
 # Install the default route as the lowest priority.
 $router->connect( ":controller/:action/:id" );
