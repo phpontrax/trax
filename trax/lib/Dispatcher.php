@@ -1,5 +1,5 @@
 <?
-# $Id: Dispatcher.php,v 1.1.1.1 2005/03/31 07:00:51 johnpipi Exp $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -23,12 +23,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class Dispatcher {
-    
+
     function dispatch() {
         $ac = new ActionController();
         $ac->process_route();
-    }      
-    
+    }
+
 }
 
 ?>

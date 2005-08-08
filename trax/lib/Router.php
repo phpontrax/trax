@@ -1,5 +1,5 @@
 <?
-# $Id: Router.php,v 1.1.1.1 2005/03/31 07:00:51 johnpipi Exp $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -23,7 +23,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class Router {
-    
+
     private $routes = array();
     private $selected_route = null;
     private $default_route_path = ":controller/:action/:id";
@@ -32,68 +32,68 @@ class Router {
     function get_selected_route() {
         return $this->selected_route;
     }
-    
+
     function connect($path, $params = null) {
         if(!is_array($params)) $params = null;
         $this->routes[$this->routes_count]['path'] = $path;
-        $this->routes[$this->routes_count]['params'] = $params; 
+        $this->routes[$this->routes_count]['params'] = $params;
         $this->routes_count = count($this->routes);
-	}
+    }
 
-	function find_route($url) {
+    function find_route($url) {
 
-	    // ensure at least one route (the default route) exists 
-	    if($this->routes_count == 0) {
-	        $this->routes['path'] = $this->default_route_path;   
-	        $this->routes['params'] = null;        
-	    }     
+        // ensure at least one route (the default route) exists
+        if($this->routes_count == 0) {
+            $this->routes['path'] = $this->default_route_path;
+            $this->routes['params'] = null;
+        }
 
-	    $this->selected_route = null;
-	    
-	    foreach($this->routes as $route) {                   
-	        unset($route_regexp);
-	        unset($reg_exp);
-            $route_regexp = $this->build_route_regexp($route['path']); 
-                       
-	        if($url == "" && $route_regexp == "") {
-	            $this->selected_route = $route;  
-	            break; 	                
-	        } elseif(preg_match("/$route_regexp/",$url) && $route_regexp != "") {
-	            $this->selected_route = $route;  
-	            break; 
-	        } elseif($route['path'] == $this->default_route_path) {
-	            $this->selected_route = $route;
-	            break;        
-	        }                                                         
-	    }    
-        
-	    return $this->selected_route;        
-	}
-	
-	function build_route_regexp($route_path) {
-	    
-	    $route_regexp = null;
-	    
-	    if(!is_array($route_path)) {
-	        $route_path = explode("/",$route_path);
-	    }
-	    
+        $this->selected_route = null;
+
+        foreach($this->routes as $route) {
+            unset($route_regexp);
+            unset($reg_exp);
+            $route_regexp = $this->build_route_regexp($route['path']);
+
+            if($url == "" && $route_regexp == "") {
+                $this->selected_route = $route;
+                break;
+            } elseif(preg_match("/$route_regexp/",$url) && $route_regexp != "") {
+                $this->selected_route = $route;
+                break;
+            } elseif($route['path'] == $this->default_route_path) {
+                $this->selected_route = $route;
+                break;
+            }
+        }
+
+        return $this->selected_route;
+    }
+
+    function build_route_regexp($route_path) {
+
+        $route_regexp = null;
+
+        if(!is_array($route_path)) {
+            $route_path = explode("/",$route_path);
+        }
+
         if(count($route_path) > 0) {
             foreach($route_path as $path_element) {
                 if(preg_match('/:[a-z0-9_\-]+/',$path_element)) {
                     $reg_exp[] = '[a-z0-9_\-]+';
                 } else {
-                    $reg_exp[] = $path_element;   
+                    $reg_exp[] = $path_element;
                 }
             }
             if(is_array($reg_exp)) {
-                $route_regexp = "^".implode("\/",$reg_exp)."$";    
+                $route_regexp = "^".implode("\/",$reg_exp)."$";
             }
-        }	
-        
-        return $route_regexp;    
-	}
-	
+        }
+
+        return $route_regexp;
+    }
+
 }
 
 ?>

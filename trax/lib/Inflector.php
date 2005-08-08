@@ -1,5 +1,5 @@
 <?
-# $Id: Inflector.php,v 1.1.1.1 2005/03/31 07:00:52 johnpipi Exp $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -25,60 +25,59 @@
 class Inflector {
 
     private $plural_rules =
-        array('/(x|ch|ss|sh)$/' => '\1es',            # search, switch, fix, box, process, address
-              '/series$/' => '\1series',
-              '/([^aeiouy]|qu)ies$/' => '\1y',
-              '/([^aeiouy]|qu)y$/' => '\1ies',        # query, ability, agency
-              '/(?:([^f])fe|([lr])f)$/' => '\1\2ves', # half, safe, wife
-              '/sis$/' => 'ses',                      # basis, diagnosis
-              '/([ti])um$/' => '\1a',                 # datum, medium
-              '/person$/' => 'people',                # person, salesperson
-              '/man$/' => 'men',                      # man, woman, spokesman
-              '/child$/' => 'children',               # child
-              '/(.+)status$/' => '\1statuses',
-              '/s$/' => 's',                          # no change (compatibility)
-              '/$/' => 's'
+        array(  '/(x|ch|ss|sh)$/' => '\1es',            # search, switch, fix, box, process, address
+                '/series$/' => '\1series',
+                '/([^aeiouy]|qu)ies$/' => '\1y',
+                '/([^aeiouy]|qu)y$/' => '\1ies',        # query, ability, agency
+                '/(?:([^f])fe|([lr])f)$/' => '\1\2ves', # half, safe, wife
+                '/sis$/' => 'ses',                      # basis, diagnosis
+                '/([ti])um$/' => '\1a',                 # datum, medium
+                '/person$/' => 'people',                # person, salesperson
+                '/man$/' => 'men',                      # man, woman, spokesman
+                '/child$/' => 'children',               # child
+                '/(.+)status$/' => '\1statuses',
+                '/s$/' => 's',                          # no change (compatibility)
+                '/$/' => 's'
         );
 
     private $singular_rules =
-        array('/(x|ch|ss)es$/' => '\1',
-              '/movies$/' => 'movie',
-              '/series$/' => 'series',
-              '/([^aeiouy]|qu)ies$/' => '\1y',
-              '/([lr])ves$/' => '\1f',
-              '/([^f])ves$/' => '\1fe',
-              '/(analy|ba|diagno|parenthe|progno|synop|the)ses$/' => '\1sis',
-              '/([ti])a$/' => '\1um',
-              '/people$/' => 'person',
-              '/men$/' => 'man',
-              '/(.+)status$/' => '\1status',         
-              '/children$/' => 'child',
-              '/news$/' => 'news',
-              '/s$/' => ''
+        array(  '/(x|ch|ss)es$/' => '\1',
+                '/movies$/' => 'movie',
+                '/series$/' => 'series',
+                '/([^aeiouy]|qu)ies$/' => '\1y',
+                '/([lr])ves$/' => '\1f',
+                '/([^f])ves$/' => '\1fe',
+                '/(analy|ba|diagno|parenthe|progno|synop|the)ses$/' => '\1sis',
+                '/([ti])a$/' => '\1um',
+                '/people$/' => 'person',
+                '/men$/' => 'man',
+                '/(.+)status$/' => '\1status',
+                '/children$/' => 'child',
+                '/news$/' => 'news',
+                '/s$/' => ''
         );
 
     function pluralize($word) {
-        //echo "$word<br>";
         $original = $word;
         foreach($this->plural_rules as $rule => $replacement) {
-            $word = preg_replace($rule,$replacement,$word);  
+            $word = preg_replace($rule,$replacement,$word);
             if($original != $word) break;
-        }        
+        }
         return $word;
     }
 
     function singularize($word) {
         $original = $word;
         foreach($this->singular_rules as $rule => $replacement) {
-            $word = preg_replace($rule,$replacement,$word);  
+            $word = preg_replace($rule,$replacement,$word);
             if($original != $word) break;
         }
-        return $word;      
-    } 
-    
+        return $word;
+    }
+
     function camelize($lower_case_and_underscored_word) {
         return str_replace(" ","",ucwords(str_replace("_"," ",$lower_case_and_underscored_word)));
-    }    
+    }
 
     function underscore($camel_cased_word) {
         $camel_cased_word = preg_replace('/([A-Z]+)([A-Z])/','\1_\2',$camel_cased_word);
@@ -87,7 +86,7 @@ class Inflector {
 
     function humanize($lower_case_and_underscored_word) {
         return ucwords(str_replace("_"," ",$lower_case_and_underscored_word));
-    }    
+    }
 
     function tableize($class_name) {
         return self::pluralize(self::underscore($class_name));
@@ -96,10 +95,10 @@ class Inflector {
     function classify($table_name) {
         return self::camelize(self::singularize($table_name));
     }
-    
+
     function foreign_key($class_name) {
         return self::underscore($class_name) . "_id";
-    } 
+    }
 
 }
 
