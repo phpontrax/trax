@@ -1,0 +1,32 @@
+<h1>Listing [model_name_plural]</h1>
+
+<table>
+<? if(count($[model_name_plural])): ?> 
+	<tr> 
+		<? foreach($posts as $post->content_columns): ?>
+			<? foreach($post->content_columns as $column): ?>
+				<th><?= $column['human_name'] ?></th>
+			<? endforeach; ?>
+		<? endforeach; ?>
+	</tr>
+  
+	<? foreach($posts as $post): ?>
+		<? foreach($post->content_columns as $column): ?>
+  			<tr>
+    			<td><?= $post->send($column['name']) ?></td>
+    			<td><?= link_to('Show', array(":action" => 'show', ":id" => $post)) ?></td>
+    			<td><?= link_to('Edit', array(":action" => 'edit', ":id" => $post)) ?></td>
+    			<td><?= link_to('Delete', array(":action" => 'destroy', ":id" => $post, ":confirm" => "Are you sure?")) ?></td>
+  			</tr>
+		<? endforeach; ?>
+	<? endforeach; ?>
+<? else: ?>
+	<tr>
+		<td>No [model_name_plural] found.</td>
+	</tr>
+<? endif; ?>
+</table>
+
+<br />
+
+<?= link_to('New post', array(":action" => 'new')) ?>
