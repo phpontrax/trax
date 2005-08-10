@@ -807,6 +807,7 @@ class ActiveRecord extends DB {
         $this->table_info = $this->tableInfo($table_name);
         if(is_array($this->table_info)) {
             unset($this->content_columns);
+            $this->content_columns = array();
             $i = 0;
             foreach($this->table_info as $info) {
                 $this->content_columns[$i]['name'] = $info['name'];
