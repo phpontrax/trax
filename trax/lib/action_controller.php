@@ -27,17 +27,28 @@ class ActionController {
     private $controller, $action, $id;
     private $controllers_path, $helpers_path, $views_path, $layouts_path, $url_path;
     private $layout_file, $default_layout_file, $controller_file, $helper_file;
-    private $controller_class, $controller_object;
     private $application_controller_file, $application_helper_file;
     private $loaded = false;
     private $router_loaded = false;
-    protected $before_filter = array();
-    protected $after_filter = array();
+    protected $before_filter = null;
+    protected $after_filter = null;
+    public $controller_class, $controller_object;
     public $views_file_extention = "phtml";
 
     function __construct() {
         if(!is_object($this->router)) {
             $this->load_router();
+        }
+    }
+
+    function __set($key, $value) {
+        //echo "setting: $key = $value<br>";
+        if($key == "before_filter") {
+            $this->add_before_filter($value);
+        } elseif($key == "after_filter") {
+            $this->add_after_filter($value);    
+        } else {
+            $this->$key = $value;
         }
     }
 
@@ -58,8 +69,17 @@ class ActionController {
             $this->load_router();
         }
 
+        //current url
+        $browser_url = $_SERVER['REDIRECT_URL'];
+
+        //strip off url prefix, if any
+        if (!is_null(TRAX_URL_PREFIX)) {
+            $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
+        }
+        
         //strip leading slash
-        $browser_url = substr($_SERVER['REDIRECT_URL'],1);
+        $browser_url = substr($browser_url,1);
+
         //trailing leading slash (if any)
         if(substr($browser_url, -1) == "/") {
             $browser_url = substr($browser_url, 0, -1);
@@ -233,7 +253,7 @@ class ActionController {
     function set_paths() {
         if(is_array($this->url_path)) {
             foreach($this->url_path as $path) {
-                if(file_exists($this->controllers_path . "/$path")) {
+				if(file_exists($this->controllers_path . "/$path")) {
                     $this->controllers_path .= "/$path";
                     $this->helpers_path .= "/$path";
                     $this->views_path .= "/$path";
@@ -241,7 +261,6 @@ class ActionController {
                     $new_path[] = $path;
                 }
             }
-
             if(is_array($new_path)) {
                 $this->url_path = $new_path;
             }
@@ -255,14 +274,25 @@ class ActionController {
                     $this->controller_object->$filter_function();
                 }
             }
+        } elseif($this->controller_object->before_filter != "") {
+            if(method_exists($this->controller_object, $this->controller_object->before_filter)) {
+                $filter_function = $this->controller_object->before_filter;
+                $this->controller_object->$filter_function();
+            }                
         }
     }
 
     function add_before_filter($filter_function_name) {
         if (is_array($filter_function_name)) {
-            $this->before_filter = $filter_function_name;
+            if(count($this->before_filter) > 0) {
+                $this->before_filter = array_merge($this->before_filter, $filter_function_name);        
+            } else {
+                $this->before_filter = $filter_function_name;
+            }
+        } elseif($this->before_filter != "") {
+            $this->before_filter = array($this->before_filter, $filter_function_name);
         } else {
-            $this->before_filter[] = $filter_function_name;
+            $this->before_filter = $filter_function_name;      
         }
     }
 
@@ -273,14 +303,25 @@ class ActionController {
                     $this->controller_object->$filter_function();
                 }
             }
+        } elseif($this->controller_object->after_filter != "") {
+            if(method_exists($this->controller_object, $this->controller_object->after_filter)) {
+                $filter_function = $this->controller_object->after_filter;
+                $this->controller_object->$filter_function();
+            }                
         }
     }
 
     function add_after_filter($filter_function_name) {
         if (is_array($filter_function_name)) {
-            $this->after_filter = $filter_function_name;
+            if(count($this->after_filter) > 0) {
+                $this->after_filter = array_merge($this->after_filter, $filter_function_name);        
+            } else {
+                $this->after_filter = $filter_function_name;
+            }            
+        } elseif($this->after_filter != "") {
+            $this->after_filter = array($this->after_filter, $filter_function_name);
         } else {
-            $this->after_filter[] = $filter_function_name;
+            $this->after_filter = $filter_function_name;      
         }
     }
 
@@ -302,7 +343,10 @@ class ActionController {
         } else {
             $path_with_file = $this->views_path."/_".$path.".".$this->views_file_extention;
         }
+
         if(file_exists($path_with_file)) {
+            // Pull all the class vars out and turn them from $this->var to $var
+            extract(get_object_vars($this->controller_object));
             include($path_with_file);
         }
     }

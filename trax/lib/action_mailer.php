@@ -34,14 +34,14 @@ class ActionMailer {
     public $from_address = "no-reply@nodomain.com";
     public $from_name = null;
     public $error = null;
-    private $mail;  // Mail_mime object
+    private $mail_mime;  // Mail_mime object
     private $to_addresses, $cc_addresses, $bcc_addresses, $replyto_addresses;
 
     function __construct($crlf = null) {
         if(!is_null($crlf)) {
             $this->crlf = $crlf;
         }
-        $this->mail = new Mail_mime($this->crlf);
+        $this->mail_mime = new Mail_mime();
     }
 
     function add_to_address($address, $name = null) {
@@ -76,17 +76,17 @@ class ActionMailer {
 
     function set_text_body($text) {
         if(strlen($text) > 0)
-            $this->mail->setTxtBody($text);
+            $this->mail_mime->setTxtBody($text);
     }
 
     function set_html_body($html) {
         if(strlen($html) > 0)
-            $this->mail->setHTMLBody($html);
+            $this->mail_mime->setHTMLBody($html);
     }
 
     function add_attachment($file, $content_type = null, $file_name = null, $is_file = null, $encoding = null) {
         if(file_exists($file))
-            $this->mail->addAttachment($file, $content_type, $file_name, $is_file, $encoding);
+            $this->mail_mime->addAttachment($file, $content_type, $file_name, $is_file, $encoding);
     }
 
     function format_address($address) {
@@ -176,14 +176,14 @@ class ActionMailer {
     }
 
     function send($to_address = null, $subject = null, $text_body = null, $html_body = null, $extra_headers = null) {
-        if(!is_null($to_address)) $this->mail->add_to_address($to_address);
+        if(!is_null($to_address)) $this->mail_mime->add_to_address($to_address);
         if(!is_null($subject)) $this->set_subject($subject);
-        if(!is_null($html_body)) $this->mail->set_html_body($html_body);
-        if(!is_null($text_body)) $this->mail->set_text_body($text_body);
+        if(!is_null($html_body)) $this->mail_mime->set_html_body($html_body);
+        if(!is_null($text_body)) $this->mail_mime->set_text_body($text_body);
 
+        $body = $this->mail_mime->get();
         $this->set_headers($extra_headers);
-        $headers = $this->mail->headers($this->headers);
-        $body = $this->mail->get();
+        $headers = $this->mail_mime->headers($this->headers);       
 
         if($this->send_type == "smtp") {
             $mail =& Mail::factory("smtp", $this->smtp_params);

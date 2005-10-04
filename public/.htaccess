@@ -1,10 +1,34 @@
-# php include path for Rails ( Pear & Trax config dir )
+# php include path for Trax ( Pear & Trax config dir )
 php_value include_path .:/usr/local/lib/php:/home/<username>/trax/config
 
-# Redirect all requests not available on the filesystem to Rails
+# Redirect all requests not available on the filesystem to Trax
 RewriteEngine On
+
+# If you don't want Trax to look in certain directories,
+# use the following rewrite rules so that Apache won't rewrite certain requests
+# 
+# Example:
+#   RewriteCond %{REQUEST_URI} ^/nottrax.*
+#   RewriteRule .* - [L]
+
+# If your Trax application is accessed via an Alias directive,
+# then you MUST also set the RewriteBase in this htaccess file.
+#
+# Example:
+#   Alias /mytraxapp /path/to/mytraxapp/public
+#   RewriteBase /mytraxapp
+
 RewriteRule ^$ index.html [QSA]
 RewriteRule ^([^.]+)$ $1.html [QSA]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond $1 !-d
 RewriteRule ^(.*)$ /dispatch.php?$1 [QSA,L]
+
+# In case Trax experiences terminal errors
+# Instead of displaying this message you can supply 
+# a file here which will be rendered instead
+# 
+# Example:
+#   ErrorDocument 500 /500.html
+
+ErrorDocument 500 "<h2>Application error</h2>Trax application failed to start properly"

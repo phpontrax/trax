@@ -24,7 +24,7 @@
 
 require_once('PEAR.php');
 require_once('DB.php');
-require_once('Inflector.php');
+require_once('inflector.php');
 
 
 if(isset($GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
@@ -39,20 +39,21 @@ define("ACTIVE_RECORD_ERR",             -3);
 define("ACTIVE_RECORD_QUERY_ERR",       -4);
 
 class ActiveRecord extends DB {
-    private $db;                    # Reference to current db
-    private $current_rs;            # Reference to current record set
+    static private $db = null;              // Reference to current db
+    static protected $inflector = null;     // object to do class inflection
+    static protected $table_info = null;    // info about each column in the table
+    
+    private $current_rs;                    // Reference to current record set
 
     protected $has_many = array();
     protected $has_one = array();
     protected $has_and_belongs_to_many = array();
     protected $belongs_to = array();
     protected $new_record = true;  // whether or not to create a new record or just update
-    protected $inflector;          // object to do class inflection
     protected $auto_update_timestamps = array("updated_at","updated_on");
     protected $auto_create_timestamps = array("created_at","created_on");
     protected $aggregrations = array("count","sum","avg","max","min");
     protected $habtm_attributes = array();
-    protected $content_columns = array();
 
     public $primary_keys = array("id");  // update where clause keys
     public $rows_per_page_default = 20;  // Pagination
@@ -69,7 +70,7 @@ class ActiveRecord extends DB {
     ########################################################################
     function __construct($params = null) {
 
-        $this->inflector = new Inflector();
+        self::$inflector = new Inflector();
 
         if(is_array($params)) {
             $this->update_attributes($params);
@@ -106,7 +107,7 @@ class ActiveRecord extends DB {
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
-            $this->table_info = $this->set_table_info($value);
+            self::$table_info = $this->set_table_info($value);
         }
         $this->$key = $value;
     }
@@ -170,15 +171,15 @@ class ActiveRecord extends DB {
     // Returns: An array of ActiveRecord objects. (e.g. Movie objects)
     function find_all_habtm($other_table_name, $parameters = null) {
 
-        $other_class_name = $this->inflector->classify($other_table_name);
+        $other_class_name = self::$inflector->classify($other_table_name);
 
         // Instantiate an object to access find_all
         $results = new $other_class_name();
 
         // Prepare the join table name primary keys (fields) to do the join on
         $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
-        $this_foreign_key = $this->inflector->singularize($this->table_name)."_id";
-        $other_foreign_key = $this->inflector->singularize($other_table_name)."_id";
+        $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
+        $other_foreign_key = self::$inflector->singularize($other_table_name)."_id";
         // Set up the SQL segments
         $conditions = "`{$join_table}`.`{$this_foreign_key}`={$this->id}";
         $orderings = null;
@@ -229,9 +230,9 @@ class ActiveRecord extends DB {
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
-            $foreign_key = $this->inflector->singularize($this->table_name)."_id";
+            $foreign_key = self::$inflector->singularize($this->table_name)."_id";
 
-        $other_class_name = $this->inflector->classify($other_table_name);
+        $other_class_name = self::$inflector->classify($other_table_name);
         $conditions = "`{$foreign_key}`=$this->id";
 
         // Use any passed-in parameters
@@ -281,11 +282,11 @@ class ActiveRecord extends DB {
         // Prepare the class name and primary key, e.g. if
         // customers has_many contacts, then we'll need a Contact
         // object, and the customer_id field name.
-        $other_class_name = $this->inflector->camelize($other_object_name);
+        $other_class_name = self::$inflector->camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
-            $foreign_key = $this->inflector->singularize($this->table_name)."_id";
+            $foreign_key = self::$inflector->singularize($this->table_name)."_id";
 
         $conditions = "`$foreign_key`='{$this->id}'";
         // Instantiate an object to access find_all
@@ -311,7 +312,7 @@ class ActiveRecord extends DB {
         // Prepare the class name and primary key, e.g. if
         // customers has_many contacts, then we'll need a Contact
         // object, and the customer_id field name.
-        $other_class_name = $this->inflector->camelize($other_object_name);
+        $other_class_name = self::$inflector->camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
@@ -357,7 +358,7 @@ class ActiveRecord extends DB {
 
     function send($column) {
         // Run the query to grab a specific columns value.
-        $result = $this->db->getOne("SELECT $column FROM $this->table_name WHERE id='$this->id'");
+        $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
 
         if ($this->isError($result)) {
             echo ($this->raiseError($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
@@ -380,7 +381,7 @@ class ActiveRecord extends DB {
         }
 
         // Run the query
-        $rs = $this->db->query($sql);
+        $rs = self::$db->query($sql);
 
         if ($this->isError($rs)) {
             echo "Error in ActiveRecord::query();<br>";
@@ -483,7 +484,8 @@ class ActiveRecord extends DB {
     }
 
     function find_first($conditions = null, $orderings = null) {
-        return @current($this->find_all($conditions, $orderings));
+        $result = $this->find_all($conditions, $orderings);
+        return @current($result);
     }
 
     function find_all_by($method_name, $parameters) {
@@ -583,6 +585,10 @@ class ActiveRecord extends DB {
         $this->set_habtm_attributes($params);
     }
 
+    function create($params = null) {
+        return $this->save($params);
+    }
+    
     function update($params) {
         return $this->save($params);
     }
@@ -645,8 +651,8 @@ class ActiveRecord extends DB {
                 reset($this->habtm_attributes);
                 foreach($this->habtm_attributes as $other_table_name => $other_foreign_values) {
                     $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
-                    $other_foreign_key = $this->inflector->singularize($other_table_name)."_id";
-                    $this_foreign_key = $this->inflector->singularize($this->table_name)."_id";
+                    $other_foreign_key = self::$inflector->singularize($other_table_name)."_id";
+                    $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
                     foreach($other_foreign_values as $other_foreign_value) {
                         unset($attributes);
                         $attributes[$this_foreign_key] = $this_foreign_value;
@@ -708,10 +714,20 @@ class ActiveRecord extends DB {
 
     function delete($conditions = null) {
         // Check for valid ids
-        if($this->id < 1 && is_null($conditions))
+        if(count($this->primary_keys) <= 0 && is_null($conditions))
             return false;
 
-        if(is_null($conditions) && $this->id > 0) {
+        if(is_null($conditions)) {
+            $conditions = array();
+            $attributes = $this->quoted_attributes();
+            // run through our fields and join them with their values
+            foreach ($attributes as $key => $value) {
+                if(in_array($key,$this->primary_keys)) {
+                    $conditions[] = "$key = $value";
+                } 
+            }            
+            $conditions = implode(" AND ", $conditions);
+        } elseif($this->id > 0) {
             $conditions = "id='$this->id'";
         } else {
             return false;
@@ -733,7 +749,7 @@ class ActiveRecord extends DB {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
                 $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
-                $this_foreign_key = $this->inflector->singularize($this->table_name)."_id";
+                $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
                 $sql = "DELETE FROM $table_name WHERE $this_foreign_key = $this_foreign_value";
                 //echo "delete_habtm_records: SQL: $sql<br>";
 
@@ -753,8 +769,8 @@ class ActiveRecord extends DB {
 
     function check_datetime($field, $value) {
         if($this->auto_timestamps) {
-            if(is_array($this->table_info)) {
-                foreach($this->table_info as $field_info) {
+            if(is_array(self::$table_info)) {
+                foreach(self::$table_info as $field_info) {
                     if(($field_info['name'] == $field) && ($field_info['type'] == "datetime")) {
                         if($this->new_record && in_array($field, $this->auto_create_timestamps))
                             return date("Y-m-d H:i:s");
@@ -768,8 +784,8 @@ class ActiveRecord extends DB {
     }
 
     function get_attributes() {
-        if(is_array($this->table_info)) {
-            foreach($this->table_info as $info) {
+        if(is_array(self::$table_info)) {
+            foreach(self::$table_info as $info) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
                 $attributes[$info['name']] = $this->$info['name'];
             }
@@ -799,19 +815,16 @@ class ActiveRecord extends DB {
 
     function set_table_name_using_class_name() {
         if(!isset($this->table_name)) {
-            $this->table_name = $this->inflector->tableize(get_class($this));
+            $this->table_name = self::$inflector->tableize(get_class($this));
         }
     }
 
     function set_table_info($table_name) {
-        $this->table_info = $this->tableInfo($table_name);
-        if(is_array($this->table_info)) {
-            unset($this->content_columns);
-            $this->content_columns = array();
+        self::$table_info = $this->tableInfo($table_name);
+        if(is_array(self::$table_info)) {
             $i = 0;
-            foreach($this->table_info as $info) {
-                $this->content_columns[$i]['name'] = $info['name'];
-                $this->content_columns[$i]['human_name'] = $this->inflector->humanize($info['name']);
+            foreach(self::$table_info as $info) {
+                self::$table_info[$i]['human_name'] = self::$inflector->humanize($info['name']);
                 ++$i;
             }
         }
@@ -851,23 +864,23 @@ class ActiveRecord extends DB {
         * DB_common::tableInfo() -- Get info about columns in a table or a query result
         */
     function affectedRows()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'affectedRows'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'affectedRows'), $args)); }
     function autoExecute()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'autoExecute'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'autoExecute'), $args)); }
     function autoPrepare()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'autoPrepare'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'autoPrepare'), $args)); }
     function createSequence()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'createSequence'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'createSequence'), $args)); }
     function disconnect()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'disconnect'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'disconnect'), $args)); }
     function dropSequence()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'dropSequence'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'dropSequence'), $args)); }
     function escapeSimple()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'escapeSimple'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'escapeSimple'), $args)); }
     function execute() {
         if (!$this->_hasCurrentDB()) return false;
         $args = func_get_args();
-        $rs = call_user_func_array(array($this->db, 'execute'), $args);
+        $rs = call_user_func_array(array(self::$db, 'execute'), $args);
         if($this->isError($rs))
             return($this->raiseError($obj->getUserInfo(), 'execute', __LINE__, ACTIVE_RECORD_QUERY_ERR, PEAR_ERROR_RETURN));
         else
@@ -877,7 +890,7 @@ class ActiveRecord extends DB {
     function executeMultiple() {
         if (!$this->_hasCurrentDB()) return false;
         $args = func_get_args();
-        $rs = call_user_func_array(array($this->db, 'executeMultiple'), $args);
+        $rs = call_user_func_array(array(self::$db, 'executeMultiple'), $args);
         if($this->isError($rs))
             return($this->raiseError($obj->getUserInfo(), 'executeMultiple', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
         else
@@ -885,39 +898,39 @@ class ActiveRecord extends DB {
         return($rs);
     }
     function freePrepared()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'freePrepared'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'freePrepared'), $args)); }
     function getAll()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getAll'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getAll'), $args)); }
     function getAssoc()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getAssoc'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getAssoc'), $args)); }
     function getCol()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getCol'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getCol'), $args)); }
     function getListOf()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getListOf'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getListOf'), $args)); }
     function getOne()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getOne'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getOne'), $args)); }
     function getRow()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'getRow'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getRow'), $args)); }
     function limitQuery()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'limitQuery'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'limitQuery'), $args)); }
     function nextId()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'nextId'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'nextId'), $args)); }
     function prepare()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'prepare'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'prepare'), $args)); }
     function provides()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'provides'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'provides'), $args)); }
     function quote()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'quote'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quote'), $args)); }
     function quoteIdentifier()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'quoteIdentifier'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quoteIdentifier'), $args)); }
     function quoteSmart()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'quoteSmart'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quoteSmart'), $args)); }
     function setFetchMode()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'setFetchMode'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'setFetchMode'), $args)); }
     function setOption()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'setOption'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'setOption'), $args)); }
     function tableInfo()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array($this->db, 'tableInfo'), $args)); }
+    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'tableInfo'), $args)); }
     /*
         * DB_result -- DB result set
         * DB_result::fetchInto() -- Fetch a row into a variable
@@ -966,18 +979,19 @@ class ActiveRecord extends DB {
     function useDB() {
 
         // Connect to the database and throw an error if the connect fails...
-        if (!is_object($this->db))
-            $obj = DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);
-
-        if(!$this->isError($obj)) {
-            $this->db = $obj;
+        if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
+            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
+        } 
+        
+        if(!$this->isError($GLOBALS['ACTIVE_RECORD_DB'])) {
+            self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
         } else {
-            return($this->raiseError($obj->getUserInfo(), 'useDB', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
+            return($this->raiseError($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'useDB', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
         }
 
-        $this->db->setFetchMode($GLOBALS['ACTIVE_RECORD_FETCHMODE']);
+        self::$db->setFetchMode($GLOBALS['ACTIVE_RECORD_FETCHMODE']);
 
-        return $this->db;
+        return self::$db;
     }
 
     ########################################################################
@@ -1015,11 +1029,11 @@ class ActiveRecord extends DB {
     #  Returns: Nothing
     ########################################################################
     function isError($obj) {
-        return((PEAR::isError($obj)) || (parent::isError($obj)));
+        return((PEAR::isError($obj)) || (DB::isError($obj)));
     }
 
     function _hasCurrentDB() {
-        if (is_object($this->db))
+        if (is_object(self::$db))
             return true;
         else
             return false;
