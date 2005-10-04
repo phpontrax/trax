@@ -104,6 +104,12 @@ class var $auto_timestamps = false;
     protected $auto_update_timestamps = array("updated_at","updated_on");
     protected $auto_create_timestamps = array("created_at","created_on");  
 
+
+== Logging
+
+Log files for php errors or if you put in your code error_log("whatever") will be writen to
+the trax/log folder in development|test|production.log file depending on the TRAX_MODE
+
 == Notes
 
 Any thing set as a class variable in the controller with become a regular variable in the view file.
@@ -139,6 +145,10 @@ trax/app/controllers
   automated URL mapping. All controllers should descend from
   ActionController.
 
+trax/app/libs
+  Application specific libraries. Basically, any kind of custom code that doesn't
+  belong controllers, models, or helpers. This directory is in the includes path.
+
 trax/app/models
   Holds models that should be named like post.rb.
   Most models will descent from ActiveRecord.
@@ -154,8 +164,7 @@ trax/config
   Configuration files for the Trax environment, the routing map, the database, and other dependencies.
 
 trax/lib
-  Application specific libraries. Basically, any kind of custom code that doesn't
-  belong controllers, models, or helpers. This directory is in the includes path.
+  Trax libraries. This directory is in the includes path.
 
 trax/script
   Helper scripts for automation and generation.
