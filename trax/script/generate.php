@@ -23,7 +23,7 @@
 
 ini_set("include_path",ini_get("include_path").":".dirname(__FILE__) . "/../lib");    
 require_once(dirname(__FILE__) . "/../config/environment.php");
-require_once("TraxGenerator.php");
+require_once("trax_generator.php");
 
 $generator = new TraxGenerator();
 $generator->run();
