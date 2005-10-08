@@ -7,11 +7,21 @@ if($_REQUEST['sess_id']) {
 session_start();
 
 if($_SERVER['TRAX_MODE']) { // Set in the Apache Vhost (SetEnv TRAX_MODE development)
-    define("TRAX_MODE",   $_SERVER['TRAX_MODE']); // production / development / test
+    define("TRAX_MODE",   $_SERVER['TRAX_MODE']); // Set from Env production / development / test
 } else {
-    define("TRAX_MODE",   "development"); // production / development / test        
+    define("TRAX_MODE",   "development"); // Manually set production / development / test        
 }
-define("TRAX_ROOT",        dirname(__FILE__) . "/../");
+
+if (substr(PHP_OS, 0, 3) == 'WIN') {
+    // Windows
+    define("TRAX_PATH_SEPERATOR", ";");
+    define("TRAX_ROOT", dirname(dirname(__FILE__))."/");
+} else {
+    // Unix
+    define("TRAX_PATH_SEPERATOR", ":");
+    define("TRAX_ROOT", dirname(dirname(__FILE__))."/../");
+} 
+
 define("TRAX_URL_PREFIX",  null); 
 define("DEFAULT_LAYOUT",   "public");  // public is the default
 
@@ -50,7 +60,7 @@ if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE
 
 # Add to the include path non framework libs
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']))
-	ini_set("include_path",ini_get("include_path").":".TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
+	ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
 
 # Set which file to log to php errors for this application to
 ini_set("error_log", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['log']."/".TRAX_MODE.".log");
