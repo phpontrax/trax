@@ -41,7 +41,7 @@ define("ACTIVE_RECORD_QUERY_ERR",       -4);
 class ActiveRecord extends DB {
     static private $db = null;              // Reference to current db
     static protected $inflector = null;     // object to do class inflection
-    static protected $table_info = null;    // info about each column in the table
+    static public $table_info = null;    // info about each column in the table
     
     private $current_rs;                    // Reference to current record set
 
@@ -784,6 +784,7 @@ class ActiveRecord extends DB {
     }
 
     function get_attributes() {
+        $attributes = array();
         if(is_array(self::$table_info)) {
             foreach(self::$table_info as $info) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
@@ -820,7 +821,7 @@ class ActiveRecord extends DB {
     }
 
     function set_table_info($table_name) {
-        self::$table_info = $this->tableInfo($table_name);
+        self::$table_info = self::$db->tableInfo($table_name);
         if(is_array(self::$table_info)) {
             $i = 0;
             foreach(self::$table_info as $info) {
