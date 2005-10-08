@@ -21,8 +21,13 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-ini_set("include_path",ini_get("include_path").":".dirname(__FILE__) . "/../lib");    
-require_once(dirname(__FILE__) . "/../config/environment.php");
+if (substr(PHP_OS, 0, 3) == 'WIN') {
+    ini_set("include_path",ini_get("include_path").";".dirname(dirname(__FILE__))."\\lib");   
+    require_once(dirname(dirname(__FILE__)). "\\config\\environment.php");
+} else {
+    ini_set("include_path",ini_get("include_path").":".dirname(__FILE__) . "/../lib");
+    require_once(dirname(__FILE__) . "/../config/environment.php");
+} 
 require_once("trax_generator.php");
 
 $generator = new TraxGenerator();
