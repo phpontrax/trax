@@ -15,15 +15,14 @@ if($_SERVER['TRAX_MODE']) { // Set in the Apache Vhost (SetEnv TRAX_MODE develop
 if (substr(PHP_OS, 0, 3) == 'WIN') {
     // Windows
     define("TRAX_PATH_SEPERATOR", ";");
-    define("TRAX_ROOT", dirname(dirname(__FILE__))."/");
 } else {
     // Unix
     define("TRAX_PATH_SEPERATOR", ":");
-    define("TRAX_ROOT", dirname(dirname(__FILE__))."/../");
-} 
+}
 
-define("TRAX_URL_PREFIX",  null); 
-define("DEFAULT_LAYOUT",   "public");  // public is the default
+define("TRAX_ROOT",         dirname(dirname(__FILE__))."/");
+define("TRAX_URL_PREFIX",   null); 
+define("DEFAULT_LAYOUT",    "public");  // public is the default
 
 $GLOBALS['TRAX_INCLUDES'] =
     array( "models" => "app/models",
@@ -34,20 +33,20 @@ $GLOBALS['TRAX_INCLUDES'] =
            "layouts" => "app/views/layouts",
            "config" => "config",
            "environments" => "config/environments",
-	       "lib" => "lib",
-	       "app" => "app",
-	       "log" => "log" );
+	   "lib" => "lib",
+	   "app" => "app",
+	   "log" => "log" );
 
 # Load databse settings
 $GLOBALS['DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
 
 # Include Trax library files.
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/active_record.php");
-require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_controller.php");  
-require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_mailer.php"); 
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_controller.php");
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_mailer.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/dispatcher.php");
-require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/inflector.php"); 
-require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/router.php"); 
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/inflector.php");
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/router.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/html_helper.php");
 
 # Include the ApplicationMailer Class which extends ActionMailer for application specific mailing functions
@@ -60,7 +59,7 @@ if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE
 
 # Add to the include path non framework libs
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']))
-	ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
+    ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
 
 # Set which file to log to php errors for this application to
 ini_set("error_log", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['log']."/".TRAX_MODE.".log");
@@ -78,10 +77,10 @@ function __autoload($class_name) {
     } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file")) {
         // Include Extra Controller Classes
         require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file");
-	} elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']."/$file")) {
+    } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']."/$file")) {
         // Include Application libs
         require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']."/$file");
-	}
+    }
 }
 
 ?>
