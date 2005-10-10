@@ -15,12 +15,13 @@ if($_SERVER['TRAX_MODE']) { // Set in the Apache Vhost (SetEnv TRAX_MODE develop
 if (substr(PHP_OS, 0, 3) == 'WIN') {
     // Windows
     define("TRAX_PATH_SEPERATOR", ";");
+    define("TRAX_ROOT", dirname(__FILE__) . "/");
 } else {
     // Unix
     define("TRAX_PATH_SEPERATOR", ":");
+    define("TRAX_ROOT", dirname(__FILE__) . "/../");
 }
 
-define("TRAX_ROOT",         dirname(dirname(__FILE__))."/");
 define("TRAX_URL_PREFIX",   null); 
 define("DEFAULT_LAYOUT",    "public");  // public is the default
 
