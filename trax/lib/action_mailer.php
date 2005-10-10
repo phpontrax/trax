@@ -29,7 +29,7 @@ class ActionMailer {
 
     public $crlf = "\r\n";
     public $smtp_params = array("host"=>"localhost", "port"=>"25");
-    public $sent_type = "mail"; // smtp or mail
+    public $send_type = "mail"; // smtp or mail
     public $subject = null; // email subject
     public $from_address = "no-reply@nodomain.com";
     public $from_name = null;
@@ -172,7 +172,13 @@ class ActionMailer {
         }
 
         if(!array_key_exists("Date", $this->headers))
-        $this->set_header_line("Date", date("r"));
+            $this->set_header_line("Date", date("r"));
+        
+        if(!array_key_exists("Return-Path", $this->headers) && !is_null($this->from_address))
+            $this->set_header_line("Return-Path", $this->from_address);
+            
+        if(!array_key_exists("Reply-To", $this->headers) && !is_null($this->from_address))
+            $this->set_header_line("Reply-To", $this->from_address);            
     }
 
     function send($to_address = null, $subject = null, $text_body = null, $html_body = null, $extra_headers = null) {
