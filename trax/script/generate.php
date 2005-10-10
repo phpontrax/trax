@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 if (substr(PHP_OS, 0, 3) == 'WIN') {
-    ini_set("include_path",ini_get("include_path").";".dirname(dirname(__FILE__))."\\lib");   
+    ini_set("include_path",ini_get("include_path").";".dirname(dirname(__FILE__))."\\lib"); 
     require_once(dirname(dirname(__FILE__)). "\\config\\environment.php");
 } else {
     ini_set("include_path",ini_get("include_path").":".dirname(__FILE__) . "/../lib");
