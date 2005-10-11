@@ -585,12 +585,12 @@ class ActiveRecord extends DB {
         $this->set_habtm_attributes($params);
     }
 
-    function create($params = null) {
-        return $this->save($params);
+    function create($params = null, $dont_validate = false) {
+        return $this->save($params, $dont_validate);
     }
     
-    function update($params) {
-        return $this->save($params);
+    function update($params, $dont_validate = false) {
+        return $this->save($params, $dont_validate);
     }
 
     function save($params = null, $dont_validate = false) {
