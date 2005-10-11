@@ -32,7 +32,7 @@
 <p><b>Before you move on</b>, verify that the following conditions have been met:</p>
 
 <ol>
-  <li>The log and public directories must be writable to the web server (<code>chmod -R 775 log</code> and <code>chmod -R 775 public</code>).
+  <li>The log files must be writable to the web server (<code>chmod 775 log/*</code>).
   <li>
     Trax on Apache needs to have mod_rewrite enabled.  <br/>
     Somewhere in your httpd.conf, you should have:<br/>
@@ -41,7 +41,7 @@
   </li>
   <li>
     Edit <code>public_html|public/.htaccess</code> and add to the end of the <code>include_path</code> the path to the trax/config dir
-    <br><small>example: <code>php_value include_path .:/usr/local/lib/php:/home/myaccount/config</code></small>
+    <br><small>example: <code>php_value include_path .:/usr/local/lib/php:/home/&lt;username&gt;/config</code></small>
   </li>
 </ol>
 
@@ -66,14 +66,15 @@
   
   <pre>
     # this is for the root directory
-    $route->connect( "", array(":controller" => "welcome") );
+    $router->connect( "", array(":controller" => "welcome") );
     # this is the default route
     $router->connect( ":controller/:action/:id" );      
   </pre>
 </p>
 
 <p>
-  Having problems getting up and running? First try debugging it yourself by looking at the php error log files on your server. <br/>
+  Having problems getting up and running? First try debugging it yourself by looking at the php error log files for your app in the trax/log directory. <br/>
+  Support is also available via Mailing list trax@phpontrax.com or IRC irc.freenode.net channel trax.
 </p>
 
 </body>
