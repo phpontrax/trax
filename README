@@ -21,8 +21,9 @@ The controller and view is handled by the Action Controller
 
 * Database (MySQL, PostgreSQL, etc) (uses Pear::DB)
 * PHP 5.x
-* PEAR::DB, PEAR::Mail / PEAR::Mail_mime
+* PEAR::DB, PEAR::Mail, PEAR::Mail_mime
 * Apache 1.3.x or 2.x 
+* FreeBSD, Unix, Linux, MacOSX, Windows
 
 == Getting Started
 
@@ -34,6 +35,13 @@ The controller and view is handled by the Action Controller
     set the path to your pear installation (/usr/local/lib/php - on my box) 
     set the path to the config dir for trax (/home/<username>/trax/config)
     example: .htaccess - php_value include_path .:/usr/local/lib/php:/home/<username>/trax/config   
+4. set the owner of your log files to the webserver user (www, apache, nobody, ...) or 
+   chmod them to 777 so the web server can write to the logs.
+   example: 
+    cd /path/to/log/
+    chown www *
+    or
+    chmod 777 *
 4. create your database and use script/generator.php to 
    generate model, controller, and view files
    ./generate.php model user (singular names must be used)
@@ -110,30 +118,9 @@ class var $auto_timestamps = false;
 Log files for php errors or if you put in your code error_log("whatever") will be writen to
 the trax/log folder in development|test|production.log file depending on the TRAX_MODE
 
-== Notes
-
-Any thing set as a class variable in the controller with become a regular variable in the view file.
-example: ($this->users becomes $users in the view file as with any class ($this->xxx) variable)
-    url: /browse/show_all
-
-    controller (browse_controller.php):
-        function show_all() {    
-            $user = new User();
-            $this->users = user->find_all();
-        }
-        
-    view file (show_all.phtml):
-        <? if(count($users) > 0): ?>
-            <? foreach($users as $user): ?>
-                <?=$user->first_name?> <?=$user->last_name?><br>
-            <? endforeach; ?>
-        <? endif; ?>         
-
-    view results:
-        john smith
-        joe smith
-        larry king
-        ...
+If your application has errors or if you want to print something to the log, then
+any where in your code if you use the built in php function "error_log('some message')"
+it will write the message to the trax/log/development.log or whatever mode your in log file.
     
 == Description of contents
 
@@ -173,3 +160,195 @@ public / public_html
   The directory available for the web server. Contains sub-directories for images, stylesheets,
   and javascripts. Also contains the .htaccess, dispatcher, and default HTML files.
 
+== Notes
+
+Any thing set as a class variable in the controller with become a regular variable in the view file.
+example: ($this->users becomes $users in the view file as with any class ($this->xxx) variable)
+    url: /browse/show_all
+
+    controller (browse_controller.php):
+        function show_all() {    
+            $user = new User();
+            $this->users = user->find_all();
+        }
+        
+    view file (show_all.phtml):
+        <? if(count($users) > 0): ?>
+            <? foreach($users as $user): ?>
+                <?=$user->first_name?> <?=$user->last_name?><br>
+            <? endforeach; ?>
+        <? endif; ?>         
+
+    view results:
+        john smith
+        joe smith
+        larry king
+        ...
+
+        
+== Example App
+
+URL:
+http://traxtest.mytechsupport.com
+
+Trax Code:
+
+###   config/database.ini ###
+[development]
+  phptype = mysql
+  database =  mydb_development
+  host = localhost
+  username = user
+  password = ******
+  persistent = 1
+
+###   MySQL Table: ###
+CREATE TABLE `files` (
+  `id` int(11) NOT NULL auto_increment,
+  `owner` varchar(50) NOT NULL default '',
+  `name` varchar(50) NOT NULL default '',
+  `contents` text NOT NULL,
+  `created_at` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+);  
+
+###   config/routes.php ###
+// this tells trax to route the root domain to the file_list controller
+// same as just going to http://traxtest.mytechsupport.com/file_list
+$router->connect( "", array(":controller" => "file_list") );
+
+###   app/controllers/file_list_controller.php  ####
+class FileListController extends ApplicationController {
+    function index() {
+        $file = new File();
+        $this->files = $file->find_all();
+    }
+
+    function edit() {
+        $file = new File();
+        $this->file = $file->find($_REQUEST['id']);
+        if($_POST) {
+            if(!$this->file->save($_REQUEST['file'])) {
+                $_SESSION['flash']['error'] = @implode("<br>",$this->file->errors);
+            } else {
+                $_SESSION['flash']['notice'] = "File saved successfully.";
+                $this->redirect_to = "/file_list";
+            }
+        }
+    }
+
+    function add() {
+        $this->file = new File($_REQUEST['file']);
+        if($_POST) {
+            if(!$this->file->save()) {
+                $_SESSION['flash']['error'] = @implode("<br>",$this->file->errors);
+            } else {
+                $_SESSION['flash']['notice'] = "File added successfully.";
+                $this->redirect_to = "/file_list";
+            }
+        }
+    }
+
+    function delete() {
+        $file = new File();
+        $this->file = $file->find($_REQUEST['id']);
+        if(is_object($this->file)) {
+            if(!$this->file->delete()) {
+                $_SESSION['flash']['error'] = "Error deleting file.";
+                $this->render_action = "edit";
+            } else {
+                $_SESSION['flash']['notice'] = "File deleted successfully.";
+                $this->redirect_to = "/file_list";
+            }
+        } else {
+            $_SESSION['flash']['error'] = "Error can't find file to delete.";
+            $this->render_action = "edit";
+        }
+    }
+}
+
+Model
+###   app/models/file.php  ####
+class File extends ActiveRecord {
+
+    function validate_name() {
+        return array(!empty($this->name), 'Please don\'t leave name blank.');
+    }
+
+    function validate_owner() {
+        return array(!empty($this->owner), 'Please don\'t leave owner blank.');
+    }
+
+    function validate_contents() {
+        if(strlen($this->contents) < 15)
+            return array(false, 'Contents needs to be at least 15 characters long.');
+        else
+            return array(true, null);
+    }
+
+}
+
+Views
+###   app/views/file_list/add.phtml  ####
+<h1>FileList->add</h1>
+<form method="post" action="/file_list/add">
+<? $this->render_partial("form") ?>
+</form>
+<br>
+<a href="/file_list">back</a>
+
+###   app/views/file_list/edit.phtml  ####
+<h1>FileList->edit</h1>
+<form method="post" action="/file_list/edit/<?=$file->id?>">
+<? $this->render_partial("form") ?>
+</form>
+<br>
+<a href="/file_list">back</a> &nbsp; <a href="/file_list/delete/<?=$file->id?>">delete</a>
+
+Partial Views
+###  app/views/file_list/_form.phtml  ####
+<table>
+<tr>
+    <td>Id: </td>
+    <td><?=$file->id?></td>
+</tr>
+<tr>
+    <td>Name: </td>
+    <td><input type="text" name="file[name]" value="<?=$file->name?>"/></td>
+</tr>
+<tr>
+    <td>Owner: </td>
+    <td><input type="text" name="file[owner]" value="<?=$file->owner?>"/></td>
+<tr>
+    <td valign="top">Contents: </td>
+    <td><textarea name="file[contents]" rows="10" cols="80"><?=$file->contents?></textarea></td>
+</tr>
+<tr>
+    <td>Created: </td>
+    <td><?=$file->created_at?></td>
+</tr>
+<tr>
+    <td colspan="2"><input type="submit" value=" Save "/></td>
+</tr>
+</table>
+
+Site layout file:
+### app/layouts/public.phtml
+<html>
+<head>
+<title>PHP on Trax</title>
+</head>
+<body>
+
+<? if($_SESSION['flash']['notice']): ?>
+    <font color="green"><?=$_SESSION['flash']['notice']?></font><br><br>
+<? elseif($_SESSION['flash']['error']): ?>
+    <font color="red"><?=$_SESSION['flash']['error']?></font><br><br>
+<? endif; ?>
+
+<?=$content_for_layout?>
+
+</body>
+</html>
+
+      
