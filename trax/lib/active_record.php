@@ -593,15 +593,19 @@ class ActiveRecord extends DB {
         return $this->save($params);
     }
 
-    function save($params = null) {
+    function save($params = null, $dont_validate = false) {
         if(!is_null($params)) {
             $this->update_attributes($params);
         }
-        if ($this->validate()) {
+        if ($dont_validate || $this->validate()) {
             return $this->add_record_or_update_record();
         } else {
             return false;
         }
+    }
+
+    function save_without_validation($params = null) {
+        return $this->save($params, true);
     }
 
     function add_record_or_update_record() {
