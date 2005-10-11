@@ -182,10 +182,10 @@ class ActionMailer {
     }
 
     function send($to_address = null, $subject = null, $text_body = null, $html_body = null, $extra_headers = null) {
-        if(!is_null($to_address)) $this->mail_mime->add_to_address($to_address);
+        if(!is_null($to_address)) $this->add_to_address($to_address);
         if(!is_null($subject)) $this->set_subject($subject);
-        if(!is_null($html_body)) $this->mail_mime->set_html_body($html_body);
-        if(!is_null($text_body)) $this->mail_mime->set_text_body($text_body);
+        if(!is_null($html_body)) $this->set_html_body($html_body);
+        if(!is_null($text_body)) $this->set_text_body($text_body);
 
         $body = $this->mail_mime->get();
         $this->set_headers($extra_headers);
@@ -198,7 +198,7 @@ class ActionMailer {
         }
 
         if(!$this->error) {
-            $result = $mail->send($to, $headers, $body);
+            $result = $mail->send(null, $headers, $body);
             if(is_object($result)) {
                 $this->error = $result->getMessage();
                 return false;
