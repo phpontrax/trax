@@ -40,26 +40,29 @@ define("ACTIVE_RECORD_QUERY_ERR",       -4);
 
 class ActiveRecord {
     
-    static private $db = null;              // Reference to current db
+    static private $db = null;              // Reference to Pear db object
     static protected $inflector = null;     // object to do class inflection
-    static public $table_info = null;    // info about each column in the table
+    public $table_info = null;              // info about each column in the table
+    public $table_name = null;
 
+    // Table associations
     protected $has_many = array();
     protected $has_one = array();
     protected $has_and_belongs_to_many = array();
     protected $belongs_to = array();
+    protected $habtm_attributes = array();
+    
     protected $new_record = true;  // whether or not to create a new record or just update
     protected $auto_update_timestamps = array("updated_at","updated_on");
     protected $auto_create_timestamps = array("created_at","created_on");
     protected $aggregrations = array("count","sum","avg","max","min");
-    protected $habtm_attributes = array();
 
-    public $primary_keys = array("id");  // update where clause keys
+    public $primary_keys = array("id");  // update / delete where clause keys
     public $rows_per_page_default = 20;  // Pagination
     public $display = 10;
     public $errors = array();
     public $auto_timestamps = true; // whether or not to auto update created_at/on and updated_at/on fields
-    public $auto_save_habtm = true; // auto insert / update has and belongs to many tables
+    public $auto_save_habtm = true; // auto insert / update $has_and_belongs_to_many tables
 
     ########################################################################
     # __contruct()
@@ -69,21 +72,28 @@ class ActiveRecord {
     ########################################################################
     function __construct($params = null) {
 
-        self::$inflector = new Inflector();
-
-        if(is_array($params)) {
-            $this->update_attributes($params);
+		// Define static members
+        if (self::$inflector == null) {
+			self::$inflector = new Inflector();
         }
-
+        
         // Open the database connection
         if ($this->is_error($use_result = $this->use_db())) {
             echo "ActiveRecord Error:".$use_result->getMessage();
             exit;
         }
 
-        $this->set_table_name_using_class_name();
-        if($this->table_name) {
-            $this->set_table_info($this->table_name);
+        // Set table_name and column info
+        if($this->table_name == null) { 
+            $this->set_table_name_using_class_name();
+            if($this->table_name) {
+                $this->set_table_info($this->table_name);
+            }
+        }
+        
+        // If $params array is passed in update the class with its contents
+        if(is_array($params)) {
+            $this->update_attributes($params);
         }
     }
 
@@ -106,7 +116,7 @@ class ActiveRecord {
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
-            self::$table_info = $this->set_table_info($value);
+            $this->table_info = $this->set_table_info($value);
         }
         $this->$key = $value;
     }
@@ -120,7 +130,7 @@ class ActiveRecord {
             // ... otherwise, check to see if the method call is one of our
             // special Trax methods ...
             // ... first check for method names that match any of our explicitly
-            // declared associations for this model ( e.g. $has_many = array("movies" => null) ) ...
+            // declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
             if (array_key_exists($method_name, $this->has_many)) {
                 return $this->find_all_has_many($method_name, $parameters);
             } elseif(array_key_exists($method_name, $this->has_one)) {
@@ -454,29 +464,28 @@ class ActiveRecord {
         return $objects;
     }
 
-    function find($id, $conditions = null) {
+    function find($id, $additional_conditions = null) {
         if(is_array($id)) {
-            $where = "id IN(".implode(",",$id).")";
+            $conditions = "id IN(".implode(",",$id).")";
+        } elseif(strstr($id,"=")) {
+            $conditions = $id;
         } else {
-            $where = "id='$id'";
+            $conditions = "id='$id'";
         }
-        if($conditions) {
-            $where .= " AND " . $conditions;
+
+        if($additional_conditions) {
+            $where .= " AND " . $additional_conditions;
         }
 
         if(is_array($id)) {
-            return $this->find_all($where);
+            return $this->find_all($conditions);
         } else {
-            return $this->find_first($where);
+            return $this->find_first($conditions);
         }
     }
 
     function find_by_sql($sql) {
-        $objects = $this->find_all($sql);
-        if(count($objects) == 1)
-            return @current($objects);
-        else
-            return $objects;
+        return $this->find_all($sql);
     }
 
     function find_first($conditions = null, $orderings = null) {
@@ -485,7 +494,6 @@ class ActiveRecord {
     }
 
     function find_all_by($method_name, $parameters) {
-
         $method_parts = explode("_",substr($method_name, 12));
         if(is_array($methodParts)) {
             $param_cnt = 0;
@@ -766,8 +774,8 @@ class ActiveRecord {
 
     function check_datetime($field, $value) {
         if($this->auto_timestamps) {
-            if(is_array(self::$table_info)) {
-                foreach(self::$table_info as $field_info) {
+            if(is_array($this->table_info)) {
+                foreach($this->table_info as $field_info) {
                     if(($field_info['name'] == $field) && ($field_info['type'] == "datetime")) {
                         if($this->new_record && in_array($field, $this->auto_create_timestamps))
                             return date("Y-m-d H:i:s");
@@ -788,8 +796,8 @@ class ActiveRecord {
     }
 
     function get_attributes() {
-        if(is_array(self::$table_info)) {
-            foreach(self::$table_info as $info) {
+        if(is_array($this->table_info)) {
+            foreach($this->table_info as $info) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
                 $attributes[$info['name']] = $this->$info['name'];
             }
@@ -824,11 +832,11 @@ class ActiveRecord {
     }
 
     function set_table_info($table_name) {
-        self::$table_info = self::$db->tableInfo($table_name);
-        if(is_array(self::$table_info)) {
+        $this->table_info = self::$db->tableInfo($table_name);
+        if(is_array($this->table_info)) {
             $i = 0;
-            foreach(self::$table_info as $info) {
-                self::$table_info[$i++]['human_name'] = self::$inflector->humanize($info['name']);
+            foreach($this->table_info as $info) {
+                $this->table_info[$i++]['human_name'] = self::$inflector->humanize($info['name']);
             }
         }
     }
