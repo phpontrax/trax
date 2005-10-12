@@ -574,23 +574,27 @@ class ActiveRecord {
         return $validated_ok;
     }
 
-    function create($params = null) {
-        return $this->save($params);
+    function create($params = null, $dont_validate = false) {
+        return $this->save($params, $dont_validate);
     }
     
-    function update($params) {
-        return $this->save($params);
+    function update($params, $dont_validate = false) {
+        return $this->save($params, $dont_validate);
     }
 
-    function save($params = null) {
+    function save($params = null, $dont_validate = false) {
         if(!is_null($params)) {
             $this->update_attributes($params);
         }
-        if ($this->validate()) {
+        if ($dont_validate || $this->validate()) {
             return $this->add_record_or_update_record();
         } else {
             return false;
         }
+    }
+
+    function save_without_validation($params = null) {
+        return $this->save($params, true);
     }
 
     function add_record_or_update_record() {
