@@ -38,12 +38,11 @@ define("ACTIVE_RECORD_CONNECT_ERR",     -2);
 define("ACTIVE_RECORD_ERR",             -3);
 define("ACTIVE_RECORD_QUERY_ERR",       -4);
 
-class ActiveRecord extends DB {
+class ActiveRecord {
+    
     static private $db = null;              // Reference to current db
     static protected $inflector = null;     // object to do class inflection
     static public $table_info = null;    // info about each column in the table
-    
-    private $current_rs;                    // Reference to current record set
 
     protected $has_many = array();
     protected $has_one = array();
@@ -77,8 +76,8 @@ class ActiveRecord extends DB {
         }
 
         // Open the database connection
-        if ($this->isError($useResult = $this->useDB())) {
-            echo "ActiveRecord Error:".$useResult->getMessage();
+        if ($this->is_error($use_result = $this->use_db())) {
+            echo "ActiveRecord Error:".$use_result->getMessage();
             exit;
         }
 
@@ -347,7 +346,7 @@ class ActiveRecord extends DB {
         if(!empty($conditions)) $sql .= "WHERE $conditions ";
 
         //echo "sql:$sql<br>";
-        if($this->isError($rs = $this->query($sql))) {
+        if($this->is_error($rs = $this->query($sql))) {
             echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
         } else {
             $row = $rs->fetchRow();
@@ -360,8 +359,8 @@ class ActiveRecord extends DB {
         // Run the query to grab a specific columns value.
         $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
 
-        if ($this->isError($result)) {
-            echo ($this->raiseError($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
+        if ($this->is_error($result)) {
+            echo ($this->raise_error($result->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
             die;
         } else {
             return $result;
@@ -376,16 +375,13 @@ class ActiveRecord extends DB {
     #  Returns: Nothing
     ########################################################################
     function query($sql) {
-        if (!$this->_hasCurrentDB()) {
-            return $this->raiseError('No database selected, run useDB first', 'query', __LINE__, ACTIVE_RECORD_NODB, PEAR_ERROR_RETURN);
-        }
 
         // Run the query
         $rs = self::$db->query($sql);
 
-        if ($this->isError($rs)) {
+        if ($this->is_error($rs)) {
             echo "Error in ActiveRecord::query();<br>";
-            $error = $this->raiseError($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
+            $error = $this->raise_error($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
             echo $error->message;
             die;
         } else {
@@ -424,7 +420,7 @@ class ActiveRecord extends DB {
             if(!is_null($limit)) {
                 if($set_pages) {
                     //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-                    if($this->isError($rs = $this->query($sql))) {
+                    if($this->is_error($rs = $this->query($sql))) {
                         echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
                     } else {
                         // Set number of total pages in result set without the LIMIT
@@ -437,7 +433,7 @@ class ActiveRecord extends DB {
         }
 
         //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-        if($this->isError($rs = $this->query($sql))) {
+        if($this->is_error($rs = $this->query($sql))) {
             echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
         }
 
@@ -448,12 +444,12 @@ class ActiveRecord extends DB {
             foreach($row as $field => $val) {
                 $obj->$field = $val;
                 if($field == "id") {
-                    $objectsKey = $val;
+                    $objects_key = $val;
                 }
             }
-            $objects[$objectsKey] = $obj;
+            $objects[$objects_key] = $obj;
             unset($obj);
-            unset($objectsKey);
+            unset($objects_key);
         }
         return $objects;
     }
@@ -578,34 +574,23 @@ class ActiveRecord extends DB {
         return $validated_ok;
     }
 
-    function update_attributes($params) {
-        foreach($params as $field => $val) {
-            $this->$field = $val;
-        }
-        $this->set_habtm_attributes($params);
-    }
-
-    function create($params = null, $dont_validate = false) {
-        return $this->save($params, $dont_validate);
+    function create($params = null) {
+        return $this->save($params);
     }
     
-    function update($params, $dont_validate = false) {
-        return $this->save($params, $dont_validate);
+    function update($params) {
+        return $this->save($params);
     }
 
-    function save($params = null, $dont_validate = false) {
+    function save($params = null) {
         if(!is_null($params)) {
             $this->update_attributes($params);
         }
-        if ($dont_validate || $this->validate()) {
+        if ($this->validate()) {
             return $this->add_record_or_update_record();
         } else {
             return false;
         }
-    }
-
-    function save_without_validation($params = null) {
-        return $this->save($params, true);
     }
 
     function add_record_or_update_record() {
@@ -636,7 +621,7 @@ class ActiveRecord extends DB {
         //echo "add_record: SQL: $sql<br>";
 
         $result = $this->query($sql);
-        if ($this->isError($result)) {
+        if ($this->is_error($result)) {
             return false;
         } else {
             $id = $this->getInsertId();
@@ -667,7 +652,7 @@ class ActiveRecord extends DB {
                         $sql = "INSERT INTO $table_name ($fields) VALUES ($values)";
                         //echo "add_habtm_records: SQL: $sql<br>";
                         $result = $this->query($sql);
-                        if ($this->isError($result)) {
+                        if ($this->is_error($result)) {
                             $failed = true;
                         }
                     }
@@ -702,7 +687,7 @@ class ActiveRecord extends DB {
         $sql = "UPDATE $this->table_name SET $update WHERE $where";
         //echo "update_record: SQL: $sql<br>";
         $result = $this->query($sql);
-        if($this->isError($result)) {
+        if($this->is_error($result)) {
             return false;
         } else {
             if($id > 0 && $this->auto_save_habtm) {
@@ -718,27 +703,31 @@ class ActiveRecord extends DB {
 
     function delete($conditions = null) {
         // Check for valid ids
-        if(count($this->primary_keys) <= 0 && is_null($conditions))
+        if(count($this->primary_keys) <= 0 && is_null($conditions) && $this->id <= 0)
             return false;
 
-        if(is_null($conditions)) {
-            $conditions = array();
-            $attributes = $this->quoted_attributes();
-            // run through our fields and join them with their values
-            foreach ($attributes as $key => $value) {
-                if(in_array($key,$this->primary_keys)) {
-                    $conditions[] = "$key = $value";
-                } 
-            }            
-            $conditions = implode(" AND ", $conditions);
-        } elseif($this->id > 0) {
+        if($this->id > 0) {
             $conditions = "id='$this->id'";
-        } else {
-            return false;
+        } elseif(is_null($conditions)) {
+            $attributes = $this->quoted_attributes();            
+            if(count($attributes) > 0) {
+                $conditions = array();
+                // run through our fields and join them with their values
+                foreach($attributes as $key => $value) {
+                    if(in_array($key,$this->primary_keys)) {
+                        $conditions[] = "$key = $value";
+                    } 
+                }            
+                $conditions = implode(" AND ", $conditions);
+            }
+        } 
+
+        if($conditions != "") {
+            return false;    
         }
 
-        // Delete their info record
-        if($this->isError($this->query("DELETE FROM $this->table_name WHERE $conditions"))) {
+        // Delete the record
+        if($this->is_error($this->query("DELETE FROM $this->table_name WHERE $conditions"))) {
             return false;
         }
 
@@ -758,7 +747,7 @@ class ActiveRecord extends DB {
                 //echo "delete_habtm_records: SQL: $sql<br>";
 
                 $result = $this->query($sql);
-                if ($this->isError($result)) {
+                if ($this->is_error($result)) {
                     $failed = true;
                 }
             }
@@ -787,8 +776,14 @@ class ActiveRecord extends DB {
         return $value;
     }
 
+    function update_attributes($params) {
+        foreach($params as $field => $val) {
+            $this->$field = $val;
+        }
+        $this->set_habtm_attributes($params);
+    }
+
     function get_attributes() {
-        $attributes = array();
         if(is_array(self::$table_info)) {
             foreach(self::$table_info as $info) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
@@ -829,134 +824,10 @@ class ActiveRecord extends DB {
         if(is_array(self::$table_info)) {
             $i = 0;
             foreach(self::$table_info as $info) {
-                self::$table_info[$i]['human_name'] = self::$inflector->humanize($info['name']);
-                ++$i;
+                self::$table_info[$i++]['human_name'] = self::$inflector->humanize($info['name']);
             }
         }
     }
-
-    // The following function overrides simply call their corresponding functions for the currend db we're using.
-    // They dynamically pass all arguments given to them on to the real function etc... If pear DB::Common or DB::Result change
-    // We need only add or remove functions from here...
-    /*
-        * DB_common -- Interface for database access
-        * DB_common::affectedRows() -- Finds the number of affected rows
-        * DB_common::autoExecute() -- Automatically performs insert or update queries
-        * DB_common::autoPrepare() -- Automatically prepare an insert or update query
-        * DB_common::createSequence() -- Create a new sequence
-        * DB_common::disconnect() -- Disconnect from a database
-        * DB_common::dropSequence() -- Deletes a sequence
-        * DB_common::escapeSimple() -- Escape a string according to the current DBMS's standards
-        * DB_common::execute() -- Executes a prepared SQL statment
-        * DB_common::executeMultiple() -- Repeated execution of a prepared SQL statment
-        * DB_common::freePrepared() -- Release resources associated with a prepared SQL statement
-        * DB_common::getAll() -- Fetch all rows
-        * DB_common::getAssoc() -- Fetch result set as associative array
-        * DB_common::getCol() -- Fetch a single column
-        * DB_common::getListOf() -- View database system information
-        * DB_common::getOne() -- Fetch the first column of the first row
-        * DB_common::getRow() -- Fetch the first row
-        * DB_common::limitQuery() -- Send a limited query to the database
-        * DB_common::nextId() -- Returns the next free id of a sequence
-        * DB_common::prepare() -- Prepares a SQL statement
-        * DB_common::provides() -- Checks if a DBMS supports a particular feature
-        * DB_common::query() -- Send a query to the database
-        * DB_common::quote() -- DEPRECATED: Quotes a string
-        * DB_common::quoteIdentifier() -- Format string so it can be safely used as an identifier
-        * DB_common::quoteSmart() -- Format input so it can be safely used as a literal
-        * DB_common::setFetchMode() -- Sets the default fetch mode
-        * DB_common::setOption() -- Set run-time configuration options for PEAR DB
-        * DB_common::tableInfo() -- Get info about columns in a table or a query result
-        */
-    function affectedRows()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'affectedRows'), $args)); }
-    function autoExecute()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'autoExecute'), $args)); }
-    function autoPrepare()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'autoPrepare'), $args)); }
-    function createSequence()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'createSequence'), $args)); }
-    function disconnect()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'disconnect'), $args)); }
-    function dropSequence()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'dropSequence'), $args)); }
-    function escapeSimple()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'escapeSimple'), $args)); }
-    function execute() {
-        if (!$this->_hasCurrentDB()) return false;
-        $args = func_get_args();
-        $rs = call_user_func_array(array(self::$db, 'execute'), $args);
-        if($this->isError($rs))
-            return($this->raiseError($obj->getUserInfo(), 'execute', __LINE__, ACTIVE_RECORD_QUERY_ERR, PEAR_ERROR_RETURN));
-        else
-            $this->_setCurrentRS($rs);
-        return($rs);
-    }
-    function executeMultiple() {
-        if (!$this->_hasCurrentDB()) return false;
-        $args = func_get_args();
-        $rs = call_user_func_array(array(self::$db, 'executeMultiple'), $args);
-        if($this->isError($rs))
-            return($this->raiseError($obj->getUserInfo(), 'executeMultiple', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
-        else
-            $this->_setCurrentRS($rs);
-        return($rs);
-    }
-    function freePrepared()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'freePrepared'), $args)); }
-    function getAll()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getAll'), $args)); }
-    function getAssoc()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getAssoc'), $args)); }
-    function getCol()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getCol'), $args)); }
-    function getListOf()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getListOf'), $args)); }
-    function getOne()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getOne'), $args)); }
-    function getRow()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'getRow'), $args)); }
-    function limitQuery()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'limitQuery'), $args)); }
-    function nextId()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'nextId'), $args)); }
-    function prepare()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'prepare'), $args)); }
-    function provides()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'provides'), $args)); }
-    function quote()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quote'), $args)); }
-    function quoteIdentifier()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quoteIdentifier'), $args)); }
-    function quoteSmart()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'quoteSmart'), $args)); }
-    function setFetchMode()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'setFetchMode'), $args)); }
-    function setOption()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'setOption'), $args)); }
-    function tableInfo()
-    { if (!$this->_hasCurrentDB()) return false; $args = func_get_args(); return(call_user_func_array(array(self::$db, 'tableInfo'), $args)); }
-    /*
-        * DB_result -- DB result set
-        * DB_result::fetchInto() -- Fetch a row into a variable
-        * DB_result::fetchRow() -- Fetch a row
-        * DB_result::free() -- Release a result set
-        * DB_result::nextResult() -- Get result sets from multiple queries
-        * DB_result::numCols() -- Get number of columns
-        * DB_result::numRows() -- Get number of rows
-        */
-    function fetchInto()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'fetchInto'), $args)); }
-    function fetchRow()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'fetchRow'), $args)); }
-    function free()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'free'), $args)); }
-    function nextResult()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'nextResult'), $args)); }
-    function numCols()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'numCols'), $args)); }
-    function numRows()
-    { if (!$this->_hasCurrentRS()) return false; $args = func_get_args(); return(call_user_func_array(array($this->current_rs, 'numRows'), $args)); }
 
     ########################################################################
     # getInsertId()
@@ -964,34 +835,34 @@ class ActiveRecord extends DB {
     #  Params : None
     #  Returns: id          integer id
     ########################################################################
-    function getInsertId() {
-        $id = $this->getOne("SELECT LAST_INSERT_ID();");
+    function get_insert_id() {
+        $id = self::$db->getOne("SELECT LAST_INSERT_ID();");
 
-        if ($this->isError($id))
-            return($this->raiseError($id->getUserInfo(), 'getInsertId', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
+        if ($this->is_error($id))
+            return($this->raise_error($id->getUserInfo(), 'get_insert_id', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
 
         return $id;
     }
 
     ########################################################################
-    # useDB()
+    # use_db()
     #  Use    : Calls DB::Connect to open a database connection. It uses
     #                       our global ACTIVE_RECORD_DEFAULTDB if no db argument is given. If it
     #                       finds connection information in ACTIVE_RECORD_DATABASES it uses it
     #                       otherwise it returns an error
     #  Returns: PEAR::db object
     ########################################################################
-    function useDB() {
+    function use_db() {
 
         // Connect to the database and throw an error if the connect fails...
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
             $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
         } 
         
-        if(!$this->isError($GLOBALS['ACTIVE_RECORD_DB'])) {
+        if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
         } else {
-            return($this->raiseError($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'useDB', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
+            return($this->raise_error($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'use_db', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
         }
 
         self::$db->setFetchMode($GLOBALS['ACTIVE_RECORD_FETCHMODE']);
@@ -1000,55 +871,30 @@ class ActiveRecord extends DB {
     }
 
     ########################################################################
-    # _setCurrentRS()
-    #  Use    : Sets the current recordset pointer
-    #  Params : $rs                 reference to the recordset to make current
-    #  Returns: Nothing
-    ########################################################################
-    function _setCurrentRS(&$rs) {
-        $this->current_rs = $rs;
-    }
-
-    ########################################################################
-    # raiseError()
-    #  Use    : Sends an error string to PEAR::raiseError
+    # raise_error()
+    #  Use    : Sends an error string to PEAR::raise_error
     #  Params : $message            error message to send
-    #                       $method                 function error occurred in
-    #                       $line                   line error occurred on (use __LINE__)
-    #                       $errno                  internal error number
-    #                       $do                             pear error action (die print return etc...)
+    #           $method             function error occurred in
+    #           $line               line error occurred on (use __LINE__)
+    #           $errno              internal error number
+    #           $do                 pear error action (die print return etc...)
     #  Returns: Nothing
     ########################################################################
-    function &raiseError($message, $method, $line, $errno, $do) {
-        $error = PEAR::raiseError(
-                                    sprintf("Error: %s on line %d of %s::%s()",
-                                            $message, $line, /*get_class($this)*/'ActiveRecord', $method), $errno, $do);
+    function &raise_error($message, $method, $line, $errno, $do) {
+        $error = PEAR::raiseError(sprintf("Error: %s on line %d of %s::%s()",
+                                  $message, $line, 'ActiveRecord', $method), $errno, $do);
         return($error);
     }
 
     ########################################################################
-    # isError()
+    # is_error()
     #  Use    : Tests to see if an object is either a pear error or a db error
     #                       object...
     #  Params : $obj                        database to open
     #  Returns: Nothing
     ########################################################################
-    function isError($obj) {
+    function is_error($obj) {
         return((PEAR::isError($obj)) || (DB::isError($obj)));
-    }
-
-    function _hasCurrentDB() {
-        if (is_object(self::$db))
-            return true;
-        else
-            return false;
-    }
-
-    function _hasCurrentRS() {
-        if (is_object($this->current_rs))
-            return true;
-        else
-            return false;
     }
 
     function limit_select($controller =null, $additional_query = null) {
