@@ -26,7 +26,6 @@ require_once('PEAR.php');
 require_once('DB.php');
 require_once('inflector.php');
 
-
 if(isset($GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
     $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'];
 }
@@ -40,50 +39,45 @@ define("ACTIVE_RECORD_QUERY_ERR",       -4);
 
 class ActiveRecord {
     
-    static private $db = null;              // Reference to Pear db object
-    static protected $inflector = null;     // object to do class inflection
-    public $table_info = null;              // info about each column in the table
+    static private $db = null;              # Reference to Pear db object
+    static protected $inflector = null;     # object to do class inflection
+    public $table_info = null;              # info about each column in the table
     public $table_name = null;
 
-    // Table associations
+    # Table associations
     protected $has_many = array();
     protected $has_one = array();
     protected $has_and_belongs_to_many = array();
     protected $belongs_to = array();
     protected $habtm_attributes = array();
     
-    protected $new_record = true;  // whether or not to create a new record or just update
+    protected $new_record = true;  # whether or not to create a new record or just update
     protected $auto_update_timestamps = array("updated_at","updated_on");
     protected $auto_create_timestamps = array("created_at","created_on");
     protected $aggregrations = array("count","sum","avg","max","min");
 
-    public $primary_keys = array("id");  // update / delete where clause keys
-    public $rows_per_page_default = 20;  // Pagination
+    public $primary_keys = array("id");  # update / delete where clause keys
+    public $rows_per_page_default = 20;  # Pagination
     public $display = 10;
     public $errors = array();
-    public $auto_timestamps = true; // whether or not to auto update created_at/on and updated_at/on fields
-    public $auto_save_habtm = true; // auto insert / update $has_and_belongs_to_many tables
+    public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
+    public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
 
-    ########################################################################
-    # __contruct()
-    #  Use    : Class constructor... opens a database connection
-    #  Params : $params     usually the HTTP REQUEST
-    #  Returns: Nothing
-    ########################################################################
-    function __construct($params = null) {
+    # Constructor sets up need parameters for AR to function properly
+    function __construct($attributes = null) {
 
-		// Define static members
+		# Define static members
         if (self::$inflector == null) {
 			self::$inflector = new Inflector();
         }
         
-        // Open the database connection
-        if ($this->is_error($use_result = $this->use_db())) {
-            echo "ActiveRecord Error:".$use_result->getMessage();
+        # Open the database connection
+        if ($this->is_error($connection_result = $this->establish_connection())) {
+            echo "ActiveRecord Error:".$connection_result->getMessage();
             exit;
         }
 
-        // Set table_name and column info
+        # Set table_name and column info
         if($this->table_name == null) { 
             $this->set_table_name_using_class_name();
             if($this->table_name) {
@@ -91,13 +85,14 @@ class ActiveRecord {
             }
         }
         
-        // If $params array is passed in update the class with its contents
-        if(is_array($params)) {
-            $this->update_attributes($params);
+        # If $attributes array is passed in update the class with its contents
+        if(is_array($attributes)) {
+            $this->update_attributes($attributes);
         }
     }
 
-    ########################################################################
+    # Override get() if they do $model->some_association->field_name dynamically load the requested
+    # contents from the database.
     function __get($key) {
         if(array_key_exists($key, $this->has_many)) {
             $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
@@ -112,7 +107,7 @@ class ActiveRecord {
         return $this->$key;
     }
 
-    ########################################################################
+    # Override set() if they set certain class variables do some action
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
@@ -120,17 +115,17 @@ class ActiveRecord {
         }
         $this->$key = $value;
     }
-
-    ########################################################################
+    
+    # Override call() to dynamically call the database associations
     function __call($method_name, $parameters) {
         if(method_exists($this,$method_name)) {
-            // If the method exists, just call it
+            # If the method exists, just call it
             return call_user_func(array($this,$method_name), $parameters);
         } else {
-            // ... otherwise, check to see if the method call is one of our
-            // special Trax methods ...
-            // ... first check for method names that match any of our explicitly
-            // declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
+            # ... otherwise, check to see if the method call is one of our
+            # special Trax methods ...
+            # ... first check for method names that match any of our explicitly
+            # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
             if (array_key_exists($method_name, $this->has_many)) {
                 return $this->find_all_has_many($method_name, $parameters);
             } elseif(array_key_exists($method_name, $this->has_one)) {
@@ -140,25 +135,30 @@ class ActiveRecord {
             } elseif(array_key_exists($method_name, $this->belongs_to)) {
                 return $this->find_one_belongs_to($method_name, $parameters);
             }
-            // check for the [count,sum,avg,etc...]_all magic functions
+            # check for the [count,sum,avg,etc...]_all magic functions
             elseif(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
                 return $this->aggregrate_all($method_name, $parameters);
             }
-            // ... and last, check for the find_all_by_* magic functions
+            # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
                 //echo "calling method: $method_name<br>";
-                return $this->find_all_by($method_name, $parameters);
+                return $this->find_by($method_name, $parameters, true);
             }
+            # check for the find_by_* magic functions
+            elseif(strlen($method_name) > 7 && substr($method_name, 0, 7) == "find_by") {
+                //echo "calling method: $method_name<br>";
+                return $this->find_by($method_name, $parameters);
+            }            
         }
     }
 
-    // Returns a the name of the join table that would be used for the two
-    // tables.  The join table name is decided from the alphabetical order
-    // of the two tables.  e.g. "genres_movies" because "g" comes before "m"
-    //
-    // Parameters: $first_table, $second_table: the names of two database tables,
-    //   e.g. "movies" and "genres"
+    # Returns a the name of the join table that would be used for the two
+    # tables.  The join table name is decided from the alphabetical order
+    # of the two tables.  e.g. "genres_movies" because "g" comes before "m"
+    #
+    # Parameters: $first_table, $second_table: the names of two database tables,
+    #   e.g. "movies" and "genres"
     function get_join_table_name($first_table, $second_table) {
         $tables = array();
         $tables["one"] = $first_table;
@@ -167,35 +167,33 @@ class ActiveRecord {
         return @implode("_", $tables);
     }
 
-    // Find all records using a "has_and_belongs_to_many" relationship
-    // (many-to-many with a join table in between).  Note that you can also
-    // specify an optional "paging limit" by setting the corresponding "limit"
-    // instance variable.  For example, if you want to return 10 movies from the
-    // 5th movie on, you could set $this->movies_limit = "10, 5"
-    //
-    // Parameters: $this_table_name:  The name of the database table that has the
-    //                                one row you are interested in.  E.g. `genres`
-    //             $other_table_name: The name of the database table that has the
-    //                                many rows you are interested in.  E.g. `movies`
-    // Returns: An array of ActiveRecord objects. (e.g. Movie objects)
+    # Find all records using a "has_and_belongs_to_many" relationship
+    # (many-to-many with a join table in between).  Note that you can also
+    # specify an optional "paging limit" by setting the corresponding "limit"
+    # instance variable.  For example, if you want to return 10 movies from the
+    # 5th movie on, you could set $this->movies_limit = "10, 5"
+    #
+    # Parameters: $this_table_name:  The name of the database table that has the
+    #                                one row you are interested in.  E.g. `genres`
+    #             $other_table_name: The name of the database table that has the
+    #                                many rows you are interested in.  E.g. `movies`
+    # Returns: An array of ActiveRecord objects. (e.g. Movie objects)
     function find_all_habtm($other_table_name, $parameters = null) {
-
         $other_class_name = self::$inflector->classify($other_table_name);
-
-        // Instantiate an object to access find_all
+        # Instantiate an object to access find_all
         $results = new $other_class_name();
 
-        // Prepare the join table name primary keys (fields) to do the join on
+        # Prepare the join table name primary keys (fields) to do the join on
         $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
         $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
         $other_foreign_key = self::$inflector->singularize($other_table_name)."_id";
-        // Set up the SQL segments
+        # Set up the SQL segments
         $conditions = "`{$join_table}`.`{$this_foreign_key}`={$this->id}";
         $orderings = null;
         $limit = null;
         $joins = "LEFT JOIN `{$join_table}` ON `{$other_table_name}`.id = `{$other_foreign_key}`";
 
-        // Use any passed-in parameters
+        # Use any passed-in parameters
         if (!is_null($parameters)) {
             if(@array_key_exists("conditions", $parameters))
                 $additional_conditions = $parameters['conditions'];
@@ -223,19 +221,19 @@ class ActiveRecord {
                 $joins .= " " . $additional_joins;
         }
 
-        // Get the list of other_class_name objects
+        # Get the list of other_class_name objects
         return $results->find_all($conditions, $orderings, $limit, $joins);
     }
 
-    // Find all records using a "has_many" relationship (one-to-many)
-    //
-    // Parameters: $other_table_name: The name of the other table that contains
-    //                                many rows relating to this object's id.
-    // Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+    # Find all records using a "has_many" relationship (one-to-many)
+    #
+    # Parameters: $other_table_name: The name of the other table that contains
+    #                                many rows relating to this object's id.
+    # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
     function find_all_has_many($other_table_name, $parameters = null) {
-        // Prepare the class name and primary key, e.g. if
-        // customers has_many contacts, then we'll need a Contact
-        // object, and the customer_id field name.
+        # Prepare the class name and primary key, e.g. if
+        # customers has_many contacts, then we'll need a Contact
+        # object, and the customer_id field name.
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
@@ -244,7 +242,7 @@ class ActiveRecord {
         $other_class_name = self::$inflector->classify($other_table_name);
         $conditions = "`{$foreign_key}`=$this->id";
 
-        // Use any passed-in parameters
+        # Use any passed-in parameters
         if (!is_null($parameters)) {
             //echo "<pre>";print_r($parameters);
             if(@array_key_exists("conditions", $parameters))
@@ -273,24 +271,23 @@ class ActiveRecord {
                 $joins .= " " . $additional_joins;
         }
 
-        // Instantiate an object to access find_all
+        # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
-        // Get the list of other_class_name objects
+        # Get the list of other_class_name objects
         $results = $other_class_object->find_all($conditions, $orderings, $limit, $joins);
 
         return $results;
     }
 
-    // Find all records using a "has_one" relationship (one-to-one)
-    // (the foreign key being in the other table)
-    // Parameters: $other_table_name: The name of the other table that contains
-    //                                many rows relating to this object's id.
-    // Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+    # Find all records using a "has_one" relationship (one-to-one)
+    # (the foreign key being in the other table)
+    # Parameters: $other_table_name: The name of the other table that contains
+    #                                many rows relating to this object's id.
+    # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
     function find_one_has_one($other_object_name, $parameters = null) {
-
-        // Prepare the class name and primary key, e.g. if
-        // customers has_many contacts, then we'll need a Contact
-        // object, and the customer_id field name.
+        # Prepare the class name and primary key, e.g. if
+        # customers has_many contacts, then we'll need a Contact
+        # object, and the customer_id field name.
         $other_class_name = self::$inflector->camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
@@ -298,11 +295,11 @@ class ActiveRecord {
             $foreign_key = self::$inflector->singularize($this->table_name)."_id";
 
         $conditions = "`$foreign_key`='{$this->id}'";
-        // Instantiate an object to access find_all
+        # Instantiate an object to access find_all
         $results = new $other_class_name();
-        // Get the list of other_class_name objects
+        # Get the list of other_class_name objects
         $results = $results->find_first($conditions, $orderings);
-        // There should only be one result, an object, if so return it
+        # There should only be one result, an object, if so return it
         if(is_object($results)) {
             return $results;
         } else {
@@ -310,17 +307,16 @@ class ActiveRecord {
         }
     }
 
-    // Find all records using a "belongs_to" relationship (one-to-one)
-    // (the foreign key being in the table itself)
-    // Parameters: $other_object_name: The singularized version of a table name.
-    //                                 E.g. If the Contact class belongs_to the
-    //                                 Customer class, then $other_object_name
-    //                                 will be "customer".
+    # Find all records using a "belongs_to" relationship (one-to-one)
+    # (the foreign key being in the table itself)
+    # Parameters: $other_object_name: The singularized version of a table name.
+    #                                 E.g. If the Contact class belongs_to the
+    #                                 Customer class, then $other_object_name
+    #                                 will be "customer".
     function find_one_belongs_to($other_object_name, $parameters = null) {
-
-        // Prepare the class name and primary key, e.g. if
-        // customers has_many contacts, then we'll need a Contact
-        // object, and the customer_id field name.
+        # Prepare the class name and primary key, e.g. if
+        # customers has_many contacts, then we'll need a Contact
+        # object, and the customer_id field name.
         $other_class_name = self::$inflector->camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
@@ -328,11 +324,11 @@ class ActiveRecord {
             $foreign_key = $other_object_name."_id";
 
         $conditions = "id='".$this->$foreign_key."'";
-        // Instantiate an object to access find_all
+        # Instantiate an object to access find_all
         $results = new $other_class_name();
-        // Get the list of other_class_name objects
+        # Get the list of other_class_name objects
         $results = $results->find_first($conditions, $orderings);
-        // There should only be one result, an object, if so return it
+        # There should only be one result, an object, if so return it
         if(is_object($results)) {
             return $results;
         } else {
@@ -340,13 +336,14 @@ class ActiveRecord {
         }
     }
 
+    # Used to run all the the *_all() aggregrate functions such as count_all() sum_all()
+    # Return the result of the aggregration or 0.
     function aggregrate_all($aggregrate_type, $parameters = null) {
-
         $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
-        $sql  = "SELECT $aggregrate_type($field) AS agg_result FROM `$this->table_name` ";
+        $sql = "SELECT $aggregrate_type($field) AS agg_result FROM `$this->table_name` ";
 
-        // Use any passed-in parameters
+        # Use any passed-in parameters
         if (!is_null($parameters)) {
             $conditions = $parameters[1];
             $joins = $parameters[2];
@@ -365,10 +362,10 @@ class ActiveRecord {
         return 0;
     }
 
+    # Returns PEAR result set of one record with only the passed in column in the result set.
     function send($column) {
-        // Run the query to grab a specific columns value.
+        # Run the query to grab a specific columns value.
         $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
-
         if ($this->is_error($result)) {
             echo ($this->raise_error($result->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
             die;
@@ -377,41 +374,32 @@ class ActiveRecord {
         }
     }
 
-    ########################################################################
-    # query()
-    #  Use    : Used to run a sql statement when you don''t want the wrapper
-    #                       to do any processing
-    #  Params : $sql                SQL to run on the current database
-    #  Returns: Nothing
-    ########################################################################
+    # Uses PEAR::DB's query to run the query and returns the DB result set
     function query($sql) {
-
-        // Run the query
+        # Run the query
         $rs = self::$db->query($sql);
-
         if ($this->is_error($rs)) {
             echo "Error in ActiveRecord::query();<br>";
             $error = $this->raise_error($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
             echo $error->message;
             die;
-        } else {
-            $this->_setCurrentRS($rs);
         }
-
         return $rs;
     }
 
+    # This will return all the records matched by the options used. 
+    # If no records are found, an empty array is returned.
     function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
         $objects = array();
 
         if (is_array($limit)) {
             list($this->page, $this->rows_per_page) = $limit;
             if($this->page <= 0) $this->page = 1;
-            // Default for rows_per_page:
+            # Default for rows_per_page:
             if ($this->rows_per_page == null) $this->rows_per_page = $this->rows_per_page_default;
-            // Set the LIMIT string segment for the SQL in the find_all
+            # Set the LIMIT string segment for the SQL in the find_all
             $this->offset = ($this->page - 1) * $this->rows_per_page;
-            // mysql 3.23 doesn't support OFFSET
+            # mysql 3.23 doesn't support OFFSET
             //$limit = "$rows_per_page OFFSET $offset";
             $limit = "$this->offset, $this->rows_per_page";
             $set_pages = true;
@@ -431,9 +419,9 @@ class ActiveRecord {
                 if($set_pages) {
                     //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
                     if($this->is_error($rs = $this->query($sql))) {
-                        echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
+                        echo "ActiveRecord Paging Error: ".$rs->getMessage()."<br>";
                     } else {
-                        // Set number of total pages in result set without the LIMIT
+                        # Set number of total pages in result set without the LIMIT
                         if($count = $rs->numRows())
                             $this->pages = (($count % $this->rows_per_page) == 0) ? $count / $this->rows_per_page : floor($count / $this->rows_per_page) + 1;
                     }
@@ -449,57 +437,65 @@ class ActiveRecord {
 
         while($row = $rs->fetchRow()) {
             $class = get_class($this);
-            $obj = new $class();
-            $obj->new_record = false;
+            $object = new $class();
+            $object->new_record = false;
             foreach($row as $field => $val) {
-                $obj->$field = $val;
+                $object->$field = $val;
                 if($field == "id") {
                     $objects_key = $val;
                 }
             }
-            $objects[$objects_key] = $obj;
-            unset($obj);
+            $objects[$objects_key] = $object;
+            unset($object);
             unset($objects_key);
         }
         return $objects;
     }
-
-    function find($id, $additional_conditions = null) {
+    
+    # This can either be a specific id (1), or an array of ids (array(5, 6, 10)). 
+    # If no record can be found for Returns an object if id isn't an array otherwise 
+    # returns an array of objects.
+    function find($id, $orderings = null, $limit = null, $joins = null) {
         if(is_array($id)) {
             $conditions = "id IN(".implode(",",$id).")";
-        } elseif(strstr($id,"=")) {
+        } elseif(strstr($id,"=")) { # has an = so must be a where clause
             $conditions = $id;
         } else {
             $conditions = "id='$id'";
         }
 
-        if($additional_conditions) {
-            $where .= " AND " . $additional_conditions;
-        }
-
         if(is_array($id)) {
-            return $this->find_all($conditions);
+            return $this->find_all($conditions, $orderings, $limit, $joins);
         } else {
-            return $this->find_first($conditions);
+            return $this->find_first($conditions, $orderings, $limit, $joins);
         }
     }
 
+    # This will return the first record matched by the options used. 
+    # These options can either be specific conditions or merely an order. 
+    # If no record can matched, false is returned.
+    function find_first($conditions, $orderings = null, $limit = null, $joins = null) {
+        $result = $this->find_all($conditions, $orderings, $limit, $joins);
+        return @current($result);
+    }
+
+    # Works like find_all(), but requires a complete SQL string.
     function find_by_sql($sql) {
         return $this->find_all($sql);
     }
 
-    function find_first($conditions = null, $orderings = null) {
-        $result = $this->find_all($conditions, $orderings);
-        return @current($result);
-    }
-
-    function find_all_by($method_name, $parameters) {
+    # *Magical* function that is dynamically built according to you.
+    # Works like find_all() or find().  
+    # Example:
+    #   $im_an_object = $model->find_by_fname("John");
+    #   $im_an_array_of_objects = $model->find_all_by_fname_and_state("John","UT"); 
+    function find_by($method_name, $parameters, $find_all = false) {
         $method_parts = explode("_",substr($method_name, 12));
-        if(is_array($methodParts)) {
+        if(is_array($method_parts)) {
             $param_cnt = 0;
             $part_cnt = 1;
-            $and_cnt = substr_count(strtolower($methodName), "_and_");
-            $or_cnt = substr_count(strtolower($methodName), "_or_");
+            $and_cnt = substr_count(strtolower($method_name), "_and_");
+            $or_cnt = substr_count(strtolower($method_name), "_or_");
             $part_size = count($method_parts) - $and_cnt - $or_cnt;
             foreach($method_parts as $part) {
                 if(strtoupper($part) == "AND") {
@@ -522,44 +518,61 @@ class ActiveRecord {
                 $part_cnt++;
             }
 
-            return $this->find_all($method_params, $orderings);
+            if($find_all) {
+            	return $this->find_all($method_params, $orderings);
+            } else {
+                return $this->find_first($method_params, $orderings);
+            }    
         }
     }
+    
+    # Reloads the attributes of this object from the database.
+    function reload($conditions = null) {
+        if(is_null($conditions)) {
+            $conditions = $this->get_primary_key_conditions();
+        }
+        $object = $this->find($conditions);
+        if(is_object($object)) {
+            foreach($object as $key => $value) {
+                $this->$key = $value;    
+            }
+        }          
+    }
 
-    // Successively calls all functions that begin with "validate_" to
-    // validate each field.  The "validate_*" functions should return an
-    // array whose first element is true or false (indicating whether or
-    // not the validation succeeded), and whose second element is the
-    // error message to display on validation failure.
-    //
-    // Parameters: none
-    //
-    // Returns: true if all validations succeeded, false otherwise
+    # Successively calls all functions that begin with "validate_" to
+    # validate each field.  The "validate_*" functions should return an
+    # array whose first element is true or false (indicating whether or
+    # not the validation succeeded), and whose second element is the
+    # error message to display on validation failure.
+    #
+    # Parameters: none
+    #
+    # Returns: true if all validations succeeded, false otherwise
     function validate() {
         $validated_ok = true;
         $attrs = $this->get_attributes();
         $methods = get_class_methods(get_class($this));
         foreach($methods as $method) {
             if (preg_match('/^validate_(.+)/', $method, $matches)) {
-                // If we find, for example, a method named validate_name, then
-                // we know that that function is validating the 'name' attribute
-                // (as found in the (.+) part of the regular expression above).
+                # If we find, for example, a method named validate_name, then
+                # we know that that function is validating the 'name' attribute
+                # (as found in the (.+) part of the regular expression above).
                 $validate_on_attribute = $matches[1];
-                // Check to see if the string found (e.g. 'name') really is
-                // in the list of attributes for this object...
+                # Check to see if the string found (e.g. 'name') really is
+                # in the list of attributes for this object...
                 if (array_key_exists($validate_on_attribute, $attrs)) {
-                    // ...if so, then call the method to see if it validates to true...
+                    # ...if so, then call the method to see if it validates to true...
                     $result = $this->$method();
                     if (is_array($result)) {
-                        // $result[0] is true if validation went ok, false otherwise
-                        // $result[1] is the error message if validation failed
+                        # $result[0] is true if validation went ok, false otherwise
+                        # $result[1] is the error message if validation failed
                         if ($result[0] == false) {
-                            // ... and if not, then validation failed
+                            # ... and if not, then validation failed
                             $validated_ok = false;
-                            // Mark the corresponding entry in the error array by
-                            // putting the error message in for the attribute,
-                            //   e.g. $this->errors['name'] = "can't be empty"
-                            //   when 'name' was an empty string.
+                            # Mark the corresponding entry in the error array by
+                            # putting the error message in for the attribute,
+                            #   e.g. $this->errors['name'] = "can't be empty"
+                            #   when 'name' was an empty string.
                             $this->errors[$validate_on_attribute] = $result[1];
                         }
                     } else {
@@ -569,9 +582,9 @@ class ActiveRecord {
                         }
                     }
                 } else {
-                    // ... otherwise, this is a validate method that isn't associated
-                    // with any of the attributes (db fields) in the class, so just
-                    // call the method and make sure it returns true
+                    # ... otherwise, this is a validate method that isn't associated
+                    # with any of the attributes (db fields) in the class, so just
+                    # call the method and make sure it returns true
                     $result = $this->$method();
                     if ($result == false) {
                         $validated_ok = false;
@@ -581,18 +594,60 @@ class ActiveRecord {
         }
         return $validated_ok;
     }
-
-    function create($params = null, $dont_validate = false) {
-        return $this->save($params, $dont_validate);
-    }
     
-    function update($params, $dont_validate = false) {
-        return $this->save($params, $dont_validate);
+    # Creates an object, instantly saves it as a record (if the validation permits it).
+    # If the save fails under validations it returns false and $errors array gets set.
+    function create($attributes, $dont_validate = false) {
+        if(is_array($attributes)) {
+            foreach($attributes as $attr) {
+                $this->create($attr, $dont_validate);        
+            }            
+        } else {
+            $class = get_class($this);
+            $object = new $class();     
+            $object->save($attributes, $dont_validate);
+        }
     }
 
-    function save($params = null, $dont_validate = false) {
-        if(!is_null($params)) {
-            $this->update_attributes($params);
+    # Finds the record from the passed id, instantly saves it with the passed attributes 
+    # (if the validation permits it). Returns true on success and false on error.
+    function update($id, $attributes, $dont_validate = false) {
+        if(is_array($id)) {
+            foreach($id as $update_id) {
+                $this->update($update_id, $attributes[$update_id], $dont_validate);        
+            }
+        } else {
+            $object = $this->find($id);
+            return $object->save($attributes, $dont_validate);
+        }
+    }
+
+    # Updates all records with the SET-part of an SQL update statement in updates and 
+    # returns an integer with the number of rows updates. A subset of the records can 
+    # be selected by specifying conditions. 
+    # Example:
+    #   $model->update_all("category = 'cooldude', approved = 1", "author = 'John'");
+    function update_all($updates, $conditions = null) {
+        $sql = "UPDATE `$this->table_name` SET $updates WHERE $conditions";
+        $result = $this->query($sql);
+        if ($this->is_error($result)) {
+            $this->errors[] = $result->getMessage();
+            return false;
+        } else {
+            return true;
+        }  
+    }
+
+    # Save without valdiating anything.
+    function save_without_validation($attributes = null) {
+        return $this->save($attributes, true);
+    }
+
+    # $attributes is an array passed in from the html form usually. Where key is the column name
+    # and value is the new value to INSERT or UPDATE in the database.  
+    function save($attributes = null, $dont_validate = false) {
+        if(!is_null($attributes)) {
+            $this->update_attributes($attributes);
         }
         if ($dont_validate || $this->validate()) {
             return $this->add_record_or_update_record();
@@ -601,19 +656,93 @@ class ActiveRecord {
         }
     }
 
-    function save_without_validation($params = null) {
-        return $this->save($params, true);
-    }
-
+    # Just determines if this save should be an INSERT or an UPDATE
     function add_record_or_update_record() {
         //echo "new record: $this->new_record<br>";
         return ($this->new_record) ? $this->add_record() : $this->update_record();
     }
+    
+    # Add a record in the table represented by this model
+    function add_record() {
+        $attributes = $this->quoted_attributes();
+        $fields = @implode(', ', array_keys($attributes));
+        $values = @implode(', ', array_values($attributes));
+        $sql = "INSERT INTO `$this->table_name` ($fields) VALUES ($values)";
+        //echo "add_record: SQL: $sql<br>";
 
-    function set_habtm_attributes($params) {
-        if(is_array($params)) {
+        $result = $this->query($sql);
+        if ($this->is_error($result)) {
+            $this->errors[] = $results->getMessage();
+            return false;
+        } else {
+            $id = $this->get_insert_id();
+            if($id > 0 && $this->auto_save_habtm) {
+                $habtm_result = $this->add_habtm_records($id);
+            }
+
+            return ($result && $habtm_result);
+        }
+    }
+
+    # Updates a record in the table represented by this model
+    function update_record() {
+        $updates = $this->get_updates_sql();
+        $conditions = $this->get_primary_key_conditions();
+        $sql = "UPDATE `$this->table_name` SET $updates WHERE $conditions";
+        //echo "update_record: SQL: $sql<br>";
+        $result = $this->query($sql);
+        if($this->is_error($result)) {
+            $this->errors[] = $results->getMessage();
+            return false;
+        } else {
+            if($this->id > 0 && $this->auto_save_habtm) {
+                $habtm_result = $this->update_habtm_records($this->id);
+            }
+            return ($result && $habtm_result);
+        }
+    }
+    
+    # Deletes the record with the given $id or if you have done a
+    # $model = $model->find($id), then $model->delete() it will delete
+    # the record it just loaded from the find() without passing anything
+    # to delete(). If an array of ids is provided, all of them are deleted.    
+    function delete($id = null) {
+        if($this->id > 0 && is_null($id)) {
+            $id = $this->id;
+        } 
+        
+        if(is_null($id)) {
+            $this->errors[] = "No id specified to delete on.";
+            return false;    
+        }        
+        
+        return $this->delete_all("id IN ($id)");
+    }
+
+    # Deletes all the records that matches the $conditions
+    # Example:
+    # $model->delete_all("person_id = 2 AND (category = 'Toasters' OR category = 'Microwaves')");    
+    function delete_all($conditions = null) {            
+        if(is_null($conditions)) {
+            $this->errors[] = "No conditions specified to delete on.";
+            return false;    
+        }
+
+        # Delete the record(s)
+        if($this->is_error($rs = $this->query("DELETE FROM `$this->table_name` WHERE $conditions"))) {
+            $this->errors[] = $rs->getMessage();
+            return false;
+        }
+
+        $this->id = 0;
+        $this->new_record = true;
+        return true;   
+    }
+
+    function set_habtm_attributes($attributes) {
+        if(is_array($attributes)) {
             unset($this->habtm_attributes);
-            foreach($params as $key => $habtm_array) {
+            foreach($attributes as $key => $habtm_array) {
                 if(is_array($habtm_array)) {
                     if(array_key_exists($key, $this->has_and_belongs_to_many)) {
                         $habtm_attributes[$key] = $habtm_array;
@@ -624,25 +753,8 @@ class ActiveRecord {
         }
     }
 
-    function add_record() {
-
-        $attributes = $this->quoted_attributes();
-        $fields = @implode(', ', array_keys($attributes));
-        $values = @implode(', ', array_values($attributes));
-        $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
-        //echo "add_record: SQL: $sql<br>";
-
-        $result = $this->query($sql);
-        if ($this->is_error($result)) {
-            return false;
-        } else {
-            $id = $this->getInsertId();
-            if($id > 0 && $this->auto_save_habtm) {
-                $habtm_result = $this->add_habtm_records($id);
-            }
-
-            return ($result && $habtm_result);
-        }
+    function update_habtm_records($this_foreign_value) {
+        return $this->add_habtm_records($this_foreign_value);
     }
 
     function add_habtm_records($this_foreign_value) {
@@ -681,73 +793,6 @@ class ActiveRecord {
         }
     }
 
-    function update_record() {
-
-        $attributes = $this->quoted_attributes();
-        // run through our fields and join them with their values
-        foreach ($attributes as $key => $value) {
-            if(in_array($key,$this->primary_keys)) {
-                $where[] = "$key = $value";
-                $id = str_replace("'","",$value);
-            } else {
-                $update[] = "$key = $value";
-            }
-        }
-
-        $update = @implode(', ', $update);
-        $where = @implode(' AND ', $where);
-        $sql = "UPDATE $this->table_name SET $update WHERE $where";
-        //echo "update_record: SQL: $sql<br>";
-        $result = $this->query($sql);
-        if($this->is_error($result)) {
-            return false;
-        } else {
-            if($id > 0 && $this->auto_save_habtm) {
-                $habtm_result = $this->update_habtm_records($id);
-            }
-            return ($result && $habtm_result);
-        }
-    }
-
-    function update_habtm_records($this_foreign_value) {
-        return $this->add_habtm_records($this_foreign_value);
-    }
-
-    function delete($conditions = null) {
-        // Check for valid ids
-        if(count($this->primary_keys) <= 0 && is_null($conditions) && $this->id <= 0)
-            return false;
-
-        if($this->id > 0) {
-            $conditions = "id='$this->id'";
-        } elseif(is_null($conditions)) {
-            $attributes = $this->quoted_attributes();            
-            if(count($attributes) > 0) {
-                $conditions = array();
-                // run through our fields and join them with their values
-                foreach($attributes as $key => $value) {
-                    if(in_array($key,$this->primary_keys)) {
-                        $conditions[] = "$key = $value";
-                    } 
-                }            
-                $conditions = implode(" AND ", $conditions);
-            }
-        } 
-
-        if($conditions != "") {
-            return false;    
-        }
-
-        // Delete the record
-        if($this->is_error($this->query("DELETE FROM $this->table_name WHERE $conditions"))) {
-            return false;
-        }
-
-        $this->id = 0;
-        $this->new_record = true;
-        return true;
-    }
-
     function delete_habtm_records($this_foreign_value) {
         $failed = false;
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
@@ -772,6 +817,10 @@ class ActiveRecord {
         }
     }
 
+    # Checks to see if $auto_timestamps is true, If yes and there exists a field
+    # with a name in matching a name in the auto_create_timestamps or auto_update_timestamps arrays
+    # then it will return a valid datetime format to insert/update into the database.
+    # This is only called from quoted_attributes().
     function check_datetime($field, $value) {
         if($this->auto_timestamps) {
             if(is_array($this->table_info)) {
@@ -788,13 +837,19 @@ class ActiveRecord {
         return $value;
     }
 
-    function update_attributes($params) {
-        foreach($params as $field => $val) {
+    # Updates all the attributes(class vars representing the table columns)
+    # from the passed array $attributes.
+    function update_attributes($attributes) {
+        foreach($attributes as $field => $val) {
             $this->$field = $val;
         }
-        $this->set_habtm_attributes($params);
+        $this->set_habtm_attributes($attributes);
     }
 
+    # If $this->set_table_info() was previously called, which will mean that 
+    # $table_info will be an array of containing the column info about the database
+    # table this model is representing.  This will return an array where the keys
+    # the column names and the values are the values from those columns.  
     function get_attributes() {
         if(is_array($this->table_info)) {
             foreach($this->table_info as $info) {
@@ -805,13 +860,16 @@ class ActiveRecord {
         return $attributes;
     }
 
+    # Returns an array of all the table columns with the key being the
+    # the database column name and the value being the database column
+    # value.  The value will be single quoted if appropriate.
     function quoted_attributes($array = null) {
         if(is_null($array)) {
             $array = $this->get_attributes();
         }
         foreach ($array as $key => $value) {
             $value = $this->check_datetime($key, $value);
-            // If the value isn't a function or null quote it...
+            # If the value isn't a function or null quote it...
             if (!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
                 $value = str_replace("\\\"","\"",$value);
                 $value = str_replace("\'","'",$value);
@@ -825,12 +883,56 @@ class ActiveRecord {
         return $array;
     }
 
+    # Returns an a string in the format to put into a WHERE clause for updating
+    # or deleting records.  It builds the clause from the $primary_keys array.
+    # Example:
+    #   $primary_keys = array("id", "ssn"); would be turned into the string
+    #   "id = '5' AND ssn = '555-55-5555'"
+    function get_primary_key_conditions() {
+        $conditions = null;
+        $attributes = $this->quoted_attributes();            
+        if(count($attributes) > 0) {
+            $conditions = array();
+            # run through our fields and join them with their values
+            foreach($attributes as $key => $value) {
+                if(in_array($key,$this->primary_keys)) {
+                    $conditions[] = "$key = $value";
+                } 
+            }            
+            $conditions = implode(" AND ", $conditions);
+        }
+        return $conditions;        
+    }
+
+    # Returns an a string in the format to put into the SET-part of an SQL update statement
+    # Should return a string formated for the UPDATE. 
+    # Example:
+    #   "id = '5', ssn = '555-55-5555'"
+    function get_updates_sql() {
+        $updates = null;
+        $attributes = $this->quoted_attributes();            
+        if(count($attributes) > 0) {
+            $updates = array();
+            # run through our fields and join them with their values
+            foreach($attributes as $key => $value) {
+                if($key && $value) {
+                    $updates[] = "$key = $value";
+                }
+            }            
+            $updates = implode(", ", $updates);
+        }
+        return $updates;        
+    }
+    
+    # Sets the $table_name varible from the class name of the child object (the Model)
+    # used in all queries throughout ActiveRecord
     function set_table_name_using_class_name() {
         if(!isset($this->table_name)) {
             $this->table_name = self::$inflector->tableize(get_class($this));
         }
     }
-
+    
+    # Populates the model object with information about the table it represents
     function set_table_info($table_name) {
         $this->table_info = self::$db->tableInfo($table_name);
         if(is_array($this->table_info)) {
@@ -841,12 +943,7 @@ class ActiveRecord {
         }
     }
 
-    ########################################################################
-    # getInsertId()
-    #  Use    : Returns the autogenerated id from the last insert query
-    #  Params : None
-    #  Returns: id          integer id
-    ########################################################################
+    # Returns the autogenerated id from the last insert query
     function get_insert_id() {
         $id = self::$db->getOne("SELECT LAST_INSERT_ID();");
 
@@ -856,59 +953,43 @@ class ActiveRecord {
         return $id;
     }
 
-    ########################################################################
-    # use_db()
-    #  Use    : Calls DB::Connect to open a database connection. It uses
-    #                       our global ACTIVE_RECORD_DEFAULTDB if no db argument is given. If it
-    #                       finds connection information in ACTIVE_RECORD_DATABASES it uses it
-    #                       otherwise it returns an error
-    #  Returns: PEAR::db object
-    ########################################################################
-    function use_db() {
-
-        // Connect to the database and throw an error if the connect fails...
+    # Calls DB::Connect() to open a database connection. It uses $GLOBALS['DB_SETTINGS'][TRAX_MODE] 
+    # If it finds a connection in ACTIVE_RECORD_DB it uses it.
+    function establish_connection() {
+        # Connect to the database and throw an error if the connect fails...
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
             $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
-        } 
-        
+        }      
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
         } else {
-            return($this->raise_error($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'use_db', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
+            return($this->raise_error($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'establish_connection', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
         }
-
         self::$db->setFetchMode($GLOBALS['ACTIVE_RECORD_FETCHMODE']);
-
         return self::$db;
     }
 
-    ########################################################################
-    # raise_error()
-    #  Use    : Sends an error string to PEAR::raise_error
+    # Sends an error string to PEAR::raiseError
     #  Params : $message            error message to send
     #           $method             function error occurred in
     #           $line               line error occurred on (use __LINE__)
     #           $errno              internal error number
     #           $do                 pear error action (die print return etc...)
-    #  Returns: Nothing
-    ########################################################################
     function &raise_error($message, $method, $line, $errno, $do) {
         $error = PEAR::raiseError(sprintf("Error: %s on line %d of %s::%s()",
                                   $message, $line, 'ActiveRecord', $method), $errno, $do);
         return($error);
     }
 
-    ########################################################################
-    # is_error()
-    #  Use    : Tests to see if an object is either a pear error or a db error
-    #                       object...
-    #  Params : $obj                        database to open
-    #  Returns: Nothing
-    ########################################################################
+    # Tests to see if an object is either a PEAR Error or a DB Error object...
     function is_error($obj) {
         return((PEAR::isError($obj)) || (DB::isError($obj)));
     }
-
+    
+    
+    #########################################################################
+    # Paging html functions
+    
     function limit_select($controller =null, $additional_query = null) {
         if($this->pages > 0) {
             $html = "
