@@ -88,9 +88,8 @@ class ActionMailer {
         $this->subject = $subject;    
     }
 
-    function add_attachment($file, $content_type = null, $file_name = null, $is_file = null, $encoding = null) {
-        if(file_exists($file))
-            $this->mail_mime->addAttachment($file, $content_type, $file_name, $is_file, $encoding);
+    function add_attachment($file, $content_type ='application/octet-stream', $file_name = '', $is_file = true, $encoding = 'base64') {
+        $this->mail_mime->addAttachment($file, $content_type, $file_name, $is_file, $encoding);
     }
 
     function format_address($address) {
