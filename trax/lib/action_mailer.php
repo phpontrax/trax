@@ -83,6 +83,10 @@ class ActionMailer {
         if(strlen($html) > 0)
             $this->mail_mime->setHTMLBody($html);
     }
+    
+    function set_subject($subject) {
+        $this->subject = $subject;    
+    }
 
     function add_attachment($file, $content_type = null, $file_name = null, $is_file = null, $encoding = null) {
         if(file_exists($file))
