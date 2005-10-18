@@ -57,33 +57,35 @@ class ActiveRecord {
     protected $aggregrations = array("count","sum","avg","max","min");
 
     public $primary_keys = array("id");  # update / delete where clause keys
-    public $rows_per_page_default = 20;  # Pagination
-    public $display = 10;
-    public $errors = array();
+    public $rows_per_page_default = 20;  # Pagination rows to display per page
+    public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
+    public $errors = array(); 
     public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
 
     # Constructor sets up need parameters for AR to function properly
     function __construct($attributes = null) {
 
-		# Define static members
+        # Define static members
         if (self::$inflector == null) {
 			self::$inflector = new Inflector();
         }
         
         # Open the database connection
         if ($this->is_error($connection_result = $this->establish_connection())) {
-            echo "ActiveRecord Error:".$connection_result->getMessage();
+            echo "ActiveRecord Connection Error:".$connection_result->getMessage();
             exit;
         }
 
-        # Set table_name and column info
+        # Set $table_name
         if($this->table_name == null) { 
             $this->set_table_name_using_class_name();
-            if($this->table_name) {
-                $this->set_table_info($this->table_name);
-            }
         }
+        
+        # Set column info
+        if($this->table_name) {
+            $this->set_table_info($this->table_name);
+        }        
         
         # If $attributes array is passed in update the class with its contents
         if(is_array($attributes)) {
@@ -111,7 +113,7 @@ class ActiveRecord {
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
-            $this->table_info = $this->set_table_info($value);
+            $this->set_table_info($value);
         }
         $this->$key = $value;
     }
@@ -368,7 +370,7 @@ class ActiveRecord {
         $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
         if ($this->is_error($result)) {
             echo ($this->raise_error($result->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
-            die;
+            exit;
         } else {
             return $result;
         }
@@ -382,7 +384,7 @@ class ActiveRecord {
             echo "Error in ActiveRecord::query();<br>";
             $error = $this->raise_error($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
             echo $error->message;
-            die;
+            exit;
         }
         return $rs;
     }
@@ -390,8 +392,6 @@ class ActiveRecord {
     # This will return all the records matched by the options used. 
     # If no records are found, an empty array is returned.
     function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
-        $objects = array();
-
         if (is_array($limit)) {
             list($this->page, $this->rows_per_page) = $limit;
             if($this->page <= 0) $this->page = 1;
@@ -435,6 +435,7 @@ class ActiveRecord {
             echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
         }
 
+        $objects = array();
         while($row = $rs->fetchRow()) {
             $class = get_class($this);
             $object = new $class();
@@ -538,63 +539,7 @@ class ActiveRecord {
             }
         }          
     }
-
-    # Successively calls all functions that begin with "validate_" to
-    # validate each field.  The "validate_*" functions should return an
-    # array whose first element is true or false (indicating whether or
-    # not the validation succeeded), and whose second element is the
-    # error message to display on validation failure.
-    #
-    # Parameters: none
-    #
-    # Returns: true if all validations succeeded, false otherwise
-    function validate() {
-        $validated_ok = true;
-        $attrs = $this->get_attributes();
-        $methods = get_class_methods(get_class($this));
-        foreach($methods as $method) {
-            if (preg_match('/^validate_(.+)/', $method, $matches)) {
-                # If we find, for example, a method named validate_name, then
-                # we know that that function is validating the 'name' attribute
-                # (as found in the (.+) part of the regular expression above).
-                $validate_on_attribute = $matches[1];
-                # Check to see if the string found (e.g. 'name') really is
-                # in the list of attributes for this object...
-                if (array_key_exists($validate_on_attribute, $attrs)) {
-                    # ...if so, then call the method to see if it validates to true...
-                    $result = $this->$method();
-                    if (is_array($result)) {
-                        # $result[0] is true if validation went ok, false otherwise
-                        # $result[1] is the error message if validation failed
-                        if ($result[0] == false) {
-                            # ... and if not, then validation failed
-                            $validated_ok = false;
-                            # Mark the corresponding entry in the error array by
-                            # putting the error message in for the attribute,
-                            #   e.g. $this->errors['name'] = "can't be empty"
-                            #   when 'name' was an empty string.
-                            $this->errors[$validate_on_attribute] = $result[1];
-                        }
-                    } else {
-                        if ($result == false) {
-                            $validated_ok = false;
-                            $this->errors[$validate_on_attribute] = "is invalid";
-                        }
-                    }
-                } else {
-                    # ... otherwise, this is a validate method that isn't associated
-                    # with any of the attributes (db fields) in the class, so just
-                    # call the method and make sure it returns true
-                    $result = $this->$method();
-                    if ($result == false) {
-                        $validated_ok = false;
-                    }
-                }
-            }
-        }
-        return $validated_ok;
-    }
-    
+       
     # Creates an object, instantly saves it as a record (if the validation permits it).
     # If the save fails under validations it returns false and $errors array gets set.
     function create($attributes, $dont_validate = false) {
@@ -649,7 +594,7 @@ class ActiveRecord {
         if(!is_null($attributes)) {
             $this->update_attributes($attributes);
         }
-        if ($dont_validate || $this->validate()) {
+        if ($dont_validate || $this->valid()) {
             return $this->add_record_or_update_record();
         } else {
             return false;
@@ -657,13 +602,24 @@ class ActiveRecord {
     }
 
     # Just determines if this save should be an INSERT or an UPDATE
-    function add_record_or_update_record() {
-        //echo "new record: $this->new_record<br>";
-        return ($this->new_record) ? $this->add_record() : $this->update_record();
+    function add_record_or_update_record() { 
+        $this->before_save();
+        if($this->new_record) {
+            $this->before_create();
+            $result = $this->add_record();   
+            $this->after_create(); 
+        } else {
+            $this->before_update();
+            $result = $this->update_record();
+            $this->after_update();
+        }     
+        $this->after_save();
+        return $result;
     }
     
     # Add a record in the table represented by this model
     function add_record() {
+        $this->before_create();
         $attributes = $this->quoted_attributes();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
@@ -705,7 +661,7 @@ class ActiveRecord {
     # Deletes the record with the given $id or if you have done a
     # $model = $model->find($id), then $model->delete() it will delete
     # the record it just loaded from the find() without passing anything
-    # to delete(). If an array of ids is provided, all of them are deleted.    
+    # to delete(). If an array of ids is provided, all ids in array are deleted.    
     function delete($id = null) {
         if($this->id > 0 && is_null($id)) {
             $id = $this->id;
@@ -716,7 +672,11 @@ class ActiveRecord {
             return false;    
         }        
         
-        return $this->delete_all("id IN ($id)");
+        $this->before_delete();
+        $result = $this->delete_all("id IN ($id)");
+        $this->after_delete();
+        
+        return $result;
     }
 
     # Deletes all the records that matches the $conditions
@@ -741,15 +701,14 @@ class ActiveRecord {
 
     function set_habtm_attributes($attributes) {
         if(is_array($attributes)) {
-            unset($this->habtm_attributes);
+            $this->habtm_attributes = array();
             foreach($attributes as $key => $habtm_array) {
                 if(is_array($habtm_array)) {
                     if(array_key_exists($key, $this->has_and_belongs_to_many)) {
-                        $habtm_attributes[$key] = $habtm_array;
+                        $this->habtm_attributes[$key] = $habtm_array;
                     }
                 }
             }
-            $this->habtm_attributes = $habtm_attributes;
         }
     }
 
@@ -851,6 +810,7 @@ class ActiveRecord {
     # table this model is representing.  This will return an array where the keys
     # the column names and the values are the values from those columns.  
     function get_attributes() {
+        $attributes = array();
         if(is_array($this->table_info)) {
             foreach($this->table_info as $info) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
@@ -863,24 +823,24 @@ class ActiveRecord {
     # Returns an array of all the table columns with the key being the
     # the database column name and the value being the database column
     # value.  The value will be single quoted if appropriate.
-    function quoted_attributes($array = null) {
-        if(is_null($array)) {
-            $array = $this->get_attributes();
+    function quoted_attributes($attributes = null) {
+        if(is_null($attributes)) {
+            $attributes = $this->get_attributes();
         }
-        foreach ($array as $key => $value) {
+        $return = array();
+        foreach ($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
             # If the value isn't a function or null quote it...
             if (!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
                 $value = str_replace("\\\"","\"",$value);
                 $value = str_replace("\'","'",$value);
                 $value = str_replace("\\\\","\\",$value);
-                $array[$key] = "'" . addslashes($value) . "'";
+                $return[$key] = "'" . addslashes($value) . "'";
             } else {
-                $array[$key] = $value;
+                $return[$key] = $value;
             }
         }
-
-        return $array;
+        return $return;
     }
 
     # Returns an a string in the format to put into a WHERE clause for updating
@@ -986,6 +946,151 @@ class ActiveRecord {
         return((PEAR::isError($obj)) || (DB::isError($obj)));
     }
     
+    # Add an error to Active Record
+    function add_error($error, $key = null) {
+        if(!is_null($key)) 
+            $this->errors[$key] = $error;
+        else
+            $this->errors[] = $error;           
+    }
+    
+    # Return the errors array or if the first param is true then
+    # returns it as a string seperated by the second param.
+    function get_errors($return_string = false, $seperator = "<br>") {
+        if($return_string && count($this->errors) > 0) {
+            return implode($seperator, $this->errors);
+        } else {
+            return $this->errors;    
+        }
+    }
+    
+    # Return errors as a string.
+    function get_errors_as_string($seperator = "<br>") {
+        return $this->get_errors(true, $seperator);
+    }
+
+    # Runs validate and validate_on_create or validate_on_update 
+    # and returns true if no errors were added otherwise false.
+    function valid() {
+        # first clear the errors array
+        $this->errors = array();
+
+        if($this->new_record) {
+            $this->before_validation();
+            $this->before_validation_on_create();
+            $this->validate();
+            $this->validate_model_attributes();
+            $this->after_validation();
+            $this->validate_on_create(); 
+            $this->after_validation_on_create();
+        } else {
+            $this->before_validation();
+            $this->before_validation_on_update();
+            $this->validate();
+            $this->validate_model_attributes();
+            $this->after_validation();
+            $this->validate_on_update();
+            $this->after_validation_on_update();
+        }
+
+        return count($this->errors) ? false : true;
+    }
+    
+    # Successively calls all functions that begin with "validate_" to
+    # validate each field.  The "validate_*" functions should return an
+    # array whose first element is true or false (indicating whether or
+    # not the validation succeeded), and whose second element is the
+    # error message to display on validation failure.
+    #
+    # Parameters: none
+    #
+    # Returns: true if all validations succeeded, false otherwise
+    function validate_model_attributes() {
+        $validated_ok = true;
+        $attrs = $this->get_attributes();
+        $methods = get_class_methods(get_class($this));
+        foreach($methods as $method) {
+            if(preg_match('/^validate_(.+)/', $method, $matches)) {
+                # If we find, for example, a method named validate_name, then
+                # we know that that function is validating the 'name' attribute
+                # (as found in the (.+) part of the regular expression above).
+                $validate_on_attribute = $matches[1];
+                # Check to see if the string found (e.g. 'name') really is
+                # in the list of attributes for this object...
+                if(array_key_exists($validate_on_attribute, $attrs)) {
+                    # ...if so, then call the method to see if it validates to true...
+                    $result = $this->$method();
+                    if(is_array($result)) {
+                        # $result[0] is true if validation went ok, false otherwise
+                        # $result[1] is the error message if validation failed
+                        if($result[0] == false) {
+                            # ... and if not, then validation failed
+                            $validated_ok = false;
+                            # Mark the corresponding entry in the error array by
+                            # putting the error message in for the attribute,
+                            #   e.g. $this->errors['name'] = "can't be empty"
+                            #   when 'name' was an empty string.
+                            $this->errors[$validate_on_attribute] = $result[1];
+                        }
+                    } 
+                } 
+            }
+        }
+        return $validated_ok;
+    }
+    
+    # Overwrite this method for validation checks on all saves and 
+    # use $this->errors[] = "My error message."; or 
+    # for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";.
+    function validate() {}
+
+    # Override this method for validation checks used only on creation.
+    function validate_on_create() {}
+
+    # Override this method for validation checks used only on updates.
+    function validate_on_update() {}
+
+    # Is called before validate().
+    function before_validation() {}
+
+    # Is called after validate().
+    function after_validation() {}
+
+    # Is called before validate() on new objects that haven't been saved yet (no record exists).
+    function before_validation_on_create() {}
+
+    # Is called after validate() on new objects that haven't been saved yet (no record exists).
+    function after_validation_on_create()  {}
+
+    # Is called before validate() on existing objects that has a record.
+    function before_validation_on_update() {}
+
+    # Is called after validate() on existing objects that has a record.
+    function after_validation_on_update()  {}
+
+    # Is called before save() (regardless of whether it’s a create or update save).
+    function before_save() {}
+    
+    # Is called after save (regardless of whether it’s a create or update save).
+    function after_save() {}
+
+    # Is called before save() on new objects that haven’t been saved yet (no record exists).
+    function before_create() {}
+    
+    # Is called after save() on new objects that haven’t been saved yet (no record exists).
+    function after_create() {}
+    
+    # Is called before save() on existing objects that has a record.    
+    function before_update() {}
+    
+    # Is called after save() on existing objects that has a record.
+    function after_update() {}
+    
+    # Is called before delete(). 
+    function before_delete() {}
+    
+    # Is called after delete().
+    function after_delete() {} 
     
     #########################################################################
     # Paging html functions
