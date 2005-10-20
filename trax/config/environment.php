@@ -15,13 +15,12 @@ if($_SERVER['TRAX_MODE']) { // Set in the Apache Vhost (SetEnv TRAX_MODE develop
 if (substr(PHP_OS, 0, 3) == 'WIN') {
     // Windows
     define("TRAX_PATH_SEPERATOR", ";");
-    define("TRAX_ROOT", dirname(__FILE__) . "/");
 } else {
     // Unix
-    define("TRAX_PATH_SEPERATOR", ":");
-    define("TRAX_ROOT", dirname(__FILE__) . "/../");
+    define("TRAX_PATH_SEPERATOR", ":");  
 }
 
+define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
 define("TRAX_URL_PREFIX",   null); 
 define("DEFAULT_LAYOUT",    "public");  // public is the default
 
@@ -34,12 +33,12 @@ $GLOBALS['TRAX_INCLUDES'] =
            "layouts" => "app/views/layouts",
            "config" => "config",
            "environments" => "config/environments",
-	   "lib" => "lib",
-	   "app" => "app",
-	   "log" => "log" );
+	       "lib" => "lib",
+	       "app" => "app",
+	       "log" => "log" );
 
 # Load databse settings
-$GLOBALS['DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
+$GLOBALS['DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."\database.ini",true);
 
 # Include Trax library files.
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/active_record.php");
