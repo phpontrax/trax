@@ -227,7 +227,11 @@ class TraxGenerator {
     }
     
     function exec($cmd) {
-        exec(str_replace("/","\\",$cmd));                    
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            exec(str_replace("/","\\",$cmd)); 
+        } else {
+            exec($cmd);
+        }                                  
     }
 
     function controller_help() {
