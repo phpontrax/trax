@@ -62,6 +62,10 @@ class ActiveRecord {
     public $errors = array(); 
     public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
+    
+    # Transactions (only use if your db supports it)
+    private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
+    public $use_transactions = false; # this will issue a rollback command if any sql fails
 
     # Constructor sets up need parameters for AR to function properly
     function __construct($attributes = null) {
@@ -375,12 +379,32 @@ class ActiveRecord {
             return $result;
         }
     }
+    
+    # Only used if you want to do transactions and your db supports transactions
+    function begin() {
+        self::$db->query("BEGIN");
+        $this->begin_executed = true;        
+    }
+    
+    # Only used if you want to do transactions and your db supports transactions
+    function commit() {
+        self::$db->query("COMMIT"); 
+        $this->begin_executed = false;       
+    }
+    
+    # Only used if you want to do transactions and your db supports transactions
+    function rollback() {
+        self::$db->query("ROLLBACK");        
+    }
 
     # Uses PEAR::DB's query to run the query and returns the DB result set
     function query($sql) {
         # Run the query
         $rs = self::$db->query($sql);
         if ($this->is_error($rs)) {
+            if($this->use_transactions && $this->begin_executed) {
+                $this->rollback();    
+            }
             echo "Error in ActiveRecord::query();<br>";
             $error = $this->raise_error($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
             echo $error->message;
@@ -459,7 +483,7 @@ class ActiveRecord {
     function find($id, $orderings = null, $limit = null, $joins = null) {
         if(is_array($id)) {
             $conditions = "id IN(".implode(",",$id).")";
-        } elseif(strstr($id,"=")) { # has an = so must be a where clause
+        } elseif(stristr($id,"=")) { # has an = so must be a where clause
             $conditions = $id;
         } else {
             $conditions = "id='$id'";
