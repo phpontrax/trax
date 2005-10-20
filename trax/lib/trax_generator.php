@@ -25,7 +25,7 @@
 
 class TraxGenerator {
 
-    private $view_path, $controller_path, $helper_path, $model_path;
+    private $view_path, $controller_path, $helper_path, $model_path, $mkdir_cmd;
     private $controller_template_file, $helper_template_file, $view_template_file, $model_template_file;
     public $view_file_extention = "phtml";
 
@@ -38,6 +38,13 @@ class TraxGenerator {
         $this->helper_template_file = TRAX_ROOT . "lib/templates/helper.php";
         $this->view_template_file = TRAX_ROOT . "lib/templates/view.".$this->view_file_extention;
         $this->model_template_file = TRAX_ROOT . "lib/templates/model.php";
+
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            $this->mkdir_cmd = "mkdir";
+        } else {
+            $this->mkdir_cmd = "mkdir -p";
+        }
+
     }
 
     function run() {
@@ -90,15 +97,15 @@ class TraxGenerator {
 
         // Create the extra folders for View / Controller
         if(!file_exists($this->view_path)) {
-            exec("mkdir -p $this->view_path");
+            $this->exec("$this->mkdir_cmd $this->view_path");
         }
 
         if(!file_exists($this->controller_path)) {
-            exec("mkdir -p $this->controller_path");
+            $this->exec("$this->mkdir_cmd $this->controller_path");
         }
 
         if(!file_exists($this->helper_path)) {
-            exec("mkdir -p $this->helper_path");
+            $this->exec("$this->mkdir_cmd $this->helper_path");
         }
 
         // Create the actual controller/helper files
@@ -217,6 +224,10 @@ class TraxGenerator {
         } else {
             echo "exists $view_file\n";
         }
+    }
+    
+    function exec($cmd) {
+        exec(str_replace("/","\\",$cmd));                    
     }
 
     function controller_help() {
