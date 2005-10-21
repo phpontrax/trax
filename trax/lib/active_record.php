@@ -100,15 +100,33 @@ class ActiveRecord {
     # Override get() if they do $model->some_association->field_name dynamically load the requested
     # contents from the database.
     function __get($key) {
+        
         if(array_key_exists($key, $this->has_many)) {
             $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
+        } elseif(is_string($this->has_many)) {
+            if(preg_match("/$key/", $this->has_many)) {
+                $this->$key = $this->find_all_has_many($key);
+            }    
         } elseif(array_key_exists($key, $this->has_one)) {
             $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
+        } elseif(is_string($this->has_one)) {
+            if(preg_match("/$key/", $this->has_one)) {
+                $this->$key = $this->find_one_has_one($key);
+            }    
         } elseif(array_key_exists($key, $this->has_and_belongs_to_many)) {
             $this->$key = $this->find_all_habtm($key);
+        } elseif(is_string($this->has_and_belongs_to_many)) {
+            if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
+                $this->$key = $this->find_all_habtm($key);
+            }    
         } elseif(array_key_exists($key, $this->belongs_to)) {
             $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
-        }
+        } elseif(is_string($this->belongs_to)) {
+            if(preg_match("/$key/", $this->belongs_to)) {
+                $this->$key = $this->find_one_belongs_to($key);
+            }    
+        } 
+            
         //echo "<pre>id: $this->id<br>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
     }
@@ -132,15 +150,31 @@ class ActiveRecord {
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
-            if (array_key_exists($method_name, $this->has_many)) {
-                return $this->find_all_has_many($method_name, $parameters);
-            } elseif(array_key_exists($method_name, $this->has_one)) {
-                return $this->find_one_has_one($method_name, $parameters);
-            } elseif(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
-                return $this->find_all_habtm($method_name, $parameters);
-            } elseif(array_key_exists($method_name, $this->belongs_to)) {
-                return $this->find_one_belongs_to($method_name, $parameters);
-            }
+            if(array_key_exists($key, $this->has_many)) {
+                $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
+            } elseif(is_string($this->has_many)) {
+                if(preg_match("/$key/", $this->has_many)) {
+                    $this->$key = $this->find_all_has_many($key);
+                }    
+            } elseif(array_key_exists($key, $this->has_one)) {
+                $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
+            } elseif(is_string($this->has_one)) {
+                if(preg_match("/$key/", $this->has_one)) {
+                    $this->$key = $this->find_one_has_one($key);
+                }    
+            } elseif(array_key_exists($key, $this->has_and_belongs_to_many)) {
+                $this->$key = $this->find_all_habtm($key);
+            } elseif(is_string($this->has_and_belongs_to_many)) {
+                if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
+                    $this->$key = $this->find_all_habtm($key);
+                }    
+            } elseif(array_key_exists($key, $this->belongs_to)) {
+                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
+            } elseif(is_string($this->belongs_to)) {
+                if(preg_match("/$key/", $this->belongs_to)) {
+                    $this->$key = $this->find_one_belongs_to($key);
+                }    
+            } 
             # check for the [count,sum,avg,etc...]_all magic functions
             elseif(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
