@@ -66,18 +66,26 @@ The controller and view is handled by the Action Controller
 In each model class you can define table relationships.
 Allowed relationships in model classes are: 
 * belongs_to: means that there is a foreign key from another table in in this table.
+    public $belongs_to = "foreign_table_name,foreign_table_name2,etc...";
+    or
     public $belongs_to = array("foreign_table_name" => null);
     - foreign table name is always singular.
 * has_one: means that there is a foreign key in another table to this table
-    public $belongs_to = array("foreign_table_name" => null);
+    public $has_one = "foreign_table_name,foreign_table_name2,etc...";
+    or
+    public $has_one = array("foreign_table_name" => null);
      - foreign table name is always singular.
 * has_many: means that there is a foreign key in another table to this table
-    public $belongs_to = array("foreign_table_name" => null);
+    public $has_many = "foreign_table_name,foreign_table_name2,etc...";
+    or
+    public $has_many = array("foreign_table_name" => null);
      - foreign table name is always plural.
 * has_and_belongs_to_many: means there is a join with another table into a third joining table
-    public $belongs_to = array("foreign_table_name" => null);
+    public $has_and_belongs_to_many = "foreign_table_name,foreign_table_name2,etc...";
+    or
+    public $has_and_belongs_to_many = array("foreign_table_name" => null);
      - foreign table name is always plural.
-     - joining table must be named table1_table2 (plural names for both)
+     - joining table must be named table1_table2 (plural names for both in alphabetical order)
 
 In place of the null you can specify an array of parameters such as "foreign_key".
     public $belongs_to = array("table_name" => array("foreign_key" => "otherkey_id")); 
@@ -91,8 +99,9 @@ the model specify the table name.  (public $table_name = "different_name";)
         $array_of_objects = $model->find_all(); // everything
         $array_of_objects = $model->find_all("id > 10"); // everyone with id > 10
 
-    * find(id, [conditions])
+    * find(id, [orderings], [limit], [joins])
         $object = $model->find($id); // one object where id=$id
+	id can be where conditions name='John', an array of ids or a single id.
 
     * find_first([conditions])
         $object = $model->find_first("last_name = 'Smith'"); // one object , first row in result set where last_name='Smith'
