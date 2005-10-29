@@ -24,18 +24,6 @@
 
 require_once('PEAR.php');
 require_once('DB.php');
-require_once('inflector.php');
-
-if(isset($GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
-    $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'];
-}
-
-$GLOBALS['ACTIVE_RECORD_FETCHMODE'] = DB_FETCHMODE_ASSOC;
-
-define("ACTIVE_RECORD_NODB",            -1);
-define("ACTIVE_RECORD_CONNECT_ERR",     -2);
-define("ACTIVE_RECORD_ERR",             -3);
-define("ACTIVE_RECORD_QUERY_ERR",       -4);
 
 class ActiveRecord {
     
@@ -43,6 +31,7 @@ class ActiveRecord {
     static protected $inflector = null;     # object to do class inflection
     public $table_info = null;              # info about each column in the table
     public $table_name = null;
+    public $fetch_mode = DB_FETCHMODE_ASSOC;
 
     # Table associations
     protected $has_many = array();
@@ -76,10 +65,7 @@ class ActiveRecord {
         }
         
         # Open the database connection
-        if ($this->is_error($connection_result = $this->establish_connection())) {
-            echo "ActiveRecord Connection Error:".$connection_result->getMessage();
-            exit;
-        }
+        $this->establish_connection();
 
         # Set $table_name
         if($this->table_name == null) { 
@@ -101,31 +87,39 @@ class ActiveRecord {
     # contents from the database.
     function __get($key) {
         
-        if(array_key_exists($key, $this->has_many)) {
-            $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
-        } elseif(is_string($this->has_many)) {
+        if(is_string($this->has_many)) {
             if(preg_match("/$key/", $this->has_many)) {
                 $this->$key = $this->find_all_has_many($key);
             }    
-        } elseif(array_key_exists($key, $this->has_one)) {
-            $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
+        } elseif(is_array($this->has_many)) {
+            if(array_key_exists($key, $this->has_many)) {
+                $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
+            }
         } elseif(is_string($this->has_one)) {
             if(preg_match("/$key/", $this->has_one)) {
                 $this->$key = $this->find_one_has_one($key);
             }    
-        } elseif(array_key_exists($key, $this->has_and_belongs_to_many)) {
-            $this->$key = $this->find_all_habtm($key);
+        } elseif(is_array($this->has_one)) {
+            if(array_key_exists($key, $this->has_one)) {
+                $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
+            }
         } elseif(is_string($this->has_and_belongs_to_many)) {
             if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
                 $this->$key = $this->find_all_habtm($key);
             }    
-        } elseif(array_key_exists($key, $this->belongs_to)) {
-            $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
+        } elseif(is_array($this->has_and_belongs_to_many)) {
+            if(array_key_exists($key, $this->has_and_belongs_to_many)) {
+                $this->$key = $this->find_all_habtm($key);
+            }
         } elseif(is_string($this->belongs_to)) {
             if(preg_match("/$key/", $this->belongs_to)) {
                 $this->$key = $this->find_one_belongs_to($key);
             }    
-        } 
+        } elseif(is_array(!$this->belongs_to)) {
+            if(array_key_exists($key, $this->belongs_to)) {
+                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
+            }
+        }  
             
         //echo "<pre>id: $this->id<br>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
@@ -150,31 +144,39 @@ class ActiveRecord {
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
-            if(array_key_exists($method_name, $this->has_many)) {
-                $result = $this->find_all_has_many($method_name, $parameters);
-            } elseif(is_string($this->has_many)) {
+            if(is_string($this->has_many)) {
                 if(preg_match("/$method_name/", $this->has_many)) {
                     $result = $this->find_all_has_many($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($method_name, $this->has_one)) {
-                $result = $this->find_one_has_one($method_name, $parameters);
+            } elseif(is_array($this->has_many)) {
+                if(array_key_exists($method_name, $this->has_many)) {
+                    $result = $this->find_all_has_many($method_name, $parameters);
+                }
             } elseif(is_string($this->has_one)) {
                 if(preg_match("/$method_name/", $this->has_one)) {
                     $result = $this->find_one_has_one($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
-                $result = $this->find_all_habtm($method_name, $parameters);
+            } elseif(is_array($this->has_one)) {
+                if(array_key_exists($method_name, $this->has_one)) {
+                    $result = $this->find_one_has_one($method_name, $parameters);
+                }
             } elseif(is_string($this->has_and_belongs_to_many)) {
                 if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
                     $result = $this->find_all_habtm($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($method_name, $this->belongs_to)) {
-                $result = $this->find_one_belongs_to($method_name, $parameters);
+            } elseif(is_array($this->has_and_belongs_to_many)) {
+                if(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
+                    $result = $this->find_all_habtm($method_name, $parameters);
+                }
             } elseif(is_string($this->belongs_to)) {
                 if(preg_match("/$method_name/", $this->belongs_to)) {
                     $result = $this->find_one_belongs_to($method_name, $parameters);
                 }    
-            } 
+            } elseif(is_array(!$this->belongs_to)) {
+                if(array_key_exists($method_name, $this->belongs_to)) {
+                    $result = $this->find_one_belongs_to($method_name, $parameters);
+                }
+            }
             # check for the [count,sum,avg,etc...]_all magic functions
             elseif(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
@@ -395,7 +397,7 @@ class ActiveRecord {
 
         //echo "sql:$sql<br>";
         if($this->is_error($rs = $this->query($sql))) {
-            echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
+            $this->raise($rs->getMessage());
         } else {
             $row = $rs->fetchRow();
             return $row["agg_result"];
@@ -407,12 +409,10 @@ class ActiveRecord {
     function send($column) {
         # Run the query to grab a specific columns value.
         $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
-        if ($this->is_error($result)) {
-            echo ($this->raise_error($result->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
-            exit;
-        } else {
-            return $result;
+        if($this->is_error($result)) {
+            $this->raise($result->getMessage());    
         }
+        return $result;
     }
     
     # Only used if you want to do transactions and your db supports transactions
@@ -440,10 +440,7 @@ class ActiveRecord {
             if($this->use_transactions && $this->begin_executed) {
                 $this->rollback();    
             }
-            echo "Error in ActiveRecord::query();<br>";
-            $error = $this->raise_error($rs->getUserInfo(), 'query', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN);
-            echo $error->message;
-            exit;
+            $this->raise($rs->getMessage());
         }
         return $rs;
     }
@@ -478,7 +475,7 @@ class ActiveRecord {
                 if($set_pages) {
                     //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
                     if($this->is_error($rs = $this->query($sql))) {
-                        echo "ActiveRecord Paging Error: ".$rs->getMessage()."<br>";
+                        $this->raise($rs->getMessage());
                     } else {
                         # Set number of total pages in result set without the LIMIT
                         if($count = $rs->numRows())
@@ -491,7 +488,7 @@ class ActiveRecord {
 
         //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         if($this->is_error($rs = $this->query($sql))) {
-            echo "ActiveRecord Error: ".$rs->getMessage()."<br>";
+            $this->raise($rs->getMessage());
         }
 
         $objects = array();
@@ -635,8 +632,7 @@ class ActiveRecord {
         $sql = "UPDATE `$this->table_name` SET $updates WHERE $conditions";
         $result = $this->query($sql);
         if ($this->is_error($result)) {
-            $this->errors[] = $result->getMessage();
-            return false;
+            $this->raise($result->getMessage());
         } else {
             return true;
         }  
@@ -687,8 +683,7 @@ class ActiveRecord {
 
         $result = $this->query($sql);
         if ($this->is_error($result)) {
-            $this->errors[] = $results->getMessage();
-            return false;
+            $this->raise($results->getMessage());
         } else {
             $id = $this->get_insert_id();
             if($id > 0 && $this->auto_save_habtm) {
@@ -707,8 +702,7 @@ class ActiveRecord {
         //echo "update_record: SQL: $sql<br>";
         $result = $this->query($sql);
         if($this->is_error($result)) {
-            $this->errors[] = $results->getMessage();
-            return false;
+            $this->raise($results->getMessage());
         } else {
             if($this->id > 0 && $this->auto_save_habtm) {
                 $habtm_result = $this->update_habtm_records($this->id);
@@ -749,8 +743,7 @@ class ActiveRecord {
 
         # Delete the record(s)
         if($this->is_error($rs = $this->query("DELETE FROM `$this->table_name` WHERE $conditions"))) {
-            $this->errors[] = $rs->getMessage();
-            return false;
+            $this->raise($rs->getMessage());
         }
 
         $this->id = 0;
@@ -776,7 +769,6 @@ class ActiveRecord {
     }
 
     function add_habtm_records($this_foreign_value) {
-        $failed = false;
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             if($this->delete_habtm_records($this_foreign_value)) {
                 reset($this->habtm_attributes);
@@ -795,24 +787,16 @@ class ActiveRecord {
                         //echo "add_habtm_records: SQL: $sql<br>";
                         $result = $this->query($sql);
                         if ($this->is_error($result)) {
-                            $failed = true;
+                            $this->raise($result->getMessage());
                         }
                     }
                 }
-            } else {
-                $failed = true;
-            }
+            } 
         }
-
-        if($failed) {
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     }
 
     function delete_habtm_records($this_foreign_value) {
-        $failed = false;
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
@@ -820,19 +804,13 @@ class ActiveRecord {
                 $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
                 $sql = "DELETE FROM $table_name WHERE $this_foreign_key = $this_foreign_value";
                 //echo "delete_habtm_records: SQL: $sql<br>";
-
                 $result = $this->query($sql);
                 if ($this->is_error($result)) {
-                    $failed = true;
+                    $this->raise($result->getMessage());
                 }
             }
         }
-
-        if($failed) {
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     }
 
     # Checks to see if $auto_timestamps is true, If yes and there exists a field
@@ -965,16 +943,19 @@ class ActiveRecord {
     # Returns the autogenerated id from the last insert query
     function get_insert_id() {
         $id = self::$db->getOne("SELECT LAST_INSERT_ID();");
-
-        if ($this->is_error($id))
-            return($this->raise_error($id->getUserInfo(), 'get_insert_id', __LINE__, ACTIVE_RECORD_ERR, PEAR_ERROR_RETURN));
-
+        if ($this->is_error($id)) {
+            $this->raise($id->getMessage());
+        }
         return $id;
     }
 
     # Calls DB::Connect() to open a database connection. It uses $GLOBALS['DB_SETTINGS'][TRAX_MODE] 
     # If it finds a connection in ACTIVE_RECORD_DB it uses it.
-    function establish_connection() {
+    function establish_connection() {      
+        # Set optional Pear parameters
+        if(isset($GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
+            $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'];
+        }               
         # Connect to the database and throw an error if the connect fails...
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
             $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
@@ -982,27 +963,25 @@ class ActiveRecord {
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
         } else {
-            return($this->raise_error($GLOBALS['ACTIVE_RECORD_DB']->getUserInfo(), 'establish_connection', __LINE__, ACTIVE_RECORD_CONNECT_ERR, PEAR_ERROR_RETURN));
+            $this->raise($GLOBALS['ACTIVE_RECORD_DB']->getMessage());
         }
-        self::$db->setFetchMode($GLOBALS['ACTIVE_RECORD_FETCHMODE']);
+        self::$db->setFetchMode($this->fetch_mode);
         return self::$db;
-    }
-
-    # Sends an error string to PEAR::raiseError
-    #  Params : $message            error message to send
-    #           $method             function error occurred in
-    #           $line               line error occurred on (use __LINE__)
-    #           $errno              internal error number
-    #           $do                 pear error action (die print return etc...)
-    function &raise_error($message, $method, $line, $errno, $do) {
-        $error = PEAR::raiseError(sprintf("Error: %s on line %d of %s::%s()",
-                                  $message, $line, 'ActiveRecord', $method), $errno, $do);
-        return($error);
     }
 
     # Tests to see if an object is either a PEAR Error or a DB Error object...
     function is_error($obj) {
-        return((PEAR::isError($obj)) || (DB::isError($obj)));
+        if((PEAR::isError($obj)) || (DB::isError($obj))) {
+            return true;        
+        } else {
+            return false;    
+        }
+    }
+    
+    function raise($message) {
+        $error_message  = "Model Class: ".get_class($this)."<br>";
+        $error_message .= "Error Message: ".$message;
+        throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");        
     }
     
     # Add an error to Active Record

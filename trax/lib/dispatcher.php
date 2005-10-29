@@ -25,8 +25,12 @@
 class Dispatcher {
 
     function dispatch() {
-        $ac = new ActionController();
-        $ac->process_route();
+        try {
+            $ac = new ActionController();
+            $ac->process_route();
+        } catch(Exception $e) {             
+            $ac->process_with_exception(&$e);
+        }
     }
 
 }

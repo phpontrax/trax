@@ -143,7 +143,7 @@ class ActionController {
         // First try to load the routes and setup the pathes to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
-                $this->error("404", "Controller ".$this->controller." not found", "Failed to load any defined routes");
+                $this->raise("Failed to load any defined routes", "Controller ".$this->controller." not found", "404");
             }
         }
 
@@ -191,7 +191,7 @@ class ActionController {
                 } elseif(method_exists($this->controller_object, "index")) {
                     $this->controller_object->index();
                 } else {
-                    $this->error("404", "Unknown action", "No action responded to ".$this->action);
+                    $this->raise("No action responded to ".$this->action, "Unknown action", "404");
                 }
                 $this->execute_after_filters();
 
@@ -221,7 +221,7 @@ class ActionController {
                     // grab view html
                     include($this->view_file);
                 } else {
-                    $this->error("404", "Unknown view", "No view file found.");
+                    $this->raise("No view file found.", "Unknown view", "404");
                 }
 
                 $content_for_layout .= ob_get_contents();
@@ -235,11 +235,11 @@ class ActionController {
                     // render view
                     include($this->default_layout_file);
                 } else {
-                    $this->error("404", "Unknown layout", "No layout file found.");
+                    $this->raise("No layout file found.", "Unknown layout", "404");
                 }
             }
         } else {
-            $this->error("404", "Unknown controller", "No controller found.");
+            $this->raise("No controller found.", "Unknown controller", "404");
         }
 
         if(!$this->keep_flash) {
@@ -351,18 +351,36 @@ class ActionController {
         }
     }
 
-    function error($error_code, $error_heading, $error_message) {
-        header("HTTP/1.0 {$error_code} {$error_heading}");
+    function raise($error_message, $error_heading, $error_code = "404") {       
+        throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);        
+    }
+
+    function process_with_exception(&$exception) {
+        $error_code = $exception->error_code;
+        $error_heading = $exception->error_heading;
+        $error_message = $exception->error_message;
+        $trace = $exception->getTraceAsString();
+        header("HTTP/1.0 {$error_code} {$error_heading}");        
         // check for user's layout for errors
-        if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.phtml")) {
+        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.phtml")) {
             include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.phtml");
-        } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/templates/error.phtml")) {
+        } elseif(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/templates/error.phtml")) {
             // use default layout for errors
             include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/templates/error.phtml");
+        } elseif(DEBUG) {
+            echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
+            echo "<h1>$error_heading</h1>\n";
+            echo "<p>$error_message</p>\n";
+            if($trace) {
+                echo "<pre style=\"background-color: #eee;padding:10px;font-size: 11px;\">";
+                echo "<code>$trace</code></pre>\n";    
+            }
+            echo "</font>\n";
         } else {
-            echo "<h1>$error_heading</h1><br>$error_message";
+            echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
+            echo "<h2>Application Error</h2>Trax application failed to start properly"; 
+            echo "</font>\n";  
         }
-        exit;
     }
 
 }
