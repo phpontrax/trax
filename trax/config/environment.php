@@ -41,11 +41,12 @@ $GLOBALS['TRAX_INCLUDES'] =
 $GLOBALS['DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
 
 # Include Trax library files.
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/trax_exceptions.php");
+require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/inflector.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/active_record.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_controller.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/action_mailer.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/dispatcher.php");
-require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/inflector.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/router.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/html_helper.php");
 
@@ -62,7 +63,18 @@ if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']))
     ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
 
 # Set which file to log to php errors for this application to
+ini_set("log_errors", "On");
 ini_set("error_log", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['log']."/".TRAX_MODE.".log");
+
+if(TRAX_MODE == "development") {
+    define("DEBUG", true);
+    # Display errors to browser if in development mode for debugging
+    ini_set("display_errors", "On");    
+} else {
+    define("DEBUG", false);
+    # Hide errors from browser if not in development mode
+    ini_set("display_errors", "Off");        
+}
 
 
 ##############################################
