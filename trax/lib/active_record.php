@@ -144,53 +144,54 @@ class ActiveRecord {
     function __call($method_name, $parameters) {
         if(method_exists($this,$method_name)) {
             # If the method exists, just call it
-            return call_user_func(array($this,$method_name), $parameters);
+            $result = call_user_func(array($this,$method_name), $parameters);
         } else {
             # ... otherwise, check to see if the method call is one of our
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
-            if(array_key_exists($key, $this->has_many)) {
-                $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
+            if(array_key_exists($method_name, $this->has_many)) {
+                $result = $this->find_all_has_many($method_name, $parameters);
             } elseif(is_string($this->has_many)) {
-                if(preg_match("/$key/", $this->has_many)) {
-                    $this->$key = $this->find_all_has_many($key);
+                if(preg_match("/$method_name/", $this->has_many)) {
+                    $result = $this->find_all_has_many($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($key, $this->has_one)) {
-                $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
+            } elseif(array_key_exists($method_name, $this->has_one)) {
+                $result = $this->find_one_has_one($method_name, $parameters);
             } elseif(is_string($this->has_one)) {
-                if(preg_match("/$key/", $this->has_one)) {
-                    $this->$key = $this->find_one_has_one($key);
+                if(preg_match("/$method_name/", $this->has_one)) {
+                    $result = $this->find_one_has_one($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($key, $this->has_and_belongs_to_many)) {
-                $this->$key = $this->find_all_habtm($key);
+            } elseif(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
+                $result = $this->find_all_habtm($method_name, $parameters);
             } elseif(is_string($this->has_and_belongs_to_many)) {
-                if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
-                    $this->$key = $this->find_all_habtm($key);
+                if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
+                    $result = $this->find_all_habtm($method_name, $parameters);
                 }    
-            } elseif(array_key_exists($key, $this->belongs_to)) {
-                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
+            } elseif(array_key_exists($method_name, $this->belongs_to)) {
+                $result = $this->find_one_belongs_to($method_name, $parameters);
             } elseif(is_string($this->belongs_to)) {
-                if(preg_match("/$key/", $this->belongs_to)) {
-                    $this->$key = $this->find_one_belongs_to($key);
+                if(preg_match("/$method_name/", $this->belongs_to)) {
+                    $result = $this->find_one_belongs_to($method_name, $parameters);
                 }    
             } 
             # check for the [count,sum,avg,etc...]_all magic functions
             elseif(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
-                return $this->aggregrate_all($method_name, $parameters);
+                $result = $this->aggregrate_all($method_name, $parameters);
             }
             # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
                 //echo "calling method: $method_name<br>";
-                return $this->find_by($method_name, $parameters, true);
+                $result = $this->find_by($method_name, $parameters, true);
             }
             # check for the find_by_* magic functions
             elseif(strlen($method_name) > 7 && substr($method_name, 0, 7) == "find_by") {
                 //echo "calling method: $method_name<br>";
-                return $this->find_by($method_name, $parameters);
+                $result = $this->find_by($method_name, $parameters);
             }            
         }
+        return $result;
     }
 
     # Returns a the name of the join table that would be used for the two
