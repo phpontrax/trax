@@ -24,7 +24,7 @@
 
 class Inflector {
 
-    private $plural_rules =
+    private static $plural_rules =
         array(  '/(x|ch|ss|sh)$/' => '\1es',            # search, switch, fix, box, process, address
                 '/series$/' => '\1series',
                 '/([^aeiouy]|qu)ies$/' => '\1y',
@@ -40,7 +40,7 @@ class Inflector {
                 '/$/' => 's'
         );
 
-    private $singular_rules =
+    private static $singular_rules =
         array(  '/(x|ch|ss)es$/' => '\1',
                 '/movies$/' => 'movie',
                 '/series$/' => 'series',
@@ -59,7 +59,7 @@ class Inflector {
 
     function pluralize($word) {
         $original = $word;
-        foreach($this->plural_rules as $rule => $replacement) {
+        foreach(self::$plural_rules as $rule => $replacement) {
             $word = preg_replace($rule,$replacement,$word);
             if($original != $word) break;
         }
@@ -68,7 +68,7 @@ class Inflector {
 
     function singularize($word) {
         $original = $word;
-        foreach($this->singular_rules as $rule => $replacement) {
+        foreach(self::$singular_rules as $rule => $replacement) {
             $word = preg_replace($rule,$replacement,$word);
             if($original != $word) break;
         }

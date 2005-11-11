@@ -406,11 +406,13 @@ class ActiveRecord {
     }
 
     # Returns PEAR result set of one record with only the passed in column in the result set.
-    function send($column) {
-        # Run the query to grab a specific columns value.
-        $result = self::$db->getOne("SELECT $column FROM `$this->table_name` WHERE id='$this->id'");
-        if($this->is_error($result)) {
-            $this->raise($result->getMessage());    
+    function send($column) {      
+        if($column != "") {
+            # Run the query to grab a specific columns value.
+            $result = self::$db->getOne("SELECT `$column` FROM `$this->table_name` WHERE id='$this->id'");
+            if($this->is_error($result)) {
+                $this->raise($result->getMessage());    
+            }            
         }
         return $result;
     }
@@ -949,16 +951,16 @@ class ActiveRecord {
         return $id;
     }
 
-    # Calls DB::Connect() to open a database connection. It uses $GLOBALS['DB_SETTINGS'][TRAX_MODE] 
+    # Calls DB::Connect() to open a database connection. It uses $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE] 
     # If it finds a connection in ACTIVE_RECORD_DB it uses it.
     function establish_connection() {      
         # Set optional Pear parameters
-        if(isset($GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
-            $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['DB_SETTINGS'][TRAX_MODE]['persistent'];
+        if(isset($GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
+            $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'];
         }               
         # Connect to the database and throw an error if the connect fails...
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
-            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
+            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
         }      
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
