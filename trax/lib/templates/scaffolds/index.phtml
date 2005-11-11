@@ -1,0 +1,30 @@
+<h1>Listing <?= $model_name_plural ?></h1>
+
+<table border="0" cellpadding="2" cellspacing="2">
+<? if(count($models)): ?> 
+	<tr> 
+	    <? foreach($table_info as $column): ?>
+	        <th><?= $column['human_name'] ?></th>
+        <? endforeach; ?>
+	</tr>
+  
+	<? foreach($models as $model): ?>   
+	    <tr>
+		    <? foreach($model->table_info as $column): ?>
+    			<td><?= $model->send($column['name']) ?></td>
+		    <? endforeach; ?>                            
+		    <td><?= link_to('Show', $controller_name, array(":action" => 'show', ":id" => $model)) ?></td>
+		    <td><?= link_to('Edit', $controller_name, array(":action" => 'edit', ":id" => $model)) ?></td>
+		    <td><?= link_to('Delete', $controller_name, array(":action" => 'delete', ":id" => $model, ":confirm" => "Are you sure?")) ?></td>
+	    </tr>
+	<? endforeach; ?>
+<? else: ?>
+	<tr>
+		<td>No <?= $model_name_plural ?> found.</td>
+	</tr>
+<? endif; ?>
+</table>
+
+<br />
+
+<?= link_to('New post', $controller_name, array(":action" => 'add')) ?>
