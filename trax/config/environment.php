@@ -37,8 +37,28 @@ $GLOBALS['TRAX_INCLUDES'] =
 	   "app" => "app",
 	   "log" => "log" );
 
+# Add to the include path non framework libs
+if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs'])) {
+    ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);    
+}
+   
+# Set which file to log php errors to for this application
+# As well in your application you can do error_log("whatever") and it will go to this log file.
+ini_set("log_errors", "On");
+ini_set("error_log", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['log']."/".TRAX_MODE.".log"); 
+
+if(TRAX_MODE == "development") {
+    define("DEBUG", true);
+    # Display errors to browser if in development mode for debugging
+    ini_set("display_errors", "On");    
+} else {
+    define("DEBUG", false);
+    # Hide errors from browser if not in development mode
+    ini_set("display_errors", "Off");        
+}
+
 # Load databse settings
-$GLOBALS['DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
+$GLOBALS['TRAX_DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
 
 # Include Trax library files.
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/trax_exceptions.php");
@@ -51,32 +71,15 @@ require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/router.php");
 require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/html_helper.php");
 
 # Include the ApplicationMailer Class which extends ActionMailer for application specific mailing functions
-if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php"))
-    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php");
-
-# Include the application environment specific config file
-if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php"))
-    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php"); 
-
-# Add to the include path non framework libs
-if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']))
-    ini_set("include_path",ini_get("include_path").TRAX_PATH_SEPERATOR.TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['libs']);
-
-# Set which file to log to php errors for this application to
-ini_set("log_errors", "On");
-ini_set("error_log", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['log']."/".TRAX_MODE.".log");
-
-if(TRAX_MODE == "development") {
-    define("DEBUG", true);
-    # Display errors to browser if in development mode for debugging
-    ini_set("display_errors", "On");    
-} else {
-    define("DEBUG", false);
-    # Hide errors from browser if not in development mode
-    ini_set("display_errors", "Off");        
+if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php")) {
+    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php");    
 }
-
-
+    
+# Include the application environment specific config file
+if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php")) {
+    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php");     
+}
+    
 ##############################################
 # Auto include model / controller / other app specific libs files
 ##############################################
