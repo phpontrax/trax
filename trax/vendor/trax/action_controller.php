@@ -296,6 +296,7 @@ class ActionController {
 
         if(!$this->keep_flash) {
             # Nuke the flash array
+            Session::
             unset($_SESSION['flash']);
         }
 
@@ -414,11 +415,11 @@ class ActionController {
         $trace = $exception->getTraceAsString();
         header("HTTP/1.0 {$error_code} {$error_heading}");        
         # check for user's layout for errors
-        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.phtml")) {
-            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.phtml");
-        } elseif(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/templates/error.phtml")) {
+        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml")) {
+            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml");
+        } elseif(DEBUG && file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
             # use default layout for errors
-            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/templates/error.phtml");
+            include(TRAX_LIB_ROOT."/templates/error.phtml");
         } elseif(DEBUG) {
             echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
             echo "<h1>$error_heading</h1>\n";
