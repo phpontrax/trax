@@ -80,7 +80,6 @@ require_once("action_controller.php");
 require_once("action_mailer.php");
 require_once("dispatcher.php");
 require_once("router.php");
-require_once("html_helper.php");
 
 # Include the ApplicationMailer Class which extends ActionMailer for application specific mailing functions
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php")) {
