@@ -27,15 +27,20 @@ include_once( "Mail/mime.php" );
 
 class ActionMailer {
 
-    public $crlf = "\r\n";
-    public $smtp_params = array("host"=>"localhost", "port"=>"25");
-    public $send_type = "mail"; // smtp or mail
-    public $subject = null; // email subject
-    public $from_address = "no-reply@nodomain.com";
-    public $from_name = null;
-    public $error = null;
-    private $mail_mime;  // Mail_mime object
-    private $to_addresses, $cc_addresses, $bcc_addresses, $replyto_addresses;
+    private
+        $mail_mime;  // Mail_mime object
+        $to_addresses,
+        $cc_addresses,
+        $bcc_addresses,
+        $replyto_addresses;
+    public
+        $crlf = "\r\n";
+        $smtp_params = array("host"=>"localhost", "port"=>"25"),
+        $send_type = "mail", // smtp or mail
+        $subject = null, // email subject
+        $from_address = "no-reply@nodomain.com",
+        $from_name = null,
+        $error = null;
 
     function __construct($crlf = null) {
         if(!is_null($crlf)) {
