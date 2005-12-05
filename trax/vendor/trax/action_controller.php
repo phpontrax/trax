@@ -1,5 +1,5 @@
 <?
-# $Id: action_controller.php 55 2005-11-11 22:38:37Z john $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -90,7 +90,7 @@ class ActionController {
         if (!is_null(TRAX_URL_PREFIX)) {
             $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
         }
-        
+
         # strip leading slash
         $browser_url = substr($browser_url,1);
 
@@ -180,31 +180,30 @@ class ActionController {
             if(class_exists($this->controller_class,false)) {
                 $class = $this->controller_class;
                 $this->controller_object = new $class();
-   
+
                 $layout = $this->controller_object->layout;
                 # Call class method to set the layout dynamically at runtime
-                if(method_exists($this->controller_object, $layout)) {                    
-                    $layout = $this->controller_object->$layout();        
+                if(method_exists($this->controller_object, $layout)) {
+                    $layout = $this->controller_object->$layout();
                 }
-                                        
+
                 # Check if there is any defined scaffolding to load
-                if($this->controller_object->scaffold) {                      
-                    $scaffold = $this->controller_object->scaffold;                           
-                    if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/scaffold_controller.php")) {
-                        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/scaffold_controller.php");
-                        $this->controller_object = new ScaffoldController($scaffold, $this->controller, $this->action);                         
+                if($this->controller_object->scaffold) {
+                    $scaffold = $this->controller_object->scaffold;
+                    if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
+                        include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
+                        $this->controller_object = new ScaffoldController($scaffold, $this->controller, $this->action);
                         if($this->action) {
-                            $this->view_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'] . "/templates/scaffolds/".$this->action.".phtml";    
+                            $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/".$this->action.".phtml";
                         } else {
-                            $this->view_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'] . "/templates/scaffolds/index.phtml";            
+                            $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/index.phtml";
                         }
                         if($layout == "") {
                             # the generic scaffold layout
-                            $this->layout_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'] . "/templates/scaffolds/layout.phtml";
-                        }                                        
+                            $this->layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
+                        }
                     }
                 }
-                
             }
 
             if($this->id != "") {
@@ -256,24 +255,24 @@ class ActionController {
                             $this->view_file = $this->views_path . "/" . $action . "." . $this->views_file_extention;
                         } else {
                             $this->view_file = $this->views_path . "/" . "index" . "." . $this->views_file_extention;
-                        }                    
+                        }
                     }
-                                        
+
                     if(file_exists($this->view_file)) {
                         # grab view html
                         include($this->view_file);
                     } else {
                         $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404");
-                    }     
-                    
+                    }
+
                     # Grab all the html from the view to put into the layout
                     $content_for_layout .= ob_get_contents();
                     ob_end_clean();
 
-                    if(!$this->layout_file) {                       
+                    if(!$this->layout_file) {
                         $this->layout_file = $this->layouts_path . "/" . $layout . "." . $this->views_file_extention;
-                    }    
-                    
+                    }
+
                     if(file_exists($this->layout_file)) {
                         # render user defined layout
                         include($this->layout_file);
@@ -285,7 +284,7 @@ class ActionController {
                         #$this->raise("No layout file found.", "Unknown layout", "404"); 
                         # No layout template so just echo out whatever is in $content_for_layout
                         echo $content_for_layout;
-                    }                                   
+                    }
                 }
             } else {
                 $this->raise("Failed to instantiate controller object \"".$this->controller."\".", "ActionController Error", "500");        
@@ -295,9 +294,8 @@ class ActionController {
         }
 
         if(!$this->keep_flash) {
-            # Nuke the flash array
-            Session::
-            unset($_SESSION['flash']);
+            # Nuke the flash
+            Session::unset_var('flash');
         }
 
         return true;
@@ -306,7 +304,7 @@ class ActionController {
     function set_paths() {
         if(is_array($this->url_path)) {
             foreach($this->url_path as $path) {
-				if(file_exists($this->controllers_path . "/$path")) {
+                if(file_exists($this->controllers_path . "/$path")) {
                     $this->controllers_path .= "/$path";
                     $this->helpers_path .= "/$path";
                     $this->views_path .= "/$path";
@@ -331,21 +329,21 @@ class ActionController {
             if(method_exists($this->controller_object, $this->controller_object->before_filter)) {
                 $filter_function = $this->controller_object->before_filter;
                 $this->controller_object->$filter_function();
-            }                
+            }
         }
     }
 
     function add_before_filter($filter_function_name) {
         if (is_array($filter_function_name)) {
             if(count($this->before_filter) > 0) {
-                $this->before_filter = array_merge($this->before_filter, $filter_function_name);        
+                $this->before_filter = array_merge($this->before_filter, $filter_function_name);
             } else {
                 $this->before_filter = $filter_function_name;
             }
         } elseif($this->before_filter != "") {
             $this->before_filter = array($this->before_filter, $filter_function_name);
         } else {
-            $this->before_filter = $filter_function_name;      
+            $this->before_filter = $filter_function_name;
         }
     }
 
@@ -360,21 +358,21 @@ class ActionController {
             if(method_exists($this->controller_object, $this->controller_object->after_filter)) {
                 $filter_function = $this->controller_object->after_filter;
                 $this->controller_object->$filter_function();
-            }                
+            }
         }
     }
 
     function add_after_filter($filter_function_name) {
         if (is_array($filter_function_name)) {
             if(count($this->after_filter) > 0) {
-                $this->after_filter = array_merge($this->after_filter, $filter_function_name);        
+                $this->after_filter = array_merge($this->after_filter, $filter_function_name);
             } else {
                 $this->after_filter = $filter_function_name;
-            }            
+            }
         } elseif($this->after_filter != "") {
             $this->after_filter = array($this->after_filter, $filter_function_name);
         } else {
-            $this->after_filter = $filter_function_name;      
+            $this->after_filter = $filter_function_name;
         }
     }
 
@@ -404,8 +402,8 @@ class ActionController {
         }
     }
 
-    function raise($error_message, $error_heading, $error_code = "404") {       
-        throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);        
+    function raise($error_message, $error_heading, $error_code = "404") {
+        throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);
     }
 
     function process_with_exception(&$exception) {
@@ -413,7 +411,7 @@ class ActionController {
         $error_heading = $exception->error_heading;
         $error_message = $exception->error_message;
         $trace = $exception->getTraceAsString();
-        header("HTTP/1.0 {$error_code} {$error_heading}");        
+        header("HTTP/1.0 {$error_code} {$error_heading}");
         # check for user's layout for errors
         if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml")) {
             include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml");

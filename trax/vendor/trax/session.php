@@ -102,12 +102,18 @@ class Session {
         self::$id = session_id();
     }
 
+    function destory_session() {
+        session_destroy();
+    }
+
     function unset_session() {
         session_unset($_SESSION[self::get_hash()]);
     }
 
-    function destory_session() {
-        session_destroy();
+    function unset_var($key) {
+        if(self::is_valid_host()) {
+            unset($_SESSION[self::get_hash()][$key]);
+        }
     }
 
     function flash($value) {
@@ -121,7 +127,6 @@ class Session {
             }
         }
     }
-
 }
 
 ?>
