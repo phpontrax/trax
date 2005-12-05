@@ -1,0 +1,9 @@
+<? foreach($model->table_info as $column): ?>
+  <p>
+    <b><?= $column['human_name'] ?>:</b>
+    <?= $model->$column['name'] ?>
+  </p>
+<? endforeach; ?>
+
+<?= link_to("Edit", $controller_name, array(":action" => "edit", ":id" => $model)) ?> |
+<?= link_to("Back", $controller_name, array(":action" => "index")) ?>
