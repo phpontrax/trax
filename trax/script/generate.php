@@ -1,6 +1,7 @@
 #! /usr/local/bin/php
 <?
 # $Id$
+#
 # Copyright (c) 2005 John Peterson
 #
 # Permission is hereby granted, free of charge, to any person obtaining
