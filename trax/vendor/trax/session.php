@@ -1,6 +1,6 @@
 <?php
 
-# $Id:$
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
