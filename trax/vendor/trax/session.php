@@ -87,6 +87,18 @@ class Session {
         session_destroy();
     }
 
+    function flash($value) {
+        if(self::is_valid_host()) {
+            if($value) {
+                $_SESSION[self::get_hash()]['flash'] = $value;
+            } else {
+                $value = $_SESSION[self::get_hash()]['flash'];
+                unset($_SESSION[self::get_hash()]['flash']);
+                return $value;
+            }
+        }
+    }
+
 }
 
 ?>
