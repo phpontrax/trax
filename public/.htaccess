@@ -1,5 +1,5 @@
-# php include path for Trax ( Pear & Trax config dir )
-php_value include_path .:/usr/local/lib/php:/home/<username>/trax/config
+# php include_path to Trax config directory
+php_value include_path .:/home/<username>/trax/config
 
 # Redirect all requests not available on the filesystem to Trax
 RewriteEngine On
