@@ -25,6 +25,7 @@ $GLOBALS['TRAX_INCLUDES'] =
            "config" => "config",
            "environments" => "config/environments",
            "app" => "app",
+           "lib" => "lib",
            "log" => "log",
            "vendor" => "vendor" );
 
@@ -70,6 +71,7 @@ ini_set("include_path",
         ".".TRAX_PATH_SEPERATOR.   # current directory
         TRAX_LIB_ROOT.TRAX_PATH_SEPERATOR.  # trax libs (vendor/trax or server trax libs)
         PHP_LIB_ROOT.TRAX_PATH_SEPERATOR.  # php libs dir (ex: /usr/local/lib/php)
+	TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config'].TRAX_PATH_SEPERATOR. # lib dir for app specific custom libs
         ini_get("include_path")); # add on old include_path to end
 
 # Include Trax library files.
