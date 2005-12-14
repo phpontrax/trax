@@ -4,8 +4,6 @@
 define("PHP_LIB_ROOT",      "/usr/share/php");
 define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
 define("TRAX_URL_PREFIX",   null);
-# public is the default
-define("DEFAULT_LAYOUT",    "public");
 
 # Set in the Apache Vhost (SetEnv TRAX_MODE development)
 if($_SERVER['TRAX_MODE']) {
