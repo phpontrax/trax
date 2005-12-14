@@ -1,0 +1,8 @@
+<?
+
+class FormHelper extends Helpers {
+
+
+}
+
+?>
