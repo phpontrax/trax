@@ -61,10 +61,10 @@
 </head>
 <body>
 
-<? if($_SESSION['flash']['notice']): ?>
-	<p style="color: green"><?= $_SESSION['flash']['notice'] ?></p>
-<? elseif($_SESSION['flash']['error']): ?>
-	<p style="color: red"><?= $_SESSION['flash']['error'] ?></p>
+<? if(Session::isset_flash("notice")): ?>
+    <p style="color: green"><?= Session::flash("notice") ?></p>
+<? elseif(Session::isset_flash("error")): ?>
+    <p style="color: red"><?= Session::flash("error") ?></p>
 <? endif; ?>
 
 <?= $content_for_layout ?>
