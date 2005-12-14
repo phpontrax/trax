@@ -1,7 +1,7 @@
 <?php
 
 # include path for your php libs (PEAR etc)
-define("PHP_LIB_ROOT",      "/usr/local/lib/php");
+define("PHP_LIB_ROOT",      "/usr/share/php");
 define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
 define("TRAX_URL_PREFIX",   null);
 # public is the default
@@ -24,8 +24,8 @@ $GLOBALS['TRAX_INCLUDES'] =
            "layouts" => "app/views/layouts",
            "config" => "config",
            "environments" => "config/environments",
-           "app" => "app",
            "lib" => "lib",
+           "app" => "app",
            "log" => "log",
            "vendor" => "vendor" );
 
@@ -71,26 +71,28 @@ ini_set("include_path",
         ".".TRAX_PATH_SEPERATOR.   # current directory
         TRAX_LIB_ROOT.TRAX_PATH_SEPERATOR.  # trax libs (vendor/trax or server trax libs)
         PHP_LIB_ROOT.TRAX_PATH_SEPERATOR.  # php libs dir (ex: /usr/local/lib/php)
-		TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'].TRAX_PATH_SEPERATOR. # lib dir for app specific custom libs
+	TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'].TRAX_PATH_SEPERATOR. # app specific libs extra libs to include
         ini_get("include_path")); # add on old include_path to end
 
 # Include Trax library files.
-require_once("trax_exceptions.php");
-require_once("inflector.php");
-require_once("active_record.php");
-require_once("action_controller.php");
-require_once("action_mailer.php");
-require_once("dispatcher.php");
-require_once("router.php");
+include_once("session.php");
+include_once("trax_exceptions.php");
+include_once("inflector.php");
+include_once("active_record.php");
+include_once("action_view.php");
+include_once("action_controller.php");
+include_once("action_mailer.php");
+include_once("dispatcher.php");
+include_once("router.php");
 
 # Include the ApplicationMailer Class which extends ActionMailer for application specific mailing functions
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php")) {
-    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php");
+    include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['app']."/application_mailer.php");
 }
 
 # Include the application environment specific config file
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php")) {
-    require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php");
+    include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php");
 }
 
 ##############################################
@@ -102,16 +104,16 @@ function __autoload($class_name) {
 
     if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file")) {
         # Include model classes
-        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file");
+        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file");
     } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file")) {
         # Include extra controller classes
-        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file");
+        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['controllers']."/$file");
     } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file")) {
         # Include users application libs
-        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file");
+        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file");
     } elseif(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file_org")) {
         # Include users application libs
-        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file_org");
+        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file_org");
     }
 }
 
