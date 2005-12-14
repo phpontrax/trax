@@ -962,9 +962,9 @@ class ActiveRecord {
                 $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE];
             }
             # Set optional Pear parameters
-            if(isset($connection_settings['persistent'])) { echo $connection_options['persistent'];
+            if(isset($connection_settings['persistent'])) {
                 $connection_options['persistent'] = $connection_settings['persistent'];
-            } echo $connection_options['persistent'];
+            }
             $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $connection_options);
         }
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
