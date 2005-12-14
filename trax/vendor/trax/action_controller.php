@@ -30,6 +30,7 @@ class ActionController {
         $id,
         $controllers_path,
         $helpers_path,
+        $helpers_base_path,
         $layouts_path,
         $url_path,
         $layout_file,
@@ -38,7 +39,10 @@ class ActionController {
         $application_controller_file,
         $application_helper_file,
         $loaded = false,
-        $router_loaded = false;
+        $router_loaded = false,
+        $helpers = array(),
+        $before_filters = array(),
+        $after_filters = array();
     protected
         $before_filter = null,
         $after_filter = null;
@@ -60,7 +64,9 @@ class ActionController {
         if($key == "before_filter") {
             $this->add_before_filter($value);
         } elseif($key == "after_filter") {
-            $this->add_after_filter($value);    
+            $this->add_after_filter($value);
+        } elseif($key == "helper") {
+            $this->add_helper($value);
         } else {
             $this->$key = $value;
         }
@@ -110,8 +116,8 @@ class ActionController {
             $this->helpers_path = $this->helpers_base_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
             $this->application_controller_file = $this->controllers_path . "/application.php";
             $this->application_helper_file = $this->helpers_path . "/application_helper.php";
-            $this->layouts_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
-            $this->default_layout_file = $this->layouts_path . "/" . DEFAULT_LAYOUT . "." . $this->views_file_extention;
+            $this->layouts_path = $this->layouts_base_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
+            $this->default_layout_file = $this->layouts_base_path . "/application." . $this->views_file_extention;
             $this->views_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
 
             $route = $this->router->find_route($browser_url);
@@ -134,6 +140,9 @@ class ActionController {
 
                 if(@in_array(":id",$route_path)) {
                     $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
+                    if($this->id != "") {
+                        $_REQUEST['id'] = $this->id;
+                    }
                 }
 
                 $this->views_path .= "/" . $this->controller;
@@ -169,23 +178,19 @@ class ActionController {
             include_once($this->application_controller_file);
         }
 
-        # Include main application helper file
-        if(file_exists($this->application_helper_file)) {
-            include_once($this->application_helper_file);
-        }
-
         # Include the controller file and execute action
         if(file_exists($this->controller_file)) {
             include_once($this->controller_file);
             if(class_exists($this->controller_class,false)) {
                 $class = $this->controller_class;
                 $this->controller_object = new $class();
-
-                $layout = $this->controller_object->layout;
-                # Call class method to set the layout dynamically at runtime
-                if(method_exists($this->controller_object, $layout)) {
-                    $layout = $this->controller_object->$layout();
+                if(is_object($this->controller_object)) {
+                    $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
+                    $GLOBALS['current_controller_name'] = $this->controller;
                 }
+
+                # Which layout should we use?
+                $this->layout_file = $this->determine_layout();
 
                 # Check if there is any defined scaffolding to load
                 if($this->controller_object->scaffold) {
@@ -198,7 +203,7 @@ class ActionController {
                         } else {
                             $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/index.phtml";
                         }
-                        if($layout == "") {
+                        if(!file_exists($this->layout_file)) {
                             # the generic scaffold layout
                             $this->layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
                         }
@@ -206,8 +211,9 @@ class ActionController {
                 }
             }
 
-            if($this->id != "") {
-                $_REQUEST['id'] = $this->id;
+            # Include main application helper file
+            if(file_exists($this->application_helper_file)) {
+                include_once($this->application_helper_file);
             }
 
             # Include helper file for this controller
@@ -215,8 +221,22 @@ class ActionController {
                 include_once($this->helper_file);
             }
 
-            # Include any extra helper files
-            $this->include_extra_helpers();
+            # Include any extra helper files defined in this controller
+            if(count($this->helpers) > 0) {
+                foreach($this->helpers as $helper) {
+                    if(strstr($helper, "/")) {
+                        $file = substr(strrchr($helper, "/"), 1);
+                        $path = substr($helper, 0, strripos($helper, "/"));
+                        $helper_path_with_file = $this->helpers_base_path."/".$path."/".$file."_helper.php";
+                    } else {
+                        $helper_path_with_file = $this->helpers_base_path."/".$helper."_helper.php";
+                    }
+                    if(file_exists($helper_path_with_file)) {
+                        # Include the helper file
+                        include($helper_path_with_file);
+                    }
+                }
+            }
 
             if(is_object($this->controller_object)) {
                 # Call the controller method based on the URL
@@ -269,25 +289,18 @@ class ActionController {
                     $content_for_layout .= ob_get_contents();
                     ob_end_clean();
 
-                    if(!$this->layout_file) {
-                        $this->layout_file = $this->layouts_path . "/" . $layout . "." . $this->views_file_extention;
-                    }
-
                     if(file_exists($this->layout_file)) {
-                        # render user defined layout
+                        # render the layout
                         include($this->layout_file);
-                    } elseif(file_exists($this->default_layout_file)) {
-                        # render default layout
-                        include($this->default_layout_file);
                     } else {
                         # Can't find any layout so throw an exception
-                        #$this->raise("No layout file found.", "Unknown layout", "404"); 
+                        # $this->raise("No layout file found.", "Unknown layout", "404"); 
                         # No layout template so just echo out whatever is in $content_for_layout
                         echo $content_for_layout;
                     }
                 }
             } else {
-                $this->raise("Failed to instantiate controller object \"".$this->controller."\".", "ActionController Error", "500");        
+                $this->raise("Failed to instantiate controller object \"".$this->controller."\".", "ActionController Error", "500");
             }
         } else {
             $this->raise("No controller found.", "Unknown controller", "404");
@@ -305,12 +318,18 @@ class ActionController {
         if(is_array($this->url_path)) {
             foreach($this->url_path as $path) {
                 if(file_exists($this->controllers_path . "/$path")) {
-                    $this->controllers_path .= "/$path";
-                    $this->helpers_path .= "/$path";
-                    $this->views_path .= "/$path";
+                    $extra_path[] = $path;
                 } else {
                     $new_path[] = $path;
                 }
+            }
+            if(is_array($extra_path)) {
+                $extra_path = implode("/", $extra_path);
+                $this->added_path = $extra_path;
+                $this->controllers_path .= "/$extra_path";
+                $this->helpers_path .= "/$extra_path";
+                $this->views_path .= "/$extra_path";
+                $this->layouts_path .= "/$extra_path";
             }
             if(is_array($new_path)) {
                 $this->url_path = $new_path;
@@ -319,71 +338,51 @@ class ActionController {
     }
 
     function execute_before_filters() {
-        if(is_array($this->controller_object->before_filter)) {
-            foreach($this->controller_object->before_filter as $filter_function) {
+        if(count($this->before_filters) > 0) {
+            foreach($this->before_filters as $filter_function) {
                 if(method_exists($this->controller_object, $filter_function)) {
                     $this->controller_object->$filter_function();
                 }
-            }
-        } elseif($this->controller_object->before_filter != "") {
-            if(method_exists($this->controller_object, $this->controller_object->before_filter)) {
-                $filter_function = $this->controller_object->before_filter;
-                $this->controller_object->$filter_function();
             }
         }
     }
 
     function add_before_filter($filter_function_name) {
-        if (is_array($filter_function_name)) {
-            if(count($this->before_filter) > 0) {
-                $this->before_filter = array_merge($this->before_filter, $filter_function_name);
+        if(is_string($filter_function_name) && !empty($filter_function_name)) {
+            $this->before_filters[] = $filter_function_name;
+        } elseif(is_array($filter_function_name)) {
+            if(count($this->before_filters) > 0) {
+                $this->before_filters = array_merge($this->before_filters, $filter_function_name);
             } else {
-                $this->before_filter = $filter_function_name;
+                $this->before_filters = $filter_function_name;
             }
-        } elseif($this->before_filter != "") {
-            $this->before_filter = array($this->before_filter, $filter_function_name);
-        } else {
-            $this->before_filter = $filter_function_name;
         }
     }
 
     function execute_after_filters() {
-        if(is_array($this->controller_object->after_filter)) {
-            foreach($this->controller_object->after_filter as $filter_function) {
+        if(count($this->after_filters) > 0) {
+            foreach($this->after_filters as $filter_function) {
                 if(method_exists($this->controller_object, $filter_function)) {
                     $this->controller_object->$filter_function();
                 }
-            }
-        } elseif($this->controller_object->after_filter != "") {
-            if(method_exists($this->controller_object, $this->controller_object->after_filter)) {
-                $filter_function = $this->controller_object->after_filter;
-                $this->controller_object->$filter_function();
             }
         }
     }
 
     function add_after_filter($filter_function_name) {
-        if (is_array($filter_function_name)) {
-            if(count($this->after_filter) > 0) {
-                $this->after_filter = array_merge($this->after_filter, $filter_function_name);
+        if(is_string($filter_function_name) && !empty($filter_function_name)) {
+            $this->after_filters[] = $filter_function_name;
+        } elseif(is_array($filter_function_name)) {
+            if(count($this->after_filters) > 0) {
+                $this->after_filters = array_merge($this->after_filters, $filter_function_name);
             } else {
-                $this->after_filter = $filter_function_name;
+                $this->after_filters = $filter_function_name;
             }
-        } elseif($this->after_filter != "") {
-            $this->after_filter = array($this->after_filter, $filter_function_name);
-        } else {
-            $this->after_filter = $filter_function_name;
         }
     }
 
-    function include_extra_helpers() {
-        if(is_array($this->controller_object->helpers)) {
-            foreach($this->controller_object->helpers as $helper) {
-                if(file_exists($this->helpers_base_path . "/$helper")) {
-                    include_once($this->helpers_base_path . "/$helper");
-                }
-            }
-        }
+    function add_helper($helper_name) {
+        $this->helpers[] = $helper_name;
     }
 
     function render_partial($path) {
@@ -400,6 +399,39 @@ class ActionController {
             extract(get_object_vars($this->controller_object));
             include($path_with_file);
         }
+    }
+
+    function determine_layout() {
+        # I guess you don't want any layout
+        if($this->controller_object->layout == "null") {
+            return null;
+        }
+        # $layout will be the layout defined in the current controller
+        # or try to use the controller name for the layout
+        $layout = $this->controller_object->layout ? $this->controller_object->layout : $this->controller;
+        # Check if a method has been defined to determine the layout at runtime
+        if(method_exists($this->controller_object, $layout)) {
+            $layout = $this->controller_object->$layout();
+        }
+        if($layout) {
+            # Is this layout for from a different controller
+            if(strstr($layout, "/")) {
+                $file = substr(strrchr($layout, "/"), 1);
+                $path = substr($layout, 0, strripos($layout, "/"));
+                $layout = $this->layouts_base_path."/".$path."/".$file.".".$this->views_file_extention;
+            } else {
+                # Is there a layout for the current controller
+                $layout = $this->layouts_path."/".$layout.".".$this->views_file_extention;
+            }
+            if(file_exists($layout)) {
+                $layout_file = $layout;
+            }
+        }
+        # No defined layout found so just use the default layout app/views/layouts/application.phtml
+        if(!$layout_file) {
+            $layout_file = $this->default_layout_file;
+        }
+        return $layout_file;
     }
 
     function raise($error_message, $error_heading, $error_code = "404") {
@@ -424,13 +456,13 @@ class ActionController {
             echo "<p>$error_message</p>\n";
             if($trace) {
                 echo "<pre style=\"background-color: #eee;padding:10px;font-size: 11px;\">";
-                echo "<code>$trace</code></pre>\n";    
+                echo "<code>$trace</code></pre>\n";
             }
             echo "</font>\n";
         } else {
             echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
-            echo "<h2>Application Error</h2>Trax application failed to start properly"; 
-            echo "</font>\n";  
+            echo "<h2>Application Error</h2>Trax application failed to start properly";
+            echo "</font>\n";
         }
     }
 
