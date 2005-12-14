@@ -1,4 +1,5 @@
 <?
+
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -42,8 +43,8 @@ class Helpers {
     }
 
     # Examples:
-    # * <tt>tag("br") => <br /></tt>
-    # * <tt>tag("input", { "type" => "text"}) => <input type="text" /></tt>
+    # tag("br") => <br />
+    # tag("input", array("type" => "text")) => <input type="text" />
     function tag($name, $options = array(), $open = false) {
         $html = "<$name ";
         $html .= $this->tag_options($options);
@@ -52,9 +53,9 @@ class Helpers {
     }
 
     # Examples:
-    # * <tt>content_tag("p", "Hello world!") => <p>Hello world!</p></tt>
-    # * <tt>content_tag("div", content_tag("p", "Hello world!"), "class" => "strong") => </tt>
-    #   <tt><div class="strong"><p>Hello world!</p></div></tt>
+    # content_tag("p", "Hello world!") => <p>Hello world!</p>
+    # content_tag("div", content_tag("p", "Hello world!"), array("class" => "strong")) =>
+    # <div class="strong"><p>Hello world!</p></div>
     function content_tag($name, $content, $options = array()) {
         $html .= "<$name ";
         $html .= $this->tag_options($options);

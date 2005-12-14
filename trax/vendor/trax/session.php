@@ -116,13 +116,25 @@ class Session {
         }
     }
 
-    function flash($value) {
+    function isset_var($key) {
+        if(self::is_valid_host()) {
+            return isset($_SESSION[self::get_hash()][$key]);
+        }
+    }
+
+    function isset_flash($key) {
+        if(self::is_valid_host()) {
+            isset($_SESSION[self::get_hash()]['flash'][$key]);
+        }
+    }
+
+    function flash($key, $value) {
         if(self::is_valid_host()) {
             if($value) {
-                $_SESSION[self::get_hash()]['flash'] = $value;
+                $_SESSION[self::get_hash()]['flash'][$key] = $value;
             } else {
-                $value = $_SESSION[self::get_hash()]['flash'];
-                unset($_SESSION[self::get_hash()]['flash']);
+                $value = $_SESSION[self::get_hash()]['flash'][$key];
+                unset($_SESSION[self::get_hash()]['flash'][$key]);
                 return $value;
             }
         }

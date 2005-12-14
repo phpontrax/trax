@@ -1,15 +1,38 @@
 <?
 
+# $Id$
+#
+# Copyright (c) 2005 John Peterson
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 class UrlHelper extends Helpers {
 
-    # Creates a link tag of the given +name+ using an URL created by the set of +options+. See the valid options in
-    # link:classes/ActionController/Base.html#M000021. It's also possible to pass a string instead of an options hash to
-    # get a link tag that just points without consideration. If nil is passed as a name, the link itself will become the name.
-    # The html_options have a special feature for creating javascript confirm alerts where if you pass :confirm => 'Are you sure?',
+    # Creates a link tag of the given +name+ using an URL created by the set of +options+.
+    # It's also possible to pass a string instead of an options hash to
+    # get a link tag that just points without consideration. If null is passed as a name, the link itself will become the name.
+    # The $html_options have a special feature for creating javascript confirm alerts where if you pass ":confirm" => 'Are you sure?',
     # the link will be guarded with a JS popup asking that question. If the user accepts, the link is processed, otherwise not.
     #
     # Example:
-    #   link_to "Delete this page", { :action => "destroy", :id => @page.id }, :confirm => "Are you sure?"
+    #   link_to("Delete this page", array(":action" => "delete", ":id" => $page->id), array(":confirm" => "Are you sure?"))
     function link_to($name, $options = array(), $html_options = array()) {
         $html_options = $this->convert_confirm_option_to_javascript($html_options);
         if(is_string($options)) {
@@ -39,8 +62,7 @@ class UrlHelper extends Helpers {
         return $html;
     }
 
-    # Returns the URL for the set of +options+ provided. This takes the same options
-    # as url_for. For a list, see the url_for documentation in link:classes/ActionController/Base.html#M000079.
+    # Returns the URL for the set of +options+ provided.
     function url_for($options = array()) {
         $url = array();
         if(is_string($options)) {

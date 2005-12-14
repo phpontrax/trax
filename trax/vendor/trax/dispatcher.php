@@ -1,5 +1,5 @@
 <?
-# $Id: dispatcher.php 51 2005-10-29 14:40:42Z john $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -26,9 +26,10 @@ class Dispatcher {
 
     function dispatch() {
         try {
+            Session::start();
             $ac = new ActionController();
             $ac->process_route();
-        } catch(Exception $e) {             
+        } catch(Exception $e) {
             $ac->process_with_exception(&$e);
         }
     }
