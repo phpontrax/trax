@@ -1,7 +1,7 @@
 <?php
 
 # include path for your php libs (PEAR etc)
-define("PHP_LIB_ROOT",      "/usr/share/php");
+define("PHP_LIB_ROOT",      "/usr/local/lib/php");
 define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
 define("TRAX_URL_PREFIX",   null);
 
@@ -11,7 +11,7 @@ if($_SERVER['TRAX_MODE']) {
     define("TRAX_MODE",   $_SERVER['TRAX_MODE']);
 } else {
     # Manually set production / development / test
-    define("TRAX_MODE",   "development");
+    define("TRAX_MODE",   "production");
 }
 
 $GLOBALS['TRAX_INCLUDES'] =
@@ -69,7 +69,7 @@ ini_set("include_path",
         ".".TRAX_PATH_SEPERATOR.   # current directory
         TRAX_LIB_ROOT.TRAX_PATH_SEPERATOR.  # trax libs (vendor/trax or server trax libs)
         PHP_LIB_ROOT.TRAX_PATH_SEPERATOR.  # php libs dir (ex: /usr/local/lib/php)
-	    TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'].TRAX_PATH_SEPERATOR. # app specific libs extra libs to include
+        TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib'].TRAX_PATH_SEPERATOR. # app specific libs extra libs to include
         ini_get("include_path")); # add on old include_path to end
 
 # Include Trax library files.
