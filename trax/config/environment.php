@@ -56,7 +56,7 @@ if(TRAX_MODE == "development") {
 $GLOBALS['TRAX_DB_SETTINGS'] = parse_ini_file(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/database.ini",true);
 
 # Should we use local copy of the Trax libs in vendor/trax or
-# the server Trax libs in the php libs dir defined in public/.htaccess
+# the server Trax libs in the php libs dir defined in PHP_LIB_ROOT
 if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['vendor']."/trax")) {
     define("TRAX_LIB_ROOT", TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['vendor']."/trax");
 } elseif(file_exists(PHP_LIB_ROOT."/trax")) {
