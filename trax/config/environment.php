@@ -11,7 +11,7 @@ if($_SERVER['TRAX_MODE']) {
     define("TRAX_MODE",   $_SERVER['TRAX_MODE']);
 } else {
     # Manually set production / development / test
-    define("TRAX_MODE",   "production");
+    define("TRAX_MODE",   "development");
 }
 
 $GLOBALS['TRAX_INCLUDES'] =
