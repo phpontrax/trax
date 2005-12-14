@@ -954,10 +954,6 @@ class ActiveRecord {
     # Calls DB::Connect() to open a database connection. It uses $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE] 
     # If it finds a connection in ACTIVE_RECORD_DB it uses it.
     function establish_connection() {
-        # Set optional Pear parameters
-        if(isset($GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
-            $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'];
-        }
         # Connect to the database and throw an error if the connect fails.
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
             if(array_key_exists("use", $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE])) {
@@ -965,7 +961,11 @@ class ActiveRecord {
             } else {
                 $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE];
             }
-            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $GLOBALS['ACTIVE_RECORD_OPTIONS']);
+            # Set optional Pear parameters
+            if(isset($connection_settings['persistent'])) { echo $connection_options['persistent'];
+                $connection_options['persistent'] = $connection_settings['persistent'];
+            } echo $connection_options['persistent'];
+            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $connection_options);
         }
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
