@@ -116,5 +116,5 @@ function __autoload($class_name) {
         include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['lib']."/$file_org");
     }
 }
- 
+
 ?>
