@@ -1,5 +1,5 @@
 <?
-# $Id: action_mailer.php 51 2005-10-29 14:40:42Z john $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #
@@ -28,13 +28,13 @@ include_once( "Mail/mime.php" );
 class ActionMailer {
 
     private
-        $mail_mime;  // Mail_mime object
+        $mail_mime,  // Mail_mime object
         $to_addresses,
         $cc_addresses,
         $bcc_addresses,
         $replyto_addresses;
     public
-        $crlf = "\r\n";
+        $crlf = "\r\n",
         $smtp_params = array("host"=>"localhost", "port"=>"25"),
         $send_type = "mail", // smtp or mail
         $subject = null, // email subject
