@@ -1,5 +1,5 @@
 <?
-# $Id: active_record.php 55 2005-11-11 22:38:37Z john $
+# $Id$
 #
 # Copyright (c) 2005 John Peterson 
 #
@@ -26,7 +26,7 @@ require_once('PEAR.php');
 require_once('DB.php');
 
 class ActiveRecord {
-    
+
     static private $db = null;              # Reference to Pear db object
     static protected $inflector = null;     # object to do class inflection
     public $table_info = null;              # info about each column in the table
@@ -39,7 +39,7 @@ class ActiveRecord {
     protected $has_and_belongs_to_many = array();
     protected $belongs_to = array();
     protected $habtm_attributes = array();
-    
+
     protected $new_record = true;  # whether or not to create a new record or just update
     protected $auto_update_timestamps = array("updated_at","updated_on");
     protected $auto_create_timestamps = array("created_at","created_on");
@@ -51,7 +51,7 @@ class ActiveRecord {
     public $errors = array(); 
     public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
-    
+
     # Transactions (only use if your db supports it)
     private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
     public $use_transactions = false; # this will issue a rollback command if any sql fails
@@ -61,9 +61,9 @@ class ActiveRecord {
 
         # Define static members
         if (self::$inflector == null) {
-			self::$inflector = new Inflector();
+            self::$inflector = new Inflector();
         }
-        
+
         # Open the database connection
         $this->establish_connection();
 
@@ -71,12 +71,12 @@ class ActiveRecord {
         if($this->table_name == null) { 
             $this->set_table_name_using_class_name();
         }
-        
+
         # Set column info
         if($this->table_name) {
             $this->set_table_info($this->table_name);
-        }        
-        
+        }
+
         # If $attributes array is passed in update the class with its contents
         if(is_array($attributes)) {
             $this->update_attributes($attributes);
@@ -86,11 +86,11 @@ class ActiveRecord {
     # Override get() if they do $model->some_association->field_name dynamically load the requested
     # contents from the database.
     function __get($key) {
-        
+
         if(is_string($this->has_many)) {
             if(preg_match("/$key/", $this->has_many)) {
                 $this->$key = $this->find_all_has_many($key);
-            }    
+            }
         } elseif(is_array($this->has_many)) {
             if(array_key_exists($key, $this->has_many)) {
                 $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
@@ -98,29 +98,29 @@ class ActiveRecord {
         } elseif(is_string($this->has_one)) {
             if(preg_match("/$key/", $this->has_one)) {
                 $this->$key = $this->find_one_has_one($key);
-            }    
+            }
         } elseif(is_array($this->has_one)) {
             if(array_key_exists($key, $this->has_one)) {
                 $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
             }
+        } elseif(is_string($this->belongs_to)) {
+            if(preg_match("/$key/", $this->belongs_to)) {
+                $this->$key = $this->find_one_belongs_to($key);
+            }
+        } elseif(is_array($this->belongs_to)) {
+            if(array_key_exists($key, $this->belongs_to)) {
+                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
+            }
         } elseif(is_string($this->has_and_belongs_to_many)) {
             if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
                 $this->$key = $this->find_all_habtm($key);
-            }    
+            }
         } elseif(is_array($this->has_and_belongs_to_many)) {
             if(array_key_exists($key, $this->has_and_belongs_to_many)) {
                 $this->$key = $this->find_all_habtm($key);
             }
-        } elseif(is_string($this->belongs_to)) {
-            if(preg_match("/$key/", $this->belongs_to)) {
-                $this->$key = $this->find_one_belongs_to($key);
-            }    
-        } elseif(is_array(!$this->belongs_to)) {
-            if(array_key_exists($key, $this->belongs_to)) {
-                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
-            }
-        }  
-            
+        }
+
         //echo "<pre>id: $this->id<br>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
     }
@@ -133,7 +133,7 @@ class ActiveRecord {
         }
         $this->$key = $value;
     }
-    
+
     # Override call() to dynamically call the database associations
     function __call($method_name, $parameters) {
         if(method_exists($this,$method_name)) {
@@ -147,7 +147,7 @@ class ActiveRecord {
             if(is_string($this->has_many)) {
                 if(preg_match("/$method_name/", $this->has_many)) {
                     $result = $this->find_all_has_many($method_name, $parameters);
-                }    
+                }
             } elseif(is_array($this->has_many)) {
                 if(array_key_exists($method_name, $this->has_many)) {
                     $result = $this->find_all_has_many($method_name, $parameters);
@@ -155,26 +155,26 @@ class ActiveRecord {
             } elseif(is_string($this->has_one)) {
                 if(preg_match("/$method_name/", $this->has_one)) {
                     $result = $this->find_one_has_one($method_name, $parameters);
-                }    
+                }
             } elseif(is_array($this->has_one)) {
                 if(array_key_exists($method_name, $this->has_one)) {
                     $result = $this->find_one_has_one($method_name, $parameters);
                 }
-            } elseif(is_string($this->has_and_belongs_to_many)) {
-                if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
-                    $result = $this->find_all_habtm($method_name, $parameters);
-                }    
-            } elseif(is_array($this->has_and_belongs_to_many)) {
-                if(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
-                    $result = $this->find_all_habtm($method_name, $parameters);
-                }
             } elseif(is_string($this->belongs_to)) {
                 if(preg_match("/$method_name/", $this->belongs_to)) {
                     $result = $this->find_one_belongs_to($method_name, $parameters);
-                }    
-            } elseif(is_array(!$this->belongs_to)) {
+                }
+            } elseif(is_array($this->belongs_to)) {
                 if(array_key_exists($method_name, $this->belongs_to)) {
                     $result = $this->find_one_belongs_to($method_name, $parameters);
+                }
+            } elseif(is_string($this->has_and_belongs_to_many)) {
+                if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
+                    $result = $this->find_all_habtm($method_name, $parameters);
+                }
+            } elseif(is_array($this->has_and_belongs_to_many)) {
+                if(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
+                    $result = $this->find_all_habtm($method_name, $parameters);
                 }
             }
             # check for the [count,sum,avg,etc...]_all magic functions
@@ -191,7 +191,7 @@ class ActiveRecord {
             elseif(strlen($method_name) > 7 && substr($method_name, 0, 7) == "find_by") {
                 //echo "calling method: $method_name<br>";
                 $result = $this->find_by($method_name, $parameters);
-            }            
+            }
         }
         return $result;
     }
@@ -406,32 +406,32 @@ class ActiveRecord {
     }
 
     # Returns PEAR result set of one record with only the passed in column in the result set.
-    function send($column) {      
+    function send($column) {
         if($column != "") {
             # Run the query to grab a specific columns value.
             $result = self::$db->getOne("SELECT `$column` FROM `$this->table_name` WHERE id='$this->id'");
             if($this->is_error($result)) {
-                $this->raise($result->getMessage());    
-            }            
+                $this->raise($result->getMessage());
+            }
         }
         return $result;
     }
-    
+
     # Only used if you want to do transactions and your db supports transactions
     function begin() {
         self::$db->query("BEGIN");
-        $this->begin_executed = true;        
+        $this->begin_executed = true;
     }
-    
+
     # Only used if you want to do transactions and your db supports transactions
     function commit() {
         self::$db->query("COMMIT"); 
-        $this->begin_executed = false;       
+        $this->begin_executed = false;
     }
-    
+
     # Only used if you want to do transactions and your db supports transactions
     function rollback() {
-        self::$db->query("ROLLBACK");        
+        self::$db->query("ROLLBACK");
     }
 
     # Uses PEAR::DB's query to run the query and returns the DB result set
@@ -440,7 +440,7 @@ class ActiveRecord {
         $rs = self::$db->query($sql);
         if ($this->is_error($rs)) {
             if($this->use_transactions && $this->begin_executed) {
-                $this->rollback();    
+                $this->rollback();
             }
             $this->raise($rs->getMessage());
         }
@@ -510,7 +510,7 @@ class ActiveRecord {
         }
         return $objects;
     }
-    
+
     # This can either be a specific id (1), or an array of ids (array(5, 6, 10)). 
     # If no record can be found for Returns an object if id isn't an array otherwise 
     # returns an array of objects.
@@ -581,10 +581,10 @@ class ActiveRecord {
             	return $this->find_all($method_params, $orderings);
             } else {
                 return $this->find_first($method_params, $orderings);
-            }    
+            }
         }
     }
-    
+
     # Reloads the attributes of this object from the database.
     function reload($conditions = null) {
         if(is_null($conditions)) {
@@ -593,21 +593,21 @@ class ActiveRecord {
         $object = $this->find($conditions);
         if(is_object($object)) {
             foreach($object as $key => $value) {
-                $this->$key = $value;    
+                $this->$key = $value;
             }
-        }          
+        }
     }
-       
+
     # Creates an object, instantly saves it as a record (if the validation permits it).
     # If the save fails under validations it returns false and $errors array gets set.
     function create($attributes, $dont_validate = false) {
         if(is_array($attributes)) {
             foreach($attributes as $attr) {
-                $this->create($attr, $dont_validate);        
-            }            
+                $this->create($attr, $dont_validate);
+            }
         } else {
             $class = get_class($this);
-            $object = new $class();     
+            $object = new $class();
             $object->save($attributes, $dont_validate);
         }
     }
@@ -617,7 +617,7 @@ class ActiveRecord {
     function update($id, $attributes, $dont_validate = false) {
         if(is_array($id)) {
             foreach($id as $update_id) {
-                $this->update($update_id, $attributes[$update_id], $dont_validate);        
+                $this->update($update_id, $attributes[$update_id], $dont_validate);
             }
         } else {
             $object = $this->find($id);
@@ -637,7 +637,7 @@ class ActiveRecord {
             $this->raise($result->getMessage());
         } else {
             return true;
-        }  
+        }
     }
 
     # Save without valdiating anything.
@@ -669,11 +669,11 @@ class ActiveRecord {
             $this->before_update();
             $result = $this->update_record();
             $this->after_update();
-        }     
+        }
         $this->after_save();
         return $result;
     }
-    
+
     # Add a record in the table represented by this model
     function add_record() {
         $this->before_create();
@@ -712,35 +712,35 @@ class ActiveRecord {
             return ($result && $habtm_result);
         }
     }
-    
+
     # Deletes the record with the given $id or if you have done a
     # $model = $model->find($id), then $model->delete() it will delete
     # the record it just loaded from the find() without passing anything
-    # to delete(). If an array of ids is provided, all ids in array are deleted.    
+    # to delete(). If an array of ids is provided, all ids in array are deleted.
     function delete($id = null) {
         if($this->id > 0 && is_null($id)) {
             $id = $this->id;
-        } 
-        
+        }
+
         if(is_null($id)) {
             $this->errors[] = "No id specified to delete on.";
-            return false;    
-        }        
-        
+            return false;
+        }
+
         $this->before_delete();
         $result = $this->delete_all("id IN ($id)");
         $this->after_delete();
-        
+
         return $result;
     }
 
     # Deletes all the records that matches the $conditions
     # Example:
-    # $model->delete_all("person_id = 2 AND (category = 'Toasters' OR category = 'Microwaves')");    
-    function delete_all($conditions = null) {            
+    # $model->delete_all("person_id = 2 AND (category = 'Toasters' OR category = 'Microwaves')");
+    function delete_all($conditions = null) {
         if(is_null($conditions)) {
             $this->errors[] = "No conditions specified to delete on.";
-            return false;    
+            return false;
         }
 
         # Delete the record(s)
@@ -750,7 +750,7 @@ class ActiveRecord {
 
         $this->id = 0;
         $this->new_record = true;
-        return true;   
+        return true;
     }
 
     function set_habtm_attributes($attributes) {
@@ -793,7 +793,7 @@ class ActiveRecord {
                         }
                     }
                 }
-            } 
+            }
         }
         return true;
     }
@@ -869,7 +869,7 @@ class ActiveRecord {
         $return = array();
         foreach ($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
-            # If the value isn't a function or null quote it...
+            # If the value isn't a function or null quote it.
             if (!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
                 $value = str_replace("\\\"","\"",$value);
                 $value = str_replace("\'","'",$value);
@@ -889,18 +889,18 @@ class ActiveRecord {
     #   "id = '5' AND ssn = '555-55-5555'"
     function get_primary_key_conditions() {
         $conditions = null;
-        $attributes = $this->quoted_attributes();            
+        $attributes = $this->quoted_attributes();
         if(count($attributes) > 0) {
             $conditions = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
                 if(in_array($key,$this->primary_keys)) {
                     $conditions[] = "$key = $value";
-                } 
-            }            
+                }
+            }
             $conditions = implode(" AND ", $conditions);
         }
-        return $conditions;        
+        return $conditions;
     }
 
     # Returns an a string in the format to put into the SET-part of an SQL update statement
@@ -909,7 +909,7 @@ class ActiveRecord {
     #   "id = '5', ssn = '555-55-5555'"
     function get_updates_sql() {
         $updates = null;
-        $attributes = $this->quoted_attributes();            
+        $attributes = $this->quoted_attributes();
         if(count($attributes) > 0) {
             $updates = array();
             # run through our fields and join them with their values
@@ -917,12 +917,12 @@ class ActiveRecord {
                 if($key && $value) {
                     $updates[] = "$key = $value";
                 }
-            }            
+            }
             $updates = implode(", ", $updates);
         }
-        return $updates;        
+        return $updates;
     }
-    
+
     # Sets the $table_name varible from the class name of the child object (the Model)
     # used in all queries throughout ActiveRecord
     function set_table_name_using_class_name() {
@@ -930,7 +930,7 @@ class ActiveRecord {
             $this->table_name = self::$inflector->tableize(get_class($this));
         }
     }
-    
+
     # Populates the model object with information about the table it represents
     function set_table_info($table_name) {
         $this->table_info = self::$db->tableInfo($table_name);
@@ -953,15 +953,20 @@ class ActiveRecord {
 
     # Calls DB::Connect() to open a database connection. It uses $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE] 
     # If it finds a connection in ACTIVE_RECORD_DB it uses it.
-    function establish_connection() {      
+    function establish_connection() {
         # Set optional Pear parameters
         if(isset($GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'])) { 
             $GLOBALS['ACTIVE_RECORD_OPTIONS'] = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['persistent'];
-        }               
-        # Connect to the database and throw an error if the connect fails...
+        }
+        # Connect to the database and throw an error if the connect fails.
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
-            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE], $GLOBALS['ACTIVE_RECORD_OPTIONS']);   
-        }      
+            if(array_key_exists("use", $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE])) {
+                $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][$GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['use']];
+            } else {
+                $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE];
+            }
+            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $GLOBALS['ACTIVE_RECORD_OPTIONS']);
+        }
         if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
             self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
         } else {
@@ -971,39 +976,39 @@ class ActiveRecord {
         return self::$db;
     }
 
-    # Tests to see if an object is either a PEAR Error or a DB Error object...
+    # Tests to see if an object is either a PEAR Error or a DB Error object.
     function is_error($obj) {
         if((PEAR::isError($obj)) || (DB::isError($obj))) {
-            return true;        
+            return true;
         } else {
-            return false;    
+            return false;
         }
     }
-    
+
     function raise($message) {
         $error_message  = "Model Class: ".get_class($this)."<br>";
         $error_message .= "Error Message: ".$message;
         throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");        
     }
-    
+
     # Add an error to Active Record
     function add_error($error, $key = null) {
         if(!is_null($key)) 
             $this->errors[$key] = $error;
         else
-            $this->errors[] = $error;           
+            $this->errors[] = $error;
     }
-    
+
     # Return the errors array or if the first param is true then
     # returns it as a string seperated by the second param.
     function get_errors($return_string = false, $seperator = "<br>") {
         if($return_string && count($this->errors) > 0) {
             return implode($seperator, $this->errors);
         } else {
-            return $this->errors;    
+            return $this->errors;
         }
     }
-    
+
     # Return errors as a string.
     function get_errors_as_string($seperator = "<br>") {
         return $this->get_errors(true, $seperator);
@@ -1035,7 +1040,7 @@ class ActiveRecord {
 
         return count($this->errors) ? false : true;
     }
-    
+
     # Successively calls all functions that begin with "validate_" to
     # validate each field.  The "validate_*" functions should return an
     # array whose first element is true or false (indicating whether or
@@ -1072,16 +1077,16 @@ class ActiveRecord {
                             #   when 'name' was an empty string.
                             $this->errors[$validate_on_attribute] = $result[1];
                         }
-                    } 
-                } 
+                    }
+                }
             }
         }
         return $validated_ok;
     }
-    
-    # Overwrite this method for validation checks on all saves and 
-    # use $this->errors[] = "My error message."; or 
-    # for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";.
+
+    # Overwrite this method for validation checks on all saves and
+    # use $this->errors[] = "My error message."; or
+    # for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";
     function validate() {}
 
     # Override this method for validation checks used only on creation.
@@ -1108,33 +1113,33 @@ class ActiveRecord {
     # Is called after validate() on existing objects that has a record.
     function after_validation_on_update()  {}
 
-    # Is called before save() (regardless of whether it’s a create or update save).
+    # Is called before save() (regardless of whether its a create or update save).
     function before_save() {}
-    
-    # Is called after save (regardless of whether it’s a create or update save).
+
+    # Is called after save (regardless of whether its a create or update save).
     function after_save() {}
 
-    # Is called before save() on new objects that haven’t been saved yet (no record exists).
+    # Is called before save() on new objects that havent been saved yet (no record exists).
     function before_create() {}
-    
-    # Is called after save() on new objects that haven’t been saved yet (no record exists).
+
+    # Is called after save() on new objects that havent been saved yet (no record exists).
     function after_create() {}
-    
-    # Is called before save() on existing objects that has a record.    
+
+    # Is called before save() on existing objects that has a record.
     function before_update() {}
-    
+
     # Is called after save() on existing objects that has a record.
     function after_update() {}
-    
-    # Is called before delete(). 
+
+    # Is called before delete().
     function before_delete() {}
-    
+
     # Is called after delete().
-    function after_delete() {} 
-    
+    function after_delete() {}
+
     #########################################################################
     # Paging html functions
-    
+
     function limit_select($controller =null, $additional_query = null) {
         if($this->pages > 0) {
             $html = "
