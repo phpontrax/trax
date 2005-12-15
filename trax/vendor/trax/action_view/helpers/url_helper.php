@@ -64,14 +64,15 @@ class UrlHelper extends Helpers {
 
     # Returns the URL for the set of +options+ provided.
     function url_for($options = array()) {
+        $url_base = null;
         $url = array();
         if(is_string($options)) {
             $url[] = $options;
         } else {
             if($_SERVER['SERVER_PORT'] == 443) {
-                $url[] = "https://".$_SERVER['HTTP_HOST'];
+                $url_base = "https://".$_SERVER['HTTP_HOST'];
             } else {
-                $url[] = "http://".$_SERVER['HTTP_HOST'];
+                $url_base = "http://".$_SERVER['HTTP_HOST'];
             }
             if(array_key_exists(":controller", $options)) {
                 if($controller = $options[":controller"]) {
@@ -95,7 +96,7 @@ class UrlHelper extends Helpers {
                 }
             }
         }
-        return implode("/", $url);
+        return $url_base . implode("/", $url);
     }
 
     function convert_confirm_option_to_javascript($html_options) {

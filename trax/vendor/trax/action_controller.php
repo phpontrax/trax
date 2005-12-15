@@ -187,6 +187,7 @@ class ActionController {
                 if(is_object($this->controller_object)) {
                     $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_name'] = $this->controller;
+                    $GLOBALS['current_controller_object'] = $this->controller_object;
                 }
 
                 # Which layout should we use?

@@ -28,13 +28,14 @@ class Helpers {
     function __construct() {
         $this->controller_name = $GLOBALS['current_controller_name'];
         $this->controller_path = $GLOBALS['current_controller_path'];
+        $this->controller_object = $GLOBALS['current_controller_object'];
     }
 
     function tag_options($options) {
         if(count($options)) {
             $html = array();
             foreach($options as $key => $value) {
-                $html[] = "$key = \"".htmlspecialchars($value, ENT_QUOTES)."\"";
+                $html[] = "$key=\"".htmlspecialchars($value, ENT_QUOTES)."\"";
             }
             sort($html);
             $html = implode(" ", $html);
