@@ -118,17 +118,23 @@ class Session {
 
     function isset_var($key) {
         if(self::is_valid_host()) {
-            return isset($_SESSION[self::get_hash()][$key]);
+            if($_SESSION[self::get_hash()][$key]) {
+                return true;    
+            }
         }
+        return false;
     }
 
     function isset_flash($key) {
         if(self::is_valid_host()) {
-            isset($_SESSION[self::get_hash()]['flash'][$key]);
+            if($_SESSION[self::get_hash()]['flash'][$key]) {
+                return true;    
+            }
         }
+        return false;
     }
 
-    function flash($key, $value) {
+    function flash($key, $value = null) {
         if(self::is_valid_host()) {
             if($value) {
                 $_SESSION[self::get_hash()]['flash'][$key] = $value;
