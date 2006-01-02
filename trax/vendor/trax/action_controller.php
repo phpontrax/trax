@@ -198,7 +198,7 @@ class ActionController {
                     $scaffold = $this->controller_object->scaffold;
                     if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
                         include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
-                        $this->controller_object = new ScaffoldController($scaffold, $this->controller, $this->action);
+                        $GLOBALS['current_controller_object'] = $this->controller_object = new ScaffoldController($scaffold, $this->controller, $this->action);
                         if($this->action) {
                             $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/".$this->action.".phtml";
                         } else {
@@ -290,7 +290,7 @@ class ActionController {
                     $content_for_layout .= ob_get_contents();
                     ob_end_clean();
 
-                    if(file_exists($this->layout_file)) {
+                    if(file_exists($this->layout_file) && $render_layout !== false) {
                         # render the layout
                         include($this->layout_file);
                     } else {

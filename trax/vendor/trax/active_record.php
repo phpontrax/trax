@@ -1,7 +1,7 @@
 <?
 # $Id$
 #
-# Copyright (c) 2005 John Peterson 
+# Copyright (c) 2005 John Peterson
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,16 +29,16 @@ class ActiveRecord {
 
     static private $db = null;              # Reference to Pear db object
     static protected $inflector = null;     # object to do class inflection
-    public $table_info = null;              # info about each column in the table
+    public $content_columns = null;         # info about each column in the table
     public $table_name = null;
     public $fetch_mode = DB_FETCHMODE_ASSOC;
 
     # Table associations
-    protected $has_many = array();
-    protected $has_one = array();
-    protected $has_and_belongs_to_many = array();
-    protected $belongs_to = array();
-    protected $habtm_attributes = array();
+    protected $has_many = null;
+    protected $has_one = null;
+    protected $has_and_belongs_to_many = null;
+    protected $belongs_to = null;
+    protected $habtm_attributes = null;
 
     protected $new_record = true;  # whether or not to create a new record or just update
     protected $auto_update_timestamps = array("updated_at","updated_on");
@@ -48,33 +48,27 @@ class ActiveRecord {
     public $primary_keys = array("id");  # update / delete where clause keys
     public $rows_per_page_default = 20;  # Pagination rows to display per page
     public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
-    public $errors = array(); 
+    public $errors = array();
     public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
 
     # Transactions (only use if your db supports it)
-    private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
-    public $use_transactions = false; # this will issue a rollback command if any sql fails
+    static private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
+    static public $use_transactions = false; # this will issue a rollback command if any sql fails
 
     # Constructor sets up need parameters for AR to function properly
     function __construct($attributes = null) {
-
-        # Define static members
-        if (self::$inflector == null) {
-            self::$inflector = new Inflector();
-        }
-
         # Open the database connection
         $this->establish_connection();
 
         # Set $table_name
-        if($this->table_name == null) { 
+        if($this->table_name == null) {
             $this->set_table_name_using_class_name();
         }
 
         # Set column info
         if($this->table_name) {
-            $this->set_table_info($this->table_name);
+            $this->set_content_columns($this->table_name);
         }
 
         # If $attributes array is passed in update the class with its contents
@@ -129,7 +123,7 @@ class ActiveRecord {
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
-            $this->set_table_info($value);
+            $this->set_content_columns($value);
         }
         $this->$key = $value;
     }
@@ -222,14 +216,14 @@ class ActiveRecord {
     #                                many rows you are interested in.  E.g. `movies`
     # Returns: An array of ActiveRecord objects. (e.g. Movie objects)
     function find_all_habtm($other_table_name, $parameters = null) {
-        $other_class_name = self::$inflector->classify($other_table_name);
+        $other_class_name = Inflector::classify($other_table_name);
         # Instantiate an object to access find_all
         $results = new $other_class_name();
 
         # Prepare the join table name primary keys (fields) to do the join on
         $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
-        $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
-        $other_foreign_key = self::$inflector->singularize($other_table_name)."_id";
+        $this_foreign_key = Inflector::singularize($this->table_name)."_id";
+        $other_foreign_key = Inflector::singularize($other_table_name)."_id";
         # Set up the SQL segments
         $conditions = "`{$join_table}`.`{$this_foreign_key}`={$this->id}";
         $orderings = null;
@@ -280,9 +274,9 @@ class ActiveRecord {
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
-            $foreign_key = self::$inflector->singularize($this->table_name)."_id";
+            $foreign_key = Inflector::singularize($this->table_name)."_id";
 
-        $other_class_name = self::$inflector->classify($other_table_name);
+        $other_class_name = Inflector::classify($other_table_name);
         $conditions = "`{$foreign_key}`=$this->id";
 
         # Use any passed-in parameters
@@ -331,11 +325,11 @@ class ActiveRecord {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
-        $other_class_name = self::$inflector->camelize($other_object_name);
+        $other_class_name = Inflector::camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
-            $foreign_key = self::$inflector->singularize($this->table_name)."_id";
+            $foreign_key = Inflector::singularize($this->table_name)."_id";
 
         $conditions = "`$foreign_key`='{$this->id}'";
         # Instantiate an object to access find_all
@@ -360,7 +354,7 @@ class ActiveRecord {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
-        $other_class_name = self::$inflector->camelize($other_object_name);
+        $other_class_name = Inflector::camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
@@ -405,6 +399,23 @@ class ActiveRecord {
         return 0;
     }
 
+    # Return if this is a new record or not.
+    function is_new_record() {
+        return $this->new_record;
+    }
+
+    # get the attributes for a specific column.
+    function column_for_attribute($attribute) {
+        if(is_array($this->content_columns)) {
+            foreach($this->content_columns as $column) {
+                if($column['name'] == $attribute) {
+                    return $column;
+                }
+            }
+        }
+        return null;
+    }
+
     # Returns PEAR result set of one record with only the passed in column in the result set.
     function send($column) {
         if($column != "") {
@@ -439,7 +450,7 @@ class ActiveRecord {
         # Run the query
         $rs = self::$db->query($sql);
         if ($this->is_error($rs)) {
-            if($this->use_transactions && $this->begin_executed) {
+            if(self::$use_transactions && self::$begin_executed) {
                 $this->rollback();
             }
             $this->raise($rs->getMessage());
@@ -451,22 +462,22 @@ class ActiveRecord {
     # If no records are found, an empty array is returned.
     function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
         if (is_array($limit)) {
-            list($this->page, $this->rows_per_page) = $limit;
-            if($this->page <= 0) $this->page = 1;
+            list(self::$page, self::$rows_per_page) = $limit;
+            if(self::$$page <= 0) self::$page = 1;
             # Default for rows_per_page:
-            if ($this->rows_per_page == null) $this->rows_per_page = $this->rows_per_page_default;
+            if (self::$rows_per_page == null) self::$rows_per_page = self::$rows_per_page_default;
             # Set the LIMIT string segment for the SQL in the find_all
-            $this->offset = ($this->page - 1) * $this->rows_per_page;
+            self::$offset = (self::$page - 1) * self::$rows_per_page;
             # mysql 3.23 doesn't support OFFSET
             //$limit = "$rows_per_page OFFSET $offset";
-            $limit = "$this->offset, $this->rows_per_page";
+            $limit = self::$offset.", ".self::$rows_per_page;
             $set_pages = true;
         }
 
         if(stristr($conditions, "SELECT")) {
             $sql = $conditions;
         } else {
-            $sql  = "SELECT * FROM `$this->table_name` ";
+            $sql  = "SELECT * FROM `".$this->table_name."` ";
             if(!is_null($joins)) {
                 if(substr($joins,0,4) != "LEFT") $sql .= ",";
                 $sql .= " $joins ";
@@ -476,12 +487,12 @@ class ActiveRecord {
             if(!is_null($limit)) {
                 if($set_pages) {
                     //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-                    if($this->is_error($rs = $this->query($sql))) {
-                        $this->raise($rs->getMessage());
+                    if(self::$is_error($rs = self::query($sql))) {
+                        self::raise($rs->getMessage());
                     } else {
                         # Set number of total pages in result set without the LIMIT
                         if($count = $rs->numRows())
-                            $this->pages = (($count % $this->rows_per_page) == 0) ? $count / $this->rows_per_page : floor($count / $this->rows_per_page) + 1;
+                            self::$pages = (($count % self::$rows_per_page) == 0) ? $count / self::$rows_per_page : floor($count / self::$rows_per_page) + 1;
                     }
                 }
                 $sql .= "LIMIT $limit";
@@ -489,13 +500,14 @@ class ActiveRecord {
         }
 
         //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-        if($this->is_error($rs = $this->query($sql))) {
-            $this->raise($rs->getMessage());
+        if(self::is_error($rs = self::query($sql))) {
+            self::raise($rs->getMessage());
         }
 
         $objects = array();
         while($row = $rs->fetchRow()) {
-            $class = get_class($this);
+            #$class = get_class($this);
+            $class = Inflector::classify($this->table_name);
             $object = new $class();
             $object->new_record = false;
             foreach($row as $field => $val) {
@@ -524,7 +536,7 @@ class ActiveRecord {
         }
 
         if(is_array($id)) {
-            return $this->find_all($conditions, $orderings, $limit, $joins);
+            return /*$this->*/find_all($conditions, $orderings, $limit, $joins);
         } else {
             return $this->find_first($conditions, $orderings, $limit, $joins);
         }
@@ -776,8 +788,8 @@ class ActiveRecord {
                 reset($this->habtm_attributes);
                 foreach($this->habtm_attributes as $other_table_name => $other_foreign_values) {
                     $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
-                    $other_foreign_key = self::$inflector->singularize($other_table_name)."_id";
-                    $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
+                    $other_foreign_key = Inflector::singularize($other_table_name)."_id";
+                    $this_foreign_key = Inflector::singularize($this->table_name)."_id";
                     foreach($other_foreign_values as $other_foreign_value) {
                         unset($attributes);
                         $attributes[$this_foreign_key] = $this_foreign_value;
@@ -803,7 +815,7 @@ class ActiveRecord {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
                 $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
-                $this_foreign_key = self::$inflector->singularize($this->table_name)."_id";
+                $this_foreign_key = Inflector::singularize($this->table_name)."_id";
                 $sql = "DELETE FROM $table_name WHERE $this_foreign_key = $this_foreign_value";
                 //echo "delete_habtm_records: SQL: $sql<br>";
                 $result = $this->query($sql);
@@ -844,16 +856,16 @@ class ActiveRecord {
         $this->set_habtm_attributes($attributes);
     }
 
-    # If $this->set_table_info() was previously called, which will mean that 
+    # If $this->set_content_columns() was previously called, which will mean that
     # $table_info will be an array of containing the column info about the database
     # table this model is representing.  This will return an array where the keys
     # the column names and the values are the values from those columns.  
     function get_attributes() {
         $attributes = array();
-        if(is_array($this->table_info)) {
-            foreach($this->table_info as $info) {
+        if(is_array($this->content_columns)) {
+            foreach($this->content_columns as $column) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
-                $attributes[$info['name']] = $this->$info['name'];
+                $attributes[$column['name']] = $this->$column['name'];
             }
         }
         return $attributes;
@@ -926,18 +938,18 @@ class ActiveRecord {
     # Sets the $table_name varible from the class name of the child object (the Model)
     # used in all queries throughout ActiveRecord
     function set_table_name_using_class_name() {
-        if(!isset($this->table_name)) {
-            $this->table_name = self::$inflector->tableize(get_class($this));
+        if(!$this->table_name) {
+            $this->table_name = Inflector::tableize(get_class($this));
         }
     }
 
     # Populates the model object with information about the table it represents
-    function set_table_info($table_name) {
-        $this->table_info = self::$db->tableInfo($table_name);
-        if(is_array($this->table_info)) {
+    function set_content_columns($table_name) {
+        $this->content_columns = self::$db->tableInfo($table_name);
+        if(is_array($this->content_columns)) {
             $i = 0;
-            foreach($this->table_info as $info) {
-                $this->table_info[$i++]['human_name'] = self::$inflector->humanize($info['name']);
+            foreach($this->content_columns as $column) {
+                $this->content_columns[$i++]['human_name'] = Inflector::humanize($column['name']);
             }
         }
     }
@@ -988,7 +1000,7 @@ class ActiveRecord {
     function raise($message) {
         $error_message  = "Model Class: ".get_class($this)."<br>";
         $error_message .= "Error Message: ".$message;
-        throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");        
+        throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");
     }
 
     # Add an error to Active Record

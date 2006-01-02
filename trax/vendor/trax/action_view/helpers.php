@@ -35,7 +35,7 @@ class Helpers {
         if(count($options)) {
             $html = array();
             foreach($options as $key => $value) {
-                $html[] = "$key=\"".htmlspecialchars($value, ENT_QUOTES)."\"";
+                $html[] = "$key=\"".@htmlspecialchars($value, ENT_QUOTES)."\"";
             }
             sort($html);
             $html = implode(" ", $html);
@@ -43,9 +43,10 @@ class Helpers {
         return $html;
     }
 
-    # Examples:
-    # tag("br") => <br />
-    # tag("input", array("type" => "text")) => <input type="text" />
+    # Example: tag("br");
+    # Results: <br />
+    # Example: tag("input", array("type" => "text"));
+    # <input type="text" />
     function tag($name, $options = array(), $open = false) {
         $html = "<$name ";
         $html .= $this->tag_options($options);
@@ -53,10 +54,10 @@ class Helpers {
         return $html;
     }
 
-    # Examples:
-    # content_tag("p", "Hello world!") => <p>Hello world!</p>
-    # content_tag("div", content_tag("p", "Hello world!"), array("class" => "strong")) =>
-    # <div class="strong"><p>Hello world!</p></div>
+    # Example: content_tag("p", "Hello world!");
+    # Result: <p>Hello world!</p>
+    # Example: content_tag("div", content_tag("p", "Hello world!"), array("class" => "strong")) =>
+    # Result:<div class="strong"><p>Hello world!</p></div>
     function content_tag($name, $content, $options = array()) {
         $html .= "<$name ";
         $html .= $this->tag_options($options);
@@ -64,6 +65,55 @@ class Helpers {
         return $html;
     }
 
+    # Returns the URL for the set of $options provided.
+    function url_for($options = array()) {
+        $url_base = null;
+        $url = array();
+        if(is_string($options)) {
+            $url[] = $options;
+        } else {
+            if($_SERVER['SERVER_PORT'] == 443) {
+                $url_base = "https://".$_SERVER['HTTP_HOST'];
+            } else {
+                $url_base = "http://".$_SERVER['HTTP_HOST'];
+            }
+            if(array_key_exists(":controller", $options)) {
+                if($controller = $options[":controller"]) {
+                    if(stristr($this->controller_path, $controller)) {
+                        $url[] = $this->controller_path;
+                    } else {
+                        $url[] = $controller;
+                    }
+                }
+            } else {
+                $url[] = $this->controller_path;
+            }
+            if(array_key_exists(":action", $options)) {
+                if($action = $options[":action"]) {
+                    $url[] = $action;
+                }
+            }
+            if(array_key_exists(":id", $options)) {
+                if(is_object($options[":id"])) {
+                    if($id = $options[":id"]->id) {
+                        $url[] = $id;
+                    }
+                } else {
+                    if($id = $options[":id"]) {
+                        $url[] = $id;
+                    }
+                }
+            }
+        }
+        return $url_base . implode("/", $url);
+    }
+
+}
+
+function content_tag() {
+    $helper = new Helpers();
+    $args = func_get_args();
+    return call_user_func_array(array($helper, 'content_tag'), $args);
 }
 
 ?>

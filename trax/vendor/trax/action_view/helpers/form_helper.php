@@ -25,10 +25,10 @@
 
 class FormHelper extends Helpers {
 
-    function __construct($object_name, $field_name) {
+    function __construct($object_name, $attribute_name) {
         parent::__construct();
         $this->object_name = $object_name;
-        $this->field_name = $field_name;
+        $this->attribute_name = $attribute_name;
         $this->default_field_options = $GLOBALS['DEFAULT_FIELD_OPTIONS'] ? $GLOBALS['DEFAULT_FIELD_OPTIONS'] : array("size" => 30);
         $this->default_radio_options = $GLOBALS['DEFAULT_RADIO_OPTIONS'] ? $GLOBALS['DEFAULT_RADIO_OPTIONS'] : array();
         $this->default_text_area_options = $GLOBALS['DEFAULT_TEXT_AREA_OPTIONS'] ? $GLOBALS['DEFAULT_TEXT_AREA_OPTIONS'] : array("cols" => 40, "rows" => 20);
@@ -36,34 +36,34 @@ class FormHelper extends Helpers {
     }
 
     function value() {
-        if(!$value = $_REQUEST[$this->object_name][$this->field_name]) {
+        if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
             $object = $this->object();
-            if(is_object($object) && $this->field_name) {
-                $value = $object->send($this->field_name);
+            if(is_object($object) && $this->attribute_name) {
+                $value = $object->send($this->attribute_name);
             }
         }
-        return $value; 
+        return $value;
     }
 
-    function object() {
-        $object_name = $this->object_name;
+    function object($object_name = null) {
+        $object_name = $object_name ? $object_name : $this->object_name;
         return $this->controller_object->$object_name;
     }
 
     function tag_name() {
-        return "{$this->object_name}[{$this->field_name}]";
+        return "{$this->object_name}[{$this->attribute_name}]";
     }
 
     function tag_name_with_index($index) {
-        return "{$this->object_name}[{$index}][{$this->field_name}]";
+        return "{$this->object_name}[{$index}][{$this->attribute_name}]";
     }
 
     function tag_id() {
-        return "{$this->object_name}_{$this->field_name}";
+        return "{$this->object_name}_{$this->attribute_name}";
     }
 
     function tag_id_with_index($index) {
-        return "{$this->object_name}_{$index}_{$this->field_name}";
+        return "{$this->object_name}_{$index}_{$this->attribute_name}";
     }
 
     function add_default_name_and_id($options) {
@@ -105,8 +105,8 @@ class FormHelper extends Helpers {
         }
         $pretty_tag_value = preg_replace('/\s/', "_", preg_replace('/\W/', "", strtolower($tag_value)));
         $options["id"] = $this->auto_index ?
-            "{$this->object_name}_{$this->auto_index}_{$this->field_name}_{$pretty_tag_value}" :
-            "{$this->object_name}_{$this->field_name}_{$pretty_tag_value}";
+            "{$this->object_name}_{$this->auto_index}_{$this->attribute_name}_{$pretty_tag_value}" :
+            "{$this->object_name}_{$this->attribute_name}_{$pretty_tag_value}";
         $options = $this->add_default_name_and_id($options);
         return $this->tag("input", $options);
     }
@@ -241,7 +241,6 @@ function check_box($object, $field, $options = array(), $checked_value = "1", $u
 # Result:
 #     <input type="radio" id="post_category" name="post[category] value="trax" checked="checked" />
 #     <input type="radio" id="post_category" name="post[category] value="java" />
-#
 function radio_button($object, $field, $tag_value, $options = array()) {
     $form = new FormHelper($object, $field);
     return $form->to_radio_button_tag($tag_value, $options);

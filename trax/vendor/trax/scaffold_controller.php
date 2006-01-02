@@ -24,7 +24,7 @@
 
 class ScaffoldController extends ActionController {
 
-    function __construct($model_name, $controller_name, $action = "index") {      
+    function __construct($model_name, $controller_name, $action = "index") {
         if($action == "") {
             $action = "index";
         }
@@ -32,28 +32,28 @@ class ScaffoldController extends ActionController {
         $this->model_name = Inflector::camelize($model_name);
         $this->model_class = Inflector::classify($model_name);
         $this->model_name_plural = Inflector::humanize(Inflector::pluralize($model_name));
-        $this->model_name_human = Inflector::humanize($model_name); 
+        $this->model_name_human = Inflector::humanize($model_name);
         if(!class_exists($this->model_class, true)) {
             $this->raise("Trying to use scaffolding on a non-existing Model ".$model_name, "Unknown Model", "404");
-        }      
-        $this->controller_name = $controller_name;    
+        }
+        $this->controller_name = $controller_name;
     }
-    
+
 	function index() {
-	    $model_class = $this->model_class;     
-		$model = new $model_class();       
-		$this->table_info = $model->table_info;
+	    $model_class = $this->model_class;
+		$model = new $model_class();
+		$this->content_columns = $model->content_columns;
 		$this->models = $model->find_all();
 	}
-   
-	function show() {         
-	    $model_class = $this->model_class;     
+
+	function show() {
+	    $model_class = $this->model_class;
 		$model = new $model_class();
-		$this->model = $model->find($_REQUEST['id']);		
+		$this->model = $model->find($_REQUEST['id']);
 	}
 
 	function add() {
-	    $model_class = $this->model_class;     
+	    $model_class = $this->model_class;
 	    $this->model = new $model_class($_REQUEST['model']);
 		if($_POST) {
     		if($this->model->save($_REQUEST['model'])) {
@@ -62,60 +62,41 @@ class ScaffoldController extends ActionController {
       			$this->render_action = "index";
     		} else {
       			$_SESSION['flash']['error'] = "Error adding ".$this->model_name_human." to the database.";
-    		}			
+    		}
 		}
 	}
 	
 	function edit() {
-		$model_class = $this->model_class;     
+		$model_class = $this->model_class;
 		$model = new $model_class();
-		$this->model = $model->find($_REQUEST['id']);		
+		$this->model = $model->find($_REQUEST['id']);
 	
 		if($_POST) {
     		if($this->model->save($_REQUEST['model'])) {
-      			$_SESSION['flash']['notice'] = $this->model_name_human." was successfully updated.";
+      			Session::flash('notice', $this->model_name_human." was successfully updated.");
       			$this->show();
       			$this->render_action = "show";
     		} else {
       			$_SESSION['flash']['error'] = "Error saving ".$this->model_name_human." to the database.";
-    		}			
+    		}
 		}
 	}
 	
 	function delete() {
 		if($_REQUEST['id'] > 0) {
-    		$model_class = $this->model_class;     
+    		$model_class = $this->model_class;
     		$model = new $model_class();
-    		$model = $model->find($_REQUEST['id']);	
+    		$model = $model->find($_REQUEST['id']);
     		if($model->delete()) {
           		$_SESSION['flash']['notice'] = $this->model_name_human." was successfully deleted.";
           	} else {
           		$_SESSION['flash']['error'] = "Error deleting ".$this->model_name_human." from the database.";
-        	}		    
+        	}
 		}
-		$this->index();
-      	$this->render_action = "index";
-	}       
-    
-}
+        $this->index();
+        $this->render_action = "index";
+	}
 
-function link_to($url_text, $controller_name, $params = null) { 
-    $url = "<a href=\"/";
-    if(!is_null($params)) {
-        if($params[':controller']) {
-            $url .= $params[':controller']."/";
-        } elseif($controller_name) {
-            $url .= $controller_name."/";        
-        }
-        if($params[':action']) {
-            $url .= $params[':action']."/";
-        }
-        if($params[':id']) {
-            $url .= $params[':id']->id;
-        }
-    } 
-    $url .= "\">$url_text</a>";
-    return $url;
 }
 
 ?>

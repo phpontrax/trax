@@ -1,6 +1,82 @@
-<h1>New <?= @scaffold_singular_name ?></h1>
+ <style>
+    body { background-color: #fff; color: #333; }
 
-<?= error_messages_for(@scaffold_singular_name) ?>
-<?= form(@scaffold_singular_name, :action => "create#{@scaffold_suffix}") ?>
+    body, p, ol, ul, td {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size:   13px;
+    line-height: 18px;
+    }
 
-<?= link_to "Back", :action => "list#{@scaffold_suffix}" ?>
+    pre {
+    background-color: #eee;
+    padding: 10px;
+    font-size: 11px;
+    }
+
+    a { color: #000; }
+    a:visited { color: #666; }
+    a:hover { color: #fff; background-color:#000; }
+
+    .fieldWithErrors {
+    padding: 2px;
+    background-color: red;
+    display: table;
+    }
+
+    #ErrorExplanation {
+    width: 400px;
+    border: 2px solid 'red';
+    padding: 7px;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    }
+
+    #ErrorExplanation h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    background-color: #c00;
+    color: #fff;
+    }
+
+    #ErrorExplanation p {
+    color: #333;
+    margin-bottom: 0;
+    padding: 5px;
+    }
+
+    #ErrorExplanation ul li {
+    font-size: 12px;
+    list-style: square;
+    }
+
+    div.uploadStatus {
+    margin: 5px;
+    }
+
+    div.progressBar {
+    margin: 5px;
+    }
+
+    div.progressBar div.border {
+    background-color: #fff;
+    border: 1px solid grey;
+    width: 100%;
+    }
+
+    div.progressBar div.background {
+    background-color: #333;
+    height: 18px;
+    width: 0%;
+    }
+  </style>
+<h1>New <?= $model_name ?></h1>
+
+<?= error_messages_for("model") ?>
+<?= form("model", array(":action" => "add",'submit_value' => "Create")) ?>
+
+<?= link_to("Show", array(":action" => "show", ":id" => $model->id)) ?> |
+<?= link_to("Back", array(":action" => "index")) ?>

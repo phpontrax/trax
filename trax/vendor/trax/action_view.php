@@ -27,7 +27,9 @@ include_once(TRAX_LIB_ROOT . "/action_view/helpers.php");
 # Include all the sub helper classes
 include_once(TRAX_LIB_ROOT . "/action_view/helpers/url_helper.php");
 include_once(TRAX_LIB_ROOT . "/action_view/helpers/form_helper.php");
+include_once(TRAX_LIB_ROOT . "/action_view/helpers/form_tag_helper.php");
+include_once(TRAX_LIB_ROOT . "/action_view/helpers/date_helper.php");
 #include_once(TRAX_LIB_ROOT . "/action_view/helpers/text_helper.php");
-#include_once(TRAX_LIB_ROOT . "/action_view/helpers/active_record_helper.php");
+include_once(TRAX_LIB_ROOT . "/action_view/helpers/active_record_helper.php");
 
 ?>
