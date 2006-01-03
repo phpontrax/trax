@@ -1,7 +1,7 @@
 <?php
 
 # include path for your php libs (PEAR etc)
-define("PHP_LIB_ROOT",      "/usr/local/lib/php");
+define("PHP_LIB_ROOT",      "/usr/share/php");
 define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
 define("TRAX_URL_PREFIX",   null);
 
@@ -74,6 +74,7 @@ ini_set("include_path",
 
 # Include Trax library files.
 include_once("session.php");
+include_once("input_filter.php");
 include_once("trax_exceptions.php");
 include_once("inflector.php");
 include_once("active_record.php");
