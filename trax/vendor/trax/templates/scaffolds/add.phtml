@@ -75,8 +75,7 @@
   </style>
 <h1>New <?= $model_name ?></h1>
 
-<?= error_messages_for("model") ?>
-<?= form("model", array(":action" => "add",'submit_value' => "Create")) ?>
+<?= error_messages_for($model_object_name) ?>
+<?= form($model_object_name, array(":action" => "add",'submit_value' => "Create")) ?>
 
-<?= link_to("Show", array(":action" => "show", ":id" => $model->id)) ?> |
 <?= link_to("Back", array(":action" => "index")) ?>

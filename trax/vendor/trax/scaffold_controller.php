@@ -24,19 +24,16 @@
 
 class ScaffoldController extends ActionController {
 
-    function __construct($model_name, $controller_name, $action = "index") {
-        if($action == "") {
-            $action = "index";
-        }
-        $model_name = strtolower($model_name);  
+    function __construct($model_name) {
+        $model_name = strtolower($model_name);
         $this->model_name = Inflector::camelize($model_name);
+        $this->model_object_name = Inflector::singularize($model_name);
         $this->model_class = Inflector::classify($model_name);
         $this->model_name_plural = Inflector::humanize(Inflector::pluralize($model_name));
         $this->model_name_human = Inflector::humanize($model_name);
         if(!class_exists($this->model_class, true)) {
             $this->raise("Trying to use scaffolding on a non-existing Model ".$model_name, "Unknown Model", "404");
         }
-        $this->controller_name = $controller_name;
     }
 
 	function index() {
@@ -49,19 +46,18 @@ class ScaffoldController extends ActionController {
 	function show() {
 	    $model_class = $this->model_class;
 		$model = new $model_class();
-		$this->model = $model->find($_REQUEST['id']);
+		$this->{$this->model_object_name} = $model->find($_REQUEST['id']);
 	}
 
 	function add() {
 	    $model_class = $this->model_class;
-	    $this->model = new $model_class($_REQUEST['model']);
+	    $this->{$this->model_object_name} = new $model_class($_REQUEST[$this->model_object_name]);
 		if($_POST) {
-    		if($this->model->save($_REQUEST['model'])) {
-      			$_SESSION['flash']['notice'] = $this->model_name_human." was successfully created.";
-      			$this->index();
-      			$this->render_action = "index";
+    		if($this->{$this->model_object_name}->save($_POST[$this->model_object_name])) {
+      			Session::flash('notice', $this->model_name_human." was successfully created.");
+                $this->redirect_to = url_for(array(":action" => "index"));
     		} else {
-      			$_SESSION['flash']['error'] = "Error adding ".$this->model_name_human." to the database.";
+      			Session::flash('error', "Error adding ".$this->model_name_human." to the database.");
     		}
 		}
 	}
@@ -69,15 +65,13 @@ class ScaffoldController extends ActionController {
 	function edit() {
 		$model_class = $this->model_class;
 		$model = new $model_class();
-		$this->model = $model->find($_REQUEST['id']);
-	
+		$this->{$this->model_object_name} = $model->find($_REQUEST['id']);	
 		if($_POST) {
-    		if($this->model->save($_REQUEST['model'])) {
+    		if($this->{$this->model_object_name}->save($_POST[$this->model_object_name])) {
       			Session::flash('notice', $this->model_name_human." was successfully updated.");
-      			$this->show();
-      			$this->render_action = "show";
+                $this->redirect_to = url_for(array(":action" => "show", ":id" => $this->{$this->model_object_name}));
     		} else {
-      			$_SESSION['flash']['error'] = "Error saving ".$this->model_name_human." to the database.";
+      			Session::flash('error', "Error saving ".$this->model_name_human." to the database.");
     		}
 		}
 	}
@@ -88,13 +82,12 @@ class ScaffoldController extends ActionController {
     		$model = new $model_class();
     		$model = $model->find($_REQUEST['id']);
     		if($model->delete()) {
-          		$_SESSION['flash']['notice'] = $this->model_name_human." was successfully deleted.";
+          		Session::flash('notice', $this->model_name_human." was successfully deleted.");
           	} else {
-          		$_SESSION['flash']['error'] = "Error deleting ".$this->model_name_human." from the database.";
+          		Session::flash('error', "Error deleting ".$this->model_name_human." from the database.");
         	}
 		}
-        $this->index();
-        $this->render_action = "index";
+        $this->redirect_to = url_for(array(":action" => "index"));
 	}
 
 }

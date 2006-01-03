@@ -33,7 +33,6 @@ class ActionController {
         $helpers_base_path,
         $layouts_path,
         $url_path,
-        $layout_file,
         $default_layout_file,
         $helper_file,
         $application_controller_file,
@@ -191,22 +190,22 @@ class ActionController {
                 }
 
                 # Which layout should we use?
-                $this->layout_file = $this->determine_layout();
+                $layout_file = $this->determine_layout();
 
                 # Check if there is any defined scaffolding to load
                 if($this->controller_object->scaffold) {
                     $scaffold = $this->controller_object->scaffold;
                     if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
                         include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
-                        $GLOBALS['current_controller_object'] = $this->controller_object = new ScaffoldController($scaffold, $this->controller, $this->action);
+                        $GLOBALS['current_controller_object'] = $this->controller_object = new ScaffoldController($scaffold);
                         if($this->action) {
                             $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/".$this->action.".phtml";
                         } else {
                             $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/index.phtml";
                         }
-                        if(!file_exists($this->layout_file)) {
+                        if(!file_exists($layout_file)) {
                             # the generic scaffold layout
-                            $this->layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
+                            $layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
                         }
                     }
                 }
@@ -290,9 +289,9 @@ class ActionController {
                     $content_for_layout .= ob_get_contents();
                     ob_end_clean();
 
-                    if(file_exists($this->layout_file) && $render_layout !== false) {
+                    if(file_exists($layout_file) && $render_layout !== false) {
                         # render the layout
-                        include($this->layout_file);
+                        include($layout_file);
                     } else {
                         # Can't find any layout so throw an exception
                         # $this->raise("No layout file found.", "Unknown layout", "404"); 

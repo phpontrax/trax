@@ -53,12 +53,16 @@
       list-style: square;
     }
   </style>
-<? foreach($model->content_columns as $column): ?>
-  <p>
-    <b><?= $column['human_name'] ?>:</b>
-    <?= $model->$column['name'] ?>
-  </p>
-<? endforeach; ?>
+<? if(count($$model_object_name->content_columns)): ?>
+    <? foreach($$model_object_name->content_columns as $column): ?>
+        <p>
+            <b><?= $column['human_name'] ?>:</b>
+            <?= $$model_object_name->$column['name'] ?>
+        </p>
+    <? endforeach; ?>
+<? else: ?>
+    no table info found.<br>
+<? endif; ?>
 
-<?= link_to("Edit", array(":action" => "edit", ":id" => $model)) ?> |
+<?= link_to("Edit", array(":action" => "edit", ":id" => $$model_object_name)) ?> |
 <?= link_to("Back", array(":action" => "index")) ?>

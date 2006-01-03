@@ -70,7 +70,7 @@
 		    <? endforeach; ?>
 		    <td><?= link_to('Show', array(":action" => 'show', ":id" => $model)) ?></td>
 		    <td><?= link_to('Edit', array(":action" => 'edit', ":id" => $model)) ?></td>
-		    <td><?= link_to('Delete', array(":action" => 'delete', ":id" => $model, "confirm" => "Are you sure?")) ?></td>
+		    <td><?= link_to('Delete', array(":action" => 'delete', ":id" => $model), array("confirm" => "Are you sure?")) ?></td>
 	    </tr>
 	<? endforeach; ?>
 <? else: ?>

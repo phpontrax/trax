@@ -87,6 +87,10 @@ class ActiveRecordHelper extends Helpers {
     # * <tt>id</tt> - The id of the error div (default: errorExplanation)
     # * <tt>class</tt> - The class of the error div (default: errorExplanation)
     function error_messages_for($object_name, $options = array()) {
+        if(is_object($object_name)) {
+            $object_name = get_class($object_name);
+            echo "object name:".$object_name;
+        }
         $this->object_name = $object_name;
         $object = $this->controller_object->$object_name;
         if(!empty($object->errors)) {

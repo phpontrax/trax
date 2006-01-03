@@ -175,8 +175,8 @@ class DateHelper extends Helpers {
             }
 
             $month_options .= ($date && ($date_month == $month_number)) ?
-            "<option value=\"$month_number\" selected=\"selected\">$month_name</option>\n" :
-            "<option value=\"$month_number\">$month_name</option>\n";
+            "<option value=\"".$this->leading_zero_on_single_digits($month_number)."\" selected=\"selected\">$month_name</option>\n" :
+            "<option value=\"".$this->leading_zero_on_single_digits($month_number)."\">$month_name</option>\n";
         }
         $field_name = ($options['field_name']) ? $options['field_name'] : 'month';
         return $this->select_html($field_name, $month_options, $options['prefix'], $options['include_blank'], $options['discard_type']);
