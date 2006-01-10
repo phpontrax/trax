@@ -20,6 +20,7 @@ a:hover { color: #fff; background-color:#000; }
   padding: 2px;
   background-color: red;
   display: table;
+  width: 1px;
 }
 
 #ErrorExplanation {
