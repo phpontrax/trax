@@ -56,7 +56,7 @@ class ActiveRecordHelper extends Helpers {
         if(!$record->is_new_record()) $contents .= hidden_field($record_name, 'id');
         $contents .= $this->all_input_tags($record, $record_name, $options);
         if(isset($options['block'])) $contents .= eval($options['block']);
-        $contents .= submit_tag($submit_value);
+        $contents .= "<br>".submit_tag($submit_value)."<br><br>";
 
         return $this->content_tag('form', $contents, array('action' => $action, 'method' => 'post'));
     }
@@ -89,7 +89,7 @@ class ActiveRecordHelper extends Helpers {
     function error_messages_for($object_name, $options = array()) {
         if(is_object($object_name)) {
             $object_name = get_class($object_name);
-            echo "object name:".$object_name;
+            //echo "object name:".$object_name;
         }
         $this->object_name = $object_name;
         $object = $this->controller_object->$object_name;
@@ -103,7 +103,7 @@ class ActiveRecordHelper extends Helpers {
                 ) .
                 $this->content_tag("p", "There were problems with the following fields:") .
                 $this->content_tag("ul", array_reduce($object->errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
-                array("id" => (isset($options['id']) ? $options['id'] : "errorExplanation"), "class" => (isset($options['class']) ? $options['class'] : "errorExplanation"))
+                array("id" => (isset($options['id']) ? $options['id'] : "ErrorExplanation"), "class" => (isset($options['class']) ? $options['class'] : "ErrorExplanation"))
             );
         }
     }
@@ -115,7 +115,9 @@ class ActiveRecordHelper extends Helpers {
             //$contents .= "<p><label for=\"".$record_name."_".$column['name']."\">";
             //$contents .= Inflector::humanize($column['name']) . ":</label><br />";
             //$contents .= input($record_name, $column['name']) . "</p>\n";
-            eval($input_block) . "\n";
+            if(!in_array($column['name'], $record->primary_keys)) {
+                eval($input_block) . "\n";    
+            }         
         } 
         return $contents;
     }

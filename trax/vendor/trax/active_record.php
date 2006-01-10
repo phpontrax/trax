@@ -833,13 +833,14 @@ class ActiveRecord {
     # This is only called from quoted_attributes().
     function check_datetime($field, $value) {
         if($this->auto_timestamps) {
-            if(is_array($this->table_info)) {
-                foreach($this->table_info as $field_info) {
+            if(is_array($this->content_columns)) {
+                foreach($this->content_columns as $field_info) {
                     if(($field_info['name'] == $field) && ($field_info['type'] == "datetime")) {
-                        if($this->new_record && in_array($field, $this->auto_create_timestamps))
+                        if($this->new_record && in_array($field, $this->auto_create_timestamps)) {
                             return date("Y-m-d H:i:s");
-                        elseif(!$this->new_record && in_array($field, $this->auto_update_timestamps))
+                        } elseif(!$this->new_record && in_array($field, $this->auto_update_timestamps)) {
                             return date("Y-m-d H:i:s");
+                        }
                     }
                 }
             }
@@ -850,14 +851,38 @@ class ActiveRecord {
     # Updates all the attributes(class vars representing the table columns)
     # from the passed array $attributes.
     function update_attributes($attributes) {
-        foreach($attributes as $field => $val) {
-            $this->$field = $val;
+        foreach($attributes as $field => $value) {
+            # datetime parts check
+            if(preg_match('/^\w+\(.*i\)$/i', $field)) {
+                $datetime_key = substr($field, 0, strpos($field, "("));
+                if($datetime_key != $old_datetime_key) {
+                    $old_datetime_key = $datetime_key;                     
+                    $datetime_value = "";   
+                } 
+                if(strstr($field, "2i") || strstr($field, "3i")) {
+                    $datetime_value .= "-".$value;    
+                } elseif(strstr($field, "4i")) {
+                    $datetime_value .= " ".$value;        
+                } elseif(strstr($field, "5i")) {
+                    $datetime_value .= ":".$value;        
+                } else {
+                    $datetime_value .= $value;    
+                }  
+                $datetime_fields[$old_datetime_key] = $datetime_value;                 
+            } else {
+                $this->$field = $value;
+            }
+        }
+        if(is_array($datetime_fields)) {
+            foreach($datetime_fields as $field => $value) {
+                $this->$field = $value;    
+            }    
         }
         $this->set_habtm_attributes($attributes);
     }
 
     # If $this->set_content_columns() was previously called, which will mean that
-    # $table_info will be an array of containing the column info about the database
+    # $content_columns will be an array of containing the column info about the database
     # table this model is representing.  This will return an array where the keys
     # the column names and the values are the values from those columns.  
     function get_attributes() {
@@ -882,14 +907,15 @@ class ActiveRecord {
         foreach ($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
             # If the value isn't a function or null quote it.
-            if (!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
-                $value = str_replace("\\\"","\"",$value);
-                $value = str_replace("\'","'",$value);
-                $value = str_replace("\\\\","\\",$value);
-                $return[$key] = "'" . addslashes($value) . "'";
-            } else {
-                $return[$key] = $value;
-            }
+            #if(!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
+            #    $value = str_replace("\\\"","\"",$value);
+            #    $value = str_replace("\'","'",$value);
+            #    $value = str_replace("\\\\","\\",$value);
+            #    $return[$key] = "'" . addslashes($value) . "'";
+            #} else {
+            #    $return[$key] = $value;
+            #}
+            $return[$key] = self::$db->quoteSmart($value);
         }
         return $return;
     }
