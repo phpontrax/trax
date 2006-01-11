@@ -27,11 +27,13 @@ require_once('DB.php');
 
 class ActiveRecord {
 
-    static private $db = null;              # Reference to Pear db object
-    static protected $inflector = null;     # object to do class inflection
-    public $content_columns = null;         # info about each column in the table
-    public $table_name = null;
+    static private $db = null; # Reference to Pear db object
+    static protected $inflector = null; # object to do class inflection
+    public $content_columns = null; # info about each column in the table
+    public $table_name = null; # if you want to override table name set this in your model
+    public $database_name = null; # if you want to override database name set this in your model
     public $fetch_mode = DB_FETCHMODE_ASSOC;
+    public $force_reconnect = false; # should we force a connection everytime
 
     # Table associations
     protected $has_many = null;
@@ -993,12 +995,16 @@ class ActiveRecord {
     # If it finds a connection in ACTIVE_RECORD_DB it uses it.
     function establish_connection() {
         # Connect to the database and throw an error if the connect fails.
-        if(!is_object($GLOBALS['ACTIVE_RECORD_DB'])) {
+        if(!is_object($GLOBALS['ACTIVE_RECORD_DB']) || $this->force_reconnect) {
             if(array_key_exists("use", $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE])) {
                 $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][$GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['use']];
             } else {
                 $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE];
             }
+            # Override database name if param is set
+            if($this->database_name) {
+                $connection_settings['database'] = $this->database_name;               
+            }            
             # Set optional Pear parameters
             if(isset($connection_settings['persistent'])) {
                 $connection_options['persistent'] = $connection_settings['persistent'];

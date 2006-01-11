@@ -443,7 +443,8 @@ class ActionController {
         $error_heading = $exception->error_heading;
         $error_message = $exception->error_message;
         $trace = $exception->getTraceAsString();
-        header("HTTP/1.0 {$error_code} {$error_heading}");
+        header('HTTP/1.0 {$error_code} {$error_heading}');
+        header('status: {$error_code} {$error_heading}'); 
         # check for user's layout for errors
         if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml")) {
             include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml");
