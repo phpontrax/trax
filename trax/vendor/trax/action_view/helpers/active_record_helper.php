@@ -2,13 +2,19 @@
 
 
 class ActiveRecordHelper extends Helpers {
+    
+    public $scaffolding = 0;
 
     # Returns a default input tag for the type of object returned by the method. Example
     # (title is a VARCHAR column and holds "Hello World"):
     #   input("post", "title") =>
     #     <input id="post_title" name="post[title]" size="30" type="text" value="Hello World" />
     function input($object_name, $attribute_name, $options = array()) {
-        return $this->to_tag($object_name, $attribute_name, $options);
+        return $this->to_tag($object_name, $attribute_name, $options);        
+    }
+    
+    function input_scaffolding($object_name, $attribute_name, $options = array()) {
+        return $this->to_scaffold_tag($object_name, $attribute_name, $options);        
     }
 
     # Returns an entire form with input tags and everything for a specified Active Record object. Example
@@ -109,27 +115,33 @@ class ActiveRecordHelper extends Helpers {
     }
 
     function all_input_tags($record, $record_name, $options) {
+        //if($record_name) $this->object_name = $record_name;
         $input_block = (isset($options['input_block']) ? $options['input_block'] : $this->default_input_block());
         $contents = '';
-        foreach($record->content_columns as $column) {
-            //$contents .= "<p><label for=\"".$record_name."_".$column['name']."\">";
-            //$contents .= Inflector::humanize($column['name']) . ":</label><br />";
-            //$contents .= input($record_name, $column['name']) . "</p>\n";
-            if(!in_array($column['name'], $record->primary_keys)) {
-                eval($input_block) . "\n";    
-            }         
+        if(is_array($record->content_columns)) {
+            foreach($record->content_columns as $column) {
+                //$contents .= "<p><label for=\"".$record_name."_".$column['name']."\">";
+                //$contents .= Inflector::humanize($column['name']) . ":</label><br />";
+                //$contents .= input($record_name, $column['name']) . "</p>\n";
+                if(!in_array($column['name'], $record->primary_keys)) {
+                    eval($input_block) . "\n";    
+                }         
+            }
         } 
         return $contents;
     }
 
     function default_input_block() {
-        return '$contents .= "<p><label for=\"{$record_name}_{$column[\'name\']}\">" . Inflector::humanize($column[\'name\']) . ":</label><br />" . input($record_name, $column[\'name\']) . "</p>";';
+        if($this->scaffolding) {
+            return '$contents .= "<p><label for=\"{$record_name}_{$column[\'name\']}\">" . Inflector::humanize($column[\'name\']) . ":</label><br/>\n<?= " . input_scaffolding($record_name, $column[\'name\']) . " ?></p>\n";';
+        } else {
+            return '$contents .= "<p><label for=\"{$record_name}_{$column[\'name\']}\">" . Inflector::humanize($column[\'name\']) . ":</label><br/>\n" . input($record_name, $column[\'name\']) . "</p>\n";';
+        }
     }
-
+    
     function to_tag($object_name, $attribute_name, $options = array()) {
         $this->object_name = $object_name;
         $this->attribute_name = $attribute_name;
-        #this will be fixed once the column object is developed
         $form = new FormHelper($object_name, $attribute_name);
         switch($this->column_type()) {
             case 'string':
@@ -158,6 +170,43 @@ class ActiveRecordHelper extends Helpers {
             case 'boolean':
             case 'bool':
                 $results = $form->to_boolean_select_tag($options);
+                break;
+        }
+        if(count($this->object()->errors)) {
+            $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
+        }
+        return $results;      
+    }
+
+    function to_scaffold_tag($object_name, $attribute_name, $options = array()) {
+        $this->object_name = $object_name;
+        $this->attribute_name = $attribute_name;
+        switch($this->column_type()) {
+            case 'string':
+            case 'varchar':
+            case 'varchar2':
+                $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
+                $results = $field_type."_field(\"$object_name\", \"$attribute_name\")";
+                break;
+            case 'text':
+            case 'blob':
+                $results = "text_area(\"$object_name\", \"$attribute_name\")";
+                break;
+            case 'integer':
+            case 'int':
+            case 'number':
+            case 'float':
+                $results = "text_field(\"$object_name\", \"$attribute_name\")";
+                break;
+            case 'date':
+                $results = "date_select(\"$object_name\", \"$attribute_name\")";
+                break;
+            case 'datetime':
+                $results = "datetime_select(\"$object_name\", \"$attribute_name\")";
+                break;
+            case 'boolean':
+            case 'bool':
+                $results = "boolean_select(\"$object_name\", \"$attribute_name\")";
                 break;
         }
         if(count($this->object()->errors)) {
@@ -274,6 +323,12 @@ function input() {
     $ar_helper = new ActiveRecordHelper();
     $args = func_get_args();
     return call_user_func_array(array($ar_helper, 'input'), $args);
+}
+
+function input_scaffolding() {
+    $ar_helper = new ActiveRecordHelper();
+    $args = func_get_args();
+    return call_user_func_array(array($ar_helper, 'input_scaffolding'), $args);
 }
 
 ?>

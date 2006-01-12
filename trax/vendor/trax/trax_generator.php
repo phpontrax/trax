@@ -34,19 +34,22 @@ class TraxGenerator {
         $controller_template_file,
         $helper_template_file,
         $view_template_file,
-        $model_template_file;
+        $model_template_file,
+        $scaffold_template_path;
     public
-        $view_file_extention = "phtml";
+        $view_file_extention = TRAX_VIEWS_EXTENTION;
 
     function __construct() {
         $this->view_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
         $this->controller_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
         $this->helper_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
         $this->model_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['models'];
+        $this->layouts_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
         $this->controller_template_file = TRAX_LIB_ROOT . "/templates/controller.php";
         $this->helper_template_file = TRAX_LIB_ROOT . "/templates/helper.php";
         $this->view_template_file = TRAX_LIB_ROOT . "/templates/view.".$this->view_file_extention;
         $this->model_template_file = TRAX_LIB_ROOT . "/templates/model.php";
+        $this->scaffold_template_path = TRAX_LIB_ROOT . "/templates/scaffolds/generator_templates";
 
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->mkdir_cmd = "mkdir";
@@ -83,20 +86,34 @@ class TraxGenerator {
                         $this->generate_model($command_name);
                     }
                     break;
+                case "scaffold":
+                    if(empty($command_name)) {
+                        $this->scaffold_help();
+                    } else {
+                        $controller_name = $_SERVER["argv"][3];
+                        if($_SERVER["argv"][4] != "") {
+                            for($i=4;$i < count($_SERVER["argv"]);$i++) {
+                                $views[] = strtolower($_SERVER["argv"][$i]);
+                            }
+                        }                        
+                        $this->generate_scaffold($command_name,$controller_name,$views);
+                    }
+                    break;                    
             }
         }
         exit;
     }
 
-    function generate_controller($name, $views="") {
+    function generate_controller($name, $views="", $scaffolding = false) {
 
         # Set the View and Controller extra path info
         if(stristr($name, "/")) {
-            $extraPath = substr($name,0,strrpos($name, "/"));
+            $this->extra_path = substr($name,0,strrpos($name, "/"));
             $name = Inflector::underscore(substr($name,strrpos($name, "/")+1));
-            $this->view_path .= "/$extraPath/$name";
-            $this->controller_path .= "/$extraPath";
-            $this->helper_path .= "/$extraPath";
+            $this->view_path .= "/$this->extra_path/$name";
+            $this->layouts_path .= "/$this->extra_path/$name";
+            $this->controller_path .= "/$this->extra_path";
+            $this->helper_path .= "/$this->extra_path";
         } else {
             $name = Inflector::underscore($name);
             $this->view_path .= "/$name";
@@ -118,11 +135,13 @@ class TraxGenerator {
         }
 
         # Create the actual controller/helper files
-        $this->create_controller($name,$views);
+        if(!$scaffolding) {
+            $this->create_controller($name, $views);
+        } 
         $this->create_helper($name);
 
-        if($extraPath) {
-            $name = $extraPath."/".$name;
+        if($this->extra_path) {
+            $name = $this->extra_path."/".$name;
         }
 
         # Create view files if any
@@ -153,14 +172,165 @@ class TraxGenerator {
                     echo "error creating model file: $model_file\n";
                 } else {
                     echo "created $model_file\n";
+                    return true;
                 }
             } else {
                 echo "error model template file doesn't exist: $this->model_template_file\n";
             }
         } else {
             echo "exists $model_file\n";
+            return true;
         }
+        return false;
     }
+    
+    function generate_scaffold($model_name, $controller_name, $views="") {
+        if(!$model_exists = $this->generate_model($model_name)) {
+            echo "Error - Can't create Model: $model_name.\n";    
+            exit;
+        }
+
+        $GLOBALS['current_controller_object'] =& $this;
+        $model_class_name = Inflector::classify($model_name);
+        $singluar_model_name = Inflector::singularize($model_name);
+        $plural_model_name = Inflector::pluralize($model_name);  
+        $human_model_name = Inflector::humanize($model_name);      
+        $this->{$singluar_model_name} = new $model_class_name();            
+        if(!$controller_name) {
+            $controller_name = Inflector::pluralize($model_name);   
+        } else {
+            $controller_name = Inflector::underscore($controller_name);    
+        }
+        $controller_file = "$this->controller_path/".$controller_name."_controller.php";
+        $non_scaffolded_actions = array();
+        $illegal_views = array("index","add","edit","show");      
+        if(is_array($views)) {
+            foreach($views as $view) {
+                if(!in_array($view, $illegal_views)) {
+                    $non_scaffolded_actions[] = $view;  
+                }           
+            }
+        }         
+        $this->generate_controller($controller_name, $non_scaffolded_actions, true); 
+        if(stristr($controller_name, "/")) {
+            $controller_class_name = Inflector::classify(substr($controller_name,strrpos($controller_name, "/")+1));
+            $human_controller_name = Inflector::humanize(substr($controller_name,strrpos($controller_name, "/")+1));
+        } else {
+            $controller_class_name = Inflector::classify($controller_name);
+            $human_controller_name = Inflector::humanize($controller_name);
+        }             
+     
+        # Generate the controller
+        ob_start();    
+        include("$this->scaffold_template_path/controller.php");
+        $controller_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();
+        if(!file_exists($controller_file)) {
+            if(!file_put_contents($controller_file, $controller_contents)) {
+                echo "error creating controller class file: $controller_file\n";
+            } else {
+                echo "created $controller_file\n";
+            }        
+        } else {
+            echo "exists $controller_file\n";        
+        } 
+                
+        # Generate the index.phtml view
+        $view_file = "$this->view_path/index.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/view_index.phtml");
+        $index_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();
+        if(!file_exists($view_file)) {
+            if(!file_put_contents($view_file, $index_contents)) {
+                echo "error creating view file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $view_file\n";        
+        } 
+               
+        # Generate the add.phtml view
+        $view_file = "$this->view_path/add.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/view_add.phtml");
+        $add_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();       
+        if(!file_exists($view_file)) {
+            if(!file_put_contents($view_file, $index_contents)) {
+                echo "error creating view file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $view_file\n";        
+        } 
+        
+        # Generate the edit.phtml view
+        $view_file = "$this->view_path/edit.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/view_edit.phtml");
+        $edit_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean(); 
+        if(!file_exists($view_file)) {
+            if(!file_put_contents($view_file, $index_contents)) {
+                echo "error creating view file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $view_file\n";        
+        } 
+        
+        # Generate the show.phtml view
+        $view_file = "$this->view_path/show.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/view_show.phtml");
+        $show_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();
+        if(!file_exists($view_file)) {
+            if(!file_put_contents($view_file, $index_contents)) {
+                echo "error creating view file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $view_file\n";        
+        } 
+               
+        # Generate the partial containing the form elments from the database
+        $view_file = "$this->view_path/_form.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/form_scaffolding.phtml");
+        $_form_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();  
+        if(!file_exists($view_file)) {
+            if(!file_put_contents($view_file, $index_contents)) {
+                echo "error creating view file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $view_file\n";        
+        } 
+        
+        # Generate the layout for the scaffolding
+        $layout_file = "$this->layouts_path/$controller_name.".$this->view_file_extention;
+        ob_start();    
+        include("$this->scaffold_template_path/layout.phtml");
+        $layout_contents = $this->fix_php_brackets(ob_get_contents());
+        ob_end_clean();  
+        if(!file_exists($layout_file)) {
+            if(!file_put_contents($layout_file, $index_contents)) {
+                echo "error creating layout file: $view_file\n";
+            } else {
+                echo "created $view_file\n";
+            }
+        } else {
+            echo "exists $layout_file\n";        
+        }                   
+    }    
 
     function create_controller($controller,$views="") {
 
@@ -214,7 +384,7 @@ class TraxGenerator {
         }
     }
 
-    function create_view($view,$controller) {
+    function create_view($view, $controller) {
         $view_file = "$this->view_path/".$view.".".$this->view_file_extention;
         if(!file_exists($view_file)) {
             if(file_exists($this->view_template_file)) {
@@ -242,6 +412,10 @@ class TraxGenerator {
             exec($cmd);
         }
     }
+    
+    function fix_php_brackets($string) {
+        return str_replace("? >", "?>", str_replace("< ?", "<?", $string));            
+    }
 
     function controller_help() {
         echo "Usage: ./generate.php controller ControllerName [view1 view2 ...]\n\n";
@@ -257,12 +431,14 @@ class TraxGenerator {
         echo "\t./script/generate.php controller CreditCard open debit credit close\n\n";
         echo "\tCredit card controller with URLs like /credit_card/debit.\n";
         echo "\t\tController: app/controllers/credit_card_controller.php\n";
-        echo "\t\tViews:      app/views/credit_card/debit.phtml [...]\n\n";
-        echo "Folders Example:\n";
+        echo "\t\tViews:      app/views/credit_card/debit.phtml [...]\n";
+        echo "\t\tHelper:     app/helpers/credit_card_helper.php\n\n";
+        echo "Module/Folders Example:\n";
         echo "\t./script/generate.php controller 'admin/credit_card' suspend late_fee\n\n";
         echo "\tCredit card admin controller with URLs /admin/credit_card/suspend.\n";
         echo "\t\tController: app/controllers/admin/credit_card_controller.php\n";
-        echo "\t\tViews:      app/views/admin/credit_card/suspend.phtml [...]\n\n";
+        echo "\t\tViews:      app/views/admin/credit_card/suspend.phtml [...]\n";
+        echo "\t\tHelper:     app/helpers/credit_card_helper.php\n\n";
     }
 
     function model_help() {
@@ -276,6 +452,32 @@ class TraxGenerator {
         echo "\t./script/generate.php model Account\n";
         echo "\tThis will create an Account model:\n";
         echo "\t\tModel:      app/models/account.php\n\n";
+    }
+    
+    function scaffold_help() {
+        echo "Usage: ./generate scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
+        echo "Description:\n";
+        echo "\tThe scaffold generator creates a controller to interact with a model.\n";
+        echo "\tIf the model does not exist, it creates the model as well.  The generated\n";
+        echo "\tcode is equivalent to the ( public \$scaffold = \"model\"; ) declaration,\n";
+        echo "\tmaking it easy to migrate when you wish to customize your controller and views.\n\n";
+        echo "\tThe generator takes a model name, an optional controller name, and a\n";
+        echo "\tlist of views as arguments.  Scaffolded actions and views are created\n";
+        echo "\tautomatically.\n\n";
+        echo "\tThe auto scaffolded actions and views are:\n";
+        echo "\t\tindex, show, add, edit, delete\n\n";
+        echo "\tIf a controller name is not given, the plural form of the model name\n";
+        echo "\twill be used.  The model and controller names may be given in CamelCase\n";
+        echo "\tor under_score and should not be suffixed with 'Model' or 'Controller'.\n\n";
+        echo "Example:\n";
+        echo "\t./generate scaffold Account Bank debit credit\n\n";
+        echo "\tThis will generate an Account model and BankController with a basic user interface\n";
+        echo "\tNow create the accounts table in your database and browse to http://localhost/bank/\n";
+        echo "\tvoila, you're on Trax!\n\n";
+        echo "Module/Folders Example:\n";
+        echo "\t./generate scaffold CreditCard 'admin/credit_card' suspend late_fee\n\n";
+        echo "\tThis will generate a CreditCard model and CreditCardController controller\n";
+        echo "\tin the admin module.\n";            
     }
 
     function generator_help() {

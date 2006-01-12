@@ -246,4 +246,9 @@ function radio_button($object, $field, $tag_value, $options = array()) {
     return $form->to_radio_button_tag($tag_value, $options);
 }
 
+function boolean_select($object, $field, $options = array()) {
+    $form = new FormHelper($object, $field);
+    return $form->to_boolean_select_tag($options);        
+}
+
 ?>

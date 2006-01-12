@@ -1,0 +1,15 @@
+< ? if(count($<?=$singluar_model_name?>->content_columns)): ? >
+    < ? foreach($<?=$singluar_model_name?>->content_columns as $column): ? >
+        <p>
+            <b>< ?= $column['human_name'] ? >:</b>
+            < ?= $<?=$singluar_model_name?>->send($column['name']) ? >
+        </p>
+    < ? endforeach; ? >
+< ? else: ? >
+    no table info found.
+< ? endif; ? >
+
+<br>
+
+< ?= link_to("Edit", array(":action" => "edit", ":id" => $<?= $singluar_model_name ?>)) ? > |
+< ?= link_to("Back", array(":action" => "index")) ? >

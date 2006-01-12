@@ -50,7 +50,7 @@ class ActionController {
         $view_file,
         $views_path,
         $controller_class, $controller_object,
-        $views_file_extention = "phtml";
+        $views_file_extention = TRAX_VIEWS_EXTENTION;
 
     function __construct() {
         if(!is_object($this->router)) {
@@ -446,8 +446,8 @@ class ActionController {
         header('HTTP/1.0 {$error_code} {$error_heading}');
         header('status: {$error_code} {$error_heading}'); 
         # check for user's layout for errors
-        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml")) {
-            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/error.phtml");
+        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.".TRAX_VIEWS_EXTENTION)) {
+            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.".TRAX_VIEWS_EXTENTION);
         } elseif(DEBUG && file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
             # use default layout for errors
             include(TRAX_LIB_ROOT."/templates/error.phtml");

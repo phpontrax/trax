@@ -29,7 +29,7 @@ class ScaffoldController extends ActionController {
         $this->model_name = Inflector::camelize($model_name);
         $this->model_object_name = Inflector::singularize($model_name);
         $this->model_class = Inflector::classify($model_name);
-        $this->model_name_plural = Inflector::humanize(Inflector::pluralize($model_name));
+        $this->model_name_plural = Inflector::pluralize($model_name);
         $this->model_name_human = Inflector::humanize($model_name);
         if(!class_exists($this->model_class, true)) {
             $this->raise("Trying to use scaffolding on a non-existing Model ".$model_name, "Unknown Model", "404");

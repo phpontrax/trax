@@ -59,6 +59,18 @@ class DateHelper extends Helpers {
     private function leading_zero_on_single_digits($number) {
         return $number > 9 ? $number : "0$number";
     }
+        
+    #   datetime_select("post", "written_on")
+    #   datetime_select("post", "written_on", array("start_year" => 1995))
+    function datetime_select($options = array()) {     
+        return $this->to_datetime_select_tag($options);
+    } 
+    
+    #   datetime_select("post", "written_on")
+    #   datetime_select("post", "written_on", array("start_year" => 1995))
+    function date_select($options = array()) {     
+        return $this->to_date_select_tag($options);
+    }           
 
     # Returns a set of html select-tags (one for year, month, and day) pre-selected with the +date+.
     function select_date($date = null, $options = array()) {
@@ -294,6 +306,18 @@ function select_datetime() {
     $date_helper = new DateHelper();
     $args = func_get_args();
     return call_user_func_array(array($date_helper, 'select_datetime'), $args);
+}
+
+function datetime_select($object, $attribute, $options = array()) {
+    $date_helper = new DateHelper($object, $attribute);
+    $args = func_get_args();
+    return call_user_func_array(array($date_helper, 'datetime_select'), $options);    
+}
+
+function date_select($object, $attribute, $options = array()) {
+    $date_helper = new DateHelper($object, $attribute);
+    $args = func_get_args();
+    return call_user_func_array(array($date_helper, 'date_select'), $options);    
 }
 
 ?>

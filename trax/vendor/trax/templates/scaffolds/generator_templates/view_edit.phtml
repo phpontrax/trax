@@ -1,0 +1,11 @@
+<h1>Editing <?= $singluar_model_name ?></h1>
+
+< ?= start_form_tag(array(":action" => "edit", ":id" => $<?= $singluar_model_name ?>)) ? >
+    < ?= $this->render_partial("form") ? ><br>
+    < ?= submit_tag("Edit") ? >
+< ?= end_form_tag() ? >
+
+<br>
+
+< ?= link_to("Show", array(":action" => "show", ":id" => $<?= $singluar_model_name ?>)) ? > |
+< ?= link_to("Back", array(":action" => "index")) ? >

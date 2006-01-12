@@ -1,0 +1,9 @@
+< ?= error_messages_for("<?= $singluar_model_name ?>") ? >
+
+<!--[form:<?= $singluar_model_name ?>]-->
+<?
+    $ar_helper = new ActiveRecordHelper();
+    $ar_helper->scaffolding = true;
+    echo $ar_helper->all_input_tags($this->{$singluar_model_name}, $singluar_model_name, array()); 
+?>
+<!--[eoform:<?= $singluar_model_name ?>]-->
