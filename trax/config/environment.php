@@ -1,9 +1,10 @@
 <?php
 
 # include path for your php libs (PEAR etc)
-define("PHP_LIB_ROOT",      "/usr/share/php");
-define("TRAX_ROOT",         dirname(dirname(__FILE__)) . "/");
-define("TRAX_URL_PREFIX",   null);
+define("PHP_LIB_ROOT",          "/usr/local/lib/php");
+define("TRAX_ROOT",             dirname(dirname(__FILE__)) . "/");
+define("TRAX_URL_PREFIX",       null);
+define("TRAX_VIEWS_EXTENTION",  "phtml");
 
 # Set in the Apache Vhost (SetEnv TRAX_MODE development)
 if($_SERVER['TRAX_MODE']) {
