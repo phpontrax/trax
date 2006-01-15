@@ -79,32 +79,38 @@ class Helpers {
             }
             if(array_key_exists(":controller", $options)) {
                 if($controller = $options[":controller"]) {
-                    if(stristr($this->controller_path, $controller)) {
-                        $url[] = $this->controller_path;
-                    } else {
-                        $url[] = $controller;
-                    }
+                    $url[] = $controller; 
                 }
             } else {
                 $url[] = $this->controller_path;
             }
-            if(array_key_exists(":action", $options)) {
-                if($action = $options[":action"]) {
-                    $url[] = $action;
-                }
-            }
-            if(array_key_exists(":id", $options)) {
-                if(is_object($options[":id"])) {
-                    if($id = $options[":id"]->id) {
-                        $url[] = $id;
+            
+            if(count($url)) {
+                if(array_key_exists(":action", $options)) {
+                    if($action = $options[":action"]) {
+                        $url[] = $action;
                     }
-                } else {
-                    if($id = $options[":id"]) {
-                        $url[] = $id;
+                } 
+            }
+            if(count($url) > 1) {
+                if(array_key_exists(":id", $options)) {
+                    if(is_object($options[":id"])) {
+                        if($id = $options[":id"]->id) {
+                            $url[] = $id;
+                        }
+                    } else {
+                        if($id = $options[":id"]) {
+                            $url[] = $id;
+                        }
                     }
                 }
             }
         }
+        
+        if(count($url) && substr($url_base,-1) != "/") {
+            $url_base .= "/";    
+        } 
+
         return $url_base . implode("/", $url);
     }
 
