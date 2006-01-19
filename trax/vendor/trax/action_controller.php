@@ -439,7 +439,7 @@ class ActionController {
                     unset($tmp_key);
                     unset($tmp_value);
                 }
-                include($path_with_file);        
+                include($file_with_path);        
             }           
         }
     }
