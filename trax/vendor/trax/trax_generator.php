@@ -258,7 +258,7 @@ class TraxGenerator {
         $add_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean();       
         if(!file_exists($view_file)) {
-            if(!file_put_contents($view_file, $index_contents)) {
+            if(!file_put_contents($view_file, $add_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
                 echo "created $view_file\n";
@@ -274,7 +274,7 @@ class TraxGenerator {
         $edit_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean(); 
         if(!file_exists($view_file)) {
-            if(!file_put_contents($view_file, $index_contents)) {
+            if(!file_put_contents($view_file, $edit_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
                 echo "created $view_file\n";
@@ -290,7 +290,7 @@ class TraxGenerator {
         $show_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean();
         if(!file_exists($view_file)) {
-            if(!file_put_contents($view_file, $index_contents)) {
+            if(!file_put_contents($view_file, $show_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
                 echo "created $view_file\n";
@@ -306,7 +306,7 @@ class TraxGenerator {
         $_form_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean();  
         if(!file_exists($view_file)) {
-            if(!file_put_contents($view_file, $index_contents)) {
+            if(!file_put_contents($view_file, $_form_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
                 echo "created $view_file\n";
@@ -322,10 +322,10 @@ class TraxGenerator {
         $layout_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean();  
         if(!file_exists($layout_file)) {
-            if(!file_put_contents($layout_file, $index_contents)) {
-                echo "error creating layout file: $view_file\n";
+            if(!file_put_contents($layout_file, $layout_contents)) {
+                echo "error creating layout file: $layout_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "created $layout_file\n";
             }
         } else {
             echo "exists $layout_file\n";        
