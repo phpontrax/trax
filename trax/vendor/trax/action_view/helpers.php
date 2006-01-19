@@ -71,11 +71,21 @@ class Helpers {
         if(is_string($options)) {
             $url[] = $options;
         } else {
+            $url_base = $_SERVER['HTTP_HOST'];
+            if(substr($url_base, -1) == "/") {
+                # remove the ending slash
+                $url_base = substr($url_base, 0, -1);                             
+            }           
+            
             if($_SERVER['SERVER_PORT'] == 443) {
-                $url_base = "https://".$_SERVER['HTTP_HOST'];
+                $url_base = "https://".$url_base;
             } else {
-                $url_base = "http://".$_SERVER['HTTP_HOST'];
+                $url_base = "http://".$url_base;
             }
+            if(!is_null(TRAX_URL_PREFIX)) {
+                $url_base .= "/".TRAX_URL_PREFIX;
+            }
+            
             if(array_key_exists(":controller", $options)) {
                 if($controller = $options[":controller"]) {
                     $url[] = $controller; 

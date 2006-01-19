@@ -92,7 +92,7 @@ class ActionController {
         $browser_url = $_SERVER['REDIRECT_URL'];
 
         # strip off url prefix, if any
-        if (!is_null(TRAX_URL_PREFIX)) {
+        if(!is_null(TRAX_URL_PREFIX)) {
             $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
         }
 
