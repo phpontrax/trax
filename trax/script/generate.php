@@ -1,5 +1,5 @@
 #! /usr/local/bin/php
-<?
+<?php
 # $Id$
 #
 # Copyright (c) 2005 John Peterson

@@ -1,5 +1,4 @@
-<?
-
+<?php
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -116,10 +115,19 @@ class Helpers {
 
 }
 
+
+################################################################################################
+## Avialble functions for use in views
+################################################################################################
 function content_tag() {
     $helper = new Helpers();
     $args = func_get_args();
     return call_user_func_array(array($helper, 'content_tag'), $args);
+}
+
+function url_for($options = array()) {
+    $helper = new Helpers();
+    return $helper->url_for($options);
 }
 
 ?>

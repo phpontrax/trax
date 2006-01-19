@@ -1,6 +1,6 @@
-<h1>New <?= $model_object_name ?></h1>
+<h1>New <?php echo $model_object_name ?></h1>
 
-<?= error_messages_for($model_object_name) ?>
-<?= form($model_object_name, array(":action" => "add",'submit_value' => "Create")) ?>
+<?php echo error_messages_for($model_object_name) ?>
+<?php echo form($model_object_name, array(":action" => "add", "submit_value" => "Create")) ?>
 
-<?= link_to("Back", array(":action" => "index")) ?>
+<?php echo link_to("Back", array(":action" => "index")) ?>

@@ -11,6 +11,7 @@
   * @license: GNU General Public License (GPL)
   */
 class InputFilter {
+    
 	static protected $tagsArray = array();	// default = empty array
 	static protected $attrArray = array();	// default = empty array
 

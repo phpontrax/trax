@@ -1,5 +1,5 @@
-<?
-# $Id: inflector.php 55 2005-11-11 22:38:37Z john $
+<?php
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #

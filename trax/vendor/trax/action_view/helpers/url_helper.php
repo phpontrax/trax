@@ -1,5 +1,4 @@
-<?
-
+<?php
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -137,11 +136,6 @@ class UrlHelper extends Helpers {
 function link_to($name, $options = array(), $html_options = array()) {
     $url_helper = new UrlHelper();
     return $url_helper->link_to($name, $options, $html_options);
-}
-
-function url_for($options = array()) {
-    $url_helper = new UrlHelper();
-    return $url_helper->url_for($options);
 }
 
 ?>

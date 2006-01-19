@@ -1,5 +1,4 @@
 <?php
-
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -82,11 +81,16 @@ class Session {
     }
 
     function start() {
+        
+        $session_name = defined("TRAX_SESSION_NAME") ? TRAX_SESSION_NAME : self::TRAX_SESSION_NAME;
+        $session_lifetime = defined("TRAX_SESSION_LIFETIME") ? TRAX_SESSION_LIFETIME : self::TRAX_SESSION_LIFETIME;
+        $session_maxlifetime_minutes = defined("TRAX_SESSION_MAXLIFETIME_MINUTES") ? TRAX_SESSION_MAXLIFETIME_MINUTES : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
+        
         # set the session default for this app
-        ini_set('session.name', TRAX_SESSION_NAME);
-        ini_set('session.cookie_lifetime', TRAX_SESSION_LIFETIME);
+        ini_set('session.name', $session_name);
+        ini_set('session.cookie_lifetime', $session_lifetime);
         ini_set('session.gc_probability', 1);
-        ini_set('session.gc_maxlifetime', TRAX_SESSION_MAXLIFETIME_MINUTES * 60);
+        ini_set('session.gc_maxlifetime', $session_maxlifetime_minutes * 60);
 
         header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
 

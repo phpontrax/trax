@@ -1,30 +1,30 @@
-<h1>Listing <?= $plural_model_name ?></h1>
+<h1>Listing <?php echo $plural_model_name ?></h1>
 
 <table border="0" cellpadding="2" cellspacing="2">
-< ? if(count($<?=$plural_model_name?>)): ? > 
+< ?php if(count($<?php echo $plural_model_name ?>)): ? > 
 	<tr> 
-	    < ? foreach($content_columns as $column): ? >
-	        <th>< ?= $column['human_name'] ? ></th>
-        < ? endforeach; ? >
+	    < ?php foreach($content_columns as $column): ? >
+	        <th>< ?php echo $column['human_name'] ? ></th>
+        < ?php endforeach; ? >
 	</tr>
   
-	< ? foreach($<?=$plural_model_name?> as $<?=$singluar_model_name?>): ? >
+	< ?php foreach($<?php echo $plural_model_name ?> as $<?php echo $singluar_model_name ?>): ? >
 	    <tr>
-		    < ? foreach($<?=$singluar_model_name?>->content_columns as $column): ? >
-    			<td>< ?= $<?=$singluar_model_name?>->send($column['name']) ? ></td>
-		    < ? endforeach; ? >
-		    <td>< ?= link_to('Show', array(":action" => 'show', ":id" => $<?=$singluar_model_name?>)) ? ></td>
-		    <td>< ?= link_to('Edit', array(":action" => 'edit', ":id" => $<?=$singluar_model_name?>)) ? ></td>
-		    <td>< ?= link_to('Delete', array(":action" => 'delete', ":id" => $<?=$singluar_model_name?>), array("confirm" => "Are you sure?")) ? ></td>
+		    < ?php foreach($<?php echo $singluar_model_name ?>->content_columns as $column): ? >
+    			<td>< ?php echo $<?php echo $singluar_model_name ?>->send($column['name']) ? ></td>
+		    < ?php endforeach; ? >
+		    <td>< ?php echo link_to("Show",   array(":action" => "show",   ":id" => $<?php echo $singluar_model_name ?>)) ? ></td>
+		    <td>< ?php echo link_to("Edit",   array(":action" => "edit",   ":id" => $<?php echo $singluar_model_name ?>)) ? ></td>
+		    <td>< ?php echo link_to("Delete", array(":action" => "delete", ":id" => $<?php echo $singluar_model_name ?>), array("confirm" => "Are you sure?")) ? ></td>
 	    </tr>
-	< ? endforeach; ? >
-< ? else: ? >
+	< ?php endforeach; ? >
+< ?php else: ? >
 	<tr>
-		<td>No <?= $plural_model_name ?> found.</td>
+		<td>No <?php echo $plural_model_name ?> found.</td>
 	</tr>
-< ? endif; ? >
+< ?php endif; ? >
 </table>
 
 <br>
 
-< ?= link_to("New post", array(":action" => "add")) ? >
+< ?php echo link_to("New post", array(":action" => "add")) ? >

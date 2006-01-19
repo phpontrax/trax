@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title><?=$error_heading?></title>
+  <title><?php echo $error_heading ?></title>
   <style>
     body { background-color: #fff; color: #333; }
 
@@ -39,38 +39,38 @@
 </head>
 <body>
 
-<h1><?=$error_heading?></h1>
+<h1><?php echo $error_heading ?></h1>
 
-<p><pre><?=$error_message?></pre></p>
+<p><pre><?php echo $error_message ?></pre></p>
 
-<? if($trace): ?>
+<?php if($trace): ?>
 <a href="#" onclick="expandContract('framework_trace')">Show framework trace</a>
-<pre id="framework_trace" style="display:none"><code><?=$trace?></code></pre>
-<? endif; ?>
+<pre id="framework_trace" style="display:none"><code><?php echo $trace ?></code></pre>
+<?php endif; ?>
 
 <p><a href="#" onclick="expandContract('session_dump')">Show $_SESSION dump</a></p>
 <div id="session_dump" style="display:none"><pre class='debug_dump'>
-<?= print_r($_SESSION, true)?>
+<?php echo print_r($_SESSION, true) ?>
 </pre></div>
 
 <p><a href="#" onclick="expandContract('get_dump')">Show $_GET dump</a></p>
 <div id="get_dump" style="display:none"><pre class='debug_dump'>
-<?= print_r($_GET, true)?>
+<?php echo print_r($_GET, true) ?>
 </pre></div>
 
 <p><a href="#" onclick="expandContract('post_dump')">Show $_POST dump</a></p>
 <div id="post_dump" style="display:none"><pre class='debug_dump'>
-<?= print_r($_POST, true)?>
+<?php echo print_r($_POST, true) ?>
 </pre></div>
 
 <p><a href="#" onclick="expandContract('cookie_dump')">Show $_COOKIE dump</a></p>
 <div id="cookie_dump" style="display:none"><pre class='debug_dump'>
-<?= print_r($_COOKIE, true)?>
+<?php echo print_r($_COOKIE, true) ?>
 </pre></div>
 
 <p><a href="#" onclick="expandContract('file_dump')">Show $_FILES dump</a></p>
 <div id="file_dump" style="display:none"><pre class='debug_dump'>
-<?= print_r($_FILES, true)?>
+<?php echo print_r($_FILES, true) ?>
 </pre></div>
 
 <br>

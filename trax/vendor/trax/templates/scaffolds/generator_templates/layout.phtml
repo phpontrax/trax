@@ -2,7 +2,7 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Scaffolding : <?= $controller_name ?></title>
+  <title>Scaffolding : <?php echo $controller_name ?></title>
   <style>
     body { background-color: #fff; color: #333; }
     
@@ -81,13 +81,13 @@
 </head>
 <body>
 
-< ? if(Session::isset_flash("notice")): ? >
-    <p style="color: green">< ?= Session::flash("notice") ? ></p>
-< ? elseif(Session::isset_flash("error")): ? >
-    <p style="color: red">< ?= Session::flash("error") ? ></p>
-< ? endif; ? >
+< ?php if(Session::isset_flash("notice")): ? >
+    <p style="color: green">< ?php echo Session::flash("notice") ? ></p>
+< ?php elseif(Session::isset_flash("error")): ? >
+    <p style="color: red">< ?php echo Session::flash("error") ? ></p>
+< ?php endif; ? >
 
-< ?= $content_for_layout ? >
+< ?php echo $content_for_layout ? >
 
 </body>
 </html>

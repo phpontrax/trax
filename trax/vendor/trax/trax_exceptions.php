@@ -1,4 +1,4 @@
-<?
+<?php
 # $Id: trax_exceptions.php 53 2005-10-29 14:49:53Z john $
 #
 # Copyright (c) 2005 John Peterson

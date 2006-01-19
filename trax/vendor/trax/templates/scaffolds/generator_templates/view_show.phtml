@@ -1,15 +1,15 @@
-< ? if(count($<?=$singluar_model_name?>->content_columns)): ? >
-    < ? foreach($<?=$singluar_model_name?>->content_columns as $column): ? >
+< ?php if(count($<?php echo $singluar_model_name ?>->content_columns)): ? >
+    < ?php foreach($<?php echo $singluar_model_name ?>->content_columns as $column): ? >
         <p>
-            <b>< ?= $column['human_name'] ? >:</b>
-            < ?= $<?=$singluar_model_name?>->send($column['name']) ? >
+            <b>< ?php echo $column['human_name'] ? >:</b>
+            < ?php echo $<?php echo $singluar_model_name ?>->send($column['name']) ? >
         </p>
-    < ? endforeach; ? >
-< ? else: ? >
+    < ?php endforeach; ? >
+< ?php else: ? >
     no table info found.
-< ? endif; ? >
+< ?php endif; ? >
 
 <br>
 
-< ?= link_to("Edit", array(":action" => "edit", ":id" => $<?= $singluar_model_name ?>)) ? > |
-< ?= link_to("Back", array(":action" => "index")) ? >
+< ?php echo link_to("Edit", array(":action" => "edit", ":id" => $<?php echo $singluar_model_name ?>)) ? > |
+< ?php echo link_to("Back", array(":action" => "index")) ? >

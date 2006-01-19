@@ -1,4 +1,4 @@
-<?
+<?php
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -186,7 +186,7 @@ class ActionController {
                 if(is_object($this->controller_object)) {
                     $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_name'] = $this->controller;
-                    $GLOBALS['current_controller_object'] = $this->controller_object;
+                    $GLOBALS['current_controller_object'] =& $this->controller_object;
                 }
 
                 # Which layout should we use?
@@ -197,7 +197,8 @@ class ActionController {
                     $scaffold = $this->controller_object->scaffold;
                     if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
                         include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
-                        $GLOBALS['current_controller_object'] = $this->controller_object = new ScaffoldController($scaffold);
+                        $this->controller_object = new ScaffoldController($scaffold);
+                        $GLOBALS['current_controller_object'] =& $this->controller_object;
                         if($this->action) {
                             $this->view_file = TRAX_LIB_ROOT . "/templates/scaffolds/".$this->action.".phtml";
                         } else {
@@ -349,7 +350,9 @@ class ActionController {
 
     function add_before_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
-            $this->before_filters[] = $filter_function_name;
+            if(!in_array($filter_function_name, $this->before_filters)) {
+                $this->before_filters[] = $filter_function_name;
+            }                        
         } elseif(is_array($filter_function_name)) {
             if(count($this->before_filters) > 0) {
                 $this->before_filters = array_merge($this->before_filters, $filter_function_name);
@@ -371,7 +374,9 @@ class ActionController {
 
     function add_after_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
-            $this->after_filters[] = $filter_function_name;
+            if(!in_array($filter_function_name, $this->after_filters)) {
+                $this->after_filters[] = $filter_function_name;
+            }
         } elseif(is_array($filter_function_name)) {
             if(count($this->after_filters) > 0) {
                 $this->after_filters = array_merge($this->after_filters, $filter_function_name);
@@ -382,22 +387,60 @@ class ActionController {
     }
 
     function add_helper($helper_name) {
-        $this->helpers[] = $helper_name;
+        if(!in_array($helper_name, $this->helpers)) {
+            $this->helpers[] = $helper_name;
+        }
     }
 
-    function render_partial($path) {
+    function render_partial($path, $options = array()) {
         if(strstr($path, "/")) {
             $file = substr(strrchr($path, "/"), 1);
             $path = substr($path, 0, strripos($path, "/"));
-            $path_with_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$path."/_".$file.".".$this->views_file_extention;
+            $file_with_path = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$path."/_".$file.".".$this->views_file_extention;
         } else {
-            $path_with_file = $this->views_path."/_".$path.".".$this->views_file_extention;
+            $file = $path;
+            $file_with_path = $this->views_path."/_".$file.".".$this->views_file_extention;
         }
 
-        if(file_exists($path_with_file)) {
+        if(file_exists($file_with_path)) {
+            
+            if(array_key_exists("spacer_template", $options)) {
+                $spacer_path = $options['spacer_template'];
+                if(strstr($spacer_path, "/")) {
+                    $spacer_file = substr(strrchr($spacer_path, "/"), 1);
+                    $spacer_path = substr($spacer_path, 0, strripos($spacer_path, "/"));
+                    $spacer_file_with_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$spacer_path."/_".$spacer_file.".".$this->views_file_extention;
+                } else {
+                    $spacer_file = $spacer_path;
+                    $spacer_file_with_file = $this->views_path."/_".$spacer_file.".".$this->views_file_extention;
+                }  
+                if(file_exists($spacer_file_with_file)) {
+                    $add_spacer = true;    
+                }
+            }          
+            
             # Pull all the class vars out and turn them from $this->var to $var
             extract(get_object_vars($this->controller_object));
-            include($path_with_file);
+            if(array_key_exists("collection", $options)) {
+                foreach($options['collection'] as $tmp_value) {
+                    ${$file."_counter"}++;
+                    ${$file} = $tmp_value;
+                    unset($tmp_value);
+                    include($file_with_path);    
+                    if($add_spacer && (${$file."_counter"} < count($options['collection']))) {
+                        include($spacer_file_with_file);        
+                    }         
+                }    
+            } else {
+                if(array_key_exists("locals", $options)) {
+                    foreach($options['locals'] as $tmp_key => $tmp_value) {
+                        ${$tmp_key} = $tmp_value;                
+                    }    
+                    unset($tmp_key);
+                    unset($tmp_value);
+                }
+                include($path_with_file);        
+            }           
         }
     }
 

@@ -1,5 +1,5 @@
-<?
-# $Id: router.php 51 2005-10-29 14:40:42Z john $
+<?php
+# $Id$
 #
 # Copyright (c) 2005 John Peterson
 #

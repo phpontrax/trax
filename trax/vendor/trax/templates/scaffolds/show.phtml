@@ -1,13 +1,13 @@
-<? if(count($$model_object_name->content_columns)): ?>
-    <? foreach($$model_object_name->content_columns as $column): ?>
+<?php if(count($$model_object_name->content_columns)): ?>
+    <?php foreach($$model_object_name->content_columns as $column): ?>
         <p>
-            <b><?= $column['human_name'] ?>:</b>
-            <?= $$model_object_name->$column['name'] ?>
+            <b><?php echo $column['human_name'] ?>:</b>&nbsp;
+            <?php echo $$model_object_name->$column['name'] ?>
         </p>
-    <? endforeach; ?>
-<? else: ?>
+    <?php endforeach; ?>
+<?php else: ?>
     no table info found.<br>
-<? endif; ?>
+<?php endif; ?>
 <br>
-<?= link_to("Edit", array(":action" => "edit", ":id" => $$model_object_name)) ?> |
-<?= link_to("Back", array(":action" => "index")) ?>
+<?php echo link_to("Edit", array(":action" => "edit", ":id" => $$model_object_name)) ?> |
+<?php echo link_to("Back", array(":action" => "index")) ?>

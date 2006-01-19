@@ -1,4 +1,4 @@
-<?
+<?php
 # $Id$
 #
 # Copyright (c) 2005 John Peterson
@@ -76,7 +76,7 @@ class TraxGenerator {
                                 $views[] = strtolower($_SERVER["argv"][$i]);
                             }
                         }
-                        $this->generate_controller($command_name,$views);
+                        $this->generate_controller($command_name, $views);
                     }
                     break;
                 case "model":
@@ -96,7 +96,7 @@ class TraxGenerator {
                                 $views[] = strtolower($_SERVER["argv"][$i]);
                             }
                         }                        
-                        $this->generate_scaffold($command_name,$controller_name,$views);
+                        $this->generate_scaffold($command_name, $controller_name, $views);
                     }
                     break;                    
             }
@@ -414,7 +414,7 @@ class TraxGenerator {
     }
     
     function fix_php_brackets($string) {
-        return str_replace("? >", "?>", str_replace("< ?", "<?", $string));            
+        return str_replace("? >", "?>", str_replace("< ?php", "<?php", $string));            
     }
 
     function controller_help() {

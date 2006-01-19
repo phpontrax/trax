@@ -1,7 +1,7 @@
-<h1>Editing <?= $model_object_name ?></h1>
+<h1>Editing <?php echo $model_object_name ?></h1>
 
-<?= error_messages_for($model_object_name) ?>
-<?= form($model_object_name, array(":action" => "edit",'submit_value' => "Update")) ?>
+<?php echo error_messages_for($model_object_name) ?>
+<?php echo form($model_object_name, array(":action" => "edit", "submit_value" => "Update")) ?>
 
-<?= link_to("Show", array(":action" => "show", ":id" => $$model_object_name->id)) ?> |
-<?= link_to("Back", array(":action" => "index")) ?>
+<?php echo link_to("Show", array(":action" => "show", ":id" => $$model_object_name->id)) ?> |
+<?php echo link_to("Back", array(":action" => "index")) ?>
