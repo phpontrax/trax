@@ -81,7 +81,12 @@ class Helpers {
                     $url[] = $controller; 
                 }
             } else {
-                $url[] = $this->controller_path;
+                $controller = $this->controller_path;
+                if(substr($controller, 0, 1) == "/") {
+                    # remove the beginning slash
+                    $controller = substr($controller, 1);        
+                }
+                $url[] = $controller;
             }
             
             if(count($url)) {
