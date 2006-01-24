@@ -35,7 +35,9 @@ class TraxGenerator {
         $helper_template_file,
         $view_template_file,
         $model_template_file,
-        $scaffold_template_path;
+        $scaffold_template_path,
+        $layout_path,
+        $layout_filename;
     public
         $view_file_extention = TRAX_VIEWS_EXTENTION;
 
@@ -110,14 +112,15 @@ class TraxGenerator {
         if(stristr($name, "/")) {
             $this->extra_path = substr($name,0,strrpos($name, "/"));
             $name = Inflector::underscore(substr($name,strrpos($name, "/")+1));
-            $this->view_path .= "/$this->extra_path/$name";
-            $this->layouts_path .= "/$this->extra_path/$name";
+            $this->view_path .= "/$this->extra_path/$name";           
+            $this->layouts_path .= "/$this->extra_path";
             $this->controller_path .= "/$this->extra_path";
             $this->helper_path .= "/$this->extra_path";
         } else {
             $name = Inflector::underscore($name);
             $this->view_path .= "/$name";
         }
+        $this->layout_filename = $name;
 
         $this->controller_class = Inflector::camelize($name);
 
@@ -316,7 +319,10 @@ class TraxGenerator {
         } 
         
         # Generate the layout for the scaffolding
-        $layout_file = "$this->layouts_path/$controller_name.".$this->view_file_extention;
+        $layout_file = $this->layouts_path."/".$this->layout_filename.".".$this->view_file_extention;
+        if(!file_exists($this->layouts_path)) {
+            mkdir($this->layouts_path);        
+        }
         ob_start();    
         include("$this->scaffold_template_path/layout.phtml");
         $layout_contents = $this->fix_php_brackets(ob_get_contents());
