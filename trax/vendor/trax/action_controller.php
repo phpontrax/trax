@@ -186,6 +186,7 @@ class ActionController {
                 if(is_object($this->controller_object)) {
                     $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_name'] = $this->controller;
+                    $GLOBALS['current_action_name'] = $this->action;
                     $GLOBALS['current_controller_object'] =& $this->controller_object;
                 }
 
@@ -339,8 +340,8 @@ class ActionController {
     }
 
     function execute_before_filters() {
-        if(count($this->before_filters) > 0) {
-            foreach($this->before_filters as $filter_function) {
+        if(count($this->controller_object->before_filters) > 0) { 
+            foreach($this->controller_object->before_filters as $filter_function) {
                 if(method_exists($this->controller_object, $filter_function)) {
                     $this->controller_object->$filter_function();
                 }
@@ -363,8 +364,8 @@ class ActionController {
     }
 
     function execute_after_filters() {
-        if(count($this->after_filters) > 0) {
-            foreach($this->after_filters as $filter_function) {
+        if(count($this->controller_object->after_filters) > 0) {
+            foreach($this->controller_object->after_filters as $filter_function) {
                 if(method_exists($this->controller_object, $filter_function)) {
                     $this->controller_object->$filter_function();
                 }
@@ -374,21 +375,21 @@ class ActionController {
 
     function add_after_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
-            if(!in_array($filter_function_name, $this->after_filters)) {
-                $this->after_filters[] = $filter_function_name;
+            if(!in_array($filter_function_name, $this->controller_object->after_filters)) {
+                $this->controller_object->after_filters[] = $filter_function_name;
             }
         } elseif(is_array($filter_function_name)) {
-            if(count($this->after_filters) > 0) {
-                $this->after_filters = array_merge($this->after_filters, $filter_function_name);
+            if(count($this->controller_object->after_filters) > 0) {
+                $this->controller_object->after_filters = array_merge($this->controller_object->after_filters, $filter_function_name);
             } else {
-                $this->after_filters = $filter_function_name;
+                $this->controller_object->after_filters = $filter_function_name;
             }
         }
     }
 
     function add_helper($helper_name) {
-        if(!in_array($helper_name, $this->helpers)) {
-            $this->helpers[] = $helper_name;
+        if(!in_array($helper_name, $this->controller_object->helpers)) {
+            $this->controller_object->helpers[] = $helper_name;
         }
     }
 

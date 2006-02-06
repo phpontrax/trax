@@ -224,9 +224,10 @@ class DateHelper extends Helpers {
         $defaults = array('discard_type' => true);
         $options  = array_merge($defaults, $options);
         $options_with_prefix = array();
-        foreach($options as $option_key => $option_value) {
-            $options_with_prefix[$i++] = array_merge($options, array('prefix' => "{$this->object_name}[{$this->attribute_name}({$option_value}i)]"));
-        }
+        for($i=1; $i < 4 ; $i++) {
+            $options_with_prefix[$i] = array_merge($options, array('prefix' => "{$this->object_name}[{$this->attribute_name}({$i}i)]"));
+        }        
+        
         if($options['include_blank']) {
             $value = $this->value();
             $date = $value ? $value : null;
@@ -251,8 +252,7 @@ class DateHelper extends Helpers {
 
         foreach($options['order'] as $param) {
             if(!$discard[$param]) {
-                $args = array($date, );
-                $date_select[] = call_user_func(array($this, "select_$param"),  $date, $options_with_prefix[$position[$param]]);
+                $date_select .= call_user_func(array($this, "select_$param"),  $date, $options_with_prefix[$position[$param]]);
             }
         }
 

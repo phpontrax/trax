@@ -69,7 +69,8 @@ class Helpers {
         $url_base = null;
         $url = array();
         if(is_string($options)) {
-            $url[] = $options;
+            //$url[] = $options;
+            return $options;
         } else {
             $url_base = $_SERVER['HTTP_HOST'];
             if(substr($url_base, -1) == "/") {

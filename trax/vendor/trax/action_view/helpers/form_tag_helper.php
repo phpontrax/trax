@@ -42,9 +42,9 @@ class FormTagHelper extends Helpers {
     }
 
     function form_tag($url_for_options = array(), $options = array(), $parameters_for_url = array()) {
-        $html_options = array_merge($options, array("method" => "post"));
+        $html_options = array_merge(array("method" => "post"), $options);
 
-        if(isset($html_options['multipart'])) {
+        if($html_options['multipart']) {
             $html_options['enctype'] = "multipart/form-data";
             unset($html_options['multipart']);
         }
@@ -90,13 +90,13 @@ class FormTagHelper extends Helpers {
 
     function check_box_tag($name, $value = "1", $checked = false, $options = array()) {
         $html_options = array_merge(array("type" => "checkbox", "name" => $name, "id" => $name, "value" => $value), $this->convert_options($options));
-        if (isset($checked)) $html_options["checked"] = "checked";
+        if ($checked) $html_options["checked"] = "checked";
         return $this->tag("input", $html_options);
     }
 
     function radio_button_tag($name, $value, $checked = false, $options = array()) {
         $html_options = array_merge(array("type" => "radio", "name" => $name, "id" => $name, "value" => $value), $this->convert_options($options));
-        if (isset($checked)) $html_options["checked"] = "checked";
+        if ($checked) $html_options["checked"] = "checked";
         return $this->tag("input", $html_options);
     }
 

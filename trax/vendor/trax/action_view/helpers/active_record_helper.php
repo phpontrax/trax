@@ -298,7 +298,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     function error_wrapping($html_tag, $has_error) {
-        return ($has_error ? '<div class="fieldWithErrors">' . $html_tag . '</div>' : $html_tag);
+        return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
     }
 
     function error_message() {

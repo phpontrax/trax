@@ -538,7 +538,7 @@ class ActiveRecord {
         }
 
         if(is_array($id)) {
-            return /*$this->*/find_all($conditions, $orderings, $limit, $joins);
+            return $this->find_all($conditions, $orderings, $limit, $joins);
         } else {
             return $this->find_first($conditions, $orderings, $limit, $joins);
         }
@@ -854,7 +854,7 @@ class ActiveRecord {
     # from the passed array $attributes.
     function update_attributes($attributes) {
         foreach($attributes as $field => $value) {
-            # datetime parts check
+            # datetime / date parts check
             if(preg_match('/^\w+\(.*i\)$/i', $field)) {
                 $datetime_key = substr($field, 0, strpos($field, "("));
                 if($datetime_key != $old_datetime_key) {
@@ -909,15 +909,17 @@ class ActiveRecord {
         foreach ($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
             # If the value isn't a function or null quote it.
-            #if(!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
-            #    $value = str_replace("\\\"","\"",$value);
-            #    $value = str_replace("\'","'",$value);
-            #    $value = str_replace("\\\\","\\",$value);
-            #    $return[$key] = "'" . addslashes($value) . "'";
-            #} else {
-            #    $return[$key] = $value;
-            #}
-            $return[$key] = self::$db->quoteSmart($value);
+            if(!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
+                $value = str_replace("\\\"","\"",$value);
+                $value = str_replace("\'","'",$value);
+                $value = str_replace("\\\\","\\",$value);
+                $return[$key] = "'" . addslashes($value) . "'";
+            } else {
+                $return[$key] = $value;
+            }
+            # quoteSmart is quoting the primary key need to fix this
+            # for now just use the above to quote fields
+            # $return[$key] = self::$db->quoteSmart($value);
         }
         return $return;
     }

@@ -92,7 +92,7 @@ class FormHelper extends Helpers {
             $options["value"] = $options["value"] ? $options["value"] : $this->value();
         }
         $options = $this->add_default_name_and_id($options);
-        return $this->tag("input", $options);
+        return $this->error_wrapping($this->tag("input", $options),$this->object()->errors[$this->attribute_name]);
     }
 
     function to_radio_button_tag($tag_value, $options = array()) {
@@ -107,13 +107,13 @@ class FormHelper extends Helpers {
             "{$this->object_name}_{$this->auto_index}_{$this->attribute_name}_{$pretty_tag_value}" :
             "{$this->object_name}_{$this->attribute_name}_{$pretty_tag_value}";
         $options = $this->add_default_name_and_id($options);
-        return $this->tag("input", $options);
+        return $this->error_wrapping($this->tag("input", $options),$this->object()->errors[$this->attribute_name]);
     }
 
     function to_text_area_tag($options = array()) {
         $options = array_merge($this->default_text_area_options, $options);
         $options = $this->add_default_name_and_id($options);
-        return $this->content_tag("textarea", htmlspecialchars($this->value()), $options);
+        return $this->error_wrapping($this->content_tag("textarea", htmlspecialchars($this->value()), $options),$this->object()->errors[$this->attribute_name]);
     }
 
     function to_check_box_tag($options = array(), $checked_value = "1", $unchecked_value = "0") {
@@ -143,16 +143,16 @@ class FormHelper extends Helpers {
         }
 
         $options = $this->add_default_name_and_id($options);
-        return $this->tag("input", $options) . $this->tag("input", array("name" => $options["name"], "type" => "hidden", "value" => $unchecked_value));
+        return $this->error_wrapping($this->tag("input", $options) . $this->tag("input", array("name" => $options["name"], "type" => "hidden", "value" => $unchecked_value)),$this->object()->errors[$this->attribute_name]);
     }
 
     function to_boolean_select_tag($options = array()) {
         $options = $this->add_default_name_and_id($options);
-        $tag_text = "<select";
+        $tag_text = "<select ";
         $tag_text .= $this->tag_options($options);
         $tag_text .= ">\n";
         $tag_text .= "<option value=\"0\"";
-        if(!$this->value() == false) {
+        if($this->value() == false) {
             $tag_text .= " selected";
         }
         $tag_text .= ">False</option>\n";
@@ -162,8 +162,12 @@ class FormHelper extends Helpers {
         }
         $tag_text .= ">True</option>\n";
         $tag_text .= "</select>\n";
-        return $tag_text;
+        return $this->error_wrapping($tag_text,$this->object()->errors[$this->attribute_name]);;
     }
+    
+    function error_wrapping($html_tag, $has_error) {
+        return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
+    }    
 
 }
 
