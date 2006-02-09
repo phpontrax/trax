@@ -38,7 +38,10 @@ class FormHelper extends Helpers {
         if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
             $object = $this->object();
             if(is_object($object) && $this->attribute_name) {
-                $value = $object->send($this->attribute_name);
+                $attribute = $this->attribute_name;
+                if(!$value = $object->$attribute) {
+                    $value = $object->send($attribute);
+                }
             }
         }
         return $value;
