@@ -111,6 +111,12 @@ class FormHelper extends Helpers {
     }
 
     function to_text_area_tag($options = array()) {
+        if ($options["size"]) {
+            $size = explode('x', $options["size"]);
+            $options["cols"] = reset($size);
+            $options["rows"] = end($size);
+            unset($options["size"]);
+        }
         $options = array_merge($this->default_text_area_options, $options);
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping($this->content_tag("textarea", htmlspecialchars($this->value()), $options),$this->object()->errors[$this->attribute_name]);

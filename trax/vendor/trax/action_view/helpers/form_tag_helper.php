@@ -80,8 +80,9 @@ class FormTagHelper extends Helpers {
 
     function text_area_tag($name, $content = null, $options = array()) {
         if ($options["size"]) {
-            $options["cols"] = reset(explode('x', $options["size"]));
-            $options["rows"] = end(explode('x', $options["size"]));
+            $size = explode('x', $options["size"]);
+            $options["cols"] = reset($size);
+            $options["rows"] = end($size);
             unset($options["size"]);
         }
 
