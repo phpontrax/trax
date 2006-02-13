@@ -82,7 +82,6 @@ class ActiveRecord {
     # Override get() if they do $model->some_association->field_name dynamically load the requested
     # contents from the database.
     function __get($key) {
-
         if(is_string($this->has_many)) {
             if(preg_match("/$key/", $this->has_many)) {
                 $this->$key = $this->find_all_has_many($key);
@@ -91,7 +90,8 @@ class ActiveRecord {
             if(array_key_exists($key, $this->has_many)) {
                 $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
             }
-        } elseif(is_string($this->has_one)) {
+        }
+        if(is_string($this->has_one)) {
             if(preg_match("/$key/", $this->has_one)) {
                 $this->$key = $this->find_one_has_one($key);
             }
@@ -99,7 +99,8 @@ class ActiveRecord {
             if(array_key_exists($key, $this->has_one)) {
                 $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
             }
-        } elseif(is_string($this->belongs_to)) {
+        }
+        if(is_string($this->belongs_to)) { 
             if(preg_match("/$key/", $this->belongs_to)) {
                 $this->$key = $this->find_one_belongs_to($key);
             }
@@ -107,7 +108,8 @@ class ActiveRecord {
             if(array_key_exists($key, $this->belongs_to)) {
                 $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
             }
-        } elseif(is_string($this->has_and_belongs_to_many)) {
+        }
+        if(is_string($this->has_and_belongs_to_many)) {
             if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
                 $this->$key = $this->find_all_habtm($key);
             }
@@ -148,7 +150,8 @@ class ActiveRecord {
                 if(array_key_exists($method_name, $this->has_many)) {
                     $result = $this->find_all_has_many($method_name, $parameters);
                 }
-            } elseif(is_string($this->has_one)) {
+            } 
+            if(is_string($this->has_one)) {
                 if(preg_match("/$method_name/", $this->has_one)) {
                     $result = $this->find_one_has_one($method_name, $parameters);
                 }
@@ -156,7 +159,8 @@ class ActiveRecord {
                 if(array_key_exists($method_name, $this->has_one)) {
                     $result = $this->find_one_has_one($method_name, $parameters);
                 }
-            } elseif(is_string($this->belongs_to)) {
+            } 
+            if(is_string($this->belongs_to)) {
                 if(preg_match("/$method_name/", $this->belongs_to)) {
                     $result = $this->find_one_belongs_to($method_name, $parameters);
                 }
@@ -164,7 +168,8 @@ class ActiveRecord {
                 if(array_key_exists($method_name, $this->belongs_to)) {
                     $result = $this->find_one_belongs_to($method_name, $parameters);
                 }
-            } elseif(is_string($this->has_and_belongs_to_many)) {
+            } 
+            if(is_string($this->has_and_belongs_to_many)) {
                 if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
                     $result = $this->find_all_habtm($method_name, $parameters);
                 }
@@ -174,7 +179,7 @@ class ActiveRecord {
                 }
             }
             # check for the [count,sum,avg,etc...]_all magic functions
-            elseif(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
+            if(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
                 $result = $this->aggregrate_all($method_name, $parameters);
             }
@@ -213,9 +218,9 @@ class ActiveRecord {
     # 5th movie on, you could set $this->movies_limit = "10, 5"
     #
     # Parameters: $this_table_name:  The name of the database table that has the
-    #                                one row you are interested in.  E.g. `genres`
+    #                                one row you are interested in.  E.g. genres
     #             $other_table_name: The name of the database table that has the
-    #                                many rows you are interested in.  E.g. `movies`
+    #                                many rows you are interested in.  E.g. movies
     # Returns: An array of ActiveRecord objects. (e.g. Movie objects)
     function find_all_habtm($other_table_name, $parameters = null) {
         $other_class_name = Inflector::classify($other_table_name);
@@ -227,10 +232,10 @@ class ActiveRecord {
         $this_foreign_key = Inflector::singularize($this->table_name)."_id";
         $other_foreign_key = Inflector::singularize($other_table_name)."_id";
         # Set up the SQL segments
-        $conditions = "`{$join_table}`.`{$this_foreign_key}`={$this->id}";
+        $conditions = "{$join_table}.{$this_foreign_key}={$this->id}";
         $orderings = null;
         $limit = null;
-        $joins = "LEFT JOIN `{$join_table}` ON `{$other_table_name}`.id = `{$other_foreign_key}`";
+        $joins = "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
 
         # Use any passed-in parameters
         if (!is_null($parameters)) {
@@ -279,7 +284,7 @@ class ActiveRecord {
             $foreign_key = Inflector::singularize($this->table_name)."_id";
 
         $other_class_name = Inflector::classify($other_table_name);
-        $conditions = "`{$foreign_key}`=$this->id";
+        $conditions = "{$foreign_key}=$this->id";
 
         # Use any passed-in parameters
         if (!is_null($parameters)) {
@@ -333,7 +338,7 @@ class ActiveRecord {
         else
             $foreign_key = Inflector::singularize($this->table_name)."_id";
 
-        $conditions = "`$foreign_key`='{$this->id}'";
+        $conditions = "$foreign_key='{$this->id}'";
         # Instantiate an object to access find_all
         $results = new $other_class_name();
         # Get the list of other_class_name objects
@@ -380,7 +385,7 @@ class ActiveRecord {
     function aggregrate_all($aggregrate_type, $parameters = null) {
         $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
-        $sql = "SELECT $aggregrate_type($field) AS agg_result FROM `$this->table_name` ";
+        $sql = "SELECT $aggregrate_type($field) AS agg_result FROM $this->table_name ";
 
         # Use any passed-in parameters
         if (!is_null($parameters)) {
@@ -388,7 +393,7 @@ class ActiveRecord {
             $joins = $parameters[2];
         }
 
-        if(!empty($joins)) $sql .= ",`$joins` ";
+        if(!empty($joins)) $sql .= ",$joins ";
         if(!empty($conditions)) $sql .= "WHERE $conditions ";
 
         //echo "sql:$sql<br>";
@@ -417,12 +422,24 @@ class ActiveRecord {
         }
         return null;
     }
+    
+    # checks if a column exists or not in the table
+    function column_attribute_exists($attribute) {
+        if(is_array($this->content_columns)) {
+            foreach($this->content_columns as $column) {
+                if($column['name'] == $attribute) {
+                    return true;
+                }
+            }
+        } 
+        return false;     
+    }
 
     # Returns PEAR result set of one record with only the passed in column in the result set.
     function send($column) {
-        if($column != "") {
+        if($this->column_attribute_exists($column)) {
             # Run the query to grab a specific columns value.
-            $result = self::$db->getOne("SELECT `$column` FROM `$this->table_name` WHERE id='$this->id'");
+            $result = self::$db->getOne("SELECT $column FROM $this->table_name WHERE id='$this->id'");
             if($this->is_error($result)) {
                 $this->raise($result->getMessage());
             }
@@ -479,7 +496,7 @@ class ActiveRecord {
         if(stristr($conditions, "SELECT")) {
             $sql = $conditions;
         } else {
-            $sql  = "SELECT * FROM `".$this->table_name."` ";
+            $sql  = "SELECT * FROM ".$this->table_name." ";
             if(!is_null($joins)) {
                 if(substr($joins,0,4) != "LEFT") $sql .= ",";
                 $sql .= " $joins ";
@@ -645,7 +662,7 @@ class ActiveRecord {
     # Example:
     #   $model->update_all("category = 'cooldude', approved = 1", "author = 'John'");
     function update_all($updates, $conditions = null) {
-        $sql = "UPDATE `$this->table_name` SET $updates WHERE $conditions";
+        $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
         $result = $this->query($sql);
         if ($this->is_error($result)) {
             $this->raise($result->getMessage());
@@ -694,7 +711,7 @@ class ActiveRecord {
         $attributes = $this->quoted_attributes();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
-        $sql = "INSERT INTO `$this->table_name` ($fields) VALUES ($values)";
+        $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
         //echo "add_record: SQL: $sql<br>";
 
         $result = $this->query($sql);
@@ -714,7 +731,7 @@ class ActiveRecord {
     function update_record() {
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
-        $sql = "UPDATE `$this->table_name` SET $updates WHERE $conditions";
+        $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
         //echo "update_record: SQL: $sql<br>";
         $result = $this->query($sql);
         if($this->is_error($result)) {
@@ -758,7 +775,7 @@ class ActiveRecord {
         }
 
         # Delete the record(s)
-        if($this->is_error($rs = $this->query("DELETE FROM `$this->table_name` WHERE $conditions"))) {
+        if($this->is_error($rs = $this->query("DELETE FROM $this->table_name WHERE $conditions"))) {
             $this->raise($rs->getMessage());
         }
 
@@ -917,9 +934,7 @@ class ActiveRecord {
             } else {
                 $return[$key] = $value;
             }
-            # quoteSmart is quoting the primary key need to fix this
-            # for now just use the above to quote fields
-            # $return[$key] = self::$db->quoteSmart($value);
+            //$return[$key] = self::$db->quoteSmart($value);
         }
         return $return;
     }
@@ -936,8 +951,12 @@ class ActiveRecord {
             $conditions = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
-                if(in_array($key,$this->primary_keys)) {
-                    $conditions[] = "$key = $value";
+                if(in_array($key, $this->primary_keys)) {
+                    if(!is_numeric($value) && !strstr($value, "'")) {
+                        $conditions[] = "$key = '$value'";
+                    } else {
+                        $conditions[] = "$key = $value";    
+                    }
                 }
             }
             $conditions = implode(" AND ", $conditions);

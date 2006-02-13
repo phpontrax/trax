@@ -25,16 +25,16 @@
 class FormTagHelper extends Helpers {
 
 
-    private function convert_options($options) {
+    private function convert_options($options = array()) {
         $arr = array('disabled', 'readonly', 'multiple');
         foreach($arr as $a) {
-            $this->boolean_attribute($options, $a);
+            $this->boolean_attribute(&$options, $a);
         }
         return $options;
     }
 
-    private function boolean_attribute($options, $attribute) {
-        if(isset($options[$attribute])) {
+    private function boolean_attribute(&$options, $attribute) {
+        if($options[$attribute]) {
             $options[$attribute] = $attribute;
         } else {
             unset($options[$attribute]);
@@ -79,7 +79,7 @@ class FormTagHelper extends Helpers {
     }
 
     function text_area_tag($name, $content = null, $options = array()) {
-        if (isset($options["size"])) {
+        if ($options["size"]) {
             $options["cols"] = reset(explode('x', $options["size"]));
             $options["rows"] = end(explode('x', $options["size"]));
             unset($options["size"]);

@@ -52,6 +52,7 @@ class Inflector {
                 '/people$/' => 'person',
                 '/men$/' => 'man',
                 '/(.+)status$/' => '\1status',
+                '/(.+)statuses$/' => '\1status',
                 '/children$/' => 'child',
                 '/news$/' => 'news',
                 '/s$/' => ''

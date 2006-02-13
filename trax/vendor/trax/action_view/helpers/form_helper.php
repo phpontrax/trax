@@ -38,10 +38,7 @@ class FormHelper extends Helpers {
         if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
             $object = $this->object();
             if(is_object($object) && $this->attribute_name) {
-                $attribute = $this->attribute_name;
-                if(!$value = $object->$attribute) {
-                    $value = $object->send($attribute);
-                }
+                $value = $object->send($this->attribute_name);
             }
         }
         return $value;
@@ -114,13 +111,8 @@ class FormHelper extends Helpers {
     }
 
     function to_text_area_tag($options = array()) {
-        if (isset($options["size"])) {
-            $options["cols"] = reset(explode('x', $options["size"]));
-            $options["rows"] = end(explode('x', $options["size"]));
-            unset($options["size"]);
-        }          
         $options = array_merge($this->default_text_area_options, $options);
-        $options = $this->add_default_name_and_id($options);      
+        $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping($this->content_tag("textarea", htmlspecialchars($this->value()), $options),$this->object()->errors[$this->attribute_name]);
     }
 
