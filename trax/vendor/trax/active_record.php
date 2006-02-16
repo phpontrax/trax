@@ -34,6 +34,7 @@ class ActiveRecord {
     public $database_name = null; # if you want to override database name set this in your model
     public $fetch_mode = DB_FETCHMODE_ASSOC;
     public $force_reconnect = false; # should we force a connection everytime
+    public $index_on = "id"; # find_all returns an array of objects each object index is off of this field
 
     # Table associations
     protected $has_many = null;
@@ -41,6 +42,8 @@ class ActiveRecord {
     protected $has_and_belongs_to_many = null;
     protected $belongs_to = null;
     protected $habtm_attributes = null;
+    protected $save_associations = array();
+    public $auto_save_associations = true; # where or not to auto save defined associations if set
 
     protected $new_record = true;  # whether or not to create a new record or just update
     protected $auto_update_timestamps = array("updated_at","updated_on");
@@ -59,7 +62,7 @@ class ActiveRecord {
     static public $use_transactions = false; # this will issue a rollback command if any sql fails
 
     # Constructor sets up need parameters for AR to function properly
-    function __construct($attributes = null) {
+    function __construct($attributes = null) { 
         # Open the database connection
         $this->establish_connection();
 
@@ -82,53 +85,54 @@ class ActiveRecord {
     # Override get() if they do $model->some_association->field_name dynamically load the requested
     # contents from the database.
     function __get($key) {
-        if(is_string($this->has_many)) {
-            if(preg_match("/$key/", $this->has_many)) {
-                $this->$key = $this->find_all_has_many($key);
-            }
-        } elseif(is_array($this->has_many)) {
-            if(array_key_exists($key, $this->has_many)) {
-                $this->$key = $this->find_all_has_many($key, $this->has_many[$key]);
-            }
+        $association_type = $this->get_association_type($key);
+        switch($association_type) {
+            case "has_many":
+                $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
+                $this->$key = $this->find_all_has_many($key, $parameters);
+                break;
+            case "has_one":
+                $parameters = is_array($this->has_one) ? $this->has_one[$key] : null;
+                $this->$key = $this->find_one_has_one($key, $parameters);
+                break;
+            case "belongs_to":
+                $parameters = is_array($this->belongs_to) ? $this->belongs_to[$key] : null;
+                $this->$key = $this->find_one_belongs_to($key, $parameters);
+                break;
+            case "has_and_belongs_to_many":  
+                $parameters = is_array($this->has_and_belongs_to_many) ? $this->has_and_belongs_to_many[$key] : null;
+                $this->$key = $this->find_all_habtm($key, $parameters); 
+                break;            
         }
-        if(is_string($this->has_one)) {
-            if(preg_match("/$key/", $this->has_one)) {
-                $this->$key = $this->find_one_has_one($key);
-            }
-        } elseif(is_array($this->has_one)) {
-            if(array_key_exists($key, $this->has_one)) {
-                $this->$key = $this->find_one_has_one($key, $this->has_one[$key]);
-            }
-        }
-        if(is_string($this->belongs_to)) { 
-            if(preg_match("/$key/", $this->belongs_to)) {
-                $this->$key = $this->find_one_belongs_to($key);
-            }
-        } elseif(is_array($this->belongs_to)) {
-            if(array_key_exists($key, $this->belongs_to)) {
-                $this->$key = $this->find_one_belongs_to($key, $this->belongs_to[$key]);
-            }
-        }
-        if(is_string($this->has_and_belongs_to_many)) {
-            if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
-                $this->$key = $this->find_all_habtm($key);
-            }
-        } elseif(is_array($this->has_and_belongs_to_many)) {
-            if(array_key_exists($key, $this->has_and_belongs_to_many)) {
-                $this->$key = $this->find_all_habtm($key);
-            }
-        }
-
         //echo "<pre>id: $this->id<br>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
     }
 
     # Override set() if they set certain class variables do some action
     function __set($key, $value) {
-        //echo "setting: $key = $value<br>";
+        
+        if(is_object($value) or is_array($value)) {
+            echo "setting: $key = $value - count(".count($value).")<br>";
+        }
         if($key == "table_name") {
             $this->set_content_columns($value);
-        }
+            # this elseif checks if first its an object if its parent is ActiveRecord
+        } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
+            if($association_type = $this->get_association_type($key)) {
+                $this->save_associations[$association_type][] = $value;
+                if($association_type == "belongs_to") {
+                    $foreign_key = Inflector::singularize($value->table_name)."_id";
+                    $this->$foreign_key = $value->id; 
+                }
+            }
+            # echo "fk:".$this->$foreign_key;
+            # this elseif checks if its an array of objects and if its parent is ActiveRecord                
+        } elseif(is_array($value) && $this->auto_save_associations) {
+            if($association_type = $this->get_association_type($key)) {
+                $this->save_associations[$association_type][] = $value;
+            }
+        }         
+        
         $this->$key = $value;
     }
 
@@ -142,42 +146,22 @@ class ActiveRecord {
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
-            if(is_string($this->has_many)) {
-                if(preg_match("/$method_name/", $this->has_many)) {
+            $association_type = $this->get_association_type($method_name);
+            switch($association_type) {
+                case "has_many":
                     $result = $this->find_all_has_many($method_name, $parameters);
-                }
-            } elseif(is_array($this->has_many)) {
-                if(array_key_exists($method_name, $this->has_many)) {
-                    $result = $this->find_all_has_many($method_name, $parameters);
-                }
-            } 
-            if(is_string($this->has_one)) {
-                if(preg_match("/$method_name/", $this->has_one)) {
+                    break;
+                case "has_one":
                     $result = $this->find_one_has_one($method_name, $parameters);
-                }
-            } elseif(is_array($this->has_one)) {
-                if(array_key_exists($method_name, $this->has_one)) {
-                    $result = $this->find_one_has_one($method_name, $parameters);
-                }
-            } 
-            if(is_string($this->belongs_to)) {
-                if(preg_match("/$method_name/", $this->belongs_to)) {
+                    break;
+                case "belongs_to":
                     $result = $this->find_one_belongs_to($method_name, $parameters);
-                }
-            } elseif(is_array($this->belongs_to)) {
-                if(array_key_exists($method_name, $this->belongs_to)) {
-                    $result = $this->find_one_belongs_to($method_name, $parameters);
-                }
-            } 
-            if(is_string($this->has_and_belongs_to_many)) {
-                if(preg_match("/$method_name/", $this->has_and_belongs_to_many)) {
-                    $result = $this->find_all_habtm($method_name, $parameters);
-                }
-            } elseif(is_array($this->has_and_belongs_to_many)) {
-                if(array_key_exists($method_name, $this->has_and_belongs_to_many)) {
-                    $result = $this->find_all_habtm($method_name, $parameters);
-                }
+                    break;
+                case "has_and_belongs_to_many":  
+                    $result = $this->find_all_habtm($method_name, $parameters); 
+                    break;            
             }
+
             # check for the [count,sum,avg,etc...]_all magic functions
             if(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
                 //echo "calling method: $method_name<br>";
@@ -203,7 +187,7 @@ class ActiveRecord {
     #
     # Parameters: $first_table, $second_table: the names of two database tables,
     #   e.g. "movies" and "genres"
-    function get_join_table_name($first_table, $second_table) {
+    private function get_join_table_name($first_table, $second_table) {
         $tables = array();
         $tables["one"] = $first_table;
         $tables["many"] = $second_table;
@@ -222,7 +206,7 @@ class ActiveRecord {
     #             $other_table_name: The name of the database table that has the
     #                                many rows you are interested in.  E.g. movies
     # Returns: An array of ActiveRecord objects. (e.g. Movie objects)
-    function find_all_habtm($other_table_name, $parameters = null) {
+    private function find_all_habtm($other_table_name, $parameters = null) {
         $other_class_name = Inflector::classify($other_table_name);
         # Instantiate an object to access find_all
         $results = new $other_class_name();
@@ -274,7 +258,7 @@ class ActiveRecord {
     # Parameters: $other_table_name: The name of the other table that contains
     #                                many rows relating to this object's id.
     # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
-    function find_all_has_many($other_table_name, $parameters = null) {
+    private function find_all_has_many($other_table_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
@@ -328,7 +312,7 @@ class ActiveRecord {
     # Parameters: $other_table_name: The name of the other table that contains
     #                                many rows relating to this object's id.
     # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
-    function find_one_has_one($other_object_name, $parameters = null) {
+    private function find_one_has_one($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
@@ -357,7 +341,7 @@ class ActiveRecord {
     #                                 E.g. If the Contact class belongs_to the
     #                                 Customer class, then $other_object_name
     #                                 will be "customer".
-    function find_one_belongs_to($other_object_name, $parameters = null) {
+    private function find_one_belongs_to($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
@@ -382,7 +366,7 @@ class ActiveRecord {
 
     # Used to run all the the *_all() aggregrate functions such as count_all() sum_all()
     # Return the result of the aggregration or 0.
-    function aggregrate_all($aggregrate_type, $parameters = null) {
+    private function aggregrate_all($aggregrate_type, $parameters = null) {
         $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
         $sql = "SELECT $aggregrate_type($field) AS agg_result FROM $this->table_name ";
@@ -477,6 +461,48 @@ class ActiveRecord {
         return $rs;
     }
 
+    # *Magical* function that is dynamically built according to you.
+    # Works like find_all() or find().  
+    # Example:
+    #   $im_an_object = $model->find_by_fname("John");
+    #   $im_an_array_of_objects = $model->find_all_by_fname_and_state("John","UT"); 
+    private function find_by($method_name, $parameters, $find_all = false) {
+        $method_parts = explode("_",substr($method_name, 12));
+        if(is_array($method_parts)) {
+            $param_cnt = 0;
+            $part_cnt = 1;
+            $and_cnt = substr_count(strtolower($method_name), "_and_");
+            $or_cnt = substr_count(strtolower($method_name), "_or_");
+            $part_size = count($method_parts) - $and_cnt - $or_cnt;
+            foreach($method_parts as $part) {
+                if(strtoupper($part) == "AND") {
+                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' AND ";
+                    $partCnt--;
+                    unset($field);
+                } elseif(strtoupper($part) == "OR") {
+                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' OR ";
+                    $part_cnt--;
+                    unset($field);
+                } else {
+                    $field[] = $part;
+                    if($part_size == $part_cnt) {
+                        $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."'";
+                        if($parameters[$param_cnt]) {
+                            $orderings = $parameters[$param_cnt];
+                        }
+                    }
+                }
+                $part_cnt++;
+            }
+
+            if($find_all) {
+            	return $this->find_all($method_params, $orderings);
+            } else {
+                return $this->find_first($method_params, $orderings);
+            }
+        }
+    }
+
     # This will return all the records matched by the options used. 
     # If no records are found, an empty array is returned.
     function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
@@ -531,7 +557,7 @@ class ActiveRecord {
             $object->new_record = false;
             foreach($row as $field => $val) {
                 $object->$field = $val;
-                if($field == "id") {
+                if($field == $this->index_on) {
                     $objects_key = $val;
                 }
             }
@@ -574,48 +600,6 @@ class ActiveRecord {
         return $this->find_all($sql);
     }
 
-    # *Magical* function that is dynamically built according to you.
-    # Works like find_all() or find().  
-    # Example:
-    #   $im_an_object = $model->find_by_fname("John");
-    #   $im_an_array_of_objects = $model->find_all_by_fname_and_state("John","UT"); 
-    function find_by($method_name, $parameters, $find_all = false) {
-        $method_parts = explode("_",substr($method_name, 12));
-        if(is_array($method_parts)) {
-            $param_cnt = 0;
-            $part_cnt = 1;
-            $and_cnt = substr_count(strtolower($method_name), "_and_");
-            $or_cnt = substr_count(strtolower($method_name), "_or_");
-            $part_size = count($method_parts) - $and_cnt - $or_cnt;
-            foreach($method_parts as $part) {
-                if(strtoupper($part) == "AND") {
-                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' AND ";
-                    $partCnt--;
-                    unset($field);
-                } elseif(strtoupper($part) == "OR") {
-                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' OR ";
-                    $part_cnt--;
-                    unset($field);
-                } else {
-                    $field[] = $part;
-                    if($part_size == $part_cnt) {
-                        $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."'";
-                        if($parameters[$param_cnt]) {
-                            $orderings = $parameters[$param_cnt];
-                        }
-                    }
-                }
-                $part_cnt++;
-            }
-
-            if($find_all) {
-            	return $this->find_all($method_params, $orderings);
-            } else {
-                return $this->find_first($method_params, $orderings);
-            }
-        }
-    }
-
     # Reloads the attributes of this object from the database.
     function reload($conditions = null) {
         if(is_null($conditions)) {
@@ -626,7 +610,14 @@ class ActiveRecord {
             foreach($object as $key => $value) {
                 $this->$key = $value;
             }
+            return true;
         }
+        return false;
+    }
+
+    # Loads into current object values from the database.
+    function load($conditions = null) {
+        return $this->reload($conditions);        
     }
 
     # Creates an object, instantly saves it as a record (if the validation permits it).
@@ -690,7 +681,7 @@ class ActiveRecord {
     }
 
     # Just determines if this save should be an INSERT or an UPDATE
-    function add_record_or_update_record() { 
+    private function add_record_or_update_record() { 
         $this->before_save();
         if($this->new_record) {
             $this->before_create();
@@ -706,29 +697,29 @@ class ActiveRecord {
     }
 
     # Add a record in the table represented by this model
-    function add_record() {
-        $this->before_create();
+    private function add_record() {
         $attributes = $this->quoted_attributes();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
         $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
         //echo "add_record: SQL: $sql<br>";
-
         $result = $this->query($sql);
         if ($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
-            $id = $this->get_insert_id();
-            if($id > 0 && $this->auto_save_habtm) {
-                $habtm_result = $this->add_habtm_records($id);
-            }
-
+            $this->id = $this->get_insert_id();
+            if($this->id > 0) {
+                if($this->auto_save_habtm) {
+                    $habtm_result = $this->add_habtm_records($this->id);
+                }
+                $this->save_associations();
+            }          
             return ($result && $habtm_result);
         }
     }
 
     # Updates a record in the table represented by this model
-    function update_record() {
+    private function update_record() {
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
         $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
@@ -737,11 +728,91 @@ class ActiveRecord {
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
-            if($this->id > 0 && $this->auto_save_habtm) {
-                $habtm_result = $this->update_habtm_records($this->id);
-            }
+            if($this->id > 0) {
+                if($this->auto_save_habtm) {
+                    $habtm_result = $this->update_habtm_records($this->id);
+                }
+                $this->save_associations();
+            }         
             return ($result && $habtm_result);
         }
+    }
+    
+    # returns the association type if defined in child class or null
+    function get_association_type($association_name) {
+        $type = null;
+        if(is_string($this->has_many)) {
+            if(preg_match("/$association_name/", $this->has_many)) {
+                $type = "has_many";    
+            }
+        } elseif(is_array($this->has_many)) {
+            if(array_key_exists($association_name, $this->has_many)) {
+                $type = "has_many";     
+            }
+        }
+        if(is_string($this->has_one)) {
+            if(preg_match("/$association_name/", $this->has_one)) {
+                $type = "has_one";     
+            }
+        } elseif(is_array($this->has_one)) {
+            if(array_key_exists($association_name, $this->has_one)) {
+                $type = "has_one";     
+            }
+        }
+        if(is_string($this->belongs_to)) { 
+            if(preg_match("/$association_name/", $this->belongs_to)) {
+                $type = "belongs_to";      
+            }
+        } elseif(is_array($this->belongs_to)) {
+            if(array_key_exists($association_name, $this->belongs_to)) {
+                $type = "belongs_to";      
+            }
+        }
+        if(is_string($this->has_and_belongs_to_many)) {
+            if(preg_match("/$association_name/", $this->has_and_belongs_to_many)) {
+                $type = "has_and_belongs_to_many";      
+            }
+        } elseif(is_array($this->has_and_belongs_to_many)) {
+            if(array_key_exists($association_name, $this->has_and_belongs_to_many)) {
+                $type = "has_and_belongs_to_many";      
+            }
+        }   
+        return $type;   
+    }
+    
+    # Saves any associations objects assigned to this instance
+    private function save_associations() {      
+        if(count($this->save_associations) && $this->auto_save_associations) {
+            foreach(array_keys($this->save_associations) as $type) {
+                if(count($this->save_associations[$type])) {
+                    foreach($this->save_associations[$type] as $object_or_array) {
+                        if(is_object($object_or_array)) {
+                            $this->save_association($object_or_array, $type);     
+                        } elseif(is_array($object_or_array)) {
+                            foreach($object_or_array as $object) {
+                                $this->save_association($object, $type);    
+                            }    
+                        }
+                    }
+                }
+            }    
+        }       
+    }
+    
+    # save the association to the database
+    private function save_association($object, $type) {
+        if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
+            echo get_class($object)." - type:$type<br>";
+            switch($type) {
+                case "has_many":
+                case "has_one":
+                    $foreign_key = Inflector::singularize($this->table_name)."_id";
+                    $object->$foreign_key = $this->id; 
+                    echo "fk:$foreign_key = $this->id<br>";
+                    break;
+            }
+            $object->save();        
+        }            
     }
 
     # Deletes the record with the given $id or if you have done a
@@ -784,24 +855,30 @@ class ActiveRecord {
         return true;
     }
 
-    function set_habtm_attributes($attributes) {
+    private function set_habtm_attributes($attributes) {
         if(is_array($attributes)) {
             $this->habtm_attributes = array();
             foreach($attributes as $key => $habtm_array) {
                 if(is_array($habtm_array)) {
-                    if(array_key_exists($key, $this->has_and_belongs_to_many)) {
-                        $this->habtm_attributes[$key] = $habtm_array;
+                    if(is_string($this->has_and_belongs_to_many)) {
+                        if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
+                            $this->habtm_attributes[$key] = $habtm_array;
+                        }
+                    } elseif(is_array($this->has_and_belongs_to_many)) {
+                        if(array_key_exists($key, $this->has_and_belongs_to_many)) {
+                            $this->habtm_attributes[$key] = $habtm_array;
+                        }
                     }
                 }
             }
         }
     }
 
-    function update_habtm_records($this_foreign_value) {
+    private function update_habtm_records($this_foreign_value) {
         return $this->add_habtm_records($this_foreign_value);
     }
 
-    function add_habtm_records($this_foreign_value) {
+    private function add_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             if($this->delete_habtm_records($this_foreign_value)) {
                 reset($this->habtm_attributes);
@@ -829,7 +906,7 @@ class ActiveRecord {
         return true;
     }
 
-    function delete_habtm_records($this_foreign_value) {
+    private function delete_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
@@ -838,7 +915,7 @@ class ActiveRecord {
                 $sql = "DELETE FROM $table_name WHERE $this_foreign_key = $this_foreign_value";
                 //echo "delete_habtm_records: SQL: $sql<br>";
                 $result = $this->query($sql);
-                if ($this->is_error($result)) {
+                if($this->is_error($result)) {
                     $this->raise($result->getMessage());
                 }
             }
@@ -850,7 +927,7 @@ class ActiveRecord {
     # with a name in matching a name in the auto_create_timestamps or auto_update_timestamps arrays
     # then it will return a valid datetime format to insert/update into the database.
     # This is only called from quoted_attributes().
-    function check_datetime($field, $value) {
+    private function check_datetime($field, $value) {
         if($this->auto_timestamps) {
             if(is_array($this->content_columns)) {
                 foreach($this->content_columns as $field_info) {
@@ -887,7 +964,21 @@ class ActiveRecord {
                 } else {
                     $datetime_value .= $value;    
                 }  
-                $datetime_fields[$old_datetime_key] = $datetime_value;                 
+                $datetime_fields[$old_datetime_key] = $datetime_value;     
+                # this elseif checks if first its an object if its parent is ActiveRecord            
+            } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
+                if($association_type = $this->get_association_type($field)) {
+                    $this->save_associations[$association_type][] = $value;
+                    if($association_type == "belongs_to") {
+                        $foreign_key = Inflector::singularize($value->table_name)."_id";
+                        $this->$foreign_key = $value->id; 
+                    }
+                }
+                # this elseif checks if its an array of objects and if its parent is ActiveRecord                
+            } elseif(is_array($value) && $this->auto_save_associations) {
+                if($association_type = $this->get_association_type($field)) {
+                    $this->save_associations[$association_type][] = $value;
+                }
             } else {
                 $this->$field = $value;
             }
@@ -975,7 +1066,7 @@ class ActiveRecord {
             $updates = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
-                if($key && $value) {
+                if($key && $value && !in_array($key, $this->primary_keys)) {
                     $updates[] = "$key = $value";
                 }
             }
