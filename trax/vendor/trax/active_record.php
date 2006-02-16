@@ -110,10 +110,7 @@ class ActiveRecord {
 
     # Override set() if they set certain class variables do some action
     function __set($key, $value) {
-        
-        if(is_object($value) or is_array($value)) {
-            echo "setting: $key = $value - count(".count($value).")<br>";
-        }
+        //echo "setting: $key = $value<br>";
         if($key == "table_name") {
             $this->set_content_columns($value);
             # this elseif checks if first its an object if its parent is ActiveRecord
@@ -125,7 +122,6 @@ class ActiveRecord {
                     $this->$foreign_key = $value->id; 
                 }
             }
-            # echo "fk:".$this->$foreign_key;
             # this elseif checks if its an array of objects and if its parent is ActiveRecord                
         } elseif(is_array($value) && $this->auto_save_associations) {
             if($association_type = $this->get_association_type($key)) {
@@ -802,13 +798,13 @@ class ActiveRecord {
     # save the association to the database
     private function save_association($object, $type) {
         if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
-            echo get_class($object)." - type:$type<br>";
+            //echo get_class($object)." - type:$type<br>";
             switch($type) {
                 case "has_many":
                 case "has_one":
                     $foreign_key = Inflector::singularize($this->table_name)."_id";
                     $object->$foreign_key = $this->id; 
-                    echo "fk:$foreign_key = $this->id<br>";
+                    //echo "fk:$foreign_key = $this->id<br>";
                     break;
             }
             $object->save();        
