@@ -473,7 +473,7 @@ class ActiveRecord {
             foreach($method_parts as $part) {
                 if(strtoupper($part) == "AND") {
                     $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' AND ";
-                    $partCnt--;
+                    $part_cnt--;
                     unset($field);
                 } elseif(strtoupper($part) == "OR") {
                     $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' OR ";
