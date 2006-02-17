@@ -35,7 +35,7 @@ class Inflector {
                 '/person$/' => 'people',                # person, salesperson
                 '/man$/' => 'men',                      # man, woman, spokesman
                 '/child$/' => 'children',               # child
-                '/(.+)status$/' => '\1statuses',
+                '/(.*)status$/' => '\1statuses',
                 '/s$/' => 's',                          # no change (compatibility)
                 '/$/' => 's'
         );
@@ -51,8 +51,7 @@ class Inflector {
                 '/([ti])a$/' => '\1um',
                 '/people$/' => 'person',
                 '/men$/' => 'man',
-                '/(.+)status$/' => '\1status',
-                '/(.+)statuses$/' => '\1status',
+                '/(.*)statuses$/' => '\1status',
                 '/children$/' => 'child',
                 '/news$/' => 'news',
                 '/s$/' => ''
