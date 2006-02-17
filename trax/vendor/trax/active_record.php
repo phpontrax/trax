@@ -463,7 +463,7 @@ class ActiveRecord {
     #   $im_an_object = $model->find_by_fname("John");
     #   $im_an_array_of_objects = $model->find_all_by_fname_and_state("John","UT"); 
     private function find_by($method_name, $parameters, $find_all = false) {
-        $method_parts = explode("_",substr($method_name, 12));
+	$method_parts = explode("_",substr($method_name, ($find_all ? 12 : 8)));
         if(is_array($method_parts)) {
             $param_cnt = 0;
             $part_cnt = 1;
