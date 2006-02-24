@@ -1,35 +1,51 @@
 <?php
-# $Id$
-#
-# Copyright (c) 2005 John Peterson
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/**
+ *  File containing the Helpers class and associated functions
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version $Id$
+ *  @copyright (c) 2005 John Peterson
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the
+ *  "Software"), to deal in the Software without restriction, including
+ *  without limitation the rights to use, copy, modify, merge, publish,
+ *  distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to
+ *  the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be
+ *  included in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+/**
+ *
+ *  @package PHPonTrax
+ */
 class Helpers {
 
+    /**
+     *
+     */
     function __construct() {
         $this->controller_name = $GLOBALS['current_controller_name'];
         $this->controller_path = $GLOBALS['current_controller_path'];
         $this->controller_object = $GLOBALS['current_controller_object'];
     }
 
+    /**
+     *
+     */
     function tag_options($options) {
         if(count($options)) {
             $html = array();
@@ -42,10 +58,14 @@ class Helpers {
         return $html;
     }
 
-    # Example: tag("br");
-    # Results: <br />
-    # Example: tag("input", array("type" => "text"));
-    # <input type="text" />
+    /**
+     *  Generate an HTML or XML tag with optional attributes
+     *
+     *  Example: tag("br");
+     *   Results: <br />
+     *  Example: tag("input", array("type" => "text"));
+     * <input type="text" />
+     */
     function tag($name, $options = array(), $open = false) {
         $html = "<$name ";
         $html .= $this->tag_options($options);
@@ -53,10 +73,14 @@ class Helpers {
         return $html;
     }
 
-    # Example: content_tag("p", "Hello world!");
-    # Result: <p>Hello world!</p>
-    # Example: content_tag("div", content_tag("p", "Hello world!"), array("class" => "strong")) =>
-    # Result:<div class="strong"><p>Hello world!</p></div>
+    /**
+     *  Generate an open/close pair of tags with content between
+     *
+     *  Example: content_tag("p", "Hello world!");
+     *  Result: <p>Hello world!</p>
+     *  Example: content_tag("div", content_tag("p", "Hello world!"), array("class" => "strong")) =>
+     *  Result:<div class="strong"><p>Hello world!</p></div>
+     */
     function content_tag($name, $content, $options = array()) {
         $html .= "<$name ";
         $html .= $this->tag_options($options);
@@ -64,7 +88,9 @@ class Helpers {
         return $html;
     }
 
-    # Returns the URL for the set of $options provided.
+    /**
+     *  Return the URL for the set of $options provided.
+     */
     function url_for($options = array()) {
         $url_base = null;
         $url = array();
@@ -131,16 +157,18 @@ class Helpers {
 
 }
 
-
-################################################################################################
-## Avialble functions for use in views
-################################################################################################
+/**
+ *  Avialble functions for use in views
+ */
 function content_tag() {
     $helper = new Helpers();
     $args = func_get_args();
     return call_user_func_array(array($helper, 'content_tag'), $args);
 }
 
+/**
+ *
+ */
 function url_for($options = array()) {
     $helper = new Helpers();
     return $helper->url_for($options);

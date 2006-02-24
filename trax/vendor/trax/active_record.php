@@ -1,67 +1,311 @@
 <?php
-# $Id$
-#
-# Copyright (c) 2005 John Peterson
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/**
+ *  File containing the ActiveRecord class
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version $Id$
+ *  @copyright (c) 2005 John Peterson
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the
+ *  "Software"), to deal in the Software without restriction, including
+ *  without limitation the rights to use, copy, modify, merge, publish,
+ *  distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to
+ *  the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be
+ *  included in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+/**
+ *  Load the {@link http://pear.php.net/manual/en/package.pear.php PEAR base class}
+ */
 require_once('PEAR.php');
+
+/**
+ *  Load the {@link http://pear.php.net/manual/en/package.database.db.php PEAR DB package}
+ */
 require_once('DB.php');
 
+/**
+ *  Base class for the ActiveRecord design pattern
+ *
+ *  <p>Each subclass of this class is associated with a database table
+ *  in the Model section of the Model-View-Controller architecture.
+ *  By convention, the name of each subclass is the CamelCase singular
+ *  form of the table name, which is in the lower_case_underscore
+ *  plural notation.  For example, 
+ *  a table named "order_details" would be associated with a subclass
+ *  of ActiveRecord named "OrderDetail", and a table named "people"
+ *  would be associated with subclass "Person".</p>
+ *
+ *  <p>For a discussion of the ActiveRecord design pattern, see
+ *  "Patterns of Enterprise 
+ *  Application Architecture" by Martin Fowler, pp. 160-164.</p>
+ *
+ *  <p>Unit tester: {@link ActiveRecordTest}</p>
+ *
+ *  @package PHPonTrax
+ */
 class ActiveRecord {
 
-    static private $db = null; # Reference to Pear db object
+    /**
+     *  Reference to the object returned by PEAR DB::Connect()
+     *
+     *  @var object DB
+     *  <b>FIXME: static should be after private</b>
+     */
+    static private $db = null;
+
+    /**
+     *  <b>FIXME: dead code?  Never referenced in ActiveRecord</b><br>
+     *  <b>FIXME: static should be after protected</b><br>
+     *  <b>FIXME: static variables $rows_per_page, $page, $offset are
+     *  not declared.  Declaring them would provide a good place to
+     *  document them.  On the other hand, if the intent is to give
+     *  the user the ability to page through a result set, these
+     *  variables need to go in $_SESSION.</b>
+     */
     static protected $inflector = null; # object to do class inflection
+
+    /**
+     *  Description of a row in the associated table in the database
+     *
+     *  <p>Retrieved from the RDBMS by {@link set_content_columns()}.
+     *  See {@link 
+     *  http://pear.php.net/manual/en/package.database.db.db-common.tableinfo.php
+     *  DB_common::tableInfo()} for the format.  <b>NOTE:</b> Some
+     *  RDBMS's don't return all values.</p>
+     *
+     *  <p>An additional element 'human_name' is added to each column
+     *  by {@link set_content_columns()}.  The actual value contained
+     *  in each column is stored in an object variable with the name
+     *  given by the 'name' element of the column description for each
+     *  column.</p>
+     *
+     *  <p><b>NOTE:</b>The information from the database about which
+     *  columns are primary keys is <b>not used</b>.  Instead, the
+     *  primary keys in the table are listed in {@$primary_keys},
+     *  which is maintained independently.</p>
+     *  @var string[]
+     *  @see $primary_keys
+     *  @see quoted_attributes()
+     *  @see __set()
+     */
     public $content_columns = null; # info about each column in the table
-    public $table_name = null; # if you want to override table name set this in your model
-    public $database_name = null; # if you want to override database name set this in your model
+
+    /**
+     *  Table name
+     *
+     *  Name of the table in the database associated with the subclass.
+     *  Normally set to the pluralized lower case underscore form of
+     *  the class name by the constructor.  May be overridden.
+     *  @var string
+     */
+    public $table_name = null;
+
+    /**
+     *  Database name override
+     *
+     *  Name of the database to use, if you are not using the value
+     *  read from file config/database.ini
+     *  @var string
+     */
+    public $database_name = null;
+
+    /**
+     *  Mode to use when fetching data from database
+     *
+     *  See {@link
+     *  http://pear.php.net/manual/en/package.database.db.db-common.setfetchmode.php
+     *  the relevant PEAR DB class documentation}
+     *  @var integer
+     */
     public $fetch_mode = DB_FETCHMODE_ASSOC;
+
+    /**
+     *  Force reconnect to database
+     *
+     *  @var boolean
+     */
     public $force_reconnect = false; # should we force a connection everytime
     public $index_on = "id"; # find_all returns an array of objects each object index is off of this field
 
     # Table associations
+    /**
+     *  @todo Document this API
+     *  @var string[]
+     */
     protected $has_many = null;
+
+    /**
+     *  @todo Document this API
+     *  @var string[]
+     */
     protected $has_one = null;
+
+    /**
+     *  @todo Document this API
+     *  @var string[]
+     */
     protected $has_and_belongs_to_many = null;
+
+    /**
+     *  @todo Document this API
+     *  @var string[]
+     */
     protected $belongs_to = null;
+
+    /**
+     *  @todo Document this API
+     *  @var string[]
+     */
     protected $habtm_attributes = null;
     protected $save_associations = array();
     public $auto_save_associations = true; # where or not to auto save defined associations if set
 
-    protected $new_record = true;  # whether or not to create a new record or just update
+    /**
+     *  Whether this object represents a new record
+     *
+     *  true => This object was created without reading a row from the
+     *          database, so use SQL 'INSERT' to put it in the database.
+     *  false => This object was a row read from the database, so use
+     *           SQL 'UPDATE' to update database with new values.
+     *  @var boolean
+     */
+    protected $new_record = true;
+
+    /**
+     *  Names of automatic update timestamp columns
+     *
+     *  When a row containing one of these columns is updated and
+     *  {@link $auto_timestamps} is true, update the contents of the
+     *  timestamp columns with the current date and time.
+     *  @see $auto_timestamps
+     *  @see $auto_create_timestamps
+     *  @var string[]
+     */
     protected $auto_update_timestamps = array("updated_at","updated_on");
+
+    /**
+     *  Names of automatic create timestamp columns
+     *
+     *  When a row containing one of these columns is created and
+     *  {@link $auto_timestamps} is true, store the current date and
+     *  time in the timestamp columns.
+     *  @see $auto_timestamps
+     *  @see $auto_update_timestamps
+     *  @var string[]
+     */
     protected $auto_create_timestamps = array("created_at","created_on");
+
+    /**
+     *  SQL aggregate functions that may be applied to the associated
+     *  table.
+     *
+     *  SQL defines aggregate functions AVG, COUNT, MAX, MIN and SUM.
+     *  Not all of these functions are implemented by all DBMS's
+     *  @var string[]
+     */
     protected $aggregrations = array("count","sum","avg","max","min");
 
-    public $primary_keys = array("id");  # update / delete where clause keys
-    public $rows_per_page_default = 20;  # Pagination rows to display per page
+    /**
+     *  Primary key of the associated table
+     *
+     *  Array element(s) name the primary key column(s), as used to
+     *  specify the row to be updated or deleted.  To be a primary key
+     *  a column must be listed both here and in {@link
+     *  $content_columns}.  <b>NOTE:</b>This
+     *  field is maintained by hand.  It is not derived from the table
+     *  description read from the database.
+     *  @var string[]
+     *  @see $content_columns
+     *  @see find()
+     *  @see find_all()
+     *  @see find_first()
+     */
+    public $primary_keys = array("id");
+
+    /**
+     *  Default for how many rows to return from {@link find_all()}
+     *  @var integer
+     */
+    public $rows_per_page_default = 20;
+
+    /**
+     *  @todo Document this API
+     */
     public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
+
+    /**
+     *  Description of non-fatal errors found
+     *
+     *  For every non-fatal error found, an element describing the
+     *  error is added to $errors.  Initialized to an empty array in 
+     *  {@link valid()} before validating object.  When an error
+     *  message is associated with a particular attribute, the message
+     *  should be stored with the attribute name as its key.  If the
+     *  message is independent of attributes, store it with a numeric
+     *  key beginning with 0.
+     *  
+     *  @var string[]
+     *  @see add_error()
+     *  @see get_errors()
+     */
     public $errors = array();
-    public $auto_timestamps = true; # whether or not to auto update created_at/on and updated_at/on fields
+
+    /**
+     *  Whether to automatically update timestamps in certain columns
+     *
+     *  @see $auto_create_timestamps
+     *  @see $auto_update_timestamps
+     *  @var boolean
+     */
+    public $auto_timestamps = true;
+
+    /**
+     *  @todo Document this API
+     */
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
 
-    # Transactions (only use if your db supports it)
+    /**
+     *  Transactions (only use if your db supports it)
+     *  <b>FIXME: static should be after private</b>
+     */
     static private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
+
+    /**
+     *  <b>FIXME: static should be after public</b>
+     */
     static public $use_transactions = false; # this will issue a rollback command if any sql fails
 
-    # Constructor sets up need parameters for AR to function properly
+    /**
+     *  Construct an ActiveRecord object
+     *
+     *  <ol>
+     *    <li>Establish a connection to the database</li>
+     *    <li>Find the name of the table associated with this object</li>
+     *    <li>Read description of this table from the database</li>
+     *    <li>Optionally apply update information to column attributes</li>
+     *  </ol>
+     *  @param string[] $attributes Updates to column attributes
+     *  @uses establish_connection()
+     *  @uses set_content_columns()
+     *  @uses $table_name
+     *  @uses set_table_name_using_class_name()
+     *  @uses update_attributes()
+     */
     function __construct($attributes = null) { 
         # Open the database connection
         $this->establish_connection();
@@ -82,8 +326,15 @@ class ActiveRecord {
         }
     }
 
-    # Override get() if they do $model->some_association->field_name dynamically load the requested
-    # contents from the database.
+    /**
+     *  @todo Document this API
+     *  Override get() if they do $model->some_association->field_name
+     *  dynamically load the requested contents from the database.
+     *  @uses $belongs_to
+     *  @uses $has_and_belongs_to_many
+     *  @uses $has_many
+     *  @uses $has_one
+     */
     function __get($key) {
         $association_type = $this->get_association_type($key);
         switch($association_type) {
@@ -108,7 +359,17 @@ class ActiveRecord {
         return $this->$key;
     }
 
-    # Override set() if they set certain class variables do some action
+    /**
+     *  Store column value or description of the table format
+     *
+     *  If called with key 'table_name', $value is stored as the
+     *  description of the table format in $content_columns.
+     *  Any other key causes an object variable with the same name to
+     *  be created and stored into.  If the value of $key matches the
+     *  name of a column in content_columns, the corresponding object
+     *  variable becomes the content of the column in this row.
+     *  @uses set_content_columns()
+     */
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
         if($key == "table_name") {
@@ -129,10 +390,22 @@ class ActiveRecord {
             }
         }         
         
+	//  Assignment to something else, do it
         $this->$key = $value;
     }
 
-    # Override call() to dynamically call the database associations
+    /**
+     *  @todo Document this API
+     *  Override call() to dynamically call the database associations
+     *  @uses $aggregrations
+     *  @uses aggregrate_all()
+     *  @uses $belongs_to
+     *  @uses $has_one
+     *  @uses $has_and_belongs_to_many
+     *  @uses $has_many
+     *  @uses find_all_by()
+     *  @uses find_by()
+     */
     function __call($method_name, $parameters) {
         if(method_exists($this,$method_name)) {
             # If the method exists, just call it
@@ -177,12 +450,15 @@ class ActiveRecord {
         return $result;
     }
 
-    # Returns a the name of the join table that would be used for the two
-    # tables.  The join table name is decided from the alphabetical order
-    # of the two tables.  e.g. "genres_movies" because "g" comes before "m"
-    #
-    # Parameters: $first_table, $second_table: the names of two database tables,
-    #   e.g. "movies" and "genres"
+    /**
+     *  @todo Document this API
+     *  Returns a the name of the join table that would be used for the two
+     *  tables.  The join table name is decided from the alphabetical order
+     *  of the two tables.  e.g. "genres_movies" because "g" comes before "m"
+     *
+     *  Parameters: $first_table, $second_table: the names of two database tables,
+     *   e.g. "movies" and "genres"
+     */
     private function get_join_table_name($first_table, $second_table) {
         $tables = array();
         $tables["one"] = $first_table;
@@ -191,17 +467,20 @@ class ActiveRecord {
         return @implode("_", $tables);
     }
 
-    # Find all records using a "has_and_belongs_to_many" relationship
-    # (many-to-many with a join table in between).  Note that you can also
-    # specify an optional "paging limit" by setting the corresponding "limit"
-    # instance variable.  For example, if you want to return 10 movies from the
-    # 5th movie on, you could set $this->movies_limit = "10, 5"
-    #
-    # Parameters: $this_table_name:  The name of the database table that has the
-    #                                one row you are interested in.  E.g. genres
-    #             $other_table_name: The name of the database table that has the
-    #                                many rows you are interested in.  E.g. movies
-    # Returns: An array of ActiveRecord objects. (e.g. Movie objects)
+    /**
+     *  @todo Document this API
+     *  Find all records using a "has_and_belongs_to_many" relationship
+     * (many-to-many with a join table in between).  Note that you can also
+     *  specify an optional "paging limit" by setting the corresponding "limit"
+     *  instance variable.  For example, if you want to return 10 movies from the
+     *  5th movie on, you could set $this->movies_limit = "10, 5"
+     *
+     *  Parameters: $this_table_name:  The name of the database table that has the
+     *                                 one row you are interested in.  E.g. genres
+     *              $other_table_name: The name of the database table that has the
+     *                                 many rows you are interested in.  E.g. movies
+     *  Returns: An array of ActiveRecord objects. (e.g. Movie objects)
+     */
     private function find_all_habtm($other_table_name, $parameters = null) {
         $other_class_name = Inflector::classify($other_table_name);
         # Instantiate an object to access find_all
@@ -249,11 +528,14 @@ class ActiveRecord {
         return $results->find_all($conditions, $orderings, $limit, $joins);
     }
 
-    # Find all records using a "has_many" relationship (one-to-many)
-    #
-    # Parameters: $other_table_name: The name of the other table that contains
-    #                                many rows relating to this object's id.
-    # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+    /**
+     *  @todo Document this API
+     *  Find all records using a "has_many" relationship (one-to-many)
+     *
+     *  Parameters: $other_table_name: The name of the other table that contains
+     *                                 many rows relating to this object's id.
+     *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+     */
     private function find_all_has_many($other_table_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
@@ -303,11 +585,14 @@ class ActiveRecord {
         return $results;
     }
 
-    # Find all records using a "has_one" relationship (one-to-one)
-    # (the foreign key being in the other table)
-    # Parameters: $other_table_name: The name of the other table that contains
-    #                                many rows relating to this object's id.
-    # Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+    /**
+     *  @todo Document this API
+     *  Find all records using a "has_one" relationship (one-to-one)
+     *  (the foreign key being in the other table)
+     *  Parameters: $other_table_name: The name of the other table that contains
+     *                                 many rows relating to this object's id.
+     *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+     */
     private function find_one_has_one($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
@@ -331,12 +616,15 @@ class ActiveRecord {
         }
     }
 
-    # Find all records using a "belongs_to" relationship (one-to-one)
-    # (the foreign key being in the table itself)
-    # Parameters: $other_object_name: The singularized version of a table name.
-    #                                 E.g. If the Contact class belongs_to the
-    #                                 Customer class, then $other_object_name
-    #                                 will be "customer".
+    /**
+     *  @todo Document this API
+     *  Find all records using a "belongs_to" relationship (one-to-one)
+     *  (the foreign key being in the table itself)
+     *  Parameters: $other_object_name: The singularized version of a table name.
+     *                                  E.g. If the Contact class belongs_to the
+     *                                  Customer class, then $other_object_name
+     *                                  will be "customer".
+     */
     private function find_one_belongs_to($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
@@ -360,8 +648,30 @@ class ActiveRecord {
         }
     }
 
-    # Used to run all the the *_all() aggregrate functions such as count_all() sum_all()
-    # Return the result of the aggregration or 0.
+    /**
+     *  Implement *_all() functions (SQL aggregate functions)
+     *
+     *  Apply one of the SQL aggregate functions to a column of the
+     *  table associated with this object.  The SQL aggregate
+     *  functions are AVG, COUNT, MAX, MIN and SUM.  Not all DBMS's
+     *  implement all of these functions.
+     *  @param string $agrregrate_type SQL aggregate function to
+     *    apply, suffixed '_all'.  The aggregate function is one of
+     *  the strings in {@link $aggregrations}. 
+     *  @param string[] $parameters  Conditions to apply to the
+     *    aggregate function.  If present, must be an array of three
+     *    strings:<ol>
+     *     <li>$parameters[0]: If present, expression to apply
+     *       the aggregate function to.  Otherwise, '*' will be used.
+     *       <b>NOTE:</b>SQL uses '*' only for the COUNT() function,
+     *       where it means "including rows with NULL in this column".</li>
+     *     <li>$parameters[1]: argument to WHERE clause</li>
+     *     <li>$parameters[2]: joins??? @todo Document this parameter</li>
+     *    </ol>
+     *  @throws {@link ActiveRecordError}
+     *  @uses query()
+     *  @uses is_error()
+     */
     private function aggregrate_all($aggregrate_type, $parameters = null) {
         $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
@@ -386,12 +696,20 @@ class ActiveRecord {
         return 0;
     }
 
-    # Return if this is a new record or not.
-    function is_new_record() {
+    /**
+     *  Test whether this object represents a new record
+     *  @uses $new_record
+     *  @return boolean Whether this object represents a new record
+     */
+   function is_new_record() {
         return $this->new_record;
     }
 
-    # get the attributes for a specific column.
+   /**
+    *  @todo Document this API
+    *  get the attributes for a specific column.
+    *  @uses $content_columns
+    */
     function column_for_attribute($attribute) {
         if(is_array($this->content_columns)) {
             foreach($this->content_columns as $column) {
@@ -403,7 +721,9 @@ class ActiveRecord {
         return null;
     }
     
-    # checks if a column exists or not in the table
+    /**
+     *  checks if a column exists or not in the table
+     */
     function column_attribute_exists($attribute) {
         if(is_array($this->content_columns)) {
             foreach($this->content_columns as $column) {
@@ -415,7 +735,14 @@ class ActiveRecord {
         return false;     
     }
 
-    # Returns PEAR result set of one record with only the passed in column in the result set.
+    /**
+     *  @todo Document this API
+     *  Returns PEAR result set of one record with only the passed in column in the result set.
+     *
+     *  @uses $db
+     *  @throws {@link ActiveRecordError}
+     *  @uses is_error()
+     */
     function send($column) {
         if($this->column_attribute_exists($column)) {
             # Run the query to grab a specific columns value.
@@ -427,24 +754,48 @@ class ActiveRecord {
         return $result;
     }
 
-    # Only used if you want to do transactions and your db supports transactions
+    /**
+     *  @todo Document this API
+     * Only used if you want to do transactions and your db supports transactions
+     *
+     *  @uses $db
+     */
     function begin() {
         self::$db->query("BEGIN");
         $this->begin_executed = true;
     }
 
-    # Only used if you want to do transactions and your db supports transactions
+    /**
+     *  @todo Document this API
+     *  Only used if you want to do transactions and your db supports transactions
+     *
+     *  @uses $db
+     */
     function commit() {
         self::$db->query("COMMIT"); 
         $this->begin_executed = false;
     }
 
-    # Only used if you want to do transactions and your db supports transactions
+    /**
+     *  @todo Document this API
+     *  Only used if you want to do transactions and your db supports transactions
+     *
+     *  @uses $db
+     */
     function rollback() {
         self::$db->query("ROLLBACK");
     }
 
-    # Uses PEAR::DB's query to run the query and returns the DB result set
+    /**
+     *  Perform an SQL query and return the results
+     *
+     *  @param string $sql  SQL for the query command
+     *  @return mixed {@link http://pear.php.net/manual/en/package.database.db.db-result.php object DB_result}
+     *    Result set from query
+     *  @uses $db
+     *  @uses is_error()
+     *  @throws {@link ActiveRecordError}
+     */
     function query($sql) {
         # Run the query
         $rs = self::$db->query($sql);
@@ -457,11 +808,25 @@ class ActiveRecord {
         return $rs;
     }
 
-    # *Magical* function that is dynamically built according to you.
-    # Works like find_all() or find().  
-    # Example:
-    #   $im_an_object = $model->find_by_fname("John");
-    #   $im_an_array_of_objects = $model->find_all_by_fname_and_state("John","UT"); 
+    /**
+     *  Implement find_by_*() and find_all_by_* methods
+     *  
+     *  Converts a method name beginning 'find_by_' or 'find_all_by_'
+     *  into a query for rows matching the rest of the method name and
+     *  the arguments to the function.  The part of the method name
+     *  after '_by' is parsed for columns and logical relationships
+     *  (AND and OR) to match.  For example, the call
+     *    find_by_fname('Ben')
+     *  is converted to
+     *    SELECT * ... WHERE fname='Ben'
+     *  and the call
+     *    find_by_fname_and_lname('Ben','Dover')
+     *  is converted to
+     *    SELECT * ... WHERE fname='Ben' AND lname='Dover'
+     *  
+     *  @uses find_all()
+     *  @uses find_first()
+     */
     private function find_by($method_name, $parameters, $find_all = false) {
 	$method_parts = explode("_",substr($method_name, ($find_all ? 12 : 8)));
         if(is_array($method_parts)) {
@@ -470,6 +835,9 @@ class ActiveRecord {
             $and_cnt = substr_count(strtolower($method_name), "_and_");
             $or_cnt = substr_count(strtolower($method_name), "_or_");
             $part_size = count($method_parts) - $and_cnt - $or_cnt;
+            // FIXME: This loop doesn't work right for either
+	    // find_by_first_name_and_last_name or
+	    // find_all_by_first_name_and_last_name
             foreach($method_parts as $part) {
                 if(strtoupper($part) == "AND") {
                     $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' AND ";
@@ -499,8 +867,38 @@ class ActiveRecord {
         }
     }
 
-    # This will return all the records matched by the options used. 
-    # If no records are found, an empty array is returned.
+    /**
+     *  Return rows selected by $conditions
+     *
+     *  If no rows match, an empty array is returned.
+     *  @param string $conditions SQL to use in the query.  If
+     *    $conditions contains "SELECT", then $orderings, $limit and
+     *    $joins are ignored and the query is completely specified by
+     *    $conditions.  If $conditions is omitted or does not contain
+     *    "SELECT", "SELECT * FROM" will be used.  If $conditions is
+     *    specified and does not contain "SELECT", the query will
+     *    include "WHERE $conditions".  If $conditions is null, the
+     *    entire table is returned.
+     *  @param string $orderings Argument to "ORDER BY" in query.
+     *    If specified, the query will include
+     *    "ORDER BY $orderings". If omitted, no ordering will be
+     *    applied.  
+     *  @param integer[] $limit Page, rows per page???
+     *  @todo Document the $limit and $joins parameters
+     *  @param string $joins ???
+     *  @uses $rows_per_page_default
+     *  @uses $rows_per_page
+     *  @uses $offset
+     *  @uses $page
+     *  @uses is_error()
+     *  @uses $new_record
+     *  @uses query()
+     *  @return object[] Array of objects of the same class as this
+     *    object, one object for each row returned by the query.
+     *    If the column 'id' was in the results, it is used as the key
+     *    for that object in the array.
+     *  @throws {@link ActiveRecordError}
+     */
     function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
         if (is_array($limit)) {
             list(self::$page, self::$rows_per_page) = $limit;
@@ -564,9 +962,41 @@ class ActiveRecord {
         return $objects;
     }
 
-    # This can either be a specific id (1), or an array of ids (array(5, 6, 10)). 
-    # If no record can be found for Returns an object if id isn't an array otherwise 
-    # returns an array of objects.
+    /**
+     *  Find row(s) with specified value(s)
+     *
+     *  Find all the rows in the table which match the argument $id.
+     *  Return zero or more objects of the same class as this
+     *  class representing the rows that matched the argument.
+     *  @param mixed[] $id  If $id is an array then a query will be
+     *    generated selecting all of the array values in column "id".
+     *    If $id is a string containing "=" then the string value of
+     *    $id will be inserted in a WHERE clause in the query.  If $id
+     *    is a scalar not containing "=" then a query will be generated 
+     *    selecting the first row WHERE id = '$id'.
+     *    <b>NOTE</b> The column name "id" is used regardless of the
+     *    value of {@link $primary_keys}.  Therefore if you need to
+     *    select based on some column other than "id", you must pass a
+     *    string argument ready to insert in the SQL SELECT.
+     *  @param string $orderings Argument to "ORDER BY" in query.
+     *    If specified, the query will include "ORDER BY
+     *    $orderings". If omitted, no ordering will be applied.
+     *  @param integer[] $limit Page, rows per page???
+     *  @param string $joins ???
+     *  @todo Document the $limit and $joins parameters
+     *  @uses find_all()
+     *  @uses find_first()
+     *  @return mixed Results of query.  If $id was a scalar then the
+     *    result is an object of the same class as this class and
+     *    matching $id conditions, or if no row matched the result is
+     *    null. 
+     *
+     *    If $id was an array then the result is an array containing
+     *    objects of the same class as this class and matching the
+     *    conditions set by $id.  If no rows matched, the array is
+     *    empty.
+     *  @throws {@link ActiveRecordError}
+     */
     function find($id, $orderings = null, $limit = null, $joins = null) {
         if(is_array($id)) {
             $conditions = "id IN(".implode(",",$id).")";
@@ -583,20 +1013,51 @@ class ActiveRecord {
         }
     }
 
-    # This will return the first record matched by the options used. 
-    # These options can either be specific conditions or merely an order. 
-    # If no record can matched, false is returned.
+    /**
+     *  Return first row selected by $conditions
+     *
+     *  If no rows match, null is returned.
+     *  @param string $conditions SQL to use in the query.  If
+     *    $conditions contains "SELECT", then $orderings, $limit and
+     *    $joins are ignored and the query is completely specified by
+     *    $conditions.  If $conditions is omitted or does not contain
+     *    "SELECT", "SELECT * FROM" will be used.  If $conditions is
+     *    specified and does not contain "SELECT", the query will
+     *    include "WHERE $conditions".  If $conditions is null, the
+     *    entire table is returned.
+     *  @param string $orderings Argument to "ORDER BY" in query.
+     *    If specified, the query will include
+     *    "ORDER BY $orderings". If omitted, no ordering will be
+     *    applied.  
+     *  FIXME This parameter doesn't seem to make sense
+     *  @param integer[] $limit Page, rows per page??? @todo Document this parameter
+     *  FIXME This parameter doesn't seem to make sense
+     *  @param string $joins ??? @todo Document this parameter
+     *  @uses find_all()
+     *  @return mixed An object of the same class as this class and
+     *    matching $conditions, or null if none did.
+     *  @throws {@link ActiveRecordError}
+     */
     function find_first($conditions, $orderings = null, $limit = null, $joins = null) {
         $result = $this->find_all($conditions, $orderings, $limit, $joins);
         return @current($result);
     }
 
-    # Works like find_all(), but requires a complete SQL string.
+    /**
+     *  Return all the rows selected by the SQL argument
+     *
+     *  If no rows match, an empty array is returned.
+     *  @param string $sql SQL to use in the query.
+     */
     function find_by_sql($sql) {
         return $this->find_all($sql);
     }
 
-    # Reloads the attributes of this object from the database.
+    /**
+     *  @todo Document this API
+     *  Reloads the attributes of this object from the database.
+     *  @uses get_primary_key_conditions()
+     */
     function reload($conditions = null) {
         if(is_null($conditions)) {
             $conditions = $this->get_primary_key_conditions();
@@ -611,13 +1072,21 @@ class ActiveRecord {
         return false;
     }
 
-    # Loads into current object values from the database.
+    /**
+     *  Loads into current object values from the database.
+     */
     function load($conditions = null) {
         return $this->reload($conditions);        
     }
 
-    # Creates an object, instantly saves it as a record (if the validation permits it).
-    # If the save fails under validations it returns false and $errors array gets set.
+    /**
+     *  @todo Document this API.  What's going on here?  It appears to
+     *        either create a row with all empty values, or it tries
+     *        to recurse once for each attribute in $attributes.
+     *  FIXME: resolve calling sequence
+     *  Creates an object, instantly saves it as a record (if the validation permits it).
+     *  If the save fails under validations it returns false and $errors array gets set.
+     */
     function create($attributes, $dont_validate = false) {
         if(is_array($attributes)) {
             foreach($attributes as $attr) {
@@ -630,8 +1099,11 @@ class ActiveRecord {
         }
     }
 
-    # Finds the record from the passed id, instantly saves it with the passed attributes 
-    # (if the validation permits it). Returns true on success and false on error.
+    /**
+     *  @todo Document this API
+     *  Finds the record from the passed id, instantly saves it with the passed attributes 
+     *  (if the validation permits it). Returns true on success and false on error.
+     */
     function update($id, $attributes, $dont_validate = false) {
         if(is_array($id)) {
             foreach($id as $update_id) {
@@ -643,11 +1115,17 @@ class ActiveRecord {
         }
     }
 
-    # Updates all records with the SET-part of an SQL update statement in updates and 
-    # returns an integer with the number of rows updates. A subset of the records can 
-    # be selected by specifying conditions. 
-    # Example:
-    #   $model->update_all("category = 'cooldude', approved = 1", "author = 'John'");
+    /**
+     *  @todo Document this API
+     *  Updates all records with the SET-part of an SQL update statement in updates and 
+     *  returns an integer with the number of rows updates. A subset of the records can 
+     *  be selected by specifying conditions. 
+     *  Example:
+     *    $model->update_all("category = 'cooldude', approved = 1", "author = 'John'");
+     *  @uses is_error()
+     *  @uses query()
+     *  @throws {@link ActiveRecordError}
+     */
     function update_all($updates, $conditions = null) {
         $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
         $result = $this->query($sql);
@@ -658,13 +1136,31 @@ class ActiveRecord {
         }
     }
 
-    # Save without valdiating anything.
+    /**
+     *  @todo Document this API
+     *  Save without valdiating anything.
+     */
     function save_without_validation($attributes = null) {
         return $this->save($attributes, true);
     }
 
-    # $attributes is an array passed in from the html form usually. Where key is the column name
-    # and value is the new value to INSERT or UPDATE in the database.  
+    /**
+     *  Create or update a row in the table with specified attributes
+     *
+     *  @param string[] $attributes List of name => value pairs giving
+     *    name and value of attributes to set.
+     *  @param boolean $dont_validate true => Don't call validation
+     *    routines before saving the row.  If false or omitted, all 
+     *    applicable validation routines are called.
+     *  @uses add_record_or_update_record()
+     *  @uses update_attributes()
+     *  @uses valid()
+     *  @return boolean
+     *          <ul>
+     *            <li>true => row was updated or inserted successfully</li>
+     *            <li>false => insert failed</li>
+     *          </ul>
+     */
     function save($attributes = null, $dont_validate = false) {
         if(!is_null($attributes)) {
             $this->update_attributes($attributes);
@@ -676,7 +1172,25 @@ class ActiveRecord {
         }
     }
 
-    # Just determines if this save should be an INSERT or an UPDATE
+    /**
+     *  Create or update a row in the table
+     *
+     *  If this object represents a new row in the table, insert it.
+     *  Otherwise, update the exiting row.  before_?() and after_?()
+     *  routines will be called depending on whether the row is new.
+     *  @uses add_record()
+     *  @uses after_create()
+     *  @uses after_update()
+     *  @uses before_create()
+     *  @uses before_save()
+     *  @uses $new_record
+     *  @uses update_record()
+     *  @return boolean
+     *          <ul>
+     *            <li>true => row was updated or inserted successfully</li>
+     *            <li>false => insert failed</li>
+     *          </ul>
+     */
     private function add_record_or_update_record() { 
         $this->before_save();
         if($this->new_record) {
@@ -692,7 +1206,31 @@ class ActiveRecord {
         return $result;
     }
 
-    # Add a record in the table represented by this model
+    /**
+     *  Insert a new row in the table associated with this object
+     *
+     *  Build an SQL INSERT statement getting the table name from
+     *  {@link $table_name}, the column names from {@link
+     *  $content_columns} and the values from object variables.
+     *  Send the insert to the RDBMS.
+     *  FIXME: Shouldn't we be saving the insert ID value as an object
+     *  variable $this->id?
+     *  @uses $auto_save_habtm
+     *  @uses add_habtm_records()
+     *  @uses before_create()
+     *  @uses get_insert_id()
+     *  @uses is_error()
+     *  @uses query()
+     *  @uses quoted_attributes()
+     *  @uses raise()
+     *  @uses $table_name
+     *  @return boolean
+     *          <ul>
+     *            <li>true => row was inserted successfully</li>
+     *            <li>false => insert failed</li>
+     *          </ul>
+     *  @throws {@link ActiveRecordError}
+     */
     private function add_record() {
         $attributes = $this->quoted_attributes();
         $fields = @implode(', ', array_keys($attributes));
@@ -714,7 +1252,27 @@ class ActiveRecord {
         }
     }
 
-    # Updates a record in the table represented by this model
+    /**
+     *  Update the row in the table described by this object
+     *
+     *  The primary key attributes must exist and have appropriate
+     *  non-null values.  If a column is listed in {@link
+     *  $content_columns} but no attribute of that name exists, the
+     *  column will be set to the null string ''.
+     *  @todo Describe habtm automatic update
+     *  @uses is_error()
+     *  @uses get_updates_sql()
+     *  @uses get_primary_key_conditions()
+     *  @uses query()
+     *  @uses raise()
+     *  @uses update_habtm_records()
+     *  @return boolean
+     *          <ul>
+     *            <li>true => row was updated successfully</li>
+     *            <li>false => update failed</li>
+     *          </ul>
+     *  @throws {@link ActiveRecordError}
+     */
     private function update_record() {
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
@@ -734,7 +1292,10 @@ class ActiveRecord {
         }
     }
     
-    # returns the association type if defined in child class or null
+    /**
+     *  @todo Document this API
+     *  returns the association type if defined in child class or null
+     */
     function get_association_type($association_name) {
         $type = null;
         if(is_string($this->has_many)) {
@@ -776,7 +1337,10 @@ class ActiveRecord {
         return $type;   
     }
     
-    # Saves any associations objects assigned to this instance
+    /**
+     *  @todo Document this API
+     *  Saves any associations objects assigned to this instance
+     */
     private function save_associations() {      
         if(count($this->save_associations) && $this->auto_save_associations) {
             foreach(array_keys($this->save_associations) as $type) {
@@ -795,7 +1359,10 @@ class ActiveRecord {
         }       
     }
     
-    # save the association to the database
+    /**
+     *  @todo Document this API
+     *  save the association to the database
+     */
     private function save_association($object, $type) {
         if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
             //echo get_class($object)." - type:$type<br>";
@@ -811,10 +1378,14 @@ class ActiveRecord {
         }            
     }
 
-    # Deletes the record with the given $id or if you have done a
-    # $model = $model->find($id), then $model->delete() it will delete
-    # the record it just loaded from the find() without passing anything
-    # to delete(). If an array of ids is provided, all ids in array are deleted.
+    /**
+     *  @todo Document this API
+     *  Deletes the record with the given $id or if you have done a
+     *  $model = $model->find($id), then $model->delete() it will delete
+     *  the record it just loaded from the find() without passing anything
+     *  to delete(). If an array of ids is provided, all ids in array are deleted.
+     *  @uses $errors
+     */
     function delete($id = null) {
         if($this->id > 0 && is_null($id)) {
             $id = $this->id;
@@ -832,9 +1403,23 @@ class ActiveRecord {
         return $result;
     }
 
-    # Deletes all the records that matches the $conditions
-    # Example:
-    # $model->delete_all("person_id = 2 AND (category = 'Toasters' OR category = 'Microwaves')");
+    /**
+     *  Delete from table all rows that match argument
+     *
+     *  Delete the row(s), if any, matching the argument.
+     *  @param string $conditions SQL argument to "WHERE" describing
+     *                the rows to delete
+     *  @return boolean
+     *          <ul>
+     *            <li>true => One or more rows were deleted</li>
+     *            <li>false => $conditions was omitted</li>
+     *          </ul>
+     *  @uses is_error()
+     *  @uses $new_record
+     *  @uses $errors
+     *  @uses query()
+     *  @throws {@link ActiveRecordError}
+     */
     function delete_all($conditions = null) {
         if(is_null($conditions)) {
             $this->errors[] = "No conditions specified to delete on.";
@@ -846,11 +1431,18 @@ class ActiveRecord {
             $this->raise($rs->getMessage());
         }
 
+        //  <b>FIXME: We don't know whether this row was deleted.
+        //    What are the implications of making this a new record?</b>
         $this->id = 0;
         $this->new_record = true;
         return true;
     }
 
+    /**
+     *  @todo Document this API
+     * 
+     *  @uses $has_and_belongs_to_many
+     */
     private function set_habtm_attributes($attributes) {
         if(is_array($attributes)) {
             $this->habtm_attributes = array();
@@ -870,10 +1462,21 @@ class ActiveRecord {
         }
     }
 
+    /**
+     *
+     *  @todo Document this API
+     */
     private function update_habtm_records($this_foreign_value) {
         return $this->add_habtm_records($this_foreign_value);
     }
 
+    /**
+     *
+     *  @todo Document this API
+     *  @uses is_error()
+     *  @uses query()
+     *  @throws {@link ActiveRecordError}
+     */
     private function add_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             if($this->delete_habtm_records($this_foreign_value)) {
@@ -902,6 +1505,13 @@ class ActiveRecord {
         return true;
     }
 
+    /**
+     *  @todo Document this API
+     *
+     *  @uses is_error()
+     *  @uses query()
+     *  @throws {@link ActiveRecordError}
+     */
     private function delete_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             reset($this->habtm_attributes);
@@ -919,10 +1529,26 @@ class ActiveRecord {
         return true;
     }
 
-    # Checks to see if $auto_timestamps is true, If yes and there exists a field
-    # with a name in matching a name in the auto_create_timestamps or auto_update_timestamps arrays
-    # then it will return a valid datetime format to insert/update into the database.
-    # This is only called from quoted_attributes().
+    /**
+     *  Apply automatic timestamp updates
+     *
+     *  If automatic timestamps are in effect (as indicated by
+     *  {@link $auto_timestamps} == true) and the column named in the
+     *  $field argument is of type "timestamp" and matches one of the
+     *  names in {@link auto_create_timestamps} or {@link
+     *  auto_update_timestamps}(as selected by {@link $new_record}),
+     *  then return the current date and  time as a string formatted
+     *  to insert in the database.  Otherwise return $value.
+     *  @uses $new_record
+     *  @uses $content_columns
+     *  @uses $auto_timestamps
+     *  @uses $auto_create_timestamps
+     *  @uses $auto_update_timestamps
+     *  @param string $field Name of a column in the table
+     *  @param mixed $value Value to return if $field is not an
+     *                      automatic timestamp column
+     *  @return mixed Current date and time or $value
+     */
     private function check_datetime($field, $value) {
         if($this->auto_timestamps) {
             if(is_array($this->content_columns)) {
@@ -940,8 +1566,12 @@ class ActiveRecord {
         return $value;
     }
 
-    # Updates all the attributes(class vars representing the table columns)
-    # from the passed array $attributes.
+    /**
+     *  Update object attributes from list in argument
+     *  @param string[] $attributes List of name => value pairs giving
+     *    name and value of attributes to set.
+     *  @todo Figure out and document how datetime fields work
+     */
     function update_attributes($attributes) {
         foreach($attributes as $field => $value) {
             # datetime / date parts check
@@ -987,10 +1617,18 @@ class ActiveRecord {
         $this->set_habtm_attributes($attributes);
     }
 
-    # If $this->set_content_columns() was previously called, which will mean that
-    # $content_columns will be an array of containing the column info about the database
-    # table this model is representing.  This will return an array where the keys
-    # the column names and the values are the values from those columns.  
+    /**
+     *  Return pairs of column-name:column-value
+     *
+     *  Return the contents of the object as an array of elements
+     *  where the key is the column name and the value is the column
+     *  value.  Relies on a previous call to
+     *  {@link set_content_columns()} for information about the format
+     *  of a row in the table.
+     *  @uses $content_columns
+     *  @see set_content_columns
+     *  @see quoted_attributes()
+     */
     function get_attributes() {
         $attributes = array();
         if(is_array($this->content_columns)) {
@@ -1002,9 +1640,24 @@ class ActiveRecord {
         return $attributes;
     }
 
-    # Returns an array of all the table columns with the key being the
-    # the database column name and the value being the database column
-    # value.  The value will be single quoted if appropriate.
+    /**
+     *  Return pairs of column-name:quoted-column-value
+     *
+     *  Return pairs of column-name:quoted-column-value where the key
+     *  is the column name and the value is the column value with
+     *  automatic timestamp updating applied and characters special to
+     *  SQL quoted.
+     *  
+     *  If $attributes is null or omitted, return all columns as
+     *  currently stored in {@link content_columns()}.  Otherwise,
+     *  return the name:value pairs in $attributes.
+     *  @param string[] $attributes Name:value pairs to return.
+     *    If null or omitted, return the column names and values
+     *    of the object as stored in $content_columns.
+     *  @return string[] 
+     *  @uses get_attributes()
+     *  @see set_content_columns()
+     */
     function quoted_attributes($attributes = null) {
         if(is_null($attributes)) {
             $attributes = $this->get_attributes();
@@ -1026,11 +1679,22 @@ class ActiveRecord {
         return $return;
     }
 
-    # Returns an a string in the format to put into a WHERE clause for updating
-    # or deleting records.  It builds the clause from the $primary_keys array.
-    # Example:
-    #   $primary_keys = array("id", "ssn"); would be turned into the string
-    #   "id = '5' AND ssn = '555-55-5555'"
+    /**
+     *  Return argument for a "WHERE" clause specifying this row
+     *
+     *  Returns a string which specifies the column(s) and value(s)
+     *  which describe the primary key of this row of the associated
+     *  table.  The primary key must be one or more attributes of the
+     *  object and must be listed in {@link $content_columns} as
+     *  columns in the row.
+     *
+     *  Example: if $primary_keys = array("id", "ssn") and column "id"
+     *  has value "5" and column "ssn" has value "123-45-6789" then
+     *  the string "id = '5' AND ssn = '123-45-6789'" would be returned.
+     *  @uses $primary_keys
+     *  @uses quoted_attributes()
+     *  @return string Column name = 'value' [ AND name = 'value']...
+     */
     function get_primary_key_conditions() {
         $conditions = null;
         $attributes = $this->quoted_attributes();
@@ -1051,10 +1715,16 @@ class ActiveRecord {
         return $conditions;
     }
 
-    # Returns an a string in the format to put into the SET-part of an SQL update statement
-    # Should return a string formated for the UPDATE. 
-    # Example:
-    #   "id = '5', ssn = '555-55-5555'"
+    /**
+     *  Return column values of object formatted for SQL update statement
+     *
+     *  Return a string containing the column names and values of this
+     *  object in a format ready to be inserted in a SQL UPDATE
+     *  statement.  Automatic update has been applied to timestamps if
+     *  enabled and characters special to SQL have been quoted.
+     *  @uses quoted_attributes()
+     *  @return string Column name = 'value', ... for all attributes
+     */
     function get_updates_sql() {
         $updates = null;
         $attributes = $this->quoted_attributes();
@@ -1071,15 +1741,34 @@ class ActiveRecord {
         return $updates;
     }
 
-    # Sets the $table_name varible from the class name of the child object (the Model)
-    # used in all queries throughout ActiveRecord
+    /**
+     *  Set {@link $table_name} from the class name of this object
+     *
+     *  By convention, the name of the database table represented by
+     *  this object is derived from the name of the class.
+     *  @uses Inflector::tableize()
+     */
     function set_table_name_using_class_name() {
         if(!$this->table_name) {
             $this->table_name = Inflector::tableize(get_class($this));
         }
     }
 
-    # Populates the model object with information about the table it represents
+    /**
+     *  Populate object with information about the table it represents 
+     *
+     *  Call {@link 
+     *  http://pear.php.net/manual/en/package.database.db.db-common.tableinfo.php
+     *  DB_common::tableInfo()} to get a description of the table and
+     *  store it in {@link $content_columns}.  Add a more human
+     *  friendly name to the element for each column.
+     *  <b>FIXME: should throw an exception if tableInfo() fails</b>
+     *  @uses $db
+     *  @uses $content_columns
+     *  @uses Inflector::humanize()
+     *  @see __set()
+     *  @param string $table_name  Name of table to get information about
+     */
     function set_content_columns($table_name) {
         $this->content_columns = self::$db->tableInfo($table_name);
         if(is_array($this->content_columns)) {
@@ -1090,7 +1779,14 @@ class ActiveRecord {
         }
     }
 
-    # Returns the autogenerated id from the last insert query
+    /**
+     *  Returns the autogenerated id from the last insert query
+     *
+     *  @uses $db
+     *  @uses is_error()
+     *  @uses raise()
+     *  @throws {@link ActiveRecordError}
+     */
     function get_insert_id() {
         $id = self::$db->getOne("SELECT LAST_INSERT_ID();");
         if ($this->is_error($id)) {
@@ -1099,8 +1795,29 @@ class ActiveRecord {
         return $id;
     }
 
-    # Calls DB::Connect() to open a database connection. It uses $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE] 
-    # If it finds a connection in ACTIVE_RECORD_DB it uses it.
+    /**
+     *  Open a database connection if one is not currently open
+     *
+     *  The name of the database normally comes from
+     *  $GLOBALS['TRAX_DB_SETTINGS'] which is set in {@link
+     *  environment.php} by reading file config/database.ini. The
+     *  database name may be overridden by assigning a different name
+     *  to {@link $database_name}. 
+     *  
+     *  If there is a connection now open, as indicated by the saved
+     *  value of a DB object in $GLOBALS['ACTIVE_RECORD_DB'], and
+     *  {@link force_reconnect} is not true, then set the database
+     *  fetch mode and return.
+     *
+     *  If there is no connection, open one and save a reference to
+     *  it in $GLOBALS['ACTIVE_RECORD_DB'].
+     *
+     *  @uses $db
+     *  @uses $database_name
+     *  @uses $force_reconnect
+     *  @uses is_error()
+     *  @throws {@link ActiveRecordError}
+     */
     function establish_connection() {
         # Connect to the database and throw an error if the connect fails.
         if(!is_object($GLOBALS['ACTIVE_RECORD_DB']) || $this->force_reconnect) {
@@ -1128,7 +1845,12 @@ class ActiveRecord {
         return self::$db;
     }
 
-    # Tests to see if an object is either a PEAR Error or a DB Error object.
+    /**
+     *  Test whether argument is a PEAR Error object or a DB Error object.
+     *
+     *  @param object $obj Object to test
+     *  @return boolean  Whether object is one of these two errors
+     */
     function is_error($obj) {
         if((PEAR::isError($obj)) || (DB::isError($obj))) {
             return true;
@@ -1137,13 +1859,27 @@ class ActiveRecord {
         }
     }
 
+    /**
+     *  Throw an exception describing an error in this object
+     *
+     *  @throws {@link ActiveRecordError}
+     */
     function raise($message) {
         $error_message  = "Model Class: ".get_class($this)."<br>";
         $error_message .= "Error Message: ".$message;
         throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");
     }
 
-    # Add an error to Active Record
+    /**
+     *  Add or overwrite description of an error to the list of errors
+     *  @param string $error Error message text
+     *  @param string $key Key to associate with the error (in the
+     *    simple case, column name).  If omitted, numeric keys will be
+     *    assigned starting with 0.  If specified and the key already
+     *    exists in $errors, the old error message will be overwritten
+     *    with the value of $error.
+     *  @uses $errors
+     */
     function add_error($error, $key = null) {
         if(!is_null($key)) 
             $this->errors[$key] = $error;
@@ -1151,8 +1887,21 @@ class ActiveRecord {
             $this->errors[] = $error;
     }
 
-    # Return the errors array or if the first param is true then
-    # returns it as a string seperated by the second param.
+    /**
+     *  Return description of non-fatal errors
+     *
+     *  @uses $errors
+     *  @param boolean $return_string
+     *    <ul>
+     *      <li>true => Concatenate all error descriptions into a string
+     *        using $seperator between elements and return the
+     *        string</li>
+     *      <li>false => Return the error descriptions as an array</li>
+     *    </ul>
+     *  @param string $seperator  String to concatenate between error
+     *    descriptions if $return_string == true
+     *  @return mixed Error description(s), if any
+     */
     function get_errors($return_string = false, $seperator = "<br>") {
         if($return_string && count($this->errors) > 0) {
             return implode($seperator, $this->errors);
@@ -1161,13 +1910,40 @@ class ActiveRecord {
         }
     }
 
-    # Return errors as a string.
+    /**
+     *  Return errors as a string.
+     *
+     *  Concatenate all error descriptions into a stringusing
+     *  $seperator between elements and return the string.
+     *  @param string $seperator  String to concatenate between error
+     *    descriptions
+     *  @return string Concatenated error description(s), if any
+     */
     function get_errors_as_string($seperator = "<br>") {
         return $this->get_errors(true, $seperator);
     }
 
-    # Runs validate and validate_on_create or validate_on_update 
-    # and returns true if no errors were added otherwise false.
+    /**
+     *  Runs validation routines for update or create
+     *
+     *  @uses after_validation();
+     *  @uses after_validation_on_create();
+     *  @uses after_validation_on_update();
+     *  @uses before_validation();
+     *  @uses before_validation_on_create();
+     *  @uses before_validation_on_update();
+     *  @uses $errors
+     *  @uses $new_record
+     *  @uses validate();
+     *  @uses validate_model_attributes();
+     *  @uses validate_on_create(); 
+     *  @return boolean 
+     *    <ul>
+     *      <li>true => Valid, no errors found.
+     *        {@link $errors} is empty</li>
+     *      <li>false => Not valid, errors in {@link $errors}</li>
+     *    </ul>
+     */
     function valid() {
         # first clear the errors array
         $this->errors = array();
@@ -1193,15 +1969,28 @@ class ActiveRecord {
         return count($this->errors) ? false : true;
     }
 
-    # Successively calls all functions that begin with "validate_" to
-    # validate each field.  The "validate_*" functions should return an
-    # array whose first element is true or false (indicating whether or
-    # not the validation succeeded), and whose second element is the
-    # error message to display on validation failure.
-    #
-    # Parameters: none
-    #
-    # Returns: true if all validations succeeded, false otherwise
+    /**
+     *  Call every method named "validate_*()" where * is a column name
+     *
+     *  Find and call every method named "validate_something()" where
+     *  "something" is the name of a column.  The "validate_something()"
+     *  functions are expected to return an array whose first element
+     *  is true or false (indicating whether or not the validation
+     *  succeeded), and whose second element is the error message to
+     *  display if the first element is false.
+     *
+     *  @return boolean 
+     *    <ul>
+     *      <li>true => Valid, no errors found.
+     *        {@link $errors} is empty</li>
+     *      <li>false => Not valid, errors in {@link $errors}.
+     *        $errors is an array whose keys are the names of columns,
+     *        and the value of each key is the error message returned
+     *        by the corresponding validate_*() method.</li>
+     *    </ul>
+     *  @uses $errors
+     *  @uses get_attributes()
+     */
     function validate_model_attributes() {
         $validated_ok = true;
         $attrs = $this->get_attributes();
@@ -1236,62 +2025,114 @@ class ActiveRecord {
         return $validated_ok;
     }
 
-    # Overwrite this method for validation checks on all saves and
-    # use $this->errors[] = "My error message."; or
-    # for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";
+    /**
+     *  @todo Document this API
+     *  Overwrite this method for validation checks on all saves and
+     *  use $this->errors[] = "My error message."; or
+     *  for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";
+     */
     function validate() {}
 
-    # Override this method for validation checks used only on creation.
+    /**
+     *  @todo Document this API
+     *  Override this method for validation checks used only on creation.
+     */
     function validate_on_create() {}
 
-    # Override this method for validation checks used only on updates.
+    /**
+     *  @todo Document this API
+     *  Override this method for validation checks used only on updates.
+     */
     function validate_on_update() {}
 
-    # Is called before validate().
+    /**
+     *  @todo Document this API
+     *  Is called before validate().
+     */
     function before_validation() {}
 
-    # Is called after validate().
+    /**
+     *  @todo Document this API
+     *  Is called after validate().
+     */
     function after_validation() {}
 
-    # Is called before validate() on new objects that haven't been saved yet (no record exists).
+    /**
+     *  @todo Document this API
+     *  Is called before validate() on new objects that haven't been saved yet (no record exists).
+     */
     function before_validation_on_create() {}
 
-    # Is called after validate() on new objects that haven't been saved yet (no record exists).
+    /**
+     *  @todo Document this API
+     *  Is called after validate() on new objects that haven't been saved yet (no record exists).
+     */
     function after_validation_on_create()  {}
 
-    # Is called before validate() on existing objects that has a record.
+    /**
+     *  @todo Document this API
+     *  Is called before validate() on existing objects that has a record.
+     */
     function before_validation_on_update() {}
 
-    # Is called after validate() on existing objects that has a record.
+    /**
+     *  @todo Document this API
+     *  Is called after validate() on existing objects that has a record.
+     */
     function after_validation_on_update()  {}
 
-    # Is called before save() (regardless of whether its a create or update save).
+    /**
+     *  @todo Document this API
+     *  Is called before save() (regardless of whether its a create or update save)
+     */
     function before_save() {}
 
-    # Is called after save (regardless of whether its a create or update save).
+    /**
+     *  @todo Document this API
+     *  Is called after save (regardless of whether its a create or update save).
+     */
     function after_save() {}
 
-    # Is called before save() on new objects that havent been saved yet (no record exists).
+    /**
+     *  @todo Document this API
+     *  Is called before save() on new objects that havent been saved yet (no record exists).
+     */
     function before_create() {}
 
-    # Is called after save() on new objects that havent been saved yet (no record exists).
+    /**
+     *  @todo Document this API
+     *  Is called after save() on new objects that havent been saved yet (no record exists).
+     */
     function after_create() {}
 
-    # Is called before save() on existing objects that has a record.
+    /**
+     *  @todo Document this API
+     *  Is called before save() on existing objects that has a record.
+     */
     function before_update() {}
 
-    # Is called after save() on existing objects that has a record.
+    /**
+     *  @todo Document this API
+     *  Is called after save() on existing objects that has a record.
+     */
     function after_update() {}
 
-    # Is called before delete().
+    /**
+     *  @todo Document this API
+     *  Is called before delete().
+     */
     function before_delete() {}
 
-    # Is called after delete().
+    /**
+     *  @todo Document this API
+     *  Is called after delete().
+     */
     function after_delete() {}
 
-    #########################################################################
-    # Paging html functions
-
+    /**
+     *  @todo Document this API
+     * Paging html functions
+     */
     function limit_select($controller =null, $additional_query = null) {
         if($this->pages > 0) {
             $html = "
@@ -1308,6 +2149,10 @@ class ActiveRecord {
         return $html;
     }
 
+    /**
+     *  @todo Document this API
+     *
+     */
     function page_list(){
         $page_list  = "";
 

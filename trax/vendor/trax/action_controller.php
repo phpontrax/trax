@@ -1,27 +1,189 @@
 <?php
-# $Id$
-#
-# Copyright (c) 2005 John Peterson
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/**
+ *  File containing ActionController class
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version $Id$
+ *  @copyright (c) 2005 John Peterson
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the
+ *  "Software"), to deal in the Software without restriction, including
+ *  without limitation the rights to use, copy, modify, merge, publish,
+ *  distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to
+ *  the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be
+ *  included in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+/**
+ *  Action controller
+ *
+ *  <p><b>Filters</b></p>
+ *
+ *  <p>Filters enable controllers to run shared pre and post
+ *  processing code for its actions. These filters can be used to do
+ *  authentication, caching, or auditing before the intended action is
+ *  performed. Or to do localization or output compression after the
+ *  action has been performed.</p>
+ *
+ *  <p>Filters have access to the request, response, and all the
+ *  instance variables set by other filters in the chain or by the
+ *  action (in the case of after filters). Additionally, it's possible
+ *  for a pre-processing <samp>before_filter</samp> to halt the processing
+ *  before the intended action is processed by returning false or
+ *  performing a redirect or render.  This is especially useful for
+ *  filters like authentication where you're not interested in
+ *  allowing the action to be  performed if the proper credentials are
+ *  not in order.</p>
+ *
+ *  <p><b>Filter inheritance</b></p>
+ *
+ *  <p>Controller inheritance hierarchies share filters downwards, but
+ *  subclasses can also add new filters without affecting the
+ *  superclass. For example:</p>
+ *
+ *  <pre>
+ *   class BankController extends ActionController
+ *   {
+ *     $this->before_filter = audit();
+ *
+ *     private function audit() {
+ *       <i>record the action and parameters in an audit log</i>
+ *     }
+ *   }
+ *
+ *   class VaultController extends BankController
+ *   {
+ *     $this->before_filter = verify_credentials();
+ *
+ *     private function verify_credentials() {
+ *       <i>make sure the user is allowed into the vault</i>
+ *     }
+ *   }
+ *  </pre>
+ *
+ *  <p>Now any actions performed on the BankController will have the
+ *  audit method called before. On the VaultController, first the
+ *  audit method is called, then the verify_credentials method. If the
+ *  audit method returns false, then verify_credentials and the
+ *  intended action are never called.</p>
+ *
+ *  <p><b>Filter types</b></p>
+ *
+ *  <p>A filter can take one of three forms: method reference
+ *  (symbol), external class, or inline method (proc). The first is the
+ *  most common and works by referencing a protected or private method
+ *  somewhere in the inheritance hierarchy of the controller by use of
+ *  a symbol. In the bank example above, both BankController and
+ *  VaultController use this form.</p>
+ *
+ *  <p>Using an external class makes for more easily reused generic
+ *  filters, such as output compression. External filter classes are
+ *  implemented by having a static +filter+ method on any class and
+ *  then passing this class to the filter method. Example:</p>
+ *
+ *  <pre>
+ *   class OutputCompressionFilter
+ *   {
+ *     static functionfilter(controller) {
+ *       controller.response.body = compress(controller.response.body)
+ *     }
+ *   }
+ *
+ *   class NewspaperController extends ActionController
+ *   {
+ *     $this->after_filter = OutputCompressionFilter;
+ *   }
+ *  </pre>
+ *
+ *  <p>The filter method is passed the controller instance and is
+ *  hence granted access to all aspects of the controller and can
+ *  manipulate them as it sees fit.</p>
+ *
+ *  <p>The inline method (using a proc) can be used to quickly do
+ *  something small that doesn't require a lot of explanation.  Or
+ *  just as a quick test. It works like this:</p>
+ *
+ *  <pre>
+ *   class WeblogController extends ActionController
+ *   {
+ *     before_filter { |controller| false if controller.params["stop_action"] }
+ *   }
+ *  </pre>
+ *
+ *  <p>As you can see, the block expects to be passed the controller
+ *  after it has assigned the request to the internal variables.  This
+ *  means that the block has access to both the request and response
+ *  objects complete with convenience methods for params, session,
+ *  template, and assigns. Note: The inline method doesn't strictly
+ *  have to be a block; any object that responds to call and returns 1
+ *  or -1 on arity will do (such as a Proc or an Method object).</p>
+ *
+ *  <p><b>Filter chain skipping</b></p>
+ *
+ *  <p>Some times its convenient to specify a filter chain in a superclass 
+ *  that'll hold true for the majority of the subclasses, but not necessarily
+ *  all of them. The subclasses that behave in exception can then specify
+ *  which filters they would like to be relieved of. Examples</p>
+ *
+ *  <pre>
+ *   class ApplicationController extends ActionController
+ *   {
+ *     $this->before_filter = authenticate();
+ *   }
+ *
+ *   class WeblogController extends ApplicationController
+ *   {
+ *      // will run the authenticate() filter
+ *   }
+ *  </pre>
+ *
+ *  <p><b>Filter conditions</b></p>
+ *
+ *  <p>Filters can be limited to run for only specific actions. This
+ *  can be expressed either by listing the actions to exclude or
+ *  the actions to include when executing the filter. Available
+ *  conditions are +:only+ or +:except+, both of which accept an
+ *  arbitrary number of method references. For example:</p>
+ *
+ *  <pre>
+ *   class Journal extends ActionController
+ *   {
+ *     // only require authentication if the current action is edit or delete
+ *     before_filter :authorize, :only => [ :edit, :delete ]
+ *    
+ *     private function authorize() {
+ *      // redirect to login unless authenticated
+ *     }
+ *   }
+ *  </pre>
+ * 
+ *  <p>When setting conditions on inline method (proc) filters the
+ *  condition must come first and be placed in parentheses.</p>
+ *
+ *  <pre>
+ *   class UserPreferences extends ActionController
+ *   {
+ *     before_filter(:except => :new) { ? some proc ... }
+ *  * ...
+ *   }
+ *  </pre>
+ *
+ *  @package PHPonTrax
+ */
 class ActionController {
 
     private
@@ -339,6 +501,9 @@ class ActionController {
         }
     }
 
+    /**
+     *  Execute the before filters
+     */
     function execute_before_filters() {
         if(count($this->controller_object->before_filters) > 0) { 
             foreach($this->controller_object->before_filters as $filter_function) {
@@ -349,6 +514,13 @@ class ActionController {
         }
     }
 
+    /**
+     *  Append a before filter to the filter chain
+     *
+     *  @param mixed $filter_function_name  String with the name of
+     *  one filter function, or array of strings with the names of
+     *  several filter functions.
+     */
     function add_before_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
             if(!in_array($filter_function_name, $this->before_filters)) {
@@ -373,6 +545,14 @@ class ActionController {
         }
     }
 
+
+    /**
+     *  Append an after filter to the filter chain
+     *
+     *  @param mixed $filter_function_name  String with the name of
+     *  one filter function, or array of strings with the names of
+     *  several filter functions.
+     */
     function add_after_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
             if(!in_array($filter_function_name, $this->controller_object->after_filters)) {
@@ -393,6 +573,42 @@ class ActionController {
         }
     }
 
+    /**
+     *  Rendering partials
+     * 
+     *  <p>Partial rendering is most commonly used together with Ajax
+     *  calls that only update one or a few elements on a page without
+     *  reloading. Rendering of partials from the controller makes it
+     *  possible to use the same partial template in both the
+     *  full-page rendering (by calling it from within the template)
+     *  and when sub-page updates happen (from the controller action
+     *  responding to Ajax calls). By default, the current layout is
+     *  not used.</p>
+     *
+     *  <ul>
+     *    <li><samp>render_partial("win");</samp><br>
+     *      Renders the partial
+     *      located at app/views/controller/_win.r(html|xml)</li>
+     *
+     *    <li><samp>render_partial("win",
+     *       array("locals" => array("name" => "david")));</samp><br>
+     *      Renders the same partial but also makes a local variable
+     *      available to it</li>
+     *     
+     *    <li><samp>render_partial("win",
+     *      array("collection" => array(...)));</samp><br>
+     *      Renders a collection of the same partial by making each
+     *      element of the collection available through the local variable
+     *      "win" as it builds the complete response </li>
+     *
+     *    <li><samp>render_partial("win", array("collection" => @wins,
+     *      "spacer_template" => "win_divider"));</samp><br>
+     *      Renders the same collection of partials, but also renders
+     *      the win_divider partial in between each win partial.</li>
+     *  </ul>
+     *  @param string $path Path to file containing partial view
+     *  @param string[] $options Options array
+     */
     function render_partial($path, $options = array()) {
         if(strstr($path, "/")) {
             $file = substr(strrchr($path, "/"), 1);
@@ -478,10 +694,21 @@ class ActionController {
         return $layout_file;
     }
 
+    /**
+     *  Raise an ActionControllerError exception
+     *
+     *  @param string $error_message Error message
+     *  @param string $error_heading Error heading
+     *  @param string $error_code    Error code
+     *  @throws ActionControllerError
+     */
     function raise($error_message, $error_heading, $error_code = "404") {
         throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);
     }
 
+    /**
+     *  Generate an HTML page describing an error
+     */
     function process_with_exception(&$exception) {
         $error_code = $exception->error_code;
         $error_heading = $exception->error_heading;

@@ -1,29 +1,44 @@
 <?php
-# $Id $
-#
-# Copyright (c) 2005 John Peterson
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/**
+ *  File containing the ScaffoldController class
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version $Id $
+ *  @copyright (c) 2005 John Peterson
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the
+ *  "Software"), to deal in the Software without restriction, including
+ *  without limitation the rights to use, copy, modify, merge, publish,
+ *  distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to
+ *  the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be
+ *  included in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+/**
+ *
+ *  @package PHPonTrax
+ *  @todo Document this class
+ */
 class ScaffoldController extends ActionController {
 
+    /**
+     *
+     *  @todo Document this method
+     */
     function __construct($model_name) {
         $model_name = strtolower($model_name);
         $this->model_name = Inflector::camelize($model_name);
@@ -36,6 +51,10 @@ class ScaffoldController extends ActionController {
         }
     }
 
+    /**
+     *
+     *  @todo Document this method
+     */
 	function index() {
 	    $model_class = $this->model_class;
 		$model = new $model_class();
@@ -43,12 +62,20 @@ class ScaffoldController extends ActionController {
 		$this->models = $model->find_all();
 	}
 
+    /**
+     *
+     *  @todo Document this method
+     */
 	function show() {
 	    $model_class = $this->model_class;
 		$model = new $model_class();
 		$this->{$this->model_object_name} = $model->find($_REQUEST['id']);
 	}
 
+    /**
+     *
+     *  @todo Document this method
+     */
 	function add() {
 	    $model_class = $this->model_class;
 	    $this->{$this->model_object_name} = new $model_class($_REQUEST[$this->model_object_name]);
@@ -62,6 +89,10 @@ class ScaffoldController extends ActionController {
 		}
 	}
 	
+    /**
+     *
+     *  @todo Document this method
+     */
 	function edit() {
 		$model_class = $this->model_class;
 		$model = new $model_class();
@@ -76,6 +107,10 @@ class ScaffoldController extends ActionController {
 		}
 	}
 	
+    /**
+     *
+     *  @todo Document this method
+     */
 	function delete() {
 		if($_REQUEST['id'] > 0) {
     		$model_class = $this->model_class;

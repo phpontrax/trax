@@ -1,5 +1,9 @@
 <?php
-// put all the global 'test' settings for this application in this file
+/**
+ *  Put all the global 'test' settings for this application in this file
+ *
+ *  @package PHPonTrax
+ */
 
 
 ?>

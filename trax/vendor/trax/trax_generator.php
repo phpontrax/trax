@@ -1,28 +1,45 @@
 <?php
-# $Id$
-#
-# Copyright (c) 2005 John Peterson
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/**
+ *  File containing the TraxGenerator class
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version $Id$
+ *  @copyright (c) 2005 John Peterson
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining
+ *  a copy of this software and associated documentation files (the
+ *  "Software"), to deal in the Software without restriction, including
+ *  without limitation the rights to use, copy, modify, merge, publish,
+ *  distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to
+ *  the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be
+ *  included in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-
+/**
+ *  Implement the commands of {@link generate.php script/generate.php}
+ *
+ *  <p>Legal commands:</p>
+ *  <ul>
+ *    <li>{@link generate_controller() controller}</li>
+ *    <li>{@link generate_model() model}</li>
+ *    <li>{@link generate_scaffold() scaffold}</li>
+ *  </ul>
+ *
+ *  @package PHPonTrax
+ */
 class TraxGenerator {
 
     private
@@ -41,6 +58,13 @@ class TraxGenerator {
     public
         $view_file_extention = TRAX_VIEWS_EXTENTION;
 
+    /**
+     *  Constructor for the TraxGenerator object
+     *
+     *  @uses $GLOBALS['TRAX_INCLUDES']
+     *  @global string[] $GLOBALS['TRAX_INCLUDES'] Array of paths to
+     *                                             various Trax directories
+     */
     function __construct() {
         $this->view_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
         $this->controller_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
@@ -61,6 +85,10 @@ class TraxGenerator {
 
     }
 
+    /**
+     *  Parse command line and carry out the command
+     *  @todo Document this method
+     */
     function run() {
         $command = strtolower($_SERVER["argv"][1]);
         $command_name = $_SERVER["argv"][2];
@@ -106,6 +134,35 @@ class TraxGenerator {
         exit;
     }
 
+    /**
+     *  Implement "generate controller" command
+     *
+     *  <p>Example:<br><samp>php script/generate.php controller</samp>
+     *  <i>SomeName</i><br>
+     *  will generate:</p>
+     *  <ul>
+     *    <li>a file
+     *  <samp>app/controllers/</samp><i>some_name</i><samp>_controller.php</samp><br>
+     *  containing the class definition<br>
+     *  <samp>class</samp> <i>SomeName</i><samp>Controller extends
+     *  ApplicationController {}</samp></li>
+     *     <li>a file
+     *  <samp>app/helpers/</samp><i>some_name</i><samp>_helper.php</samp></li>
+     *     <li>a directory
+     *  <samp>app/views/</samp><i>some_name</i></li>
+     *  </ul>
+     *
+     *  <p>Optionally, one or more views can be appended to the command:<br>
+     *  <samp>php script/generate.php controller</samp>
+     *  <i>SomeName view1 view2</i><br>
+     *  which will additionally generate files:<br>
+     *  <samp>app/views/</samp><i>some_name/view1</i><samp>.phtml</samp><br>
+     *  <samp>app/views/</samp><i>some_name/view2</i><samp>.phtml</samp></p>
+     *
+     *  @param string $name Name of the controller to generate in camel case
+     *  @param string $views  Optional list of views to generate
+     *  @param boolean $scaffolding
+     */
     function generate_controller($name, $views="", $scaffolding = false) {
 
         # Set the View and Controller extra path info
@@ -157,6 +214,18 @@ class TraxGenerator {
         }
     }
 
+    /**
+     *  Implement the "generate model" command
+     *
+     *  <p>Example:<br><samp>php script/generate.php model</samp>
+     *  <i>SomeName</i><br>
+     *  will generate a file
+     *  <samp>app/models/</samp><i>some_name</i><samp>.php</samp><br>
+     *  containing the class definition<br>
+     *  <samp>class</samp> <i>SomeName</i> <samp>extends
+     *  ActiveRecord {}</samp>
+     *  @param string $name Name of the model
+     */
     function generate_model($name) {
 
         if(stristr($name, "_")) {
@@ -187,6 +256,13 @@ class TraxGenerator {
         return false;
     }
     
+    /**
+     *  Implement the "generate scaffold" command
+     *
+     *  @param string $model_name
+     *  @param string $controller_name
+     *  @param string $views
+     */
     function generate_scaffold($model_name, $controller_name, $views="") {
         if(!$model_exists = $this->generate_model($model_name)) {
             echo "Error - Can't create Model: $model_name.\n";    
@@ -338,6 +414,10 @@ class TraxGenerator {
         }                   
     }    
 
+    /**
+     *  @todo Document this method
+     *
+     */
     function create_controller($controller,$views="") {
 
         $controller_file = "$this->controller_path/".$controller."_controller.php";
@@ -368,6 +448,10 @@ class TraxGenerator {
         }
     }
 
+    /**
+     *  @todo Document this method
+     *
+     */
     function create_helper($controller) {
 
         $helper_file = "$this->helper_path/".$controller."_helper.php";
@@ -390,6 +474,10 @@ class TraxGenerator {
         }
     }
 
+    /**
+     *  @todo Document this method
+     *
+     */
     function create_view($view, $controller) {
         $view_file = "$this->view_path/".$view.".".$this->view_file_extention;
         if(!file_exists($view_file)) {
@@ -411,6 +499,11 @@ class TraxGenerator {
         }
     }
 
+    /**
+     *  Execute an operating system command
+     *
+     *  @param string $cmd  Command to be executed
+     */
     function exec($cmd) {
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             exec(str_replace("/","\\",$cmd));
@@ -419,10 +512,19 @@ class TraxGenerator {
         }
     }
     
+    /**
+     *  Replace "< ?php ... ? >" with "<?php ... ?>"
+     *
+     *  @param string $string  String to be edited
+     *  @return string Edited input string
+     */
     function fix_php_brackets($string) {
         return str_replace("? >", "?>", str_replace("< ?php", "<?php", $string));            
     }
 
+    /**
+     *  Output console help message for "generate controller"
+     */
     function controller_help() {
         echo "Usage: ./generate.php controller ControllerName [view1 view2 ...]\n\n";
         echo "Description:\n";
@@ -447,6 +549,9 @@ class TraxGenerator {
         echo "\t\tHelper:     app/helpers/credit_card_helper.php\n\n";
     }
 
+    /**
+     *  Output console help message for "generate model"
+     */
     function model_help() {
         echo "Usage: ./generate.php model ModelName\n";
         echo "Description:\n";
@@ -460,6 +565,9 @@ class TraxGenerator {
         echo "\t\tModel:      app/models/account.php\n\n";
     }
     
+    /**
+     *  Output console help message for "generate scaffold"
+     */
     function scaffold_help() {
         echo "Usage: ./generate scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
         echo "Description:\n";
@@ -486,6 +594,9 @@ class TraxGenerator {
         echo "\tin the admin module.\n";            
     }
 
+    /**
+     *  Output console help message for unrecognized command
+     */
     function generator_help() {
         echo "Usage:\n";
         echo "Generate Controller:\n";

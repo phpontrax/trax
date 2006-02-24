@@ -1,15 +1,24 @@
 <?php
 
-/** @class: InputFilter (PHP5-Strict with comments)
-  * @project: PHP Input Filter
-  * @date: 10-05-2005
-  * @version: 1.2.2_php5
-  * @author: Daniel Morris
-  * @contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
-  * @copyright: Daniel Morris
-  * @email: dan@rootcube.com
-  * @license: GNU General Public License (GPL)
-  */
+/**
+ *  File containing the InputFilter class
+ *
+ *  (PHP 5)
+ *
+ *  @package PHPonTrax
+ *  @version 1.2.2_php5
+ *  @author Daniel Morris
+ *  contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider,
+ *                Chris Tobin and Andrew Eddie.
+ *  @copyright Daniel Morris <dan@rootcube.com>
+ *  @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
+/**
+ *
+ *  @todo Document this class
+ *  @package PHPonTrax
+ */
 class InputFilter {
     
 	static protected $tagsArray = array();	// default = empty array
@@ -24,7 +33,7 @@ class InputFilter {
 		
 	/** 
 	  * Constructor for inputFilter class. Only first parameter is required.
-	  * @access constructor
+	  *
 	  * @param Array $tagsArray - list of user-defined tags
 	  * @param Array $attrArray - list of user-defined attributes
 	  * @param int $tagsMethod - 0= allow just user-defined, 1= allow all but user-defined
@@ -47,6 +56,7 @@ class InputFilter {
       * Added by John Peterson
       * Method to be called by Trax dispatcher to clean all passed in input. Processes for XSS and specified bad code.
       * @access public
+      *  @todo Document this method
       */
     public function process_all($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1) {
         self::__construct($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);

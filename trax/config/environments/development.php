@@ -1,5 +1,7 @@
 <?php
-// put all the global 'development' settings for this application in this file
-
-
+/**
+ * Put all the global 'development' settings for this application in this file
+ *
+ *  @package PHPonTrax
+ */
 ?>
