@@ -1,0 +1,35 @@
+
+			PHPONTRAX TESTS README
+
+This directory contains a collection of unit tests for the Trax
+package.  To run these tests, you must have PHP available to run from
+your command line (not just your web server).  The tests are run using
+PHPUnit2.
+
+PHPUnit2 is a standard part of the PEAR library (http://pear.php.net).
+You can install PHPUnit2 on your system using pear with the command:
+
+ pear install PHPUnit2
+
+The documentation for PHPUnit2 is at
+http://pear.php.net/package/PHPUnit2
+
+These tests do not require any of the other additional packages that
+you may see mentioned in messages from the installation of PHPUnit2.
+
+With PHPUnit2 installed on your system, connect to this
+directory and type
+
+ php runtests.php
+
+on the command line.  All tests will be run automatically.
+(on Linux and other Unix-like systems, you can type ./runtests.php)
+
+Or you can run a single test, for example the test of the ActiveRecord
+class, from the command line:
+
+ phpunit ActiveRecord
+
+(on Linux and other Unix-like systems, you can type ./ActiveRecord.php)
+
+

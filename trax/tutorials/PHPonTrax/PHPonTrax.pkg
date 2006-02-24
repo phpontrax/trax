@@ -1,0 +1,383 @@
+<refentry id="{@id}" revision="$Id$">
+ <refnamediv>
+  <refname>PHP On Trax</refname>
+  <refpurpose>Rapid Application Development Made Easy</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+  <author>
+   Walt Haas
+   <authorblurb>
+    {@link mailto:haas@xmission.com haas@xmission.com}
+   </authorblurb>
+  </author>
+ </refsynopsisdiv>
+ {@toc}
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>PHP port of Ruby on Rails</para>
+  <para>MVC design pattern</para>
+  <para>Currently a subset of the RoR functionality</para>
+<!--
+  <refsect2 id="{@id intro_defines}">
+   <title>Defines</title>
+    <para>TRAX_VIEWS_EXTENTION file extension for views</para>
+    <para>TRAX_MODE 'test', 'development', 'production'. Determines
+     which  database to use.
+     Get it from $_SERVER['TRAX_MODE'] if that exists</para>   
+  </refsect2>
+-->
+ </refsect1>
+ <refsect1 id="{@id start}">
+  <title>Getting Started With Trax</title>
+  <refsect2 id="{@id start_install}">
+   <title>Installing Trax In Your Home Directory</title>
+    <para>In the steps below, we will install Trax in the home
+    directory of user <literal>haas</literal> and verify basic
+    functions.  When following these instructions, substitute your own
+    username for <literal>haas</literal>.</para> 
+
+    <para>Trax requires {@link http://www.php.net PHP} 5, the
+    {@link http://httpd.apache.org/ Apache web server} and a relational 
+    DBMS such as {@link http://www.mysql.com/ MySQL}.  Trax also
+    requires several {@link http://pear.php.net PEAR} modules. The
+    examples below use
+    {@link http://fedora.redhat.com/ Fedora Core 4 Linux}, and may
+    need adjustment for other systems.  The installation procedure below
+    begins by checking for the required software.</para>
+    <orderedlist>
+
+     <listitem>Verify that PHP 5 is available from the command
+     line.  On the command line, type:
+     <example>
+$ <important>php --version</important>
+PHP 5.0.4 (cli) (built: Nov  8 2005 08:27:12)
+...
+     </example>
+     You need to have at least version 5.0.3??? of PHP.
+     </listitem>
+
+     <listitem>Trax needs the DB, Mail and Mail_mime PEAR modules.
+     To see which modules are currently installed, type:
+     <example>
+$ <important>pear list</important>
+Installed packages:
+===================
+Package              Version  State
+...
+DB                   1.7.6    stable
+...
+Mail                 1.1.4    stable
+Mail_Mime            1.3.1    stable
+     </example>
+     If any of the required packages are missing, you need to install
+     them.  Become root, then use the PEAR install command to install
+     whichever packages are missing.  For example, to install DB:
+     <example>
+$ <important>su -</important>
+Password: ...
+# <important>pear install DB</important>
+downloading DB-1.7.6.tgz ...
+Starting to download DB-1.7.6.tgz (124,807 bytes)
+............................done: 124,807 bytes
+install ok: DB 1.7.6
+     </example>
+     Optionally, install PHPUnit2 to run the Trax regression tests,
+     and PhpDocumentor to regenerate this documentation.
+     </listitem>
+
+     <listitem>
+     Check your Apache configuration.  Verify that Apache includes
+     the mod_php, mod_rewrite and mod_userdir modules.  To check,
+     examine file <literal>/etc/httpd/conf/httpd.conf</literal> and
+     <literal>/etc/httpd/conf.d/php.conf</literal> for the lines: 
+     <example>
+LoadModule userdir_module modules/mod_userdir.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule php5_module modules/libphp5.so
+AddHandler php5-script .php
+AddType text/html .php
+     </example>
+     If any of these modules is missing or disabled, you need to add
+     it.  NOTE: it is possible that these modules have been compiled
+     into your version of Apache.
+     </listitem>
+
+     <listitem>
+     Verify that your home directory is accessible to Apache.  Examine
+     file <literal>httpd.conf</literal> for something like:
+     <example>
+     UserDir public_html
+     </example>
+     If <literal>UserDir</literal> is <literal>disable</literal>, you
+     need to change the configuration file to set
+     <literal>UserDir</literal> to some appropriate subdirectory
+     (<literal>public_html</literal> is customary).  If your
+     configuration sets <literal>UserDir</literal> to some other
+     subdirectory of your home directory, make a note of the value.
+     </listitem>
+
+     <listitem>
+     Verify the name of the per-directory configuration file.
+     File <literal>httpd.conf</literal> should contain a line
+     like that below:
+     <example>
+AccessFileName .htaccess
+     </example>
+     If <literal>AccessFileName</literal> is not
+     <literal>.htaccess</literal>, use the filename in the configuration
+     instead of <literal>.htaccess</literal> in the steps below, and
+     rename file <literal>~/public_html/.htaccess</literal> to the
+     name you found in the configuration.
+     </listitem>
+
+     <listitem>
+     Verify that Apache will follow commands from a
+     <literal>.htaccess</literal> file in 
+     subdirectory <literal>public_html</literal>.
+     File <literal>httpd.conf</literal> should contain lines 
+     like those below.  If <literal>UserDir</literal> is not
+     <literal>public_html</literal>, then the
+     <literal>Directory</literal> line below should match the
+     subdirectory specified in <literal>UserDir</literal>.
+     File <literal>.htaccess</literal> must be 
+     given at least the override permissions below in order for
+     mod_rewrite to work.
+     <example>
+<entity>&lt;</entity>Directory /home/*/public_html<entity>&gt;</entity>
+    AllowOverride FileInfo Options
+    Options FollowSymLinks
+<entity>&lt;</entity>/Directory<entity>&gt;</entity>
+     </example>
+     </listitem>
+
+     <listitem>
+     If any of the steps above produced a change to the Apache
+     configuration, you must restart Apache:
+     <example>
+$ <important>su -</important>
+Password: ...
+# <important>apachectl restart</important>
+     </example>
+     </listitem>
+
+     <listitem>
+     Verify that your home directory doesn't have anything valuable in
+     subdirectories <literal>public</literal> or <literal>trax</literal>.
+     </listitem>
+
+     <listitem>
+     Download the
+     {@link http://www.phpontrax.com/downloads Trax distribution}
+     into your home directory and untar it.
+     </listitem>
+
+     <listitem>
+     If the value assigned to <literal>UserDir</literal> in
+     <literal>httpd.conf</literal> is other than
+     <literal>public</literal>, rename directory
+     <literal>public</literal> to the value assigned to
+     <literal>UserDir</literal>: 
+     <example>
+$ <important>mv public public_html</important>
+     </example>
+     </listitem>
+
+     <listitem>
+     As you work with Trax, you may find it helpful to monitor the
+     Apache error log.  You can do this with <literal>less</literal>.
+     Type:
+     <example>
+$ <important>su -</important>
+Password: ...
+# <important>less /var/log/httpd/error_log</important>
+     </example>
+     When <literal>less</literal> starts, give it the command
+     <literal>F</literal> to start continuous monitoring of file
+     <literal>error_log</literal>. 
+     </listitem>
+
+     <listitem>
+     Browse to <literal>http://localhost/~haas/index.html</literal>
+     (substitute your username for <literal>haas</literal>) and verify
+     that you  see a page that begins <important>Congratulations,
+     you've put PHP on Trax!</important>.  At this point you know that
+     Apache will access a static HTML file untarred from the Trax
+     distribution in your home directory.
+     </listitem>
+
+     <listitem>
+     You can verify that PHP works in your
+     <literal>public_html</literal> directory and 
+     is the right revision by creating a file that runs
+     <literal>phpinfo()</literal>: 
+     <example>
+$ <important>cd ~/public_html</important>
+$ <important>cat <entity>&gt;</entity> phpinfo.php
+<entity>&lt;</entity>?php phpinfo() ?<entity>&gt;</entity></important>
+     </example>
+     Then browse to
+     <literal>http://localhost/~haas/phpinfo.php</literal>.  You
+     should see a page that starts <important>PHP Version
+     ...</important> and details how PHP was built.
+     You need to have at least version 5.0.3??? of PHP.
+     At this point you know that Apache will execute a simple PHP
+     script from your home directory.
+     </listitem>
+
+     <listitem>
+     With your favorite editor, edit file
+     <literal>~/public_html/.htaccess</literal> to change the
+     <literal>include_path</literal> line so that it includes the
+     correct location of the Trax configuration directory in your home
+     directory, plus any other directories currently
+     searched by PHP, particularly the PEAR library.  To find the
+     current value of <literal>include_path</literal>, 
+     check the PHP configuration file <literal>/etc/php.ini</literal>:
+     <example>
+$ <important>grep include_path /etc/php.ini</important>
+...
+include_path = ".:/usr/share/pear"
+...
+     </example>
+     You may also see other lines returned by <literal>grep</literal>.
+     Lines that begin with <literal>;</literal> are comments and don't
+     affect the running PHP configuration.  The information you want
+     is on the line that does not start with <literal>;</literal>.
+     Add the <literal>include_path</literal> information
+     from<literal>/etc/php.ini</literal> to 
+     <literal>.htaccess</literal>:  
+     <example>
+php_value include_path .:/usr/share/pear:/home/haas/trax/config
+     </example>
+     In the same file, after the line that says
+     <literal>RewriteEngine&nbsp;On</literal>, add a line that says:
+     <example>
+RewriteBase /~haas/
+     </example>
+     (substitute your username for "haas").
+     In the same file, remove the / from dispatch.php in the last
+     RewriteRule line.  Change:
+     <example>
+RewriteRule ^(.*)$ /dispatch.php?$1 [QSA,L]
+     </example>
+     To:
+     <example>
+RewriteRule ^(.*)$ dispatch.php?$1 [QSA,L]
+     </example>
+     </listitem>
+
+     <listitem>
+     Browse to <literal>http://localhost/~haas/dispatch.php</literal>
+     and verify that you see a page that says:
+     <important>Controller ~haas not found</important>???
+     If you don't get this page and the Apache error log shows a message such
+     as "Failed opening required 'environment.php'" then there is
+     something wrong with the <literal>include_path</literal> value in
+     <literal>.htaccess</literal>.  If you get the expected page, you
+     know that the <literal>include_path</literal> includes the Trax
+     configuration.
+     </listitem>
+
+     <listitem>
+     Delete file <literal>index.html</literal> from
+     <literal>~/public_html</literal>:
+     <example>
+$ <important>rm ~/public_html/index.html</important>
+     </example>
+     </listitem>
+
+     <listitem>
+     Browse to <literal>http://localhost/~haas/</literal>
+     and verify that you see the same page as when you browsed
+     directly to <literal>dispatch.php</literal>, above.
+     If you get the expected page, you know that your mod_rewrite
+     configuration works correctly.
+     </listitem>
+
+     <listitem>
+     Change file permissions on the log files in ~/trax/log so that
+     Apache can write to them:
+     <example>
+$ <important>su -</important>
+Password: ...
+# <important>chmod 777 /home/haas/trax/log/*</important>
+     </example>
+     </listitem>
+    </orderedlist>
+    You now have a working Trax installation in your home directory.
+  </refsect2>  
+  <refsect2 id="{@id start_simple}">
+   <title>Building A Simple Trax Application</title>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id model}">
+  <title>The Model Stores Data</title>
+  <para>The Model part of the MVC architectures owns the data and is
+   responsible for enforcing the rules about it.</para>
+  <para>ActiveRecord design pattern</para>
+  <para>Table name convention</para>
+  <para>Table mapped to ActiveRecord</para>
+  <para>Uses PEAR::DB class</para>
+  <para>RDBMS</para>
+<!--
+  <refsect2 id="{@id model_globals}">
+   <title>The $GLOBALS array</title>
+   <para></para>
+   <refsect3 id="{@id model_globals_ardb}">
+    <title>$GLOBALS['ACTIVE_RECORD_DB']</title>
+    <para>stores a reference to the resource returned from
+     DB::Connect.
+     Set/used in {@link ActiveRecord::establish_connection()}
+     of every ActiveRecord object</para>
+   </refsect3>
+   <refsect3 id="{@id model_globals_dbsetngs}">
+    <title>$GLOBALS['TRAX_DB_SETTINGS']</title>
+    <para></para>
+   </refsect3>
+   <refsect3 id="{@id model_globals_includes}">
+    <title>$GLOBALS['TRAX_INCLUDES']</title>
+    <para></para>
+   </refsect3>
+   <refsect3 id="{@id model_globals_cur_action}">
+    <title>$GLOBALS['current_action_name']</title>
+    <para></para>
+   </refsect3>
+   <refsect3 id="{@id model_globals_cur_cont_nm}">
+    <title>$GLOBALS['current_controller_name']</title>
+    <para></para>
+   </refsect3>
+   <refsect3 id="{@id model_globals_cur_cont_obj}">
+    <title>$GLOBALS['current_controller_object']</title>
+    <para></para>
+   </refsect3>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id view}">
+  <title>The View Presents Data To The User</title>
+  <para>outline</para>
+ </refsect1>
+ <refsect1 id="{@id controller}">
+  <title>The Controller Mediates Between Model And View</title>
+  <para>outline</para>
+ </refsect1>
+ <refsect1 id="{@id session}">
+  <title>Maintaining Session State Between Pages</title>
+  <para></para>
+  <refsect2 id="{@id session_ary}">
+   <title>The $_SESSION array</title>
+   <para></para>
+   <refsect3 id="{@id session_ary_flash}">
+    <title>$_SESSION[]['flash']</title>
+    <para></para>
+   </refsect3>
+  </refsect2>
+-->
+ </refsect1>
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
+</refentry>
