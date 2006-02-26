@@ -5,6 +5,7 @@
 # include path for your php libs (PEAR etc)
 define("PHP_LIB_ROOT",          "/usr/local/lib/php");
 define("TRAX_ROOT",             dirname(dirname(__FILE__)) . "/");
+define("TRAX_PUBLIC",           dirname(dirname(dirname(__FILE__)))."/public");
 define("TRAX_URL_PREFIX",       null); # no leading or trailing slashes
 define("TRAX_VIEWS_EXTENTION",  "phtml");
 
