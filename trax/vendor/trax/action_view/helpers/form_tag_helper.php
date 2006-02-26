@@ -67,7 +67,7 @@ class FormTagHelper extends Helpers {
             unset($html_options['multipart']);
         }
 
-        $html_options['action'] = $this->url_for($url_for_options, $parameters_for_url);
+        $html_options['action'] = url_for($url_for_options, $parameters_for_url);
         return $this->tag("form", $html_options, true);
     }
 

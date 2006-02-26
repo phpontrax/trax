@@ -93,7 +93,7 @@ class ActiveRecordHelper extends Helpers {
     function form($record_name, $options = array()) {
         $record = $this->object($record_name);
         $options["action"] = $options[":action"] ? $options[":action"] : $record->is_new_record() ? "add" : "save";
-        $action = $this->url_for(array(':action' => $options[':action'], ':id' => $record->id));
+        $action = url_for(array(':action' => $options[':action'], ':id' => $record->id));
         $submit_value = (isset($options['submit_value']) ? $options['submit_value'] : ucfirst(preg_replace('/[^\w]/', '', $options[':action'])));
 
         $contents = '';

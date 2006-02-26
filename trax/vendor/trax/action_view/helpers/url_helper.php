@@ -151,6 +151,91 @@ class UrlHelper extends Helpers {
         return $this->link_to($this->tag("img", $image_options), $options, $html_options, $parameters_for_method_reference);
     }
 
+    /**
+     *  Return the URL for the set of $options provided.
+     */
+    function url_for($options = array()) {
+        $url_base = null;
+        $url = array();
+        if(is_string($options)) {
+            //$url[] = $options;
+            return $options;
+        } else {
+            $url_base = $_SERVER['HTTP_HOST'];
+            if(substr($url_base, -1) == "/") {
+                # remove the ending slash
+                $url_base = substr($url_base, 0, -1);                             
+            }           
+            
+            if($_SERVER['SERVER_PORT'] == 443) {
+                $url_base = "https://".$url_base;
+            } else {
+                $url_base = "http://".$url_base;
+            }
+            if(!is_null(TRAX_URL_PREFIX)) {
+                $url_base .= "/".TRAX_URL_PREFIX;
+            }
+            
+            if(array_key_exists(":controller", $options)) {
+                if($controller = $options[":controller"]) {
+                    $url[] = $controller; 
+                }
+            } else {
+                $controller = $this->controller_path;
+                if(substr($controller, 0, 1) == "/") {
+                    # remove the beginning slash
+                    $controller = substr($controller, 1);        
+                }
+                $url[] = $controller;
+            }
+            
+            if(count($url)) {
+                if(array_key_exists(":action", $options)) {
+                    if($action = $options[":action"]) {
+                        $url[] = $action;
+                    }
+                } 
+            }
+            if(count($url) > 1) {
+                if(array_key_exists(":id", $options)) {
+                    if(is_object($options[":id"])) {
+                        if($id = $options[":id"]->id) {
+                            $url[] = $id;
+                        }
+                    } else {
+                        if($id = $options[":id"]) {
+                            $url[] = $id;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if(count($url) && substr($url_base,-1) != "/") {
+            $url_base .= "/";    
+        } 
+
+        return $url_base . implode("/", $url);
+    }
+    
+    function convert_confirm_option_to_javascript($html_options) {
+        if($html_options['confirm']) {
+            $html_options['onclick'] = "return confirm('".addslashes($html_options['confirm'])."');";
+            unset($html_options['confirm']);
+        }
+        return $html_options;
+    }
+
+    function convert_boolean_attributes(&$html_options, $bool_attrs) {
+        foreach($bool_attrs as $x) {
+            if(in_array($x, $html_options)) {
+                $html_options[$x] = $x;
+                unset($html_options[$x]);
+            }
+        }
+        return $html_options;
+    }    
+
 }
 
 /**
@@ -160,6 +245,21 @@ class UrlHelper extends Helpers {
 function link_to($name, $options = array(), $html_options = array()) {
     $url_helper = new UrlHelper();
     return $url_helper->link_to($name, $options, $html_options);
+}
+
+function link_image_to($src, $options = array(), $html_options = array()) {
+    $url_helper = new UrlHelper();
+    return $url_helper->link_image_to($src, $options, $html_options);        
+}
+
+function button_to($name, $options = array(), $html_options = null) {
+    $url_helper = new UrlHelper();
+    return $url_helper->button_to($name, $options, $html_options);    
+}
+
+function url_for($options = array()) {
+    $url_helper = new UrlHelper();
+    return $url_helper->url_for($options);
 }
 
 ?>
