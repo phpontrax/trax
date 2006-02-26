@@ -210,13 +210,13 @@ class UrlHelper extends Helpers {
                 }
             }
             
-            if(count($options)) {
-                foreach($options as $key => $value) {
-                    if(!strstr($key, ":")) {
-                        $extra_params[$key] = $value; 
-                    }       
-                }    
-            }
+            #if(count($options)) {
+            #    foreach($options as $key => $value) {
+            #        if(!strstr($key, ":")) {
+            #            $extra_params[$key] = $value; 
+            #        }       
+            #    }    
+            #}
         }
         
         if(count($url) && substr($url_base,-1) != "/") {
