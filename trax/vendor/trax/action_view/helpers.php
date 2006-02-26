@@ -88,73 +88,6 @@ class Helpers {
         return $html;
     }
 
-    /**
-     *  Return the URL for the set of $options provided.
-     */
-    function url_for($options = array()) {
-        $url_base = null;
-        $url = array();
-        if(is_string($options)) {
-            //$url[] = $options;
-            return $options;
-        } else {
-            $url_base = $_SERVER['HTTP_HOST'];
-            if(substr($url_base, -1) == "/") {
-                # remove the ending slash
-                $url_base = substr($url_base, 0, -1);                             
-            }           
-            
-            if($_SERVER['SERVER_PORT'] == 443) {
-                $url_base = "https://".$url_base;
-            } else {
-                $url_base = "http://".$url_base;
-            }
-            if(!is_null(TRAX_URL_PREFIX)) {
-                $url_base .= "/".TRAX_URL_PREFIX;
-            }
-            
-            if(array_key_exists(":controller", $options)) {
-                if($controller = $options[":controller"]) {
-                    $url[] = $controller; 
-                }
-            } else {
-                $controller = $this->controller_path;
-                if(substr($controller, 0, 1) == "/") {
-                    # remove the beginning slash
-                    $controller = substr($controller, 1);        
-                }
-                $url[] = $controller;
-            }
-            
-            if(count($url)) {
-                if(array_key_exists(":action", $options)) {
-                    if($action = $options[":action"]) {
-                        $url[] = $action;
-                    }
-                } 
-            }
-            if(count($url) > 1) {
-                if(array_key_exists(":id", $options)) {
-                    if(is_object($options[":id"])) {
-                        if($id = $options[":id"]->id) {
-                            $url[] = $id;
-                        }
-                    } else {
-                        if($id = $options[":id"]) {
-                            $url[] = $id;
-                        }
-                    }
-                }
-            }
-        }
-        
-        if(count($url) && substr($url_base,-1) != "/") {
-            $url_base .= "/";    
-        } 
-
-        return $url_base . implode("/", $url);
-    }
-
 }
 
 /**
@@ -166,12 +99,10 @@ function content_tag() {
     return call_user_func_array(array($helper, 'content_tag'), $args);
 }
 
-/**
- *
- */
-function url_for($options = array()) {
+function tag() {
     $helper = new Helpers();
-    return $helper->url_for($options);
+    $args = func_get_args();
+    return call_user_func_array(array($helper, 'tag'), $args);
 }
 
 ?>
