@@ -110,6 +110,16 @@ class Inflector {
     }
 
     /**
+     *  Capitalize a word making it all lower case with first letter uppercase 
+     *
+     *  @param  string $word  Word to be capitalized
+     *  @return string Capitalized $word
+     */
+    function capitalize($word) {
+        return ucfirst(strtolower($word));     
+    }
+
+    /**
      *  Convert a phrase from the lower case and underscored form
      *  to the camel case form
      *
@@ -178,7 +188,7 @@ class Inflector {
     function foreign_key($class_name) {
         return self::underscore($class_name) . "_id";
     }
-
+    
 }
 
 
