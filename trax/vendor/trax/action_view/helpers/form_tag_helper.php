@@ -37,7 +37,7 @@ class FormTagHelper extends Helpers {
     /**
      *
      */
-    function form_tag($url_for_options = array(), $options = array(), $parameters_for_url = array()) {
+    function form_tag($url_for_options = array(), $options = array()) {
         $html_options = array_merge(array("method" => "post"), $options);
 
         if($html_options['multipart']) {
@@ -45,7 +45,7 @@ class FormTagHelper extends Helpers {
             unset($html_options['multipart']);
         }
 
-        $html_options['action'] = url_for($url_for_options, $parameters_for_url);
+        $html_options['action'] = url_for($url_for_options);
         return $this->tag("form", $html_options, true);
     }
 

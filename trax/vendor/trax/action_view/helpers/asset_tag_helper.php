@@ -102,13 +102,15 @@ class AssetTagHelper extends Helpers {
                 if(file_exists(TRAX_PUBLIC. "/javascripts/application.js")) {
                     $sources[] = 'application';
                 }
+                # remove defaults from array
+                unset($sources[array_search('defaults', $sources)]);  
             }
             $contents = array();
             foreach($sources as $source) {
                 $source = $this->javascript_path($source);
                 $contents[] = $this->content_tag("script", "", array_merge(array("type" => "text/javascript", "src" => $source), $options));
             }
-            return implode("\n", $contents)."\n";
+            return implode("", $contents);
         }
     }
     
@@ -145,7 +147,7 @@ class AssetTagHelper extends Helpers {
                 $source = $this->stylesheet_path($source);
                 $contents[] = $this->tag("link", array_merge(array("rel" => "Stylesheet", "type" => "text/css", "media" => "screen", "href" => $source), $options));
             }
-            return implode("\n", $contents) . "\n";
+            return implode("", $contents);
         }
     }
     

@@ -156,10 +156,11 @@ class UrlHelper extends Helpers {
     function url_for($options = array()) {
         $url_base = null;
         $url = array();
+        $extra_params = array();
         if(is_string($options)) {
             //$url[] = $options;
             return $options;
-        } else {
+        } elseif(is_array($options)) {
             $url_base = $_SERVER['HTTP_HOST'];
             if(substr($url_base, -1) == "/") {
                 # remove the ending slash
@@ -208,13 +209,20 @@ class UrlHelper extends Helpers {
                     }
                 }
             }
+            
+            if(count($options)) {
+                foreach($options as $key => $value) {
+                    if(!strstr($key, ":")) {
+                        $extra_params[$key] = $value; 
+                    }       
+                }    
+            }
         }
         
         if(count($url) && substr($url_base,-1) != "/") {
             $url_base .= "/";    
         } 
-
-        return $url_base . implode("/", $url);
+        return $url_base . implode("/", $url) . (count($extra_params) ? "?".http_build_query($extra_params) : null);
     }    
 
 }

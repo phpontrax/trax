@@ -50,7 +50,7 @@ class Helpers {
         if(count($options)) {
             $html = array();
             foreach($options as $key => $value) {
-                $html[] = "$key=\"".@htmlspecialchars($value, ENT_QUOTES)."\"";
+                $html[] = "$key=\"".@htmlspecialchars($value, ENT_COMPAT)."\"";
             }
             sort($html);
             $html = implode(" ", $html);
