@@ -218,19 +218,24 @@ class FormOptionsHelper extends FormHelper {
  * Create a select tag and a series of contained option tags for the provided object and method.
  * The option currently held by the object will be selected, provided that the object is available.
  * See options_for_select for the required format of the choices parameter.
-#
- * Example with @post.person_id => 1:
- *   select("post", "person_id", Person.find_all.collect {|p| [ p.name, p.id ] }, { :include_blank => true })
-#
+ *
+ * Example with $post->person_id => 1:
+ *   $person = new Person;
+ *   $people = $person->find_all();
+ *   foreach($people as $person) {
+ *      $choices[$person->id] = $person->first_name;
+ *   }
+ *   select("post", "person_id", $choices, array("include_blank" => true))
+ *
  * could become:
-#
- *   <select name="post[person_id">
+ *
+ *   <select name="post[person_id]">
  *     <option></option>
  *     <option value="1" selected="selected">David</option>
  *     <option value="2">Sam</option>
  *     <option value="3">Tobias</option>
  *   </select>
-#
+ *
  * This can be used to provide a functionault set of options in the standard way: before r}ering the create form, a
  * new model instance is assigned the functionault options and bound to @model_name. Usually this model is not saved
  * to the database. Instead, a second model object is created when the create request is received.
@@ -245,6 +250,21 @@ function select($object_name, $attribute_name, $choices, $options = array(), $ht
 /**
  * Return select and option tags for the given object and method using 
  * options_from_collection_for_select to generate the list of option tags.
+ *
+ * Example with $post->person_id => 1:
+ *   $person = new Person;
+ *   $people = $person->find_all();
+ *   collection_select("post", "person_id", $people, "id", "first_name", array("include_blank" => true))
+ *
+ * could become:
+ *
+ *   <select name="post[person_id]">
+ *     <option></option>
+ *     <option value="1" selected="selected">David</option>
+ *     <option value="2">Sam</option>
+ *     <option value="3">Tobias</option>
+ *   </select>
+ *
  */
 function collection_select($object_name, $attribute_name, $collection, $attribute_value, $attribute_text, $options = array(), $html_options = array()) {
     $form = new FormOptionsHelper($object_name, $attribute_name);

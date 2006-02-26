@@ -89,9 +89,8 @@ class UrlHelper extends Helpers {
      */
     function convert_boolean_attributes(&$html_options, $bool_attrs) {
         foreach($bool_attrs as $x) {
-            if(in_array($x, $html_options)) {
+            if(@array_key_exists($x, $html_options)) {
                 $html_options[$x] = $x;
-                unset($html_options[$x]);
             }
         }
         return $html_options;
@@ -102,14 +101,14 @@ class UrlHelper extends Helpers {
      */
     function button_to($name, $options = array(), $html_options = null) {
         $html_options = (!is_null($html_options) ? $html_options : array());
-        $this->convert_boolean_attributes($html_options, array($disabled));
+        $this->convert_boolean_attributes($html_options, array('disabled'));
         $this->convert_confirm_option_to_javascript($html_options);
         if (is_string($options)) {
             $url = $options;
             $name = (!is_null($name) ? $name : $options);
         } else {
             $url = url_for($options);
-            $name = (!is_null($name) ? $name : $this->url_for($options));
+            $name = (!is_null($name) ? $name : url_for($options));
         }
 
         $html_options = array_merge($html_options, array("type" => "submit", "value" => $name));
@@ -119,9 +118,9 @@ class UrlHelper extends Helpers {
 
     /**
      * This tag is deprecated. Combine the link_to and AssetTagHelper::image_tag yourself instead, like:
-     *   link_to(image_tag("rss", :size => "30x45", :border => 0), "http://www.example.com")
+     *   link_to(image_tag("rss", array("size" => "30x45"), array("border" => 0)), "http://www.example.com")
      */
-    function link_image_to($src, $options = array(), $html_options = array(), $parameters_for_method_reference = array()) {
+    function link_image_to($src, $options = array(), $html_options = array()) {
         $image_options = array("src" => (ereg("/", $src) ? $src : "/images/$src"));
         if (!ereg(".", $image_options["src"])) $image_options["src"] .= ".png";
 
@@ -148,7 +147,7 @@ class UrlHelper extends Helpers {
             unset($html_options["align"]);
         }
 
-        return $this->link_to($this->tag("img", $image_options), $options, $html_options, $parameters_for_method_reference);
+        return $this->link_to($this->tag("img", $image_options), $options, $html_options);
     }
 
     /**
@@ -216,24 +215,6 @@ class UrlHelper extends Helpers {
         } 
 
         return $url_base . implode("/", $url);
-    }
-    
-    function convert_confirm_option_to_javascript($html_options) {
-        if($html_options['confirm']) {
-            $html_options['onclick'] = "return confirm('".addslashes($html_options['confirm'])."');";
-            unset($html_options['confirm']);
-        }
-        return $html_options;
-    }
-
-    function convert_boolean_attributes(&$html_options, $bool_attrs) {
-        foreach($bool_attrs as $x) {
-            if(in_array($x, $html_options)) {
-                $html_options[$x] = $x;
-                unset($html_options[$x]);
-            }
-        }
-        return $html_options;
     }    
 
 }

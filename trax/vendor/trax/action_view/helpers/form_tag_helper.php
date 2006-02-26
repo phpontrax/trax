@@ -37,28 +37,6 @@ class FormTagHelper extends Helpers {
     /**
      *
      */
-    private function convert_options($options = array()) {
-        $arr = array('disabled', 'readonly', 'multiple');
-        foreach($arr as $a) {
-            $this->boolean_attribute(&$options, $a);
-        }
-        return $options;
-    }
-
-    /**
-     *
-     */
-    private function boolean_attribute(&$options, $attribute) {
-        if($options[$attribute]) {
-            $options[$attribute] = $attribute;
-        } else {
-            unset($options[$attribute]);
-        }
-    }
-
-    /**
-     *
-     */
     function form_tag($url_for_options = array(), $options = array(), $parameters_for_url = array()) {
         $html_options = array_merge(array("method" => "post"), $options);
 

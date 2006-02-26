@@ -46,7 +46,7 @@ class Helpers {
     /**
      *
      */
-    function tag_options($options) {
+    protected function tag_options($options) {
         if(count($options)) {
             $html = array();
             foreach($options as $key => $value) {
@@ -57,6 +57,39 @@ class Helpers {
         }
         return $html;
     }
+
+    /**
+     *
+     */
+    protected function convert_options($options = array()) {
+        foreach(array('disabled', 'readonly', 'multiple') as $a) {
+            $this->boolean_attribute(&$options, $a);
+        }
+        return $options;
+    }
+
+    /**
+     *
+     */
+    protected function boolean_attribute(&$options, $attribute) {
+        if($options[$attribute]) {
+            $options[$attribute] = $attribute;
+        } else {
+            unset($options[$attribute]);
+        }
+    }
+    
+    /**
+     * 
+     * Returns a CDATA section for the given +content+.  CDATA sections
+     * are used to escape blocks of text containing characters which would
+     * otherwise be recognized as markup. CDATA sections begin with the string
+     * <tt>&lt;![CDATA[</tt> and end with (and may not contain) the string 
+     * <tt>]]></tt>. 
+     */
+    function cdata_section($content) {
+        return "<![CDATA[".$content."]]>";
+    }    
 
     /**
      *  Generate an HTML or XML tag with optional attributes
@@ -70,7 +103,7 @@ class Helpers {
         $html = "<$name ";
         $html .= $this->tag_options($options);
         $html .= $open ? ">" : " />";
-        return $html;
+        return $html."\n";
     }
 
     /**
@@ -85,7 +118,7 @@ class Helpers {
         $html .= "<$name ";
         $html .= $this->tag_options($options);
         $html .= ">$content</$name>";
-        return $html;
+        return $html."\n";
     }
 
 }
@@ -103,6 +136,12 @@ function tag() {
     $helper = new Helpers();
     $args = func_get_args();
     return call_user_func_array(array($helper, 'tag'), $args);
+}
+
+function cdata_section() {
+    $helper = new Helpers();
+    $args = func_get_args();
+    return call_user_func_array(array($helper, 'cdata_section'), $args);
 }
 
 ?>
