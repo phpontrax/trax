@@ -35,7 +35,7 @@
 class FormTagHelper extends Helpers {
 
     /**
-     *
+     *  @todo Document this method
      */
     function form_tag($url_for_options = array(), $options = array()) {
         $html_options = array_merge(array("method" => "post"), $options);
@@ -50,6 +50,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function start_form_tag() {
@@ -58,6 +59,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function select_tag($name, $option_tags = null, $options = array()) {
@@ -65,6 +67,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function text_field_tag($name, $value = null, $options = array()) {
@@ -72,6 +75,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function hidden_field_tag($name, $value = null, $options = array()) {
@@ -79,6 +83,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function file_field_tag($name, $options = array()) {
@@ -86,6 +91,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function password_field_tag($name = "password", $value = null, $options = array()) {
@@ -93,6 +99,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function text_area_tag($name, $content = null, $options = array()) {
@@ -107,6 +114,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function check_box_tag($name, $value = "1", $checked = false, $options = array()) {
@@ -116,6 +124,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function radio_button_tag($name, $value, $checked = false, $options = array()) {
@@ -125,6 +134,7 @@ class FormTagHelper extends Helpers {
     }
 
     /**
+     *  @todo Document this method
      *
      */
     function submit_tag($value = "Save changes", $options = array()) {
@@ -133,6 +143,7 @@ class FormTagHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     function image_submit_tag($source, $options = array()) {
         return $this->tag("input", array_merge(array("type" => "image", "src" => image_path($source)), $this->convert_options($options)));
@@ -141,6 +152,7 @@ class FormTagHelper extends Helpers {
 }
 
 /**
+ *  @todo Document this method
  *  Avialble functions for use in views
  */
 function form_tag() {
@@ -150,6 +162,7 @@ function form_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function start_form_tag() {
@@ -158,6 +171,7 @@ function start_form_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function end_form_tag() {
@@ -165,6 +179,7 @@ function end_form_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function select_tag() {
@@ -174,6 +189,7 @@ function select_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function text_field_tag() {
@@ -183,6 +199,7 @@ function text_field_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function hidden_field_tag() {
@@ -193,6 +210,7 @@ function hidden_field_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function file_field_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -202,6 +220,7 @@ function file_field_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function password_field_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -211,6 +230,7 @@ function password_field_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function text_area_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -220,6 +240,7 @@ function text_area_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function check_box_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -229,6 +250,7 @@ function check_box_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function radio_button_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -238,6 +260,7 @@ function radio_button_tag() {
 
 /**
  *
+ *  @todo Document this method
  */
 function submit_tag() {
     $form_tag_helper = new FormTagHelper();
@@ -246,6 +269,7 @@ function submit_tag() {
 }
 
 /**
+ *  @todo Document this method
  *
  */
 function image_submit_tag() {

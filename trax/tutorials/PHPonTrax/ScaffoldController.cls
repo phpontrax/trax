@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>ScaffoldController</refname>
   <refpurpose>@todo ScaffoldController tutorial</refpurpose>

@@ -5,7 +5,7 @@
  *
  * (PHP 5)
  *
- * @package PHPonTrax
+ * @package PHPonTraxTest
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright (c) Walter O. Haas 2006
  * @version $Id$
@@ -15,6 +15,7 @@
 //$tests = glob('*Test.php');
 //  Control order of tests
 $tests = array(
+               'InputFilterTest.php',
                'InflectorTest.php',
                'ActiveRecordTest.php',
 			   );

@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>ActiveRecordError</refname>
   <refpurpose>Error exception thrown by ActiveRecord</refpurpose>

@@ -56,7 +56,7 @@ require_once('DB.php');
  *
  *  <p>Unit tester: {@link ActiveRecordTest}</p>
  *
- *  @package PHPonTrax
+ *  @tutorial PHPonTrax/ActiveRecord.cls
  */
 class ActiveRecord {
 

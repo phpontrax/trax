@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>ActiveRecordHelper</refname>
   <refpurpose></refpurpose>

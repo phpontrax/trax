@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>TraxGenerator</refname>
   <refpurpose>@todo TraxGenerator tutorial</refpurpose>

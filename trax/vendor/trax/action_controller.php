@@ -217,7 +217,7 @@ class ActionController {
         $views_file_extention = TRAX_VIEWS_EXTENTION;
 
     function __construct() {
-        if(!is_object($this->router)) {
+      if(!isset($this->router) || !is_object($this->router)) {
             $this->load_router();
         }
     }
@@ -506,7 +506,7 @@ class ActionController {
                     $new_path[] = $path;
                 }
             }
-            if(is_array($extra_path)) {
+            if(isset($extra_path) && is_array($extra_path)) {
                 $extra_path = implode("/", $extra_path);
                 $this->added_path = $extra_path;
                 $this->controllers_path .= "/$extra_path";

@@ -29,13 +29,25 @@
  */
 
 /**
+ *  Singleton class to call controller selected by HTTP request
  *
- *  @package PHPonTrax
+ *  @tutorial PHPonTrax/Dispatcher.cls
  */
 class Dispatcher {
 
     /**
+     *  Dispatch a request from Apache
      *
+     *  Called from file dispatch.php, which is invoked by
+     *  {@link http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html Apache mod_rewrite}
+     *  whenever a client makes a request.
+     *  Filter ???, start a session, construct an ActionController and
+     *  process the route.
+     *  @uses ActionController::__construct()
+     *  @uses ActionController::process_route()
+     *  @uses ActionController::process_with_exception()
+     *  @uses InputFilter::process_all()
+     *  @uses Session::start()
      */
     function dispatch() {
         try {
@@ -44,7 +56,7 @@ class Dispatcher {
             $ac = new ActionController();
             $ac->process_route();
         } catch(Exception $e) {
-            $ac->process_with_exception(&$e);
+            $ac->process_with_exception($e);
         }
     }
 

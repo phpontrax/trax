@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>Session</refname>
   <refpurpose>@todo Session tutorial</refpurpose>

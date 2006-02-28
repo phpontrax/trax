@@ -31,11 +31,9 @@
 /**
  *  Inflector contains static methods to convert English words between
  *  singular and plural, and phrases between the camel case form and
- *  the lower case underscore form.  For details see the
- *  {@tutorial PHPonTrax/Inflector.cls} tutorial.
+ *  the lower case underscore form.
  *
- *  @package PHPonTrax
- *
+ *  @tutorial PHPonTrax/Inflector.cls
  */
 class Inflector {
 

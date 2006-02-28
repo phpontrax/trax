@@ -1,4 +1,4 @@
-<refentry id="{@id}" revision="$Id$">
+<refentry id="{@id}" revision="$Id$" revision="$Id$">
  <refnamediv>
   <refname>PHP On Trax</refname>
   <refpurpose>Rapid Application Development Made Easy</refpurpose>

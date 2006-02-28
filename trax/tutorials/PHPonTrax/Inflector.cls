@@ -1,4 +1,4 @@
-<refentry id="{@id}" revision="$Id$">
+<refentry id="{@id}" revision="$Id$" revision="$Id$">
  <refnamediv>
   <refname>Inflector</refname>
   <refpurpose>Convert names between classes and database tables</refpurpose>

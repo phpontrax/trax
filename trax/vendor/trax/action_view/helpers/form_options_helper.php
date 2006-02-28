@@ -31,7 +31,7 @@
 /**
  * All the countries included in the country_options output.
  */
-if(!$GLOBALS['COUNTRIES']) {
+if(!array_key_exists('COUNTRIES',$GLOBALS)) {
     $GLOBALS['COUNTRIES'] = 
         array("Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", 
         "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", 

@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>TraxError</refname>
   <refpurpose>Error exception thrown by Trax modules</refpurpose>

@@ -10,7 +10,7 @@ define("TRAX_URL_PREFIX",       null); # no leading or trailing slashes
 define("TRAX_VIEWS_EXTENTION",  "phtml");
 
 # Set in the Apache Vhost (SetEnv TRAX_MODE development)
-if($_SERVER['TRAX_MODE']) {
+if(isset($_SERVER) && array_key_exists('TRAX_MODE',$_SERVER)) {
     # Set from Env production / development / test
     define("TRAX_MODE",   $_SERVER['TRAX_MODE']);
 } else {

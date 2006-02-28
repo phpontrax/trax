@@ -30,17 +30,20 @@
 
 /**
  *
- *  @package PHPonTrax
+ *  @todo Document this class
  */
 class DateHelper extends Helpers {
     public $selected_years = array();
     /**
-     *
+     *  @todo Document this method
      */
     function __construct($object_name = null, $attribute_name = null) {
         parent::__construct($object_name, $attribute_name);
     }
     
+    /**
+     *  @todo Document this method
+     */
     private function check_request_for_value() {
         if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
             # check if this a date / datetime
@@ -68,6 +71,7 @@ class DateHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     private function select_html($type, $options, $prefix = null, $include_blank = false, $discard_type = false) {
         $select_html  = "<select name=\"$prefix";       
@@ -85,6 +89,7 @@ class DateHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     private function leading_zero_on_single_digits($number) {
         return $number > 9 ? $number : "0$number";
@@ -92,6 +97,7 @@ class DateHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     protected function value() {
         if(!$value = $this->check_request_for_value()) {
@@ -103,6 +109,9 @@ class DateHelper extends Helpers {
         return $value;
     }
     
+    /**
+     *  @todo Document this method
+     */
     function expiration_date_select($options = array()) {
         return $this->to_expiration_date_select_tag($options);      
     }
@@ -110,6 +119,7 @@ class DateHelper extends Helpers {
     /**
      *   datetime_select("post", "written_on")
      *   datetime_select("post", "written_on", array("start_year" => 1995))
+     *  @todo Document this method
      */
     function datetime_select($options = array()) {     
         return $this->to_datetime_select_tag($options);
@@ -118,11 +128,15 @@ class DateHelper extends Helpers {
     /**
      *   datetime_select("post", "written_on")
      *   datetime_select("post", "written_on", array("start_year" => 1995))
+     *  @todo Document this method
      */
     function date_select($options = array()) {   
         return $this->to_date_select_tag($options);
     }  
     
+    /**
+     *  @todo Document this method
+     */
     function select_expiration_date($date = null, $options = array()) {
         $options['month_before_year'] = true;      
         $options['use_month_numbers'] = true;   
@@ -145,6 +159,7 @@ class DateHelper extends Helpers {
 
     /**
      * Returns a set of html select-tags (one for year, month, and day) pre-selected with the +date+.
+     *  @todo Document this method
      */
     function select_date($date = null, $options = array()) {
         $date = is_null($date) ? date("Y-m-d") : $date;
@@ -155,6 +170,7 @@ class DateHelper extends Helpers {
 
     /**
      * Returns a set of html select-tags (one for year, month, day, hour, and minute) preselected the +datetime+.
+     *  @todo Document this method
      */
     function select_datetime($datetime = null, $options = array()) {
         $datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
@@ -167,6 +183,7 @@ class DateHelper extends Helpers {
 
     /**
      * Returns a set of html select-tags (one for hour and minute)
+     *  @todo Document this method
      */
     function select_time($datetime = null, $options = array()) {
         $datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
@@ -179,6 +196,7 @@ class DateHelper extends Helpers {
      *  Returns a select tag with options for each of the seconds 0 through 59 with the current second selected.
      *  The <tt>second</tt> can also be substituted for a second number.
      *  Override the field name using the <tt>:field_name</tt> option, 'second' by default.
+     *  @todo Document this method
      */
     function select_second($datetime, $options = array()) {
         $second_options = "";
@@ -206,6 +224,7 @@ class DateHelper extends Helpers {
      *  Also can return a select tag with options by <tt>minute_step</tt> from 0 through 59 with the 00 minute selected
      *  The <tt>minute</tt> can also be substituted for a minute number.
      *  Override the field name using the <tt>:field_name</tt> option, 'minute' by default.
+     *  @todo Document this method
      */
     function select_minute($datetime, $options = array()) {
         $minute_options = "";
@@ -232,6 +251,7 @@ class DateHelper extends Helpers {
      *  Returns a select tag with options for each of the hours 0 through 23 with the current hour selected.
      *  The <tt>hour</tt> can also be substituted for a hour number.
      *  Override the field name using the <tt>:field_name</tt> option, 'hour' by default.
+     *  @todo Document this method
      */
     function select_hour($datetime, $options = array()) {
         $hour_options = "";
@@ -259,6 +279,7 @@ class DateHelper extends Helpers {
      *  Returns a select tag with options for each of the days 1 through 31 with the current day selected.
      *  The <tt>date</tt> can also be substituted for a hour number.
      *  Override the field name using the <tt>:field_name</tt> option, 'day' by default.
+     *  @todo Document this method
      */
     function select_day($datetime, $options = array()) {
         $day_options = "";
@@ -293,6 +314,7 @@ class DateHelper extends Helpers {
     *   select_month(Date.today, :add_month_numbers => true) # Will use keys like "1 - January", "3 - March"
     *
     *  Override the field name using the <tt>:field_name</tt> option, 'month' by default.
+     *  @todo Document this method
    */
     function select_month($date, $options = array()) {
         $month_options = "";
@@ -331,6 +353,7 @@ class DateHelper extends Helpers {
     *   select_year(Date.today, :start_year => 2005, :end_year => 1900)  # descending year values
     *
     * Override the field name using the <tt>:field_name</tt> option, 'year' by default.
+     *  @todo Document this method
     */
     function select_year($date, $options = array()) {
         $year_options = "";
@@ -358,6 +381,7 @@ class DateHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     function to_date_select_tag($options = array()) {
         $defaults = array('discard_type' => true);
@@ -405,6 +429,7 @@ class DateHelper extends Helpers {
 
     /**
      *
+     *  @todo Document this method
      */
     function to_datetime_select_tag($options = array()) {
         $defaults = array('discard_type' => true);
@@ -435,6 +460,9 @@ class DateHelper extends Helpers {
         return $datetime_select;
     }
     
+    /**
+     *  @todo Document this method
+     */
     function to_expiration_date_select_tag($options = array()) {
         $options['discard_day'] = true; 
         $options['month_before_year'] = true;      
@@ -450,6 +478,7 @@ class DateHelper extends Helpers {
 /**
   *  Avialble functions for use in views
   *  select_date($date = null, $options = array())
+  *  @todo Document this function
   */
 function select_date() {
     $date_helper = new DateHelper();
@@ -459,6 +488,7 @@ function select_date() {
 
 /**
  *  Select_datetime($datetime = null, $options = array())
+ *  @todo Document this function
  */
 function select_datetime() {
     $date_helper = new DateHelper();
@@ -468,6 +498,7 @@ function select_datetime() {
 
 /**
  * select_expiration_date($datetime = null, $options = array())
+ *  @todo Document this function
  */
 function select_expiration_date() {
     $date_helper = new DateHelper();
@@ -477,6 +508,7 @@ function select_expiration_date() {
 
 /**
  *
+ *  @todo Document this function
  */
 function datetime_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
@@ -485,33 +517,59 @@ function datetime_select($object, $attribute, $options = array()) {
 
 /**
  *
+ *  @todo Document this function
  */
 function date_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
     return $date_helper->date_select($options);    
 }
 
+/**
+ *
+ *  @todo Document this function
+ */
 function expiration_date_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
     return $date_helper->expiration_date_select($options);        
 }
 
+
+/**
+ *
+ *  @todo Document this function
+ */
 function select_year() {
     $date_helper = new DateHelper();
     $args = func_get_args();
     return call_user_func_array(array($date_helper, 'select_year'), $args);    
 }
 
+
+/**
+ *
+ *  @todo Document this function
+ */
 function select_month() {
     $date_helper = new DateHelper();
     $args = func_get_args();
     return call_user_func_array(array($date_helper, 'select_month'), $args);    
 }
 
+
+/**
+ *  @todo Document this function
+ */
 function select_day() {
     $date_helper = new DateHelper();
     $args = func_get_args();
     return call_user_func_array(array($date_helper, 'select_day'), $args);    
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

@@ -5,7 +5,7 @@
  *
  * (PHP 5)
  *
- * @package PHPonTrax
+ * @package PHPonTraxTest
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright (c) Walter O. Haas 2006
  * @version $Id$

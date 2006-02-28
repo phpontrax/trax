@@ -1,4 +1,4 @@
-<refentry id="{@id}">
+<refentry id="{@id}" revision="$Id$">
  <refnamediv>
   <refname>UrlHelper</refname>
   <refpurpose>@todo UrlHelper tutorial</refpurpose>
