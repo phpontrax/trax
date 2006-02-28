@@ -272,16 +272,6 @@ class ActiveRecordHelper extends Helpers {
     /**
      *
      */
-    function object($object_name = null) {
-        $object_name = $object_name ? $object_name : $this->object_name;
-        if($object_name) {
-            return $this->controller_object->$object_name;
-        }
-    }
-
-    /**
-     *
-     */
     function tag_without_error_wrapping() {
         $args = func_get_args();
         return call_user_func_array(array(parent, 'tag'), $args);
