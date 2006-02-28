@@ -38,34 +38,11 @@ class FormHelper extends Helpers {
      *
      */
     function __construct($object_name, $attribute_name) {
-        parent::__construct();
-        $this->object_name = $object_name;
-        $this->attribute_name = $attribute_name;
+        parent::__construct($object_name, $attribute_name);
         $this->default_field_options = $GLOBALS['DEFAULT_FIELD_OPTIONS'] ? $GLOBALS['DEFAULT_FIELD_OPTIONS'] : array("size" => 30);
         $this->default_radio_options = $GLOBALS['DEFAULT_RADIO_OPTIONS'] ? $GLOBALS['DEFAULT_RADIO_OPTIONS'] : array();
         $this->default_text_area_options = $GLOBALS['DEFAULT_TEXT_AREA_OPTIONS'] ? $GLOBALS['DEFAULT_TEXT_AREA_OPTIONS'] : array("cols" => 40, "rows" => 20);
         $this->default_date_options = $GLOBALS['DEFAULT_DATE_OPTIONS'] ? $GLOBALS['DEFAULT_DATE_OPTIONS'] : array(":discard_type" => true);
-    }
-
-    /**
-     *
-     */
-    function value() {
-        if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
-            $object = $this->object();
-            if(is_object($object) && $this->attribute_name) {
-                $value = $object->send($this->attribute_name);
-            }
-        }
-        return $value;
-    }
-
-    /**
-     *
-     */
-    function object($object_name = null) {
-        $object_name = $object_name ? $object_name : $this->object_name;
-        return $this->controller_object->$object_name;
     }
 
     /**

@@ -37,12 +37,38 @@ class Helpers {
     /**
      *
      */
-    function __construct() {
+    function __construct($object_name = null, $attribute_name = null) {
+        $this->object_name = $object_name;
+        $this->attribute_name = $attribute_name;        
         $this->controller_name = $GLOBALS['current_controller_name'];
         $this->controller_path = $GLOBALS['current_controller_path'];
         $this->controller_object = $GLOBALS['current_controller_object'];
     }
 
+    /**
+     *
+     */
+    protected function value() {
+        if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
+            $object = $this->object();
+            if(is_object($object) && $this->attribute_name) {
+                $value = $object->send($this->attribute_name);
+            }
+        }
+        return $value;
+    }
+
+    /**
+     *
+     */
+    protected function object($object_name = null) {
+        $object_name = $object_name ? $object_name : $this->object_name;
+        if($object_name) {
+            return $this->controller_object->$object_name;
+        }
+        return null;
+    }   
+    
     /**
      *
      */
@@ -120,6 +146,13 @@ class Helpers {
         $html .= ">$content</$name>";
         return $html."\n";
     }
+    
+    /**
+     *
+     */    
+    function to_content_tag($tag_name, $options = array()) {
+        return $this->content_tag($tag_name, $this->value(), $options);
+    }     
 
 }
 

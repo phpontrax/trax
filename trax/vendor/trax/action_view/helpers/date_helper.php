@@ -38,22 +38,7 @@ class DateHelper extends Helpers {
      *
      */
     function __construct($object_name = null, $attribute_name = null) {
-        parent::__construct();
-        $this->object_name = $object_name;
-        $this->attribute_name = $attribute_name;
-    }
-
-    /**
-     *
-     */
-    private function value() {
-        if(!$value = $this->check_request_for_value()) {
-            $object = $this->object();
-            if(is_object($object) && $this->attribute_name) {
-                $value = $object->send($this->attribute_name);
-            }
-        }
-        return $value;
+        parent::__construct($object_name, $attribute_name);
     }
     
     private function check_request_for_value() {
@@ -84,14 +69,6 @@ class DateHelper extends Helpers {
     /**
      *
      */
-    private function object($object_name = null) {
-        $object_name = $object_name ? $object_name : $this->object_name;
-        return $this->controller_object->$object_name;
-    }
-
-    /**
-     *
-     */
     private function select_html($type, $options, $prefix = null, $include_blank = false, $discard_type = false) {
         $select_html  = "<select name=\"$prefix";       
         if(!$discard_type) {
@@ -111,6 +88,19 @@ class DateHelper extends Helpers {
      */
     private function leading_zero_on_single_digits($number) {
         return $number > 9 ? $number : "0$number";
+    }
+
+    /**
+     *
+     */
+    protected function value() {
+        if(!$value = $this->check_request_for_value()) {
+            $object = $this->object();
+            if(is_object($object) && $this->attribute_name) {
+                $value = $object->send($this->attribute_name);
+            }
+        }
+        return $value;
     }
     
     function expiration_date_select($options = array()) {

@@ -46,7 +46,7 @@ class JavaScriptHelper extends Helpers {
 
     }
 
-    private function options_for_javascript($options) {
+    protected function options_for_javascript($options) {
         $javascript = array();
         if(is_array($options)) {
             $javascript = array_map(create_function('$k, $v', 'return "{$k}:{$v}";'), array_keys($options), array_values($options));
@@ -114,6 +114,21 @@ class JavaScriptHelper extends Helpers {
             }
         }
         return $callbacks;
+    }
+    
+    private function remove_ajax_options($options) {
+        if(is_array($options)) {
+            $GLOBALS['ajax_options'] = $this->ajax_options;
+            foreach($options as $option_key => $option_value) {
+                if(!in_array($option_key, $this->ajax_options)) {
+                    $new_options[$option_key] = $option_value;  
+                }  
+            } 
+            if(is_array($new_options)) {
+                $options = $new_options; 
+            }           
+        }    
+        return $options;    
     }
        
     # Returns a link that'll trigger a javascript $function using the 
@@ -502,8 +517,7 @@ class JavaScriptHelper extends Helpers {
         if(!$options['onUpdate']) {
             $options['onUpdate'] = "function(){" . $this->remote_function($options) . "}";
         }
-        $options = array_filter($options, create_function('$value', 'return !in_array($value, $this->ajax_options);'));
-
+        $options = $this->remove_ajax_options($options);
         foreach(array('tag', 'overlap', 'constraint', 'handle') as $option) {
             if($options[$option]) {
                 $options[$option] = "'{$options[$option]}'";
@@ -551,8 +565,7 @@ class JavaScriptHelper extends Helpers {
         if(!$options['onUpdate']) {
             $options['onUpdate'] = "function(element){" . $this->remote_function($options) . "}";
         }
-        $options = array_filter($options, create_function('$value', 'return !in_array($value, $this->ajax_options);'));
-        
+        $options = $this->remove_ajax_options($options);
         if($options['accept']) {
             $options['accept'] = $this->array_or_string_for_javascript($options['accept']);  
         }  
