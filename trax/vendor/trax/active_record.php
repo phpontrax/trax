@@ -69,17 +69,6 @@ class ActiveRecord {
     static private $db = null;
 
     /**
-     *  <b>FIXME: dead code?  Never referenced in ActiveRecord</b><br>
-     *  <b>FIXME: static should be after protected</b><br>
-     *  <b>FIXME: static variables $rows_per_page, $page, $offset are
-     *  not declared.  Declaring them would provide a good place to
-     *  document them.  On the other hand, if the intent is to give
-     *  the user the ability to page through a result set, these
-     *  variables need to go in $_SESSION.</b>
-     */
-    static protected $inflector = null; # object to do class inflection
-
-    /**
      *  Description of a row in the associated table in the database
      *
      *  <p>Retrieved from the RDBMS by {@link set_content_columns()}.
@@ -211,6 +200,33 @@ class ActiveRecord {
     protected $auto_create_timestamps = array("created_at","created_on");
 
     /**
+     *  Date format for use with auto timestamping
+     *
+     *  The format for this should be compatiable with the php date() function.
+     *  http://www.php.net/date
+     *  @var string 
+     */
+     protected $date_format = "Y-m-d";
+
+    /**
+     *  Time format for use with auto timestamping
+     *
+     *  The format for this should be compatiable with the php date() function.
+     *  http://www.php.net/date
+     *  @var string 
+     */    
+     protected $time_format = "H:i:s";
+       
+    /**
+     *  Whether to keep date/datetime fields NULL if not set
+     *
+     *  true => If date field is not set it try to preserve NULL
+     *  false => Don't try to preserve NULL if field is already NULL
+     *  @var boolean
+     */       
+     protected $preserve_null_dates = true;
+
+    /**
      *  SQL aggregate functions that may be applied to the associated
      *  table.
      *
@@ -219,7 +235,7 @@ class ActiveRecord {
      *  @var string[]
      */
     protected $aggregrations = array("count","sum","avg","max","min");
-
+     
     /**
      *  Primary key of the associated table
      *
@@ -1553,13 +1569,22 @@ class ActiveRecord {
         if($this->auto_timestamps) {
             if(is_array($this->content_columns)) {
                 foreach($this->content_columns as $field_info) {
-                    if(($field_info['name'] == $field) && ($field_info['type'] == "datetime")) {
-                        if($this->new_record && in_array($field, $this->auto_create_timestamps)) {
-                            return date("Y-m-d H:i:s");
-                        } elseif(!$this->new_record && in_array($field, $this->auto_update_timestamps)) {
-                            return date("Y-m-d H:i:s");
+                    if(($field_info['name'] == $field) && stristr($field_info['type'], "date")) {
+                        $format = ($field_info['type'] == "date") ? $this->date_format : "{$this->date_format} {$this->time_format}";
+                        if($this->new_record) {
+                            if(in_array($field, $this->auto_create_timestamps)) {
+                                return date($format);
+                            } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
+                                return 'NULL';    
+                            }
+                        } elseif(!$this->new_record) {
+                            if(in_array($field, $this->auto_update_timestamps)) {
+                                return date($format);
+                            } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
+                                return 'NULL';    
+                            }
                         }
-                    }
+                    }  
                 }
             }
         }
