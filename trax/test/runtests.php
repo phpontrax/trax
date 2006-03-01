@@ -12,12 +12,32 @@
  * @author Walt Haas <haas@xmission.com>
  */
 
-//$tests = glob('*Test.php');
 //  Control order of tests
 $tests = array(
-               'InputFilterTest.php',
-               'InflectorTest.php',
+               'ActionControllerTest.php',
+               'ActionControllerErrorTest.php',
+               'ActionMailerTest.php',
                'ActiveRecordTest.php',
+               'ActiveRecordErrorTest.php',
+               'ActiveRecordHelperTest.php',
+               'ApplicationControllerTest.php',
+               'ApplicationMailerTest.php',
+               'AssetTagHelperTest.php',
+               'DateHelperTest.php',
+               'DispatcherTest.php',
+               'FormHelperTest.php',
+               'FormOptionsHelperTest.php',
+               'FormTagHelperTest.php',
+               'HelpersTest.php',
+               'InflectorTest.php',
+               'InputFilterTest.php',
+               'JavaScriptHelperTest.php',
+               'RouterTest.php',
+               'ScaffoldControllerTest.php',
+               'SessionTest.php',
+               'TraxErrorTest.php',
+               'TraxGeneratorTest.php',
+               'UrlHelperTest.php',
 			   );
 
 foreach ($tests as $test) {

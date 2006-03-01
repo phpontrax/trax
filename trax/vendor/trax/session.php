@@ -113,7 +113,7 @@ class Session {
         if(self::is_valid_host()) {
             $_SESSION[self::get_hash()][$key] = $value;
         }
-    }
+     }
 
     /**
      *  Test whether the user host is as expected for this session

@@ -40,9 +40,18 @@ class Dispatcher {
      *
      *  Called from file dispatch.php, which is invoked by
      *  {@link http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html Apache mod_rewrite}
-     *  whenever a client makes a request.
-     *  Filter ???, start a session, construct an ActionController and
-     *  process the route.
+     *  whenever a client makes a request.  Actions:
+     *  <ol>
+     *    <li>Remove forbidden tags and attributes from
+     *      {@link http://www.php.net/reserved.variables#reserved.variables.get $_GET},
+     *      {@link http://www.php.net/reserved.variables#reserved.variables.post $_POST} and
+     *      {@link http://www.php.net/reserved.variables#reserved.variables.request $_REQUEST}.
+</li>
+     *    <li>Start a session to keep track of state between requests from
+     *      the client.</li>
+     *    <li>Construct an ActionController to process the action.</li>
+     *    <li>Process the route</li>
+     *  </ol>
      *  @uses ActionController::__construct()
      *  @uses ActionController::process_route()
      *  @uses ActionController::process_with_exception()

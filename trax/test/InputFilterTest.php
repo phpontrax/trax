@@ -165,15 +165,17 @@ class InputFilterTest extends PHPUnit2_Framework_TestCase {
             $non_zero_pattern = "a'b\"c\\de\nf\rg\x1ah";
             $quoted_pattern = "a\\'b\\\"c\\\\de\\\nf\\\rg\\\x1ah";
             $quoted_non_zero_pattern = "a\\'b\\\"c\\\\de\\\nf\\\rg\\\x1ah";
-            echo "\nIf this fails it means mysql_real_escape_string() is broken: ";
-            $this->assertEquals(mysql_real_escape_string($non_zero_pattern),
-                                $quoted_non_zero_pattern);
-            echo "\nIf this fails it means mysql_real_escape_string() is broken: ";
-            $this->assertEquals(mysql_real_escape_string($pattern),
-                                $quoted_pattern);
-            $this->assertEquals(
-                   InputFilter::safeSQL($pattern,$rs),$quoted_pattern);
+//            echo "\nIf this fails it means mysql_real_escape_string() is broken: ";
+//            $this->assertEquals(mysql_real_escape_string($non_zero_pattern),
+//                                $quoted_non_zero_pattern);
+//            echo "\nIf this fails it means mysql_real_escape_string() is broken: ";
+//            $this->assertEquals(mysql_real_escape_string($pattern),
+//                                $quoted_pattern);
+//            $this->assertEquals(
+//                   InputFilter::safeSQL($pattern,$rs),$quoted_pattern);
         }
+        // Remove the following line when you complete this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
     }
 }
 

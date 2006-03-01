@@ -758,7 +758,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
                  "SELECT * FROM person_names WHERE first_name='Ben' ",
                  new DB_find_all_result);
-        $result = $p->find_by_first_name_and_last_name('Ben','Dover');
+        $result = $p->find_by_first_name('Ben');
         // Test find_by_first_name_and_last_name()
         $p = new PersonName;
         $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
