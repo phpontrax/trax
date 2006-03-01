@@ -130,7 +130,7 @@ class Session {
      *            <li>false => User host NOT as expected</li>
      *          </ul>
      */
-
+    function is_valid_host() {
         if(($_SERVER['REMOTE_ADDR'] == self::$ip || self::is_aol_host()) &&
            $_SERVER['HTTP_USER_AGENT'] == self::$user_agent) {
             return true;
