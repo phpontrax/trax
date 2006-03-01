@@ -25,6 +25,8 @@
  *    <li>{@link process_all()} applies {@link process()} to all
  *      possible sources of user input</li>
  *  </ul>
+ *  For usage instructions see
+ *  {@tutorial PHPonTrax/InputFilter.cls the class tutorial}.
  *  @todo Check FIXMEs
  */
 class InputFilter {
@@ -598,10 +600,11 @@ class InputFilter {
      */	
 	protected function escapeString($string, &$connection) {
 		// depreciated function
-		if (version_compare(phpversion(),"4.3.0", "<")) mysql_escape_string($string);
+		if (version_compare(phpversion(),"4.3.0", "<"))
+            return mysql_escape_string($string);
 		// current function
-		else mysql_real_escape_string($string);
-		return $string;
+		else
+            return mysql_real_escape_string($string);
 	}
 }
 
