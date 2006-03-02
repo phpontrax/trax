@@ -38,11 +38,22 @@ class Helpers {
      *
      */
     function __construct($object_name = null, $attribute_name = null) {
-        $this->object_name = $object_name;
+    	if(substr($object_name, -2) == "[]") {
+            $auto_index = true;    	       	
+    	}
+    	$this->auto_index = false;
+        $this->object_name = str_replace("[]", "", $object_name);     
         $this->attribute_name = $attribute_name;        
         $this->controller_name = $GLOBALS['current_controller_name'];
         $this->controller_path = $GLOBALS['current_controller_path'];
         $this->controller_object = $GLOBALS['current_controller_object'];
+    	if($auto_index) {
+        	$object = $this->object();
+            if(is_object($object)) {
+                $index = $object->index_on; # should be primary key (usually id field)
+                $this->auto_index = $object->$index;  	
+           	}  
+        }         
     }
 
     /**

@@ -76,8 +76,8 @@ class FormHelper extends Helpers {
     /**
      *
      */
-    function add_default_name_and_id($options) {
-        if(array_key_exists("index", $options)) {
+    function add_default_name_and_id($options) {  	
+       	if(array_key_exists("index", $options)) {
             $options["name"] = $options["name"] ? $options["name"] : $this->tag_name_with_index($options["index"]);
             $options["id"] = $options["id"] ? $options["id"] : $this->tag_id_with_index($options["index"]);
             unset($options["index"]);
