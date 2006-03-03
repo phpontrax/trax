@@ -64,35 +64,103 @@ class RouterTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     * @todo Implement testGet_selected_route().
-     */
-    public function testGet_selected_route() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testConnect().
-     */
-    public function testConnect() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testFind_route().
-     */
-    public function testFind_route() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testBuild_route_regexp().
+     *  Test build_route_regexp().
      */
     public function testBuild_route_regexp() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $r = new Router;
+        // Two abstract route components
+        $regexp = $r->build_route_regexp(':foo/:bar');
+        $this->assertEquals($regexp,
+                            '^[a-z0-9_\-]+\/[a-z0-9_\-]+$');
+        // Three abstract route components
+        $regexp = $r->build_route_regexp(':foo/:bar/:mumble');
+        $this->assertEquals($regexp,
+                            '^[a-z0-9_\-]+\/[a-z0-9_\-]+\/[a-z0-9_\-]+$');
+        // Abstract, concrete, abstract route components
+        $regexp = $r->build_route_regexp(':foo/bar/:mumble');
+        $this->assertEquals($regexp,
+                            '^[a-z0-9_\-]+\/bar\/[a-z0-9_\-]+$');
+        // Two concrete route components
+        $regexp = $r->build_route_regexp('foo/bar');
+        $this->assertEquals($regexp,
+                            '^foo\/bar$');
+    }
+
+    /**
+     * Test default route table
+     */
+    public function testDefault_route() {
+        $r = new Router;
+        // Should find default route
+        $route = $r->find_route('a/b/mumble');
+        $this->assertEquals(':controller/:action/:id', $route['path']);
+        $this->assertNull($route['params']);
+    }
+
+    /**
+     * Test route table with one simple entry besides default
+     */
+    public function testSimple_route() {
+        $r = new Router;
+        //  Build route table
+        $r->connect(':foo/:bar/mumble', array('mumble route'));
+        //  Params not an array ignored, null is stored
+        $r->connect(':controller/:action/:id', 'not-an-array');
+
+        //  Match first route
+        $route = $r->find_route('a/b/mumble');
+        $this->assertEquals(':foo/:bar/mumble', $route['path']);
+        $this->assertEquals(array('mumble route'), $route['params']);
+        $selected = $r->get_selected_route();
+        $this->assertEquals(':foo/:bar/mumble', $selected['path']);
+        $this->assertEquals(array('mumble route'), $selected['params']);
+
+        //  Match second route
+        $route = $r->find_route('a/b/c');
+        $this->assertEquals(':controller/:action/:id', $route['path']);
+        $this->assertNull($route['params']);
+        $selected = $r->get_selected_route();
+        $this->assertEquals(':controller/:action/:id', $selected['path']);
+        $this->assertNull($selected['params']);
+    }
+
+    /**
+     * Test route table with one regexp entry besides default
+     */
+    public function testRegexp_route() {
+        $r = new Router;
+        //  Build route table
+        $r->connect(':foo/:bar/\?(catalog|part)number=.*',
+                    array('number route'));
+        $r->connect(':controller/:action/:id', array('default route'));
+
+        //  Match first route
+        $route = $r->find_route('a/b/?catalognumber=17');
+        $this->assertEquals(':foo/:bar/\?(catalog|part)number=.*',
+                            $route['path']);
+        $this->assertEquals(array('number route'), $route['params']);
+        $route = $r->find_route('a/b/?partnumber=123-456');
+        $this->assertEquals(':foo/:bar/\?(catalog|part)number=.*',
+                            $route['path']);
+        $this->assertEquals(array('number route'), $route['params']);
+        $route = $r->find_route('a/b/?personnumber=156');
+        $this->assertEquals(':controller/:action/:id', $route['path']);
+        $this->assertEquals(array('default route'), $route['params']);
+    }
+
+    /**
+     * Test route table with route with empty path
+     */
+    public function testEmpty_route() {
+        $r = new Router;
+        //  Build route table with only an empty path
+        $r->connect('', array('empty route'));
+        $route = $r->find_route('');
+        $this->assertEquals('', $route['path']);
+        $this->assertEquals(array('empty route'), $route['params']);
+        //  This route shouldn't match anything
+        $route = $r->find_route('mumble/foo');
+        $this->assertNull($route);
     }
 }
 

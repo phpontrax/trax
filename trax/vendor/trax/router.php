@@ -29,28 +29,64 @@
  */
 
 /**
- *
- *  @todo Document this class
- *  @package PHPonTrax
+ *  Convert a URL to an action
+ *  @tutorial PHPonTrax/Router.cls
  */
 class Router {
 
+    /**
+     *  Route table
+     *
+     *  For a description of the structure, see
+     *  {@tutorial PHPonTrax/Router.cls#table the Router tutorial}.
+     *  Routes are added by calling {@link connect()} and looked up
+     *  by calling {@link find_route()}.
+     *  <b>FIXME:</b> Should we have a Route class to describe an
+     *  entry in the route table?
+     *  @var string[][]
+     */
     private $routes = array();
+
+    /**
+     *  Last route found by a call to find_route()
+     *  @var string[]
+     */
     private $selected_route = null;
+
+    /**
+     *  Default route path
+     *
+     *  This route path is added to the route table if the table is
+     *  empty when find_route() is called.
+     *  @var string constant
+     */
     private $default_route_path = ":controller/:action/:id";
+
+    /**
+     *  Count of the number of elements in $routes
+     *  @var integer
+     */
     public $routes_count = 0;
 
     /**
-     *
-     *  @todo Document this method
+     *  Accessor method to return contents of $selected_route
+     *  @return string[] Contents of $selected_route
+     *  @uses $selected_route
      */
     function get_selected_route() {
         return $this->selected_route;
     }
 
     /**
+     *  Accessor method to add a route to the route table
      *
-     *  @todo Document this method
+     *  The route is added to the end of
+     *  {@link $routes the route table}. If $params is not an array,
+     *  NULL is stored in the route parameter area.
+     *  @param string $path
+     *  @param mixed[] $params
+     *  @uses $routes
+     *  @uses $routes_count
      */
     function connect($path, $params = null) {
         if(!is_array($params)) $params = null;
@@ -60,15 +96,31 @@ class Router {
     }
 
     /**
+     *  Find first route in route table with path that matches argument
      *
-     *  @todo Document this method
+     *  First, assure that the route table {@link $routes} has at
+     *  least one route by adding
+     *  {@link $default_route_path the default route} if the table is
+     *  empty.  Then search the table to find the first route in the
+     *  table whose path matches the argument $url. If $url is an
+     *  empty string, it matches a path that is an empty string.
+     *  Otherwise, try to match $url to the path part of the table
+     *  entry according to {@link http://www.php.net/manual/en/ref.pcre.php Perl regular expression}
+     *  rules.  Return the first matching route to the caller, and
+     *  also save a copy in {@link $selected_route}.
+     *  @param string $url
+     *  @uses build_route_regexp()
+     *  @uses $default_route_path
+     *  @uses $routes
+     *  @uses $routes_count
+     *  @uses $selected_route
+     *  @return string[] Selected route. Path is in return['path'],
+     *                   params in return['params'],
      */
     function find_route($url) {
-
         // ensure at least one route (the default route) exists
         if($this->routes_count == 0) {
-            $this->routes['path'] = $this->default_route_path;
-            $this->routes['params'] = null;
+            $this->connect($this->default_route_path);
         }
 
         $this->selected_route = null;
@@ -77,7 +129,6 @@ class Router {
             unset($route_regexp);
             unset($reg_exp);
             $route_regexp = $this->build_route_regexp($route['path']);
-
             if($url == "" && $route_regexp == "") {
                 $this->selected_route = $route;
                 break;
@@ -91,20 +142,26 @@ class Router {
         }
 
         return $this->selected_route;
-    }
+    }                                 // function find_route($url)
 
     /**
+     *  Build a regular expression that matches a route
      *
-     *  @todo Document this method
+     *  <b>FIXME:</b> Should this method be private?
+     *  @param string $route_path  A route path.
+     *  @return string Regular expression that matches the route in
+     *                $route_path 
      */
     function build_route_regexp($route_path) {
+        //        echo "entering build_route_regexp(), \$route_path is '$route_path'\n";
 
         $route_regexp = null;
 
         if(!is_array($route_path)) {
             $route_path = explode("/",$route_path);
         }
-
+        //        echo "route path:\n";
+        //        var_dump($route_path);
         if(count($route_path) > 0) {
             foreach($route_path as $path_element) {
                 if(preg_match('/:[a-z0-9_\-]+/',$path_element)) {
@@ -123,4 +180,11 @@ class Router {
 
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

@@ -1,5 +1,12 @@
 <?php                       
 /**
+ *  Configuration file to define URL to action mapping
+ *
+ *  This file contains one or more PHP statements that call
+ *  {@link Router::connect() $router->connect()} to add routes to the
+ *  route table stored in the {@link Router} object pointed to by
+ *  $router.
+ *
  *  Add your own custom routes here.
  *  The priority is based upon order of creation: first created ->
  *  highest priority. 

@@ -181,47 +181,157 @@
  *  * ...
  *   }
  *  </pre>
- *
- *  @package PHPonTrax
  */
 class ActionController {
 
-    private
-        $controller,
-        $action,
-        $id,
-        $controllers_path,
-        $helpers_path,
-        $helpers_base_path,
-        $layouts_path,
-        $url_path,
-        $default_layout_file,
-        $helper_file,
-        $application_controller_file,
-        $application_helper_file,
-        $loaded = false,
-        $router_loaded = false,
-        $helpers = array(),
-        $before_filters = array(),
-        $after_filters = array();     
-    protected
-        $before_filter = null,
-        $after_filter = null;
-    public
-        $controller_file,
-        $view_file,
-        $views_path,
-        $controller_class, 
-        $controller_object,
-        $asset_host = null,
-        $views_file_extention = TRAX_VIEWS_EXTENTION;
+    /**
+     *  @todo Document this attribute
+     */
+    private $controller;
 
+    /**
+     *  @todo Document this attribute
+     */
+    private $action;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $id;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $controllers_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $helpers_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $helpers_base_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $layouts_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $url_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $default_layout_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $helper_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $application_controller_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $application_helper_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $loaded = false;
+
+    /**
+     *  Whether a Router object was loaded
+     *
+     *  @var boolean
+     *  <ul>
+     *    <li>true => $router points to the Router object</li>
+     *    <li>false => no Router object exists</li>
+     *  </ul>
+     */
+    private $router_loaded = false;
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $helpers = array();
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $before_filters = array();
+
+    /**
+     *  @todo Document this attribute
+     */
+    private $after_filters = array();     
+
+    /**
+     *  @todo Document this attribute
+     */
+    protected $before_filter = null;
+
+    /**
+     *  @todo Document this attribute
+     */
+    protected $after_filter = null;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $controller_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $view_file;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $views_path;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $controller_class;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $controller_object;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $asset_host = null;
+
+    /**
+     *  @todo Document this attribute
+     */
+    public $views_file_extention = TRAX_VIEWS_EXTENTION;
+
+    /**
+     *  @todo Document this method
+     */
     function __construct() {
       if(!isset($this->router) || !is_object($this->router)) {
             $this->load_router();
         }
     }
 
+    /**
+     *  @todo Document this method
+     */
     function __set($key, $value) {
         #echo "setting: $key = $value<br>";
         if($key == "before_filter") {
@@ -235,6 +345,9 @@ class ActionController {
         }
     }
 
+    /**
+     *  @todo Document this method
+     */
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
             # If the method exists, just call it
@@ -251,6 +364,15 @@ class ActionController {
         return $result;
     }
 
+    /**
+     *  Load routes from configuration file routes.php
+     *
+     *  Routes are loaded by requiring {@link routes.php} from the
+     *  configuration directory.
+     *  @uses Router
+     *  @uses $router
+     *  @uses $router_loaded
+     */
     function load_router() {
         $this->router_loaded = false;
         $router = new Router();
@@ -262,6 +384,14 @@ class ActionController {
         }
     }
 
+    /**
+     *  @todo Document this method
+     *  @uses load_router()
+     *  @uses $router
+     *  @uses $router_loaded
+     *  @uses set_paths()
+     *  @uses $url_path
+     */
     function recognize_route() {
 
         if(!$this->router_loaded) {
@@ -340,12 +470,17 @@ class ActionController {
         }
     }
 
+    /**
+     *  @todo Document this method
+     */
     function process_route() {
 
         # First try to load the routes and setup the pathes to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
-                $this->raise("Failed to load any defined routes", "Controller ".$this->controller." not found", "404");
+                $this->raise("Failed to load any defined routes",
+			     "Controller ".$this->controller." not found",
+			     "404");
             }
         }
 
@@ -495,8 +630,11 @@ class ActionController {
         }
 
         return true;
-    }
+    }                                // function process_route()
 
+    /**
+     *  @todo Document this method
+     */
     function set_paths() {
         if(is_array($this->url_path)) {
             foreach($this->url_path as $path) {
@@ -680,6 +818,9 @@ class ActionController {
         }
     }
 
+    /**
+     *  @todo Document this method
+     */
     function determine_layout() {
         # I guess you don't want any layout
         if($this->controller_object->layout == "null") {
@@ -787,4 +928,11 @@ class ActionController {
 
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>
