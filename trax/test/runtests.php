@@ -14,13 +14,22 @@
 
 //  Control order of tests
 $tests = array(
-               'ActionControllerTest.php',
+               //  TraxError used by ActiveRecordError, ActionControllerError
+               'TraxErrorTest.php',
                'ActionControllerErrorTest.php',
+               'ActiveRecordErrorTest.php',
+               //  Inflector is used by many classes
+               'InflectorTest.php',
+               //  Router is used by ActionController
+               'RouterTest.php',
+               'ActionControllerTest.php',
+               //  ScaffoldController extends ActionController
+               'ScaffoldControllerTest.php',
+               //  ApplicationController extends ActionController
+               'ApplicationControllerTest.php',
                'ActionMailerTest.php',
                'ActiveRecordTest.php',
-               'ActiveRecordErrorTest.php',
                'ActiveRecordHelperTest.php',
-               'ApplicationControllerTest.php',
                'ApplicationMailerTest.php',
                'AssetTagHelperTest.php',
                'DateHelperTest.php',
@@ -29,13 +38,9 @@ $tests = array(
                'FormOptionsHelperTest.php',
                'FormTagHelperTest.php',
                'HelpersTest.php',
-               'InflectorTest.php',
                'InputFilterTest.php',
                'JavaScriptHelperTest.php',
-               'RouterTest.php',
-               'ScaffoldControllerTest.php',
                'SessionTest.php',
-               'TraxErrorTest.php',
                'TraxGeneratorTest.php',
                'UrlHelperTest.php',
 			   );

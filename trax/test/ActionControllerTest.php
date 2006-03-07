@@ -13,6 +13,19 @@
  */
 
 echo "testing ActionController\n";
+//  root Trax files in the test directory
+define("TRAX_ROOT", dirname(__FILE__) . "/");
+define("TRAX_LIB_ROOT", "../vendor/trax");
+define("TRAX_VIEWS_EXTENTION",  "phtml");
+//  you don't really need a 'haas' account to test,
+//  the use of this prefix is purely syntactic
+define("TRAX_URL_PREFIX", "~haas");
+$GLOBALS['TRAX_INCLUDES'] =
+    array( "config"      => "config",
+           "controllers" => "controllers",
+           "helpers"     => "helpers",
+           "layouts"     => "layouts",
+           "views"       => "views");
 
 // Call ActionControllerTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,7 +38,11 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
+require_once "../vendor/trax/router.php";
+require_once "../vendor/trax/inflector.php";
+require_once "../vendor/trax/trax_exceptions.php";
 require_once "../vendor/trax/action_controller.php";
+require_once "../app/controllers/application.php";
 
 /**
  * Test class for ActionController.
@@ -64,6 +81,175 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
+     * @todo Implement test__construct().
+     *  The constructor calls load_router() to load
+     *  routes from config/routes.php
+     */
+    public function test__construct() {
+        $ac = new ActionController;
+        $this->assertTrue(is_object($ac->router));
+    }
+
+    /**
+     *  Test recognize_route().
+     *  recognize_route() sets up a lot of private variables that we
+     *  don't have access to so we can't test it very thoroughly here
+     */
+    public function testRecognize_route() {
+        //  read routes from config/routes.php
+        $ac = new ActionController;
+        //  this URL doesn't match any route
+        $_SERVER['REDIRECT_URL'] = '~haas/foo/bar';
+        $this->assertFalse($ac->recognize_route());
+        //  this URL matches but the controller doesn't exist
+        $_SERVER['REDIRECT_URL'] = '~haas/nocontroller/foo/bar';
+        $this->assertFalse($ac->recognize_route());
+        //  this URL matches and the controller is where it should be
+        $_SERVER['REDIRECT_URL'] = '~haas/products/bar';
+        $this->assertTrue($ac->recognize_route());
+    }
+
+    /**
+     *  Test raise() with default value of code
+     */
+    public function testRaise_default_code() {
+        $ac = new ActionController;
+        try {
+            $ac->raise('text1','text2');
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'ActionControllerError'));
+            $this->assertEquals('Error Message: text1',$e->getMessage());
+            $this->assertEquals('Error Message: text1',$e->error_message);
+            $this->assertEquals('text2',$e->error_heading);
+            $this->assertEquals('404',$e->error_code);
+            return;
+        }
+        $this->fail('raise() exception with default code not raised');
+    }
+
+    /**
+     *  Test raise() with specified of code
+     */
+    public function testSpecified_code() {
+        $ac = new ActionController;
+        try {
+            $ac->raise('text3','text4', 250);
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'ActionControllerError'));
+            $this->assertEquals('Error Message: text3',$e->getMessage());
+            $this->assertEquals('Error Message: text3',$e->error_message);
+            $this->assertEquals('text4',$e->error_heading);
+            $this->assertEquals(250,$e->error_code);
+            return;
+        }
+        $this->fail('raise() exception with code 250 not raised');
+    }
+
+    /**
+     *  Test process_route() with an unrecognized route
+     */
+    public function testProcess_route_unrecognized() {
+        //  read routes from config/routes.php
+        $ac = new ActionController;
+        //  this URL doesn't match any route
+        $_SERVER['REDIRECT_URL'] = '~haas/foo/bar';
+        try {
+            $ac->process_route();
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'ActionControllerError'));
+            $this->assertEquals('Error Message: Failed to load any'
+                                .' defined routes',$e->getMessage());
+            $this->assertEquals('Error Message: Failed to load any'
+                                .' defined routes',$e->error_message);
+            $this->assertEquals('Controller foo not found',
+                                $e->error_heading);
+            $this->assertEquals('404',$e->error_code);
+            return;
+        }
+        $this->fail('raise() exception with default code not raised');
+    }
+
+    /**
+     *  Test process_route() with missing controller file
+     */
+    public function testProcess_route_missing_controller() {
+        //  read routes from config/routes.php
+        $ac = new ActionController;
+        //  this URL matches default route
+        $_SERVER['REDIRECT_URL'] = '~haas/nocontroller/foo/bar';
+        try {
+            $ac->process_route();
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'ActionControllerError'));
+            $this->assertEquals('Error Message: Failed to load any'
+                               .' defined routes',$e->getMessage());
+            $this->assertEquals('Error Message: Failed to load any'
+                               .' defined routes',$e->error_message);
+            $this->assertEquals('Controller nocontroller not found',
+                                $e->error_heading);
+            $this->assertEquals('404',$e->error_code);
+            return;
+        }
+        $this->fail('process_route() missing controller file'
+                    .' exception not raised');
+    }
+
+    /**
+     *  Test process_route() with missing controller class
+     */
+    public function testProcess_route_missing_class() {
+        //  read routes from config/routes.php
+        $ac = new ActionController;
+        //  this URL matches default route, but the controller
+        //  file doesn't have a Noclass class
+        $_SERVER['REDIRECT_URL'] = '~haas/noclass/foo/bar';
+        try {
+            $ac->process_route();
+        }
+        catch(Exception $e) {
+            return;
+            $this->assertTrue(is_a($e,'ActionControllerError'));
+            $this->assertEquals('Error Message: Failed to instantiate'
+                               .' controller object "noclass"',
+                                $e->getMessage());
+            $this->assertEquals('Error Message: Failed to instantiate'
+                               .' controller object "noclass"',
+                                $e->error_message);
+            $this->assertEquals('ActionController error',
+                                $e->error_heading);
+            $this->assertEquals('500',$e->error_code);
+            return;
+        }
+        $this->fail('process_route() missing class exception not raised');
+    }
+
+    /**
+     * @todo Implement testProcess_route().
+     */
+//    public function testProcess_route() {
+//        $ac = new ActionController;
+//        //  should invoke CatalogController
+//        $_SERVER['REDIRECT_URL'] = '~haas/products/bar';
+//        $ac->process_route();
+//        // Remove the following line when you implement this test.
+//        throw new PHPUnit2_Framework_IncompleteTestError;
+//    }
+
+    /**
+     *  FIXME: need controllers with layout undefined, layout=null,
+     *  layout=false, layout=file, layout=method
+     * @todo Implement testDetermine_layout().
+     */
+    public function testDetermine_layout() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
      * @todo Implement test__set().
      */
     public function test__set() {
@@ -75,30 +261,6 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
      * @todo Implement test__call().
      */
     public function test__call() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testLoad_router().
-     */
-    public function testLoad_router() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testRecognize_route().
-     */
-    public function testRecognize_route() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testProcess_route().
-     */
-    public function testProcess_route() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }
@@ -160,25 +322,9 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     * @todo Implement testDetermine_layout().
-     */
-    public function testDetermine_layout() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
      * @todo Implement testRedirect_to().
      */
     public function testRedirect_to() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
-     * @todo Implement testRaise().
-     */
-    public function testRaise() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }

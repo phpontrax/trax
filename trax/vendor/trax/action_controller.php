@@ -185,12 +185,18 @@
 class ActionController {
 
     /**
-     *  @todo Document this attribute
+     *  Name of the controller (without the _controller.php)
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $controller;
 
     /**
-     *  @todo Document this attribute
+     *  Name of the action method in the controller class
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $action;
 
@@ -200,12 +206,18 @@ class ActionController {
     private $id;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to ../app/controllers/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $controllers_path;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to ../app/helpers/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $helpers_path;
 
@@ -215,17 +227,29 @@ class ActionController {
     private $helpers_base_path;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to ../app/layouts/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @todo <b>FIXME:</> declare $layouts_base_path
+     *  @var string
      */
     private $layouts_path;
 
     /**
-     *  @todo Document this attribute
+     *  User's URL in components
+     *
+     *  Contains user's URL stripped of TRAX_URL_PREFIX and leading
+     *  and trailing slashes, then exploded into an array on slash
+     *  boundaries.
+     *  @var string[]
      */
     private $url_path;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to the default layouts file application.phtml
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $default_layout_file;
 
@@ -235,17 +259,26 @@ class ActionController {
     private $helper_file;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to application.php file
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $application_controller_file;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to application_helper.php file
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $application_helper_file;
 
     /**
-     *  @todo Document this attribute
+     *  URL recognized, paths resoved, controller file found
+     *
+     *  Set by {@link recognize_route()}
+     *  @var boolean
      */
     private $loaded = false;
 
@@ -257,6 +290,8 @@ class ActionController {
      *    <li>true => $router points to the Router object</li>
      *    <li>false => no Router object exists</li>
      *  </ul>
+     *  @todo <b>FIXME:</b> No declaration of $router so no place to hang
+     *    its documentation.
      */
     private $router_loaded = false;
 
@@ -296,7 +331,10 @@ class ActionController {
     public $view_file;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to the ../app/views/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     public $views_path;
 
@@ -321,19 +359,22 @@ class ActionController {
     public $views_file_extention = TRAX_VIEWS_EXTENTION;
 
     /**
-     *  @todo Document this method
+     *  Build a Router object and load routes from config/route.php
+     *  @uses load_router()
      */
     function __construct() {
-      if(!isset($this->router) || !is_object($this->router)) {
+        if(!isset($this->router) || !is_object($this->router)) {
             $this->load_router();
         }
     }
 
     /**
      *  @todo Document this method
+     *  @uses add_after_filter()
+     *  @uses add_before_filter()
+     *  @uses add_helper()
      */
     function __set($key, $value) {
-        #echo "setting: $key = $value<br>";
         if($key == "before_filter") {
             $this->add_before_filter($value);
         } elseif($key == "after_filter") {
@@ -347,6 +388,7 @@ class ActionController {
 
     /**
      *  @todo Document this method
+     *  Implement before_filter(), after_filter(), helper()
      */
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
@@ -365,10 +407,15 @@ class ActionController {
     }
 
     /**
-     *  Load routes from configuration file routes.php
+     *  Load routes from configuration file config/routes.php
      *
      *  Routes are loaded by requiring {@link routes.php} from the
-     *  configuration directory.
+     *  configuration directory.  The file routes.php contains
+     *  statements of the form "$router->connect(path,params);" where
+     *  (path,params) describes the route being added by the
+     *  statement. Route syntax is described in
+     *  {@tutorial PHPonTrax/Router.cls the Router class tutorial}.
+     *
      *  @uses Router
      *  @uses $router
      *  @uses $router_loaded
@@ -376,8 +423,9 @@ class ActionController {
     function load_router() {
         $this->router_loaded = false;
         $router = new Router();
-        # Load the routes
-        require_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/routes.php");
+
+        // Load the routes.
+        require(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/routes.php");
         $this->router = $router;
         if(is_object($this->router)) {
             $this->router_loaded = true;
@@ -385,15 +433,39 @@ class ActionController {
     }
 
     /**
-     *  @todo Document this method
+     *  Convert URL to controller, action and id
+     *
+     *  Parse the URL in $_SERVER['REDIRECT_URL'] into elements.
+     *  Compute filesystem paths to the various components used by the
+     *  URL and store the paths in object private variables.
+     *  Verify that the controller exists.
+     *
      *  @uses load_router()
+     *  @uses $action
+     *  @uses $application_controller_file
+     *  @uses $controller
+     *  @uses $controller_class
+     *  @uses $controller_file
+     *  @uses $controllers_path
+     *  @uses $default_layout_file
+     *  @uses $helper_file
+     *  @uses $helpers_path
+     *  @uses $id
+     *  @uses $layouts_path
+     *  @uses $loaded
      *  @uses $router
      *  @uses $router_loaded
      *  @uses set_paths()
      *  @uses $url_path
+     *  @uses $views_file_extention
+     *  @uses $views_path
+     *  @return boolean
+     *  <ul>
+     *    <li>true =>  route recognized, controller found.</li>
+     *    <li>false => failed, route not recognized.</li>
+     *  </ul>
      */
     function recognize_route() {
-
         if(!$this->router_loaded) {
             $this->load_router();
         }
@@ -447,6 +519,7 @@ class ActionController {
                     $this->action = strtolower($this->url_path[@array_search(":action", $route_path)]);
                 }
 
+                //  FIXME: get a warning if ':id' not in $url_path
                 if(@in_array(":id",$route_path)) {
                     $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
                     if($this->id != "") {
@@ -472,10 +545,31 @@ class ActionController {
 
     /**
      *  @todo Document this method
+     *  @uses $action
+     *  @uses $application_controller_file
+     *  @uses $application_helper_file
+     *  @uses $controller
+     *  @uses $controller_class
+     *  @uses $controller_file
+     *  @uses $controller_object
+     *  @uses determine_layout()
+     *  @uses execute_after_filters()
+     *  @uses $helpers
+     *  @uses $helper_file
+     *  @uses $helpers_base_path
+     *  @uses $keep_flash
+     *  @uses $loaded
+     *  @uses recognize_route()
+     *  @uses raise()
+     *  @uses ScaffoldController
+     *  @uses $view_file
+     *  @uses $views_file_extention
+     *  @uses $views_path
+     *  @return boolean true
      */
     function process_route() {
 
-        # First try to load the routes and setup the pathes to everything
+        # First try to load the routes and setup the paths to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
                 $this->raise("Failed to load any defined routes",
@@ -493,6 +587,7 @@ class ActionController {
         }
 
         # Include the controller file and execute action
+        // FIXME: redundant, recognize_route() already test for file exists
         if(file_exists($this->controller_file)) {
             include_once($this->controller_file);
             if(class_exists($this->controller_class,false)) {
@@ -501,6 +596,7 @@ class ActionController {
                 if(is_object($this->controller_object)) {
                     $this->controller_object->controller = $this->controller;
                     $this->controller_object->action = $this->action;
+                    //  FIXME: $added_path doesn't exist at this point
                     $this->controller_object->controller_path = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_name'] = $this->controller;
@@ -634,6 +730,12 @@ class ActionController {
 
     /**
      *  @todo Document this method
+     *  @uses $added_path
+     *  @uses $controllers_path
+     *  @uses $helpers_path
+     *  @uses $layous_path
+     *  @uses $views_path
+     *  @uses $url_path
      */
     function set_paths() {
         if(is_array($this->url_path)) {
@@ -820,9 +922,16 @@ class ActionController {
 
     /**
      *  @todo Document this method
+     *  @uses $controller_object
+     *  @uses $layouts_base_path
+     *  @uses $layouts_path
+     *  @return mixed Layout file or null if none
+     *  @todo <b>FIXME:</b> Should this method be private?
      */
     function determine_layout() {
         # I guess you don't want any layout
+        // FIXME: Do we really want to test for null here?
+        // It might make more sense to test isset(...layout)
         if($this->controller_object->layout == "null") {
             return null;
         }
@@ -847,7 +956,10 @@ class ActionController {
                 $layout_file = $layout;
             }
         }
-        # No defined layout found so just use the default layout app/views/layouts/application.phtml
+        //  No defined layout found so just use the default layout
+        //  app/views/layouts/application.phtml 
+        //  FIXME: this file isn't in the distribution so
+        //  this reference will fail
         if(!$layout_file) {
             $layout_file = $this->default_layout_file;
         }

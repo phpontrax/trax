@@ -47,11 +47,13 @@ $routes[0]['path']    First route path
    route paths:</para>
 
   <unorderedlist>
-   <listitem>Placeholder strings start with a colon (':') followed by
+   <listitem>Keyword strings start with a colon (':') followed by
+    a keyword consisting of
     one or more alphameric characters chosen from "a..z0..9_-".  A
-    placeholder string matches any alphameric string in the same
-    position of a URL.  The actual contents of the placeholder string
-    following ':' are irrelevant.</listitem> 
+    keyword string matches any alphameric string in the same
+    position of a URL.  The value of the keyword following ':' is
+    irrelevant to Router, but certain keywords are meaninful to
+    {@tutorial PHPonTrax/ActionController.cls}.</listitem>  
    <listitem>Pattern strings start with any character except ':' or
     '/' followed by any character except '/'.  The contents of
     the pattern string are a

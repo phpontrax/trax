@@ -30,7 +30,6 @@
 
 /**
  *
- *  @package PHPonTrax
  *  @todo Document this class
  */
 class ScaffoldController extends ActionController {

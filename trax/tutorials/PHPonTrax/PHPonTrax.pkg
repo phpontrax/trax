@@ -1,4 +1,5 @@
-<refentry id="{@id}" revision="$Id$" revision="$Id$">
+<refentry id="{@id}"
+          revision="$Id$">
  <refnamediv>
   <refname>PHP On Trax</refname>
   <refpurpose>Rapid Application Development Made Easy</refpurpose>
@@ -57,9 +58,16 @@ PHP 5.0.4 (cli) (built: Nov  8 2005 08:27:12)
      </listitem>
 
      <listitem>Trax needs the DB, Mail and Mail_mime PEAR modules.
-     To see which modules are currently installed, type:
+     Most current Linux distributions come with PEAR installed.
+     To test your system, type:
      <example>
 $ <important>pear list</important>
+     </example>
+     <orderedlist>
+      <listitem>
+       If the PEAR library is installed you will see a list of installed
+       packages:
+       <example>
 Installed packages:
 ===================
 Package              Version  State
@@ -68,11 +76,11 @@ DB                   1.7.6    stable
 ...
 Mail                 1.1.4    stable
 Mail_Mime            1.3.1    stable
-     </example>
-     If any of the required packages are missing, you need to install
-     them.  Become root, then use the PEAR install command to install
-     whichever packages are missing.  For example, to install DB:
-     <example>
+      </example>
+      If any of the required packages are missing, you need to install
+      them.  Become root, then use the PEAR install command to install
+      whichever packages are missing.  For example, to install DB:
+      <example>
 $ <important>su -</important>
 Password: ...
 # <important>pear install DB</important>
@@ -80,9 +88,22 @@ downloading DB-1.7.6.tgz ...
 Starting to download DB-1.7.6.tgz (124,807 bytes)
 ............................done: 124,807 bytes
 install ok: DB 1.7.6
-     </example>
-     Optionally, install PHPUnit2 to run the Trax regression tests,
-     and PhpDocumentor to regenerate this documentation.
+       </example>
+      </listitem>
+      <listitem>
+       If PEAR is not present you will get an error message similar to
+       "pear: command not found".  In this case you need to install
+       PEAR.  You can find the necessary code on the
+       {@link http://www.phpontrax.com/downloads Trax download page}.
+       Download and install PEAR according to the instructions there.
+       The PHP_LIB_ROOT constant mentioned is in config/environment.php.
+      </listitem>
+     </orderedlist>
+     Optionally, install
+     {@link http://pear.php.net/package/PHPUnit2 PHPUnit2} to run the
+     Trax regression tests, and
+     {@link http://www.phpdoc.org/ phpDocumentor} to regenerate this
+     documentation.
      </listitem>
 
      <listitem>
@@ -249,20 +270,14 @@ include_path = ".:/usr/share/pear"
      <example>
 php_value include_path .:/usr/share/pear:/home/haas/trax/config
      </example>
-     In the same file, after the line that says
-     <literal>RewriteEngine&nbsp;On</literal>, add a line that says:
-     <example>
-RewriteBase /~haas/
-     </example>
-     (substitute your username for "haas").
-     In the same file, remove the / from dispatch.php in the last
-     RewriteRule line.  Change:
+     In the same file, add a prefix before the / from dispatch.php in
+     the last RewriteRule line.  Change:
      <example>
 RewriteRule ^(.*)$ /dispatch.php?$1 [QSA,L]
      </example>
      To:
      <example>
-RewriteRule ^(.*)$ dispatch.php?$1 [QSA,L]
+RewriteRule ^(.*)$ ~haas/dispatch.php?$1 [QSA,L]
      </example>
      </listitem>
 
@@ -292,6 +307,15 @@ $ <important>rm ~/public_html/index.html</important>
      directly to <literal>dispatch.php</literal>, above.
      If you get the expected page, you know that your mod_rewrite
      configuration works correctly.
+     </listitem>
+
+     <listitem>
+     With your favorite editor, open file
+     ~/trax/config/environment.php and change the line that defines
+     TRAX_URL_PREFIX to:
+     <example>
+define("TRAX_URL_PREFIX", "~haas");
+     </example>
      </listitem>
 
      <listitem>

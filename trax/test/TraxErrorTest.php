@@ -64,9 +64,39 @@ class TraxErrorTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     *  Empty test to prevent failure
+     *  Test exception with default value of code
      */
-    public function testEmpty() {
+    public function testDefault_code() {
+        try {
+            throw new TraxError('text1','text2');
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'TraxError'));
+            $this->assertEquals('text1',$e->getMessage());
+            $this->assertEquals('text1',$e->error_message);
+            $this->assertEquals('text2',$e->error_heading);
+            $this->assertEquals('500',$e->error_code);
+            return;
+        }
+        $this->fail('TraxError exception with default code not raised');
+    }
+
+    /**
+     *  Test exception with specified of code
+     */
+    public function testSpecified_code() {
+        try {
+            throw new TraxError('text3','text4', 250);
+        }
+        catch(Exception $e) {
+            $this->assertTrue(is_a($e,'TraxError'));
+            $this->assertEquals('text3',$e->getMessage());
+            $this->assertEquals('text3',$e->error_message);
+            $this->assertEquals('text4',$e->error_heading);
+            $this->assertEquals(250,$e->error_code);
+            return;
+        }
+        $this->fail('TraxError exception with code 250 not raised');
     }
 }
 
