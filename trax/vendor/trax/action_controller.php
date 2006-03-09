@@ -894,9 +894,11 @@ class ActionController {
                     $add_spacer = true;    
                 }
             }          
-            
+
             # Pull all the class vars out and turn them from $this->var to $var
-            extract(get_object_vars($this->controller_object));
+            if(is_object($this->controller_object)) {
+                extract(get_object_vars($this->controller_object));
+            }
             if(array_key_exists("collection", $options)) {
                 foreach($options['collection'] as $tmp_value) {
                     ${$file."_counter"}++;

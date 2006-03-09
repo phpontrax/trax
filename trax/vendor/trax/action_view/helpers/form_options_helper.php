@@ -279,4 +279,9 @@ function country_select($object_name, $attribute_name, $priority_countries = nul
     return $form->to_country_select_tag($priority_countries, $options, $html_options);
 }
 
+function options_for_select($choices, $selected = null) {
+    $form = new FormOptionsHelper();
+    return $form->options_for_select($choices, $selected = null);    
+}
+
 ?>
