@@ -25,7 +25,51 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
+//  root Trax files in the test directory
+define("TRAX_ROOT", dirname(__FILE__) . "/");
+define("TRAX_LIB_ROOT", "../vendor/trax");
+define("TRAX_VIEWS_EXTENTION",  "phtml");
+$GLOBALS['TRAX_INCLUDES'] =
+    array( "config"      => "config",
+           "controllers" => "controllers",
+           "helpers"     => "helpers",
+           "layouts"     => "layouts",
+           "views"       => "views");
+
 require_once "../vendor/trax/action_view/helpers.php";
+require_once "../vendor/trax/action_controller.php";
+require_once "../vendor/trax/router.php";
+require_once "../app/controllers/application.php";
+
+/**
+ *  Extend Helpers class to test protected methods
+ */
+class ExtHelpers extends Helpers
+{
+    function __construct($object_name = null, $attribute_name = null) {
+        parent::__construct($object_name, $attribute_name);
+    }
+
+    function boolean_attribute(&$options, $attribute) {
+        parent::boolean_attribute($options, $attribute);
+    }
+
+    function convert_options($options = array()) {
+        return parent::convert_options($options);
+    }
+
+    function object($object_name = null) {
+        return parent::object($object_name);
+    }
+}                         // class ExtHelpers extends Helpers
+
+/**
+ *  Dummy controller object
+ */
+class DummyController extends ApplicationController
+{
+    var $some_attr = 'attr value';
+}                         // class DummyController
 
 /**
  * Test class for Helpers.
@@ -52,6 +96,9 @@ class HelpersTest extends PHPUnit2_Framework_TestCase {
      * @access protected
      */
     protected function setUp() {
+        $GLOBALS['current_controller_name'] = 'foo_controller';
+        $GLOBALS['current_controller_path'] = '/foo/bar/mumble';
+        $GLOBALS['current_controller_object'] = 'nonobject';
     }
 
     /**
@@ -63,34 +110,150 @@ class HelpersTest extends PHPUnit2_Framework_TestCase {
     protected function tearDown() {
     }
 
+
     /**
-     * @todo Implement testCdata_section().
+     *  Test constructor
+     * @todo Figure out how to test first argument
+     */
+    public function test__construct() {
+        //  No arguments to constructor
+        $h = new Helpers;
+        $this->assertFalse($h->auto_index);
+        $this->assertEquals('', $h->object_name);
+        $this->assertNull($h->attribute_name);
+        $this->assertEquals('foo_controller', $h->controller_name);
+        $this->assertEquals('/foo/bar/mumble', $h->controller_path);
+        $this->assertEquals('nonobject', $h->controller_object);
+        //  Only attribute argument to constructor
+        $h = new Helpers(null,'someattr');
+        $this->assertFalse($h->auto_index);
+        $this->assertEquals('', $h->object_name);
+        $this->assertEquals('someattr', $h->attribute_name);
+        $this->assertEquals('foo_controller', $h->controller_name);
+        $this->assertEquals('/foo/bar/mumble', $h->controller_path);
+        $this->assertEquals('nonobject', $h->controller_object);
+
+        //  Need to figure out how the first argument is used
+        //  and write a test for it.
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     * Test cdata_section().
      */
     public function testCdata_section() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        //  Test the cdata_section() method of the object
+        $h = new Helpers;
+        $s = $h->cdata_section('foo');
+        $this->assertEquals("<![CDATA[foo]]>", $s);
+        //  Test the file function that calls cdata_section()
+        $s = cdata_section('foo');
+        $this->assertEquals("<![CDATA[foo]]>", $s);
     }
 
     /**
-     * @todo Implement testTag().
+     *  Test tag()
      */
     public function testTag() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        //  Test the tag() method of the object
+        $h = new Helpers;
+        $s = $h->tag('p');
+        $this->assertEquals("<p  />\n",$s);
+        $h = new Helpers;
+        $s = $h->tag('p', array('id'=>'a&b'));
+        $this->assertEquals("<p id=\"a&amp;b\" />\n",$s);
+        $h = new Helpers;
+        $s = $h->tag('p', array('id'=>'a&b'),true);
+        $this->assertEquals("<p id=\"a&amp;b\">\n",$s);
+        //  Test the file function that calls tag()
+        $s = tag('p');
+        $this->assertEquals("<p  />\n",$s);
+        $s = tag('p', array('id'=>'a&b'));
+        $this->assertEquals("<p id=\"a&amp;b\" />\n",$s);
+        $s = tag('p', array('id'=>'a&b'),true);
+        $this->assertEquals("<p id=\"a&amp;b\">\n",$s);
     }
 
     /**
-     * @todo Implement testContent_tag().
+     *  Test content_tag()
      */
     public function testContent_tag() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        //  Test the content_tag() method of the object
+        $h = new Helpers;
+        $s = $h->content_tag('p','hello world');
+        $this->assertEquals("<p >hello world</p>\n",$s);
+        $h = new Helpers;
+        $s = $h->content_tag('p','hello world',array('class'=>'content'));
+        $this->assertEquals("<p class=\"content\">hello world</p>\n",$s);
+        $h = new Helpers;
+        $s = $h->content_tag('p','hello world',array('id'=>'a&b'));
+        $this->assertEquals("<p id=\"a&amp;b\">hello world</p>\n",$s);
+        //  Test the file function that calls content_tag()
+        $s = content_tag('p','hello world');
+        $this->assertEquals("<p >hello world</p>\n",$s);
+        $s = content_tag('p','hello world',array('class'=>'content'));
+        $this->assertEquals("<p class=\"content\">hello world</p>\n",$s);
+    }
+
+    /**
+     * Test boolean_attribute().
+     */
+    public function testBoolean_attribute() {
+        $e = new ExtHelpers;
+        $k = array('foo'=>'bar', 'mumble'=>'grumble');
+        $e->boolean_attribute($k,'foo');
+        $this->assertEquals(array('foo'=>'foo', 'mumble'=>'grumble'), $k);
+    }
+
+    /**
+     * Test convert_options().
+     */
+    public function testConvert_options() {
+        $e = new ExtHelpers;
+        $k = array('disabled'=>'foo',
+                   'readonly'=>'bar',
+                   'multiple'=>'whocares',
+                   'mumble'=>'grumble');
+        $r = $e->convert_options($k);
+        $this->assertEquals(array('disabled'=>'disabled',
+                                  'readonly'=>'readonly',
+                                  'multiple'=>'multiple',
+                                  'mumble'=>'grumble'),
+                            $r);
+    }
+
+    /**
+     * Test object()
+     */
+    public function testObject() {
+        //  Constructing with no object name and then
+        //  calling object with no argument should return null
+        $e = new ExtHelpers;
+        $this->assertNull($e->object());
+        //  Create a dummy controller object
+        $d = new DummyController;
+        $GLOBALS['current_controller_object'] = $d;
+        //  This should inherit value of current_controller_object
+        $e = new ExtHelpers;
+        $this->assertEquals('attr value', $e->object('some_attr'));
+        //  This should inherit object name from constructor
+        $e = new ExtHelpers('some_attr');
+        $this->assertEquals('attr value', $e->object());
     }
 
     /**
      * @todo Implement testTo_content_tag().
      */
     public function testTo_content_tag() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     * @todo Implement testValue().
+     */
+    public function testValue() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }

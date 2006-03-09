@@ -206,6 +206,14 @@ class ActionController {
     private $id;
 
     /**
+     *  Path to add to other filesystem paths
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
+     */
+    private $added_path = '';
+     
+    /**
      *  Filesystem path to ../app/controllers/ directory
      *
      *  Set by {@link recognize_route()}
@@ -262,6 +270,7 @@ class ActionController {
      *  Filesystem path to application.php file
      *
      *  Set by {@link recognize_route()}
+     *  @see $controller_file
      *  @var string
      */
     private $application_controller_file;
@@ -321,7 +330,11 @@ class ActionController {
     protected $after_filter = null;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to the PHP program file for this controller
+     *
+     *  Set by {@link recognize_route()}
+     *  @see $application_controller_file
+     *  @var string
      */
     public $controller_file;
 
@@ -339,12 +352,19 @@ class ActionController {
     public $views_path;
 
     /**
-     *  @todo Document this attribute
+     *  Class name of the controller
+     *
+     *  Set by {@link recognize_route()}.
+     *  Derived from contents of {@link $controller}.
+     *  @var string
      */
     public $controller_class;
 
     /**
-     *  @todo Document this attribute
+     *  Instance of the controller class
+     *
+     *  Set by {@link process_route()}
+     *  @var object
      */
     public $controller_object;
 
@@ -357,6 +377,12 @@ class ActionController {
      *  @todo Document this attribute
      */
     public $views_file_extention = TRAX_VIEWS_EXTENTION;
+
+    /**
+     *  Whether to keep flash message after displaying it
+     *  @var boolean
+     */
+    public $keep_flash = false;
 
     /**
      *  Build a Router object and load routes from config/route.php
@@ -472,7 +498,6 @@ class ActionController {
 
         # current url
         $browser_url = $_SERVER['REDIRECT_URL'];
-
         # strip off url prefix, if any
         if(!is_null(TRAX_URL_PREFIX)) {
             $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
@@ -515,12 +540,15 @@ class ActionController {
 
                 if(@array_key_exists(":action",$route_params)) {
                     $this->action = $route_params[':action'];
-                } elseif(@in_array(":action",$route_path)) {
+                } elseif(@in_array(":action",$route_path)
+                   && array_key_exists(@array_search(":action", $route_path),
+                                       $this->url_path)) {
                     $this->action = strtolower($this->url_path[@array_search(":action", $route_path)]);
                 }
 
-                //  FIXME: get a warning if ':id' not in $url_path
-                if(@in_array(":id",$route_path)) {
+                if(@in_array(":id",$route_path)
+                   && array_key_exists(@array_search(":id", $route_path),
+                                       $this->url_path)) {
                     $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
                     if($this->id != "") {
                         $_REQUEST['id'] = $this->id;
@@ -562,6 +590,7 @@ class ActionController {
      *  @uses recognize_route()
      *  @uses raise()
      *  @uses ScaffoldController
+     *  @uses Session::unset()
      *  @uses $view_file
      *  @uses $views_file_extention
      *  @uses $views_path
@@ -578,7 +607,7 @@ class ActionController {
             }
         }
 
-        # Surpress output
+        # Suppress output
         ob_start();
 
         # Include main application controller file
@@ -586,6 +615,8 @@ class ActionController {
             include_once($this->application_controller_file);
         }
 
+        error_log('process_route() controller="'.$this->controller
+                  .'"  action="'.$this->action.'"');
         # Include the controller file and execute action
         // FIXME: redundant, recognize_route() already test for file exists
         if(file_exists($this->controller_file)) {
@@ -596,19 +627,24 @@ class ActionController {
                 if(is_object($this->controller_object)) {
                     $this->controller_object->controller = $this->controller;
                     $this->controller_object->action = $this->action;
-                    //  FIXME: $added_path doesn't exist at this point
                     $this->controller_object->controller_path = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
                     $GLOBALS['current_controller_name'] = $this->controller;
                     $GLOBALS['current_action_name'] = $this->action;
                     $GLOBALS['current_controller_object'] =& $this->controller_object;
+                    error_log('$GLOBALS[\'current_action_name\']='
+                              .$GLOBALS['current_action_name']);
+                    error_log('$GLOBALS[\'current_controller_name\']='
+                              .$GLOBALS['current_controller_name']);
+                    error_log('$GLOBALS[\'current_controller_path\']='
+                              .$GLOBALS['current_controller_path']);
                 }
 
                 # Which layout should we use?
                 $layout_file = $this->determine_layout();
-
+                error_log('layout_file="'.$layout_file.'"');
                 # Check if there is any defined scaffolding to load
-                if($this->controller_object->scaffold) {
+                if(isset($this->controller_object->scaffold)) {
                     $scaffold = $this->controller_object->scaffold;
                     if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
                         include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
@@ -658,34 +694,42 @@ class ActionController {
                 # Call the controller method based on the URL
                 $this->execute_before_filters();
                 if(method_exists($this->controller_object, $this->action)) {
+                    error_log('controller has method "'.$this->action.'"');
                     $action = $this->action;
                     $this->controller_object->$action();
                 } elseif(file_exists($this->views_path . "/" . $this->action . "." . $this->views_file_extention)) {
+                    error_log('views file "'.$this->action.'"');
                     $action = $this->action;
                 } elseif(method_exists($this->controller_object, "index")) {
+                    error_log('calling index()');
                     $this->controller_object->index();
                 } else {
+                    error_log('no action');
                     $this->raise("No action responded to ".$this->action, "Unknown action", "404");
                 }
                 $this->execute_after_filters();
 
                 # Find out if there was a redirect to some other page
-                if($this->controller_object->redirect_to) {
+                if(isset($this->controller_object->redirect_to)
+                    && $this->controller_object->redirect_to != '') {
                     $this->redirect_to($this->controller_object->redirect_to);
                 } else {
                     # Pull all the class vars out and turn them from $this->var to $var
                     extract(get_object_vars($this->controller_object));
                 }
 
-                if($this->controller_object->render_text != "") {
+                if(isset($this->controller_object->render_text)
+                   && $this->controller_object->render_text != "") {
                     echo $this->controller_object->render_text;
                 } else {
                     # If this isn't a scaffolding then get the view file to include
-                    if(!$scaffold) { 
+                    if(!isset($scaffold)) { 
                         # Normal processing of the view
-                        if($this->controller_object->render_action) {
+                        if(isset($this->controller_object->render_action)
+                           && $this->controller_object->render_action != '' ) {
                             $this->view_file = $this->views_path . "/" . $this->controller_object->render_action . "." . $this->views_file_extention;
-                        } elseif($action) {
+                        } elseif(isset($action)
+                                 && $action != '') {
                             $this->view_file = $this->views_path . "/" . $action . "." . $this->views_file_extention;
                         } else {
                             $this->view_file = $this->views_path . "/" . "index" . "." . $this->views_file_extention;
@@ -700,7 +744,7 @@ class ActionController {
                     }
 
                     # Grab all the html from the view to put into the layout
-                    $content_for_layout .= ob_get_contents();
+                    $content_for_layout = ob_get_contents();
                     ob_end_clean();
 
                     if(file_exists($layout_file) && $render_layout !== false) {
@@ -754,7 +798,8 @@ class ActionController {
                 $this->views_path .= "/$extra_path";
                 $this->layouts_path .= "/$extra_path";
             }
-            if(is_array($new_path)) {
+            if(isset($new_path)
+               && is_array($new_path)) {
                 $this->url_path = $new_path;
             }
         }
@@ -932,14 +977,15 @@ class ActionController {
      */
     function determine_layout() {
         # I guess you don't want any layout
-        // FIXME: Do we really want to test for null here?
-        // It might make more sense to test isset(...layout)
-        if($this->controller_object->layout == "null") {
+        if(!isset($this->controller_object->layout)
+           || $this->controller_object->layout == "null") {
             return null;
         }
         # $layout will be the layout defined in the current controller
         # or try to use the controller name for the layout
-        $layout = $this->controller_object->layout ? $this->controller_object->layout : $this->controller;
+        $layout = (isset($this->controller_object->layout)
+                   && $this->controller_object->layout != '')
+            ? $this->controller_object->layout : $this->controller;
         # Check if a method has been defined to determine the layout at runtime
         if(method_exists($this->controller_object, $layout)) {
             $layout = $this->controller_object->$layout();
@@ -962,7 +1008,7 @@ class ActionController {
         //  app/views/layouts/application.phtml 
         //  FIXME: this file isn't in the distribution so
         //  this reference will fail
-        if(!$layout_file) {
+        if(!isset($layout_file)) {
             $layout_file = $this->default_layout_file;
         }
         return $layout_file;

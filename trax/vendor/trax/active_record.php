@@ -85,7 +85,7 @@ class ActiveRecord {
      *
      *  <p><b>NOTE:</b>The information from the database about which
      *  columns are primary keys is <b>not used</b>.  Instead, the
-     *  primary keys in the table are listed in {@$primary_keys},
+     *  primary keys in the table are listed in {@link $primary_keys},
      *  which is maintained independently.</p>
      *  @var string[]
      *  @see $primary_keys
@@ -161,7 +161,15 @@ class ActiveRecord {
      *  @var string[]
      */
     protected $habtm_attributes = null;
+
+    /**
+     *  @todo Document this property
+     */
     protected $save_associations = array();
+    /**
+     *  @todo Document this property
+     *  @var boolean
+     */
     public $auto_save_associations = true; # where or not to auto save defined associations if set
 
     /**
@@ -347,12 +355,20 @@ class ActiveRecord {
      *  Override get() if they do $model->some_association->field_name
      *  dynamically load the requested contents from the database.
      *  @uses $belongs_to
+     *  @uses get_association_type()
      *  @uses $has_and_belongs_to_many
      *  @uses $has_many
      *  @uses $has_one
+     *  @uses find_all_has_many()
+     *  @uses find_all_habtm()
+     *  @uses find_one_belongs_to()
+     *  @uses find_one_has_one()
      */
     function __get($key) {
         $association_type = $this->get_association_type($key);
+        if (is_null($association_type)) {
+            return null;
+        }
         switch($association_type) {
             case "has_many":
                 $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
@@ -384,6 +400,8 @@ class ActiveRecord {
      *  be created and stored into.  If the value of $key matches the
      *  name of a column in content_columns, the corresponding object
      *  variable becomes the content of the column in this row.
+     *  @uses $auto_save_associations
+     *  @uses get_association_type()
      *  @uses set_content_columns()
      */
     function __set($key, $value) {
@@ -415,6 +433,7 @@ class ActiveRecord {
      *  Override call() to dynamically call the database associations
      *  @uses $aggregrations
      *  @uses aggregrate_all()
+     *  @uses get_association_type()
      *  @uses $belongs_to
      *  @uses $has_one
      *  @uses $has_and_belongs_to_many
@@ -1309,8 +1328,22 @@ class ActiveRecord {
     }
     
     /**
-     *  @todo Document this API
      *  returns the association type if defined in child class or null
+     *  @todo Document this API
+     *  @todo <b>FIXME:</b> does the match algorithm match a substring
+     *        of what we want to match?
+     *  @uses $belongs_to
+     *  @uses $has_and_belongs_to_many
+     *  @uses $has_many
+     *  @uses $has_one
+     *  @return mixed Association type, one of the following:
+     *  <ul>
+     *    <li>"belongs_to"</li>
+     *    <li>"has_and_belongs_to_many"</li>
+     *    <li>"has_many"</li>
+     *    <li>"has_one"</li>
+     *  </ul>
+     *  if an association exists, or null if no association
      */
     function get_association_type($association_name) {
         $type = null;
@@ -1356,6 +1389,7 @@ class ActiveRecord {
     /**
      *  @todo Document this API
      *  Saves any associations objects assigned to this instance
+     *  @uses $auto_save_associations
      */
     private function save_associations() {      
         if(count($this->save_associations) && $this->auto_save_associations) {
@@ -1595,6 +1629,7 @@ class ActiveRecord {
      *  Update object attributes from list in argument
      *  @param string[] $attributes List of name => value pairs giving
      *    name and value of attributes to set.
+     *  @uses $auto_save_associations
      *  @todo Figure out and document how datetime fields work
      */
     function update_attributes($attributes) {
@@ -1634,7 +1669,8 @@ class ActiveRecord {
                 $this->$field = $value;
             }
         }
-        if(is_array($datetime_fields)) {
+        if(isset($datetime_fields)
+           && is_array($datetime_fields)) {
             foreach($datetime_fields as $field => $value) {
                 $this->$field = $value;    
             }    
@@ -1845,7 +1881,9 @@ class ActiveRecord {
      */
     function establish_connection() {
         # Connect to the database and throw an error if the connect fails.
-        if(!is_object($GLOBALS['ACTIVE_RECORD_DB']) || $this->force_reconnect) {
+      if(!array_key_exists('ACTIVE_RECORD_DB',$GLOBALS)
+	 || !is_object($GLOBALS['ACTIVE_RECORD_DB'])
+	 || $this->force_reconnect) {
             if(array_key_exists("use", $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE])) {
                 $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][$GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['use']];
             } else {
@@ -2237,4 +2275,11 @@ class ActiveRecord {
 
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>
