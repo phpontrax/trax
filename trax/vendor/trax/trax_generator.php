@@ -569,7 +569,7 @@ class TraxGenerator {
      *  Output console help message for "generate scaffold"
      */
     function scaffold_help() {
-        echo "Usage: ./generate scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
+        echo "Usage: ./generate.php scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
         echo "Description:\n";
         echo "\tThe scaffold generator creates a controller to interact with a model.\n";
         echo "\tIf the model does not exist, it creates the model as well.  The generated\n";
