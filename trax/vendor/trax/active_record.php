@@ -711,7 +711,7 @@ class ActiveRecord {
         $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
         $sql = "SELECT $aggregrate_type($field) AS agg_result FROM $this->table_name ";
-
+        
         # Use any passed-in parameters
         if (!is_null($parameters)) {
             $conditions = $parameters[1];
@@ -781,7 +781,9 @@ class ActiveRecord {
     function send($column) {
         if($this->column_attribute_exists($column)) {
             # Run the query to grab a specific columns value.
-            $result = self::$db->getOne("SELECT $column FROM $this->table_name WHERE id='$this->id'");
+            $sql = "SELECT $column FROM $this->table_name WHERE id='$this->id'";
+            $this->log_query($sql);
+            $result = self::$db->getOne($sql);
             if($this->is_error($result)) {
                 $this->raise($result->getMessage());
             }
@@ -833,6 +835,7 @@ class ActiveRecord {
      */
     function query($sql) {
         # Run the query
+        $this->log_query($sql);
         $rs = self::$db->query($sql);
         if ($this->is_error($rs)) {
             if(self::$use_transactions && self::$begin_executed) {
@@ -2191,6 +2194,12 @@ class ActiveRecord {
      *  Is called after delete().
      */
     function after_delete() {}
+
+    function log_query($sql) {
+        if(TRAX_MODE == "development" && $sql) {
+            $GLOBALS['ACTIVE_RECORD_SQL_LOG'][] = $sql;       
+        }    
+    }
 
     /**
      *  @todo Document this API
