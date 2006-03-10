@@ -977,8 +977,7 @@ class ActionController {
      */
     function determine_layout() {
         # I guess you don't want any layout
-        if(!isset($this->controller_object->layout)
-           || $this->controller_object->layout == "null") {
+        if($this->controller_object->layout == "null") {
             return null;
         }
         # $layout will be the layout defined in the current controller
