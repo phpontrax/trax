@@ -606,7 +606,7 @@ class TraxGenerator {
         echo "./generate.php model model_name\n";
         echo "for more model info ./generate.php model\n\n";
         echo "Generate Scaffold:\n";
-        echo "./generate scaffold ModelName [ControllerName] [view1 view2 ...]\n";
+        echo "./generate.php scaffold ModelName [ControllerName] [view1 view2 ...]\n";
         echo "for more scaffold info ./generate.php scaffold\n\n";        
     }
 }
