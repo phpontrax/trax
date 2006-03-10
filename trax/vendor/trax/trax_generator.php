@@ -601,10 +601,13 @@ class TraxGenerator {
         echo "Usage:\n";
         echo "Generate Controller:\n";
         echo "./generate.php controller controller_name [view1 view2 ..]\n";
-        echo "for more controller info ./generate.php controller\n";
+        echo "for more controller info ./generate.php controller\n\n";
         echo "Generate Model:\n";
         echo "./generate.php model model_name\n";
         echo "for more model info ./generate.php model\n\n";
+        echo "Generate Scaffold:\n";
+        echo "./generate scaffold ModelName [ControllerName] [view1 view2 ...]\n";
+        echo "for more scaffold info ./generate.php scaffold\n\n";        
     }
 }
 
