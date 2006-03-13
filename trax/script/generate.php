@@ -41,11 +41,6 @@
  *  <p>See the {@link TraxGenerator} class definition for valid values
  *  of <i>command [ arguments... ]</i></p>
  */
-if (substr(PHP_OS, 0, 3) == 'WIN') {
-    ini_set("include_path",ini_get("include_path").";".dirname(dirname(__FILE__))."/lib"); 
-} else {
-    ini_set("include_path",ini_get("include_path").":".dirname(dirname(__FILE__)) . "/lib");
-} 
 
 /**
  *  Load definitions of the Trax environment from {@link environment.php}
