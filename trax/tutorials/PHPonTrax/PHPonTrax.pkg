@@ -268,7 +268,7 @@ RewriteRule ^(.*)$ /dispatch.php?$1 [QSA,L]
      </example>
      To:
      <example>
-RewriteRule ^(.*)$ ~haas/dispatch.php?$1 [QSA,L]
+RewriteRule ^(.*)$ /~haas/dispatch.php?$1 [QSA,L]
      </example>
      </listitem>
 
@@ -302,16 +302,18 @@ $ <important>rm ~/public_html/index.html</important>
 
      <listitem>
      With your favorite editor, open file
-     ~/trax/config/environment.php and change the line that defines
-     TRAX_URL_PREFIX to:
+     <literal>~/trax/config/environment.php</literal> and change the
+     line that defines <literal>TRAX_URL_PREFIX</literal> to:
      <example>
 define("TRAX_URL_PREFIX", "~haas");
      </example>
+     Also edit the line that defines <literal>TRAX_PUBLIC</literal> to
+     change <literal>public</literal> to <literal>public_html</literal>.
      </listitem>
 
      <listitem>
-     Change file permissions on the log files in ~/trax/log so that
-     Apache can write to them:
+     Change file permissions on the log files in
+     <literal>~/trax/log</literal> so that Apache can write to them:
      <example>
 $ <important>su -</important>
 Password: ...
@@ -392,7 +394,34 @@ Password: ...
   <title>Reference</title>
   <refsect2 id="{@id ref_defines}">
    <title>Defines</title>
+   All the definitions below are set in file
+  {@link environment.php config/environment.php}
    <itemizedlist>
+
+    <listitem><command>DEBUG</command>
+     <cmdsynopsis>boolean set to true if TRAX_MODE is 'development',
+     false otherwise.  Determines whether PHP error messages should be
+     sent to the browser; true means show error messages on the
+     browser as well as the error log, false means send error messages
+     to only the error log.  Implemented by calling
+     {@link http://www.php.net/ini_set ini_set()}
+     at the time DEBUG is defined.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>PHP_LIB_ROOT</command>
+     <cmdsynopsis>Directory containing PHP libraries.  This directory
+     will be added to the PHP
+     {@link http://www.php.net/manual/en/ini.core.php#ini.include-path include path}.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_LIB_ROOT</command>
+     <cmdsynopsis>Directory containing Trax libraries.  Set to a
+     subdirectory of TRAX_ROOT or PHP_LIB_ROOT and added to the PHP
+     {@link http://www.php.net/manual/en/ini.core.php#ini.include-path include path}.
+     </cmdsynopsis>
+    </listitem>
 
     <listitem><command>TRAX_MODE</command>
      <cmdsynopsis>Contains one of 'test', 'development' or 'production'.
@@ -400,33 +429,36 @@ Password: ...
       Get it from $_SERVER['TRAX_MODE'] if that exists</cmdsynopsis>
     </listitem>
 
+    <listitem><command>TRAX_PATH_SEPERATOR</command>
+     <cmdsynopsis>Character to use as the separator when defining the
+     PHP include path. ';' for Windows, otherwise ':'.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_PUBLIC</command>
+     <cmdsynopsis>Subdirectory of the user's home directory referenced
+     by the Apache configuration variable <literal>UserDir</literal>.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_ROOT</command>
+     <cmdsynopsis>Filesystem path to the top of the Trax file tree.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_URL_PREFIX</command>
+     <cmdsynopsis>That part of a URL which refers to a Trax
+     application that comes after the domain name and before the
+     controller.  Usually empty.  In the case of a Trax application in
+     the home directory of user <literal>username</literal>,
+     <command>TRAX_URL_PREFIX</command> would be set to 
+     '<literal>~username</literal>'.
+     </cmdsynopsis>
+    </listitem>
+
     <listitem><command>TRAX_VIEWS_EXTENTION</command>
-     <cmdsynopsis>file extension for views</cmdsynopsis>
-    </listitem>
-
-    <listitem><command></command>
-     <cmdsynopsis>
-     </cmdsynopsis>
-    </listitem>
-
-    <listitem><command></command>
-     <cmdsynopsis>
-     </cmdsynopsis>
-    </listitem>
-
-    <listitem><command></command>
-     <cmdsynopsis>
-     </cmdsynopsis>
-    </listitem>
-
-    <listitem><command></command>
-     <cmdsynopsis>
-     </cmdsynopsis>
-    </listitem>
-
-    <listitem><command></command>
-     <cmdsynopsis>
-     </cmdsynopsis>
+     <cmdsynopsis>File extension for views, default
+     'phtml'.</cmdsynopsis>
     </listitem>
 
    </itemizedlist>

@@ -171,6 +171,7 @@ class Session {
         if(!self::is_aol_host()) {
             $key .= $_SERVER['REMOTE_ADDR'];
         }
+        // error_log('get_hash() returns '.md5($key));
         return md5($key);
     }
 
@@ -241,8 +242,11 @@ class Session {
      *  @uses is_valid_host()
      */
     function unset_var($key) {
+         // error_log('Session::unset_var("'.$key.'")');
         if(self::is_valid_host()) {
+            // error_log('before unsetting SESSION='.var_export($_SESSION,true));
             unset($_SESSION[self::get_hash()][$key]);
+            // error_log('after unsetting SESSION='.var_export($_SESSION,true));
         }
     }
 

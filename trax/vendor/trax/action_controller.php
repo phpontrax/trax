@@ -31,156 +31,18 @@
 /**
  *  Action controller
  *
- *  <p><b>Filters</b></p>
+ *  <p>The ActionController base class operates as follows:</p>
+ *  <ol>
+ *    <li>Accept a URL as input</li>
+ *    <li>Translate the URL into a controller and action</li>
+ *    <li>Create the indicated controller object (which is a subclass
+ *      of ActionController) and call its action method</li>
+ *    <li>Render the output of the action method</li>
+ *    <li>Redirect to the next URL</li>
+ *  </ol>
  *
- *  <p>Filters enable controllers to run shared pre and post
- *  processing code for its actions. These filters can be used to do
- *  authentication, caching, or auditing before the intended action is
- *  performed. Or to do localization or output compression after the
- *  action has been performed.</p>
- *
- *  <p>Filters have access to the request, response, and all the
- *  instance variables set by other filters in the chain or by the
- *  action (in the case of after filters). Additionally, it's possible
- *  for a pre-processing <samp>before_filter</samp> to halt the processing
- *  before the intended action is processed by returning false or
- *  performing a redirect or render.  This is especially useful for
- *  filters like authentication where you're not interested in
- *  allowing the action to be  performed if the proper credentials are
- *  not in order.</p>
- *
- *  <p><b>Filter inheritance</b></p>
- *
- *  <p>Controller inheritance hierarchies share filters downwards, but
- *  subclasses can also add new filters without affecting the
- *  superclass. For example:</p>
- *
- *  <pre>
- *   class BankController extends ActionController
- *   {
- *     $this->before_filter = audit();
- *
- *     private function audit() {
- *       <i>record the action and parameters in an audit log</i>
- *     }
- *   }
- *
- *   class VaultController extends BankController
- *   {
- *     $this->before_filter = verify_credentials();
- *
- *     private function verify_credentials() {
- *       <i>make sure the user is allowed into the vault</i>
- *     }
- *   }
- *  </pre>
- *
- *  <p>Now any actions performed on the BankController will have the
- *  audit method called before. On the VaultController, first the
- *  audit method is called, then the verify_credentials method. If the
- *  audit method returns false, then verify_credentials and the
- *  intended action are never called.</p>
- *
- *  <p><b>Filter types</b></p>
- *
- *  <p>A filter can take one of three forms: method reference
- *  (symbol), external class, or inline method (proc). The first is the
- *  most common and works by referencing a protected or private method
- *  somewhere in the inheritance hierarchy of the controller by use of
- *  a symbol. In the bank example above, both BankController and
- *  VaultController use this form.</p>
- *
- *  <p>Using an external class makes for more easily reused generic
- *  filters, such as output compression. External filter classes are
- *  implemented by having a static +filter+ method on any class and
- *  then passing this class to the filter method. Example:</p>
- *
- *  <pre>
- *   class OutputCompressionFilter
- *   {
- *     static functionfilter(controller) {
- *       controller.response.body = compress(controller.response.body)
- *     }
- *   }
- *
- *   class NewspaperController extends ActionController
- *   {
- *     $this->after_filter = OutputCompressionFilter;
- *   }
- *  </pre>
- *
- *  <p>The filter method is passed the controller instance and is
- *  hence granted access to all aspects of the controller and can
- *  manipulate them as it sees fit.</p>
- *
- *  <p>The inline method (using a proc) can be used to quickly do
- *  something small that doesn't require a lot of explanation.  Or
- *  just as a quick test. It works like this:</p>
- *
- *  <pre>
- *   class WeblogController extends ActionController
- *   {
- *     before_filter { |controller| false if controller.params["stop_action"] }
- *   }
- *  </pre>
- *
- *  <p>As you can see, the block expects to be passed the controller
- *  after it has assigned the request to the internal variables.  This
- *  means that the block has access to both the request and response
- *  objects complete with convenience methods for params, session,
- *  template, and assigns. Note: The inline method doesn't strictly
- *  have to be a block; any object that responds to call and returns 1
- *  or -1 on arity will do (such as a Proc or an Method object).</p>
- *
- *  <p><b>Filter chain skipping</b></p>
- *
- *  <p>Some times its convenient to specify a filter chain in a superclass 
- *  that'll hold true for the majority of the subclasses, but not necessarily
- *  all of them. The subclasses that behave in exception can then specify
- *  which filters they would like to be relieved of. Examples</p>
- *
- *  <pre>
- *   class ApplicationController extends ActionController
- *   {
- *     $this->before_filter = authenticate();
- *   }
- *
- *   class WeblogController extends ApplicationController
- *   {
- *      // will run the authenticate() filter
- *   }
- *  </pre>
- *
- *  <p><b>Filter conditions</b></p>
- *
- *  <p>Filters can be limited to run for only specific actions. This
- *  can be expressed either by listing the actions to exclude or
- *  the actions to include when executing the filter. Available
- *  conditions are +:only+ or +:except+, both of which accept an
- *  arbitrary number of method references. For example:</p>
- *
- *  <pre>
- *   class Journal extends ActionController
- *   {
- *     // only require authentication if the current action is edit or delete
- *     before_filter :authorize, :only => [ :edit, :delete ]
- *    
- *     private function authorize() {
- *      // redirect to login unless authenticated
- *     }
- *   }
- *  </pre>
- * 
- *  <p>When setting conditions on inline method (proc) filters the
- *  condition must come first and be placed in parentheses.</p>
- *
- *  <pre>
- *   class UserPreferences extends ActionController
- *   {
- *     before_filter(:except => :new) { ? some proc ... }
- *  * ...
- *   }
- *  </pre>
+ *  For details see the
+ *  {@tutorial PHPonTrax/ActionController.cls class tutorial}
  */
 class ActionController {
 
@@ -201,7 +63,10 @@ class ActionController {
     private $action;
 
     /**
-     *  @todo Document this attribute
+     *  Value of :id parsed from URL then forced to lower case
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $id;
 
@@ -222,26 +87,36 @@ class ActionController {
     private $controllers_path;
 
     /**
-     *  Filesystem path to ../app/helpers/ directory
+     *  Filesystem path to ../app/helpers/<i>extras</i> directory
      *
-     *  Set by {@link recognize_route()}
+     *  Set by {@link recognize_route()}, {@link set_paths()}
      *  @var string
      */
     private $helpers_path;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to ../app/helpers/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $helpers_base_path;
 
     /**
-     *  Filesystem path to ../app/layouts/ directory
+     *  Filesystem path to ../app/views/layouts/<i>extras</i> directory
      *
-     *  Set by {@link recognize_route()}
-     *  @todo <b>FIXME:</> declare $layouts_base_path
+     *  Set by {@link recognize_route()}, {@link set_paths()}
      *  @var string
      */
     private $layouts_path;
+
+    /**
+     *  Filesystem path to ../app/views/layouts/ directory
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
+     */
+    private $layouts_base_path;
 
     /**
      *  User's URL in components
@@ -262,7 +137,10 @@ class ActionController {
     private $default_layout_file;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to the controllername_helper.php file
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
      */
     private $helper_file;
 
@@ -305,17 +183,26 @@ class ActionController {
     private $router_loaded = false;
 
     /**
-     *  @todo Document this attribute
+     *  List of additional helper files for this controller object
+     *
+     *  Set by {@link add_helper()}
+     *  @var string[]
      */
     private $helpers = array();
 
     /**
-     *  @todo Document this attribute
+     *  List of filters to execute before calling action method
+     *
+     *  Set by {@link add_before_filters()
+     *  @var string[]
      */
     private $before_filters = array();
 
     /**
-     *  @todo Document this attribute
+     *  List of filters to execute after calling action method
+     *
+     *  Set by {@link add_after_filters()
+     *  @var string[]
      */
     private $after_filters = array();     
 
@@ -339,7 +226,10 @@ class ActionController {
     public $controller_file;
 
     /**
-     *  @todo Document this attribute
+     *  Filesystem path to the view file selected for this action
+     *
+     *  Set by {@link process_route()
+     *  @var string
      */
     public $view_file;
 
@@ -370,11 +260,16 @@ class ActionController {
 
     /**
      *  @todo Document this attribute
+     *  @todo <b>FIXME:</b> Not referenced in this class - is it used
+     *        by subclasses?  If so, for what?
      */
     public $asset_host = null;
 
     /**
-     *  @todo Document this attribute
+     *  File extension appended to view files
+     *
+     *  Set from a define in {@link environment.php}.  Usually phtml
+     *  @var string
      */
     public $views_file_extention = TRAX_VIEWS_EXTENTION;
 
@@ -461,7 +356,10 @@ class ActionController {
     /**
      *  Convert URL to controller, action and id
      *
-     *  Parse the URL in $_SERVER['REDIRECT_URL'] into elements.
+     *  Parse the URL in
+     *  {@link
+     *  http://www.php.net/manual/en/reserved.variables.php#reserved.variables.server $_SERVER}['REDIRECT_URL']
+     *  into elements.
      *  Compute filesystem paths to the various components used by the
      *  URL and store the paths in object private variables.
      *  Verify that the controller exists.
@@ -498,18 +396,26 @@ class ActionController {
 
         # current url
         $browser_url = $_SERVER['REDIRECT_URL'];
+        //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
         if(!is_null(TRAX_URL_PREFIX)) {
-            $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
+            // FIXME: Do we know for sure that the
+            // initial '/' will be there?
+            $browser_url = str_replace('/'.TRAX_URL_PREFIX,"",$browser_url);
         }
+        //error_log('browser url='.$browser_url);
 
         # strip leading slash
+        // FIXME: Do we know for sure that the
+        // initial '/' will be there?
         $browser_url = substr($browser_url,1);
+        //error_log('browser url='.$browser_url);
 
         # strip trailing slash (if any)
         if(substr($browser_url, -1) == "/") {
             $browser_url = substr($browser_url, 0, -1);
         }
+        //error_log('browser url='.$browser_url);
 
         if($browser_url) {
             $this->url_path = explode("/", $browser_url);
@@ -527,6 +433,9 @@ class ActionController {
             $this->views_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
 
             $route = $this->router->find_route($browser_url);
+
+            //  find_route() returns an array if it finds a path that
+            //  matches the URL, null if no match found
             if(is_array($route)) {
                 $this->set_paths();
                 $route_path = explode("/",$route['path']);
@@ -537,7 +446,7 @@ class ActionController {
                 } elseif(@in_array(":controller",$route_path)) {
                     $this->controller = strtolower($this->url_path[@array_search(":controller", $route_path)]);
                 }
-
+                //error_log('controller='.$this->controller);
                 if(@array_key_exists(":action",$route_params)) {
                     $this->action = $route_params[':action'];
                 } elseif(@in_array(":action",$route_path)
@@ -545,7 +454,10 @@ class ActionController {
                                        $this->url_path)) {
                     $this->action = strtolower($this->url_path[@array_search(":action", $route_path)]);
                 }
-
+                //error_log('action='.$this->action);
+                //  FIXME: RoR uses :name as a keyword parameter, id
+                //  is not treated as a special case.
+                //  Do we want to do the same?
                 if(@in_array(":id",$route_path)
                    && array_key_exists(@array_search(":id", $route_path),
                                        $this->url_path)) {
@@ -554,7 +466,7 @@ class ActionController {
                         $_REQUEST['id'] = $this->id;
                     }
                 }
-
+                //error_log('id='.$this->id);
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
                 $this->controller_class = Inflector::camelize($this->controller) . "Controller";
@@ -572,7 +484,8 @@ class ActionController {
     }
 
     /**
-     *  @todo Document this method
+     *  Parse URL, extract controller and action and execute them
+     *
      *  @uses $action
      *  @uses $application_controller_file
      *  @uses $application_helper_file
@@ -590,7 +503,7 @@ class ActionController {
      *  @uses recognize_route()
      *  @uses raise()
      *  @uses ScaffoldController
-     *  @uses Session::unset()
+     *  @uses Session::unset_var()
      *  @uses $view_file
      *  @uses $views_file_extention
      *  @uses $views_path
@@ -598,6 +511,7 @@ class ActionController {
      */
     function process_route() {
 
+        $render_layout = true;
         # First try to load the routes and setup the paths to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
@@ -615,11 +529,11 @@ class ActionController {
             include_once($this->application_controller_file);
         }
 
-        error_log('process_route() controller="'.$this->controller
-                  .'"  action="'.$this->action.'"');
+        //error_log('process_route() controller="'.$this->controller
+        //          .'"  action="'.$this->action.'"');
         # Include the controller file and execute action
         // FIXME: redundant, recognize_route() already test for file exists
-        if(file_exists($this->controller_file)) {
+        if (file_exists($this->controller_file)) {
             include_once($this->controller_file);
             if(class_exists($this->controller_class,false)) {
                 $class = $this->controller_class;
@@ -632,18 +546,18 @@ class ActionController {
                     $GLOBALS['current_controller_name'] = $this->controller;
                     $GLOBALS['current_action_name'] = $this->action;
                     $GLOBALS['current_controller_object'] =& $this->controller_object;
-                    error_log('$GLOBALS[\'current_action_name\']='
-                              .$GLOBALS['current_action_name']);
-                    error_log('$GLOBALS[\'current_controller_name\']='
-                              .$GLOBALS['current_controller_name']);
-                    error_log('$GLOBALS[\'current_controller_path\']='
-                              .$GLOBALS['current_controller_path']);
+                    // error_log('$GLOBALS[\'current_action_name\']='
+                    //           .$GLOBALS['current_action_name']);
+                    // error_log('$GLOBALS[\'current_controller_name\']='
+                    //           .$GLOBALS['current_controller_name']);
+                    // error_log('$GLOBALS[\'current_controller_path\']='
+                    //           .$GLOBALS['current_controller_path']);
                 }
 
                 # Which layout should we use?
                 $layout_file = $this->determine_layout();
-                error_log('layout_file="'.$layout_file.'"');
-                # Check if there is any defined scaffolding to load
+                // error_log('layout_file="'.$layout_file.'"');
+                // # Check if there is any defined scaffolding to load
                 if(isset($this->controller_object->scaffold)) {
                     $scaffold = $this->controller_object->scaffold;
                     if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
@@ -693,18 +607,19 @@ class ActionController {
             if(is_object($this->controller_object)) {
                 # Call the controller method based on the URL
                 $this->execute_before_filters();
+                // FIXME: shouldn't we check return here?
                 if(method_exists($this->controller_object, $this->action)) {
-                    error_log('controller has method "'.$this->action.'"');
+                    //error_log('controller has method "'.$this->action.'"');
                     $action = $this->action;
                     $this->controller_object->$action();
                 } elseif(file_exists($this->views_path . "/" . $this->action . "." . $this->views_file_extention)) {
-                    error_log('views file "'.$this->action.'"');
+                    // error_log('views file "'.$this->action.'"');
                     $action = $this->action;
                 } elseif(method_exists($this->controller_object, "index")) {
-                    error_log('calling index()');
+                    //error_log('calling index()');
                     $this->controller_object->index();
                 } else {
-                    error_log('no action');
+                    //error_log('no action');
                     $this->raise("No action responded to ".$this->action, "Unknown action", "404");
                 }
                 $this->execute_after_filters();
@@ -713,6 +628,7 @@ class ActionController {
                 if(isset($this->controller_object->redirect_to)
                     && $this->controller_object->redirect_to != '') {
                     $this->redirect_to($this->controller_object->redirect_to);
+                    //  redirect_to() exits instead of returning
                 } else {
                     # Pull all the class vars out and turn them from $this->var to $var
                     extract(get_object_vars($this->controller_object));
@@ -724,6 +640,7 @@ class ActionController {
                 } else {
                     # If this isn't a scaffolding then get the view file to include
                     if(!isset($scaffold)) { 
+                        // error_log('not scaffolding, looking for view file');
                         # Normal processing of the view
                         if(isset($this->controller_object->render_action)
                            && $this->controller_object->render_action != '' ) {
@@ -734,6 +651,7 @@ class ActionController {
                         } else {
                             $this->view_file = $this->views_path . "/" . "index" . "." . $this->views_file_extention;
                         }
+                        // error_log('view file='.$this->view_file);
                     }
 
                     if(file_exists($this->view_file)) {
@@ -747,6 +665,9 @@ class ActionController {
                     $content_for_layout = ob_get_contents();
                     ob_end_clean();
 
+                    //error_log('layout file='.$layout_file
+                    //          .'  render_layout='
+                    //          .var_export($render_layout,true));
                     if(file_exists($layout_file) && $render_layout !== false) {
                         # render the layout
                         include($layout_file);
@@ -764,6 +685,7 @@ class ActionController {
             $this->raise("No controller found.", "Unknown controller", "404");
         }
 
+        // error_log('keep flash='.var_export($this->keep_flash,true));
         if(!$this->keep_flash) {
             # Nuke the flash
             Session::unset_var('flash');
@@ -773,13 +695,25 @@ class ActionController {
     }                                // function process_route()
 
     /**
-     *  @todo Document this method
+     *  Extend the search path for components
+     *
+     *  On entry, $url_path is set according to the browser's URL and 
+     *  $controllers_path has been set according to the configuration
+     *  in {@link environment.php config/environment.php} .  Examine
+     *  the $controllers_path directory for files or directories that
+     *  match any component of the URL.  If one is found, add that
+     *  component to all paths.  Replace the contents of $url_path
+     *  with the list of URL components that did NOT match any files
+     *  or directories.
      *  @uses $added_path
      *  @uses $controllers_path
      *  @uses $helpers_path
-     *  @uses $layous_path
+     *  @uses $layouts_path
      *  @uses $views_path
      *  @uses $url_path
+     *  @todo <b>FIXME:</b> Creating a file or directory in
+     *        app/controllers with the same name as a controller, action or
+     *        other URL element will hijack the browser!
      */
     function set_paths() {
         if(is_array($this->url_path)) {
@@ -807,6 +741,7 @@ class ActionController {
 
     /**
      *  Execute the before filters
+     *  @uses $before_filters
      */
     function execute_before_filters() {
         if(count($this->controller_object->before_filters) > 0) { 
@@ -824,6 +759,7 @@ class ActionController {
      *  @param mixed $filter_function_name  String with the name of
      *  one filter function, or array of strings with the names of
      *  several filter functions.
+     *  @uses $before_filters
      */
     function add_before_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
@@ -839,6 +775,10 @@ class ActionController {
         }
     }
 
+    /**
+     *  Execute the after filters
+     *  @uses $after_filters
+     */
     function execute_after_filters() {
         if(count($this->controller_object->after_filters) > 0) {
             foreach($this->controller_object->after_filters as $filter_function) {
@@ -856,6 +796,7 @@ class ActionController {
      *  @param mixed $filter_function_name  String with the name of
      *  one filter function, or array of strings with the names of
      *  several filter functions.
+     *  @uses $after_filters
      */
     function add_after_filter($filter_function_name) {
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
@@ -871,6 +812,14 @@ class ActionController {
         }
     }
 
+    /**
+     *  Add a helper to the list of helpers used by a controller
+     *  object
+     *
+     *  @param $helper_name string Name of a helper to add to the list
+     *  @uses  $helpers
+     *  @uses  $controller_object
+     */
     function add_helper($helper_name) {
         if(!in_array($helper_name, $this->controller_object->helpers)) {
             $this->controller_object->helpers[] = $helper_name;
@@ -968,7 +917,8 @@ class ActionController {
     }
 
     /**
-     *  @todo Document this method
+     *  Select a layout file based on the controller object
+     *
      *  @uses $controller_object
      *  @uses $layouts_base_path
      *  @uses $layouts_path
@@ -978,6 +928,7 @@ class ActionController {
     function determine_layout() {
         # I guess you don't want any layout
         if($this->controller_object->layout == "null") {
+            //error_log('controller->layout absent');
             return null;
         }
         # $layout will be the layout defined in the current controller
@@ -1014,21 +965,32 @@ class ActionController {
     }
 
     /**
-     * Redirects the browser to the target specified in options. This parameter can take one of three forms:
-     * 
-     *     * Array: The URL will be generated by calling url_for() with the options.
-     *     * String starting with protocol:// (like http://): Is passed straight through as the target for redirection.
-     *     * String not containing a protocol: The current protocol and host is prepended to the string.
-     *     * back: Back to the page that issued the request. Useful for forms that are triggered from multiple places. Short-hand for redirect_to(request.env["HTTP_REFERER"])
-     * 
-     * Examples:
-     * 
-     *   redirect_to(array(":action" => "show", ":id" => 5))
-     *   redirect_to("http://www.rubyonrails.org")
-     *   redirect_to("/images/screenshot.jpg")
-     *   redirect_to("back")
+     *  Redirect the browser to a specified target
      *
-     * @param mixed $options array or string url  
+     *  Redirect the browser to the target specified in $options. This
+     *  parameter can take one of three forms:
+     *  <ul>
+     *    <li>Array: The URL will be generated by calling
+     *      {@link url_for()} with the options.</li>
+     *    <li>String starting with a protocol:// (like http://): Is
+     *      passed straight through as the target for redirection.</li>
+     *    <li>String not containing a protocol: The current protocol
+     *      and host is prepended to the string.</li>
+     *    <li>back: Back to the page that issued the request. Useful
+     *      for forms that are triggered from multiple
+     *      places. Short-hand for redirect_to(request.env["HTTP_REFERER"]) 
+     *   </ul>
+     *
+     *  Examples:
+     *  <ul>
+     *    <li>redirect_to(array(":action" => "show", ":id" => 5))</li>
+     *    <li>redirect_to("http://www.rubyonrails.org")</li>
+     *    <li>redirect_to("/images/screenshot.jpg")</li>
+     *    <li>redirect_to("back")</li>
+     *  </ul>
+     *
+     *  @param mixed $options array or string url  
+     *  @todo <b>FIXME:</b> Make header configurable
      */    
     function redirect_to($options = null) {
         if($options == "back") {

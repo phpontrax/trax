@@ -105,19 +105,22 @@ class Router {
      *  table whose path matches the argument $url. If $url is an
      *  empty string, it matches a path that is an empty string.
      *  Otherwise, try to match $url to the path part of the table
-     *  entry according to {@link http://www.php.net/manual/en/ref.pcre.php Perl regular expression}
-     *  rules.  Return the first matching route to the caller, and
-     *  also save a copy in {@link $selected_route}.
+     *  entry according to
+     *  {@link http://www.php.net/manual/en/ref.pcre.php Perl regular expression}
+     *  rules.  If a matching route is found, return it any to the caller, and
+     *  also save a copy in {@link $selected_route}; if no matching
+     *  route is found return null.
      *  @param string $url
      *  @uses build_route_regexp()
      *  @uses $default_route_path
      *  @uses $routes
      *  @uses $routes_count
      *  @uses $selected_route
-     *  @return string[] Selected route. Path is in return['path'],
+     *  @return mixed Matching route or null.  Path is in return['path'],
      *                   params in return['params'],
      */
     function find_route($url) {
+        //error_log('url='.$url);
         // ensure at least one route (the default route) exists
         if($this->routes_count == 0) {
             $this->connect($this->default_route_path);
@@ -129,25 +132,31 @@ class Router {
             unset($route_regexp);
             unset($reg_exp);
             $route_regexp = $this->build_route_regexp($route['path']);
+            //error_log("route regexp=/$route_regexp/");
             if($url == "" && $route_regexp == "") {
+                //error_log('selected');
                 $this->selected_route = $route;
                 break;
             } elseif(preg_match("/$route_regexp/",$url) && $route_regexp != "") {
+                //error_log('selected');
                 $this->selected_route = $route;
                 break;
             } elseif($route['path'] == $this->default_route_path) {
+                //error_log('defaulted');
                 $this->selected_route = $route;
                 break;
             }
         }
-
+        //error_log('selected route='.var_export($this->selected_route,true));
         return $this->selected_route;
     }                                 // function find_route($url)
 
     /**
      *  Build a regular expression that matches a route
      *
-     *  <b>FIXME:</b> Should this method be private?
+     *  @todo <b>FIXME:</b> Should this method be private?
+     *  @todo <b>FIXME:</b> Shouldn't the regexp match be the same as
+     *  for a PHP variable name? '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
      *  @param string $route_path  A route path.
      *  @return string Regular expression that matches the route in
      *                $route_path 
@@ -160,8 +169,7 @@ class Router {
         if(!is_array($route_path)) {
             $route_path = explode("/",$route_path);
         }
-        //        echo "route path:\n";
-        //        var_dump($route_path);
+        //error_log("route path:\n".var_export($route_path,true));
         if(count($route_path) > 0) {
             foreach($route_path as $path_element) {
                 if(preg_match('/:[a-z0-9_\-]+/',$path_element)) {
@@ -174,7 +182,6 @@ class Router {
                 $route_regexp = "^".implode("\/",$reg_exp)."$";
             }
         }
-
         return $route_regexp;
     }
 

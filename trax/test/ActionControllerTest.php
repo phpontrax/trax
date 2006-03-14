@@ -99,13 +99,13 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
         //  read routes from config/routes.php
         $ac = new ActionController;
         //  this URL doesn't match any route
-        $_SERVER['REDIRECT_URL'] = '~haas/foo/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/foo/bar';
         $this->assertFalse($ac->recognize_route());
         //  this URL matches but the controller doesn't exist
-        $_SERVER['REDIRECT_URL'] = '~haas/nocontroller/foo/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/nocontroller/foo/bar';
         $this->assertFalse($ac->recognize_route());
         //  this URL matches and the controller is where it should be
-        $_SERVER['REDIRECT_URL'] = '~haas/products/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/products/bar';
         $this->assertTrue($ac->recognize_route());
     }
 
@@ -154,7 +154,7 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
         //  read routes from config/routes.php
         $ac = new ActionController;
         //  this URL doesn't match any route
-        $_SERVER['REDIRECT_URL'] = '~haas/foo/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/foo/bar';
         try {
             $ac->process_route();
         }
@@ -179,7 +179,7 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
         //  read routes from config/routes.php
         $ac = new ActionController;
         //  this URL matches default route
-        $_SERVER['REDIRECT_URL'] = '~haas/nocontroller/foo/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/nocontroller/foo/bar';
         try {
             $ac->process_route();
         }
@@ -206,7 +206,7 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
         $ac = new ActionController;
         //  this URL matches default route, but the controller
         //  file doesn't have a Noclass class
-        $_SERVER['REDIRECT_URL'] = '~haas/noclass/foo/bar';
+        $_SERVER['REDIRECT_URL'] = '/~haas/noclass/foo/bar';
         try {
             $ac->process_route();
         }
@@ -233,7 +233,7 @@ class ActionControllerTest extends PHPUnit2_Framework_TestCase {
 //    public function testProcess_route() {
 //        $ac = new ActionController;
 //        //  should invoke CatalogController
-//        $_SERVER['REDIRECT_URL'] = '~haas/products/bar';
+//        $_SERVER['REDIRECT_URL'] = '/~haas/products/bar';
 //        $ac->process_route();
 //        // Remove the following line when you implement this test.
 //        throw new PHPUnit2_Framework_IncompleteTestError;

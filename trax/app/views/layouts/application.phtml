@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>PHP on Trax</title>
+</head>
+<body>
+
+<? if( array_key_exists('flash',$_SESSION)
+       && array_key_exists('notice',$_SESSION) ): ?>
+    <font color="green"><?=$_SESSION['flash']['notice']?></font><br><br>
+<? endif; ?>
+<? if( array_key_exists('flash',$_SESSION)
+       && array_key_exists('error',$_SESSION) ): ?>
+    <font color="red"><?=$_SESSION['flash']['error']?></font><br><br>
+<? endif; ?>
+
+<?=$content_for_layout?>
+		
+</body>
+</html>
