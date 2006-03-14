@@ -6,7 +6,7 @@
 define("PHP_LIB_ROOT",          "/usr/local/lib/php");
 define("TRAX_ROOT",             dirname(dirname(__FILE__)) . "/");
 define("TRAX_PUBLIC",           dirname(dirname(dirname(__FILE__)))."/public");
-define("TRAX_URL_PREFIX",       "~haas"); # no leading or trailing slashes
+define("TRAX_URL_PREFIX",       null); # no leading or trailing slashes
 define("TRAX_VIEWS_EXTENTION",  "phtml");
 
 # Set in the Apache Vhost (SetEnv TRAX_MODE development)
