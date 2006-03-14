@@ -201,7 +201,7 @@ class ActionController {
     /**
      *  @todo Document this attribute
      */
-    private $action_render_performed = false;
+    private $render_performed = false;
 
     /**
      *  @todo Document this attribute
@@ -617,7 +617,7 @@ class ActionController {
                 
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
-                    
+                   
                     if(method_exists($this->controller_object, $this->action)) {
                         error_log('controller has method "'.$this->action.'"');
                         $action = $this->action;
@@ -669,8 +669,11 @@ class ActionController {
                     if($this->controller_object->render_layout !== false && $layout_file) {
                         $locals['content_for_layout'] = $content_for_layout;
                         # render the layout
-                        //error_log("rendering layout: $layout_file");
-                        $this->controller_object->render_file($layout_file, false, $locals);
+                        error_log("rendering layout: $layout_file");
+                        if(!$this->controller_object->render_file($layout_file, false, $locals)) {
+                            # No layout template so just echo out whatever is in $content_for_layout
+                            echo $content_for_layout;        
+                        }
                     } else {
                         # Can't find any layout so throw an exception
                         # $this->raise("No layout file found.", "Unknown layout", "404"); 
@@ -939,7 +942,7 @@ class ActionController {
         } else {    
             $this->view_file = $this->views_path . "/" . $action . "." . $this->views_file_extention;
         }
-        #error_log(get_class($this)." - render_action() view_file: $this->view_file");
+        error_log(get_class($this)." - render_action() view_file: $this->view_file");
         return $this->render_file($this->view_file);
     }
     
