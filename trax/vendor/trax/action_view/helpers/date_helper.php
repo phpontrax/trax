@@ -310,10 +310,10 @@ class DateHelper extends Helpers {
      *  set the <tt>:add_month_numbers</tt> key in +options+ to true. Examples:
      *
      *   select_month(Date.today)                             # Will use keys like "January", "March"
-    *   select_month(Date.today, :use_month_numbers => true) # Will use keys like "1", "3"
-    *   select_month(Date.today, :add_month_numbers => true) # Will use keys like "1 - January", "3 - March"
-    *
-    *  Override the field name using the <tt>:field_name</tt> option, 'month' by default.
+     *   select_month(Date.today, :use_month_numbers => true) # Will use keys like "1", "3"
+     *   select_month(Date.today, :add_month_numbers => true) # Will use keys like "1 - January", "3 - March"
+     *
+     *  Override the field name using the <tt>:field_name</tt> option, 'month' by default.
      *  @todo Document this method
    */
     function select_month($date, $options = array()) {
@@ -350,9 +350,9 @@ class DateHelper extends Helpers {
      * substituted for a year given as a number. Example:
      *
      *   select_year(Date.today, :start_year => 1992, :end_year => 2007)  # ascending year values
-    *   select_year(Date.today, :start_year => 2005, :end_year => 1900)  # descending year values
-    *
-    * Override the field name using the <tt>:field_name</tt> option, 'year' by default.
+     *   select_year(Date.today, :start_year => 2005, :end_year => 1900)  # descending year values
+     *
+     * Override the field name using the <tt>:field_name</tt> option, 'year' by default.
      *  @todo Document this method
     */
     function select_year($date, $options = array()) {
@@ -366,8 +366,8 @@ class DateHelper extends Helpers {
             $date_year = $date ? date("Y",strtotime($date)) : date("Y");
         } 
 
-        $start_year = ($options['start_year']) ? $options['start_year'] : $y - 5;
-        $end_year = ($options['end_year']) ? $options['end_year'] : $y + 5;
+        $start_year = ($options['start_year']) ? $options['start_year'] : $date_year - 5;
+        $end_year = ($options['end_year']) ? $options['end_year'] : $date_year + 5;
 
         for($year = $start_year; $year <= $end_year; $year++) {
             $year_options .= ($date && ($date_year == $year)) ?
@@ -446,7 +446,7 @@ class DateHelper extends Helpers {
             $value = $this->value();
             $datetime = $value ? $value : date("Y-m-d H:i:s");
         }
-
+    
         $datetime_select = $this->select_year($datetime, $options_with_prefix[1]);
         if(!$options['discard_month'])
             $datetime_select .= $this->select_month($datetime, $options_with_prefix[2]);
