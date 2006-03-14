@@ -669,7 +669,7 @@ class ActionController {
                     if($this->controller_object->render_layout !== false && $layout_file) {
                         $locals['content_for_layout'] = $content_for_layout;
                         # render the layout
-                        error_log("rendering layout: $layout_file");
+                        //error_log("rendering layout: $layout_file");
                         if(!$this->controller_object->render_file($layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
                             echo $content_for_layout;        
@@ -942,7 +942,7 @@ class ActionController {
         } else {    
             $this->view_file = $this->views_path . "/" . $action . "." . $this->views_file_extention;
         }
-        error_log(get_class($this)." - render_action() view_file: $this->view_file");
+        //error_log(get_class($this)." - render_action() view_file: $this->view_file");
         return $this->render_file($this->view_file);
     }
     
