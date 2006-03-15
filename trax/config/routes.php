@@ -11,7 +11,7 @@
  *  The priority is based upon order of creation: first created ->
  *  highest priority. 
  *
- *  Here's a sample route:
+ *  Here's a sample route:A <important>path</important>
  *  $router->connect( "products/:id",
  *                    array(":controller" => "catalog",
  "                    :action" => "view") ); 
@@ -24,6 +24,7 @@
  *
  *  @package PHPonTrax
  */
-$router->connect( ":controller/:action/:id" );
+$router->connect( "", array(":controller" => "file_list") );
+$router->connect( ":controller/:action/:id");
 
 ?>

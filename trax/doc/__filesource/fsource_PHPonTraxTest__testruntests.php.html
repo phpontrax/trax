@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>File Source for runtests.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTraxTest</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTraxTest.html" class="menu">class tree: PHPonTraxTest</a> ]
+		  [ <a href="../elementindex_PHPonTraxTest.html" class="menu">index: PHPonTraxTest</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file runtests.php</h1>
+<p>Documentation is available at <a href="../PHPonTraxTest/_test_runtests_php.html">runtests.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a>#!/usr/bin/php -q</li>
+<li><a name="a2"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a3"></a><span class="src-doc">/**</span></li>
+<li><a name="a4"></a><span class="src-doc"> *  Regression test for the </span><span class="src-doc-inlinetag">{@link PHPonTrax}</span><span class="src-doc"> package</span></li>
+<li><a name="a5"></a><span class="src-doc"> *</span></li>
+<li><a name="a6"></a><span class="src-doc"> * (PHP 5)</span></li>
+<li><a name="a7"></a><span class="src-doc"> *</span></li>
+<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
+<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
+<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: runtests.php 163 2006-03-07 16:44:21Z haas $</span></li>
+<li><a name="a12"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
+<li><a name="a13"></a><span class="src-doc"> */</span></li>
+<li><a name="a14"></a>&nbsp;</li>
+<li><a name="a15"></a><span class="src-comm">//  Control order of tests</span></li>
+<li><a name="a16"></a><span class="src-var">$tests </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a17"></a>               <span class="src-comm">//  TraxError used by ActiveRecordError, ActionControllerError</span></li>
+<li><a name="a18"></a>                              <span class="src-str">'TraxErrorTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a19"></a>               <span class="src-str">'ActionControllerErrorTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a20"></a>               <span class="src-str">'ActiveRecordErrorTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a21"></a>               <span class="src-comm">//  Inflector is used by many classes</span></li>
+<li><a name="a22"></a>                              <span class="src-str">'InflectorTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a23"></a>               <span class="src-comm">//  Router is used by ActionController</span></li>
+<li><a name="a24"></a>                              <span class="src-str">'RouterTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a25"></a>               <span class="src-str">'ActionControllerTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a26"></a>               <span class="src-comm">//  ScaffoldController extends ActionController</span></li>
+<li><a name="a27"></a>                              <span class="src-str">'ScaffoldControllerTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a28"></a>               <span class="src-comm">//  ApplicationController extends ActionController</span></li>
+<li><a name="a29"></a>                              <span class="src-str">'ApplicationControllerTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a30"></a>               <span class="src-str">'ActionMailerTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a31"></a>               <span class="src-str">'ActiveRecordTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a32"></a>               <span class="src-str">'ActiveRecordHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a33"></a>               <span class="src-str">'ApplicationMailerTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a34"></a>               <span class="src-str">'AssetTagHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a35"></a>               <span class="src-str">'DateHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a36"></a>               <span class="src-str">'DispatcherTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a37"></a>               <span class="src-str">'FormHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a38"></a>               <span class="src-str">'FormOptionsHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a39"></a>               <span class="src-str">'FormTagHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a40"></a>               <span class="src-str">'HelpersTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a41"></a>               <span class="src-str">'InputFilterTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a42"></a>               <span class="src-str">'JavaScriptHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a43"></a>               <span class="src-str">'SessionTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a44"></a>               <span class="src-str">'TraxGeneratorTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a45"></a>               <span class="src-str">'UrlHelperTest.php'</span><span class="src-sym">,</span></li>
+<li><a name="a46"></a>               <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a47"></a>&nbsp;</li>
+<li><a name="a48"></a><span class="src-key">foreach </span><span class="src-sym">(</span><span class="src-var">$tests </span><span class="src-key">as </span><span class="src-var">$test</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a49"></a>    <a href="http://www.php.net/passthru">passthru</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-id">phpunit </span><span class="src-var">$test</span><span class="src-str">&quot;</span><span class="src-sym">,</span><span class="src-var">$rc</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a50"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$rc</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a51"></a>        echo <span class="src-str">&quot;Test Failed!!!\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a52"></a>        <span class="src-key">break</span><span class="src-sym">;</span></li>
+<li><a name="a53"></a>    <span class="src-sym">}</span></li>
+<li><a name="a54"></a><span class="src-sym">}</span></li>
+<li><a name="a55"></a>&nbsp;</li>
+<li><a name="a56"></a>&nbsp;</li>
+<li><a name="a57"></a>&nbsp;</li>
+<li><a name="a58"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a59"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a60"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a61"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a62"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a63"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a64"></a><span class="src-comm">// End:</span></li>
+<li><a name="a65"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:16:39 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

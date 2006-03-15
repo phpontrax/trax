@@ -1,0 +1,397 @@
+<html>
+<head>
+<title>File Source for session.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTrax</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTrax.html" class="menu">class tree: PHPonTrax</a> ]
+		  [ <a href="../elementindex_PHPonTrax.html" class="menu">index: PHPonTrax</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file session.php</h1>
+<p>Documentation is available at <a href="../PHPonTrax/_vendor_trax_session_php.html">session.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  File containing the Session class</span></li>
+<li><a name="a4"></a><span class="src-doc"> *</span></li>
+<li><a name="a5"></a><span class="src-doc"> *  (PHP 5)</span></li>
+<li><a name="a6"></a><span class="src-doc"> *</span></li>
+<li><a name="a7"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
+<li><a name="a8"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: session.php 174 2006-03-14 04:10:15Z haas $</span></li>
+<li><a name="a9"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) 2005 John Peterson</span></li>
+<li><a name="a10"></a><span class="src-doc"> *</span></li>
+<li><a name="a11"></a><span class="src-doc"> *   Permission is hereby granted, free of charge, to any person obtaining</span></li>
+<li><a name="a12"></a><span class="src-doc"> *   a copy of this software and associated documentation files (the</span></li>
+<li><a name="a13"></a><span class="src-doc"> *   &quot;Software&quot;), to deal in the Software without restriction, including</span></li>
+<li><a name="a14"></a><span class="src-doc"> *   without limitation the rights to use, copy, modify, merge, publish,</span></li>
+<li><a name="a15"></a><span class="src-doc"> *   distribute, sublicense, and/or sell copies of the Software, and to</span></li>
+<li><a name="a16"></a><span class="src-doc"> *   permit persons to whom the Software is furnished to do so, subject to</span></li>
+<li><a name="a17"></a><span class="src-doc"> *   the following conditions:</span></li>
+<li><a name="a18"></a><span class="src-doc"> *</span></li>
+<li><a name="a19"></a><span class="src-doc"> *   The above copyright notice and this permission notice shall be</span></li>
+<li><a name="a20"></a><span class="src-doc"> *   included in all copies or substantial portions of the Software.</span></li>
+<li><a name="a21"></a><span class="src-doc"> *</span></li>
+<li><a name="a22"></a><span class="src-doc"> *   THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span></li>
+<li><a name="a23"></a><span class="src-doc"> *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span></li>
+<li><a name="a24"></a><span class="src-doc"> *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</span></li>
+<li><a name="a25"></a><span class="src-doc"> *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE</span></li>
+<li><a name="a26"></a><span class="src-doc"> *   LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION</span></li>
+<li><a name="a27"></a><span class="src-doc"> *   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION</span></li>
+<li><a name="a28"></a><span class="src-doc"> *   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span></li>
+<li><a name="a29"></a><span class="src-doc"> */</span></li>
+<li><a name="a30"></a>&nbsp;</li>
+<li><a name="a31"></a><span class="src-doc">/**</span></li>
+<li><a name="a32"></a><span class="src-doc"> *  Keep track of state of the client's session with the server</span></li>
+<li><a name="a33"></a><span class="src-doc"> *</span></li>
+<li><a name="a34"></a><span class="src-doc"> *  Since there is no continuous connection between the client and the</span></li>
+<li><a name="a35"></a><span class="src-doc"> *  web server, there must be some way to carry information forward</span></li>
+<li><a name="a36"></a><span class="src-doc"> *  from one page to the next.  PHP does this with a global array variable</span></li>
+<li><a name="a37"></a><span class="src-doc"> *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a38"></a><span class="src-doc"> *  which is automatically restored from an area of the server's hard disk</span></li>
+<li><a name="a39"></a><span class="src-doc"> *  indicated by the contents of a cookie stored on the client's computer.</span></li>
+<li><a name="a40"></a><span class="src-doc"> *  This class is a static class with convenience methods for accessing the</span></li>
+<li><a name="a41"></a><span class="src-doc"> *  contents of $_SESSION.</span></li>
+<li><a name="a42"></a><span class="src-doc"> *   </span><span class="src-doc-coretag">@tutorial</span><span class="src-doc"> PHPonTrax/Session.cls</span></li>
+<li><a name="a43"></a><span class="src-doc"> */</span></li>
+<li><a name="a44"></a><span class="src-key">class </span><a href="../PHPonTrax/Session.html">Session</a> <span class="src-sym">{</span></li>
+<li><a name="a45"></a>&nbsp;</li>
+<li><a name="a46"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a47"></a><span class="src-doc">     *  Name of the session (used as cookie name).</span></li>
+<li><a name="a48"></a><span class="src-doc">     */</span></li>
+<li><a name="a49"></a>    <span class="src-key">const </span><span class="src-id">TRAX_SESSION_NAME </span>= <span class="src-str">&quot;TRAXSESSID&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a50"></a>&nbsp;</li>
+<li><a name="a51"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a52"></a><span class="src-doc">     *  Lifetime in seconds of cookie or, if 0, until browser is restarted.</span></li>
+<li><a name="a53"></a><span class="src-doc">     */</span></li>
+<li><a name="a54"></a>    <span class="src-key">const </span><span class="src-id">TRAX_SESSION_LIFETIME </span>= <span class="src-str">&quot;0&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a55"></a>&nbsp;</li>
+<li><a name="a56"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a57"></a><span class="src-doc">     *  After this number of minutes, stored data will be seen as</span></li>
+<li><a name="a58"></a><span class="src-doc">     *  'garbage' and cleaned up by the garbage collection process.</span></li>
+<li><a name="a59"></a><span class="src-doc">     */</span></li>
+<li><a name="a60"></a>    <span class="src-key">const </span><span class="src-id">TRAX_SESSION_MAXLIFETIME_MINUTES </span>= <span class="src-str">&quot;20&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a61"></a>&nbsp;</li>
+<li><a name="a62"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a63"></a><span class="src-doc">     *  IP Address of client</span></li>
+<li><a name="a64"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a65"></a><span class="src-doc">     */</span></li>
+<li><a name="a66"></a>    <span class="src-key">private </span><span class="src-key">static </span><span class="src-var">$ip </span>= <span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a67"></a>&nbsp;</li>
+<li><a name="a68"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a69"></a><span class="src-doc">     *  User Agent (OS, Browser, etc) of client</span></li>
+<li><a name="a70"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a71"></a><span class="src-doc">     */</span></li>
+<li><a name="a72"></a>    <span class="src-key">private </span><span class="src-key">static </span><span class="src-var">$user_agent </span>= <span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a73"></a>&nbsp;</li>
+<li><a name="a74"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a75"></a><span class="src-doc">     *  Session ID</span></li>
+<li><a name="a76"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a77"></a><span class="src-doc">     */</span></li>
+<li><a name="a78"></a>    <span class="src-key">public </span><span class="src-key">static </span><span class="src-var">$id </span>= <span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a79"></a>&nbsp;</li>
+<li><a name="a80"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a81"></a><span class="src-doc">     *  Get a session variable</span></li>
+<li><a name="a82"></a><span class="src-doc">     *</span></li>
+<li><a name="a83"></a><span class="src-doc">     *  Fetch the contents from a specified element of</span></li>
+<li><a name="a84"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a85"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">mixed </span><span class="src-doc-var">$key </span><span class="src-doc">Key to identify one particular session variable</span></li>
+<li><a name="a86"></a><span class="src-doc">     *                     of potentially many for this session</span></li>
+<li><a name="a87"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">mixed </span><span class="src-doc">Content of the session variable with the specified</span></li>
+<li><a name="a88"></a><span class="src-doc">     *                 key if the variable exists; otherwise null.</span></li>
+<li><a name="a89"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a90"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a91"></a><span class="src-doc">     */</span></li>
+<li><a name="a92"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodget">get</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a93"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a94"></a>            <span class="src-key">return </span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a95"></a>        <span class="src-sym">}</span></li>
+<li><a name="a96"></a>        <span class="src-key">return </span><span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a97"></a>    <span class="src-sym">}</span></li>
+<li><a name="a98"></a>&nbsp;</li>
+<li><a name="a99"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a100"></a><span class="src-doc">     *  Set a session variable</span></li>
+<li><a name="a101"></a><span class="src-doc">     *</span></li>
+<li><a name="a102"></a><span class="src-doc">     *  Store a value in a specified element of</span></li>
+<li><a name="a103"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a104"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">mixed </span><span class="src-doc-var">$key </span><span class="src-doc">Key to identify one particular session variable</span></li>
+<li><a name="a105"></a><span class="src-doc">     *                     of potentially many for this session</span></li>
+<li><a name="a106"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$value </span><span class="src-doc">Value to store in the session variable</span></li>
+<li><a name="a107"></a><span class="src-doc">     *                        identified by $key</span></li>
+<li><a name="a108"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a109"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a110"></a><span class="src-doc">     *  </span></li>
+<li><a name="a111"></a><span class="src-doc">     */</span></li>
+<li><a name="a112"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodset">set</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">, </span><span class="src-var">$value</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a113"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a114"></a>            <span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">] </span>= <span class="src-var">$value</span><span class="src-sym">;</span></li>
+<li><a name="a115"></a>        <span class="src-sym">}</span></li>
+<li><a name="a116"></a>     <span class="src-sym">}</span></li>
+<li><a name="a117"></a>&nbsp;</li>
+<li><a name="a118"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a119"></a><span class="src-doc">     *  Test whether the user host is as expected for this session</span></li>
+<li><a name="a120"></a><span class="src-doc">     *</span></li>
+<li><a name="a121"></a><span class="src-doc">     *  Compare the REMOTE_ADDR and HTTP_USER_AGENT elements of</span></li>
+<li><a name="a122"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.server $_SERVER}</span></li>
+<li><a name="a123"></a><span class="src-doc">     *  to the expected values for this session.</span></li>
+<li><a name="a124"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> $ip</span></li>
+<li><a name="a125"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_aol_host()</span></li>
+<li><a name="a126"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> $user_agent</span></li>
+<li><a name="a127"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a128"></a><span class="src-doc">     *           &lt;ul&gt;</span></li>
+<li><a name="a129"></a><span class="src-doc">     *             &lt;li&gt;true =&gt;  User host is as expected&lt;/li&gt;</span></li>
+<li><a name="a130"></a><span class="src-doc">     *             &lt;li&gt;false =&gt; User host NOT as expected&lt;/li&gt;</span></li>
+<li><a name="a131"></a><span class="src-doc">     *           &lt;/ul&gt;</span></li>
+<li><a name="a132"></a><span class="src-doc">     */</span></li>
+<li><a name="a133"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodis_valid_host">is_valid_host</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a134"></a>        <span class="src-key">if</span><span class="src-sym">((</span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REMOTE_ADDR'</span><span class="src-sym">] </span>== <span class="src-id">self</span><span class="src-sym">::</span><span class="src-var">$ip </span>|| <span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_aol_host</span><span class="src-sym">(</span><span class="src-sym">)) </span>&amp;&amp;</li>
+<li><a name="a135"></a>           <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_USER_AGENT'</span><span class="src-sym">] </span>== <span class="src-id">self</span><span class="src-sym">::</span><span class="src-var">$user_agent</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a136"></a>            <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a137"></a>        <span class="src-sym">}</span></li>
+<li><a name="a138"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a139"></a>    <span class="src-sym">}</span></li>
+<li><a name="a140"></a>&nbsp;</li>
+<li><a name="a141"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a142"></a><span class="src-doc">     *  Test whether the client is an AOL user</span></li>
+<li><a name="a143"></a><span class="src-doc">     *</span></li>
+<li><a name="a144"></a><span class="src-doc">     *  Check whether the domain name of the client's IP ends in</span></li>
+<li><a name="a145"></a><span class="src-doc">     *  &quot;proxy.aol.com&quot; or the client's user agent name includes &quot;AOL&quot;</span></li>
+<li><a name="a146"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a147"></a><span class="src-doc">     *           &lt;ul&gt;</span></li>
+<li><a name="a148"></a><span class="src-doc">     *             &lt;li&gt;true =&gt;  Client is on AOL&lt;/li&gt;</span></li>
+<li><a name="a149"></a><span class="src-doc">     *             &lt;li&gt;false =&gt; Client from some other ISP&lt;/li&gt;</span></li>
+<li><a name="a150"></a><span class="src-doc">     *           &lt;/ul&gt;</span></li>
+<li><a name="a151"></a><span class="src-doc">     */</span></li>
+<li><a name="a152"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodis_aol_host">is_aol_host</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a153"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/ereg">ereg</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str"><span class="src-id">proxy</span>\.<span class="src-id">aol</span>\.<span class="src-id">com</span>$</span><span class="src-str">&quot;</span><span class="src-sym">, </span><a href="http://www.php.net/gethostbyaddr">gethostbyaddr</a><span class="src-sym">(</span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REMOTE_ADDR'</span><span class="src-sym">]</span><span class="src-sym">)) </span>||</li>
+<li><a name="a154"></a>           <a href="http://www.php.net/stristr">stristr</a><span class="src-sym">(</span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_USER_AGENT'</span><span class="src-sym">]</span><span class="src-sym">, </span><span class="src-str">&quot;AOL&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a155"></a>            <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a156"></a>        <span class="src-sym">}</span></li>
+<li><a name="a157"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a158"></a>    <span class="src-sym">}</span></li>
+<li><a name="a159"></a>&nbsp;</li>
+<li><a name="a160"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a161"></a><span class="src-doc">     *  Get key that uniquely identifies this session</span></li>
+<li><a name="a162"></a><span class="src-doc">     *</span></li>
+<li><a name="a163"></a><span class="src-doc">     *  Calculate a unique session key based on the session ID and</span></li>
+<li><a name="a164"></a><span class="src-doc">     *  user agent, plus the user's IP address if not on AOL.</span></li>
+<li><a name="a165"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_aol_host()</span></li>
+<li><a name="a166"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> md5()</span></li>
+<li><a name="a167"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> session_id()</span></li>
+<li><a name="a168"></a><span class="src-doc">     */</span></li>
+<li><a name="a169"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodget_hash">get_hash</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a170"></a>        <span class="src-var">$key </span>= <a href="http://www.php.net/session_id">session_id</a><span class="src-sym">(</span><span class="src-sym">)</span>.<span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_USER_AGENT'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a171"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_aol_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a172"></a>            <span class="src-var">$key </span>.= <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REMOTE_ADDR'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a173"></a>        <span class="src-sym">}</span></li>
+<li><a name="a174"></a>        <span class="src-comm">// error_log('get_hash() returns '.md5($key));</span></li>
+<li><a name="a175"></a>        <span class="src-key">return </span><a href="http://www.php.net/md5">md5</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a176"></a>    <span class="src-sym">}</span></li>
+<li><a name="a177"></a>&nbsp;</li>
+<li><a name="a178"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a179"></a><span class="src-doc">     *  Start or continue a session</span></li>
+<li><a name="a180"></a><span class="src-doc">     *</span></li>
+<li><a name="a181"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> ini_set()</span></li>
+<li><a name="a182"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> $ip</span></li>
+<li><a name="a183"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a184"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> session_id()</span></li>
+<li><a name="a185"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> session_start()</span></li>
+<li><a name="a186"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> $user_agent</span></li>
+<li><a name="a187"></a><span class="src-doc">     */</span></li>
+<li><a name="a188"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodstart">start</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a189"></a>        </li>
+<li><a name="a190"></a>        <span class="src-var">$session_name </span>= <a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_SESSION_NAME&quot;</span><span class="src-sym">) </span>? <span class="src-id"><a href="../PHPonTrax/Session.html#constTRAX_SESSION_NAME">TRAX_SESSION_NAME</a> </span>: <span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">TRAX_SESSION_NAME</span><span class="src-sym">;</span></li>
+<li><a name="a191"></a>        <span class="src-var">$session_lifetime </span>= <a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_SESSION_LIFETIME&quot;</span><span class="src-sym">) </span>? <span class="src-id"><a href="../PHPonTrax/Session.html#constTRAX_SESSION_LIFETIME">TRAX_SESSION_LIFETIME</a> </span>: <span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">TRAX_SESSION_LIFETIME</span><span class="src-sym">;</span></li>
+<li><a name="a192"></a>        <span class="src-var">$session_maxlifetime_minutes </span>= <a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_SESSION_MAXLIFETIME_MINUTES&quot;</span><span class="src-sym">) </span>? <span class="src-id"><a href="../PHPonTrax/Session.html#constTRAX_SESSION_MAXLIFETIME_MINUTES">TRAX_SESSION_MAXLIFETIME_MINUTES</a> </span>: <span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">TRAX_SESSION_MAXLIFETIME_MINUTES</span><span class="src-sym">;</span></li>
+<li><a name="a193"></a>        </li>
+<li><a name="a194"></a>        <span class="src-comm"># set the session default for this app</span></li>
+<li><a name="a195"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">'session.name'</span><span class="src-sym">, </span><span class="src-var">$session_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a196"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">'session.cookie_lifetime'</span><span class="src-sym">, </span><span class="src-var">$session_lifetime</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a197"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">'session.gc_probability'</span><span class="src-sym">, </span><span class="src-num">1</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a198"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">'session.gc_maxlifetime'</span><span class="src-sym">, </span><span class="src-var">$session_maxlifetime_minutes </span>* <span class="src-num">60</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a199"></a>&nbsp;</li>
+<li><a name="a200"></a>        <a href="http://www.php.net/header">header</a><span class="src-sym">(</span><span class="src-str">'P3P: CP=&quot;NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM&quot;'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a201"></a>&nbsp;</li>
+<li><a name="a202"></a>        <span class="src-id">self</span><span class="src-sym">::</span><span class="src-var">$ip </span>= <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REMOTE_ADDR'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a203"></a>        <span class="src-id">self</span><span class="src-sym">::</span><span class="src-var">$user_agent </span>= <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'HTTP_USER_AGENT'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a204"></a>&nbsp;</li>
+<li><a name="a205"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">) </span>&amp;&amp; <a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">'sess_id'</span><span class="src-sym">,</span><span class="src-var">$_REQUEST</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a206"></a>            <a href="http://www.php.net/session_id">session_id</a><span class="src-sym">(</span><span class="src-var">$_REQUEST</span><span class="src-sym">[</span><span class="src-str">'sess_id'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a207"></a>        <span class="src-sym">}</span></li>
+<li><a name="a208"></a>&nbsp;</li>
+<li><a name="a209"></a>        <a href="http://www.php.net/session_cache_limiter">session_cache_limiter</a><span class="src-sym">(</span><span class="src-str">&quot;must-revalidate&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a210"></a>        <a href="http://www.php.net/session_start">session_start</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a211"></a>        <span class="src-id">self</span><span class="src-sym">::</span><span class="src-var">$id </span>= <span class="src-id">session_id</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a212"></a>    <span class="src-sym">}</span></li>
+<li><a name="a213"></a>&nbsp;</li>
+<li><a name="a214"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a215"></a><span class="src-doc">     *  Destroy the user's session</span></li>
+<li><a name="a216"></a><span class="src-doc">     *</span></li>
+<li><a name="a217"></a><span class="src-doc">     *  Destroy all data registered to a session</span></li>
+<li><a name="a218"></a><span class="src-doc">     *</span></li>
+<li><a name="a219"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> session_destroy()</span></li>
+<li><a name="a220"></a><span class="src-doc">     */</span></li>
+<li><a name="a221"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methoddestory_session">destory_session</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a222"></a>        <a href="http://www.php.net/session_destroy">session_destroy</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a223"></a>    <span class="src-sym">}</span></li>
+<li><a name="a224"></a>&nbsp;</li>
+<li><a name="a225"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a226"></a><span class="src-doc">     *  Free all session variables currently registered</span></li>
+<li><a name="a227"></a><span class="src-doc">     *</span></li>
+<li><a name="a228"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a229"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> session_unset()</span></li>
+<li><a name="a230"></a><span class="src-doc">     */</span></li>
+<li><a name="a231"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodunset_session">unset_session</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a232"></a>        <a href="http://www.php.net/session_unset">session_unset</a><span class="src-sym">(</span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a233"></a>    <span class="src-sym">}</span></li>
+<li><a name="a234"></a>&nbsp;</li>
+<li><a name="a235"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a236"></a><span class="src-doc">     *  Unset a session variable</span></li>
+<li><a name="a237"></a><span class="src-doc">     *</span></li>
+<li><a name="a238"></a><span class="src-doc">     *  Unset the variable in</span></li>
+<li><a name="a239"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a240"></a><span class="src-doc">     *  identified by key $key</span></li>
+<li><a name="a241"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a242"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a243"></a><span class="src-doc">     */</span></li>
+<li><a name="a244"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodunset_var">unset_var</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a245"></a>         <span class="src-comm">// error_log('Session::unset_var(&quot;'.$key.'&quot;)');</span></li>
+<li><a name="a246"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a247"></a>            <span class="src-comm">// error_log('before unsetting SESSION='.var_export($_SESSION,true));</span></li>
+<li><a name="a248"></a>            unset<span class="src-sym">(</span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a249"></a>            <span class="src-comm">// error_log('after unsetting SESSION='.var_export($_SESSION,true));</span></li>
+<li><a name="a250"></a>        <span class="src-sym">}</span></li>
+<li><a name="a251"></a>    <span class="src-sym">}</span></li>
+<li><a name="a252"></a>&nbsp;</li>
+<li><a name="a253"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a254"></a><span class="src-doc">     *  Test whether a session variable is defined in $_SESSION</span></li>
+<li><a name="a255"></a><span class="src-doc">     *</span></li>
+<li><a name="a256"></a><span class="src-doc">     *  Check the</span></li>
+<li><a name="a257"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a258"></a><span class="src-doc">     *  array for the existance of a variable identified by $key</span></li>
+<li><a name="a259"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">mixed </span><span class="src-doc-var">$key </span><span class="src-doc">Key to identify one particular session variable</span></li>
+<li><a name="a260"></a><span class="src-doc">     *                     of potentially many for this session</span></li>
+<li><a name="a261"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a262"></a><span class="src-doc">     *           &lt;ul&gt;</span></li>
+<li><a name="a263"></a><span class="src-doc">     *             &lt;li&gt;true =&gt;  The specified session variable is</span></li>
+<li><a name="a264"></a><span class="src-doc">     *                          defined.&lt;/li&gt;</span></li>
+<li><a name="a265"></a><span class="src-doc">     *             &lt;li&gt;false =&gt; The specified session variable is</span></li>
+<li><a name="a266"></a><span class="src-doc">     *                          not defined.&lt;/li&gt;</span></li>
+<li><a name="a267"></a><span class="src-doc">     *           &lt;/ul&gt;</span></li>
+<li><a name="a268"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a269"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a270"></a><span class="src-doc">     */</span></li>
+<li><a name="a271"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodisset_var">isset_var</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a272"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a273"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a274"></a>                <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;    </span></li>
+<li><a name="a275"></a>            <span class="src-sym">}</span></li>
+<li><a name="a276"></a>        <span class="src-sym">}</span></li>
+<li><a name="a277"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a278"></a>    <span class="src-sym">}</span></li>
+<li><a name="a279"></a>&nbsp;</li>
+<li><a name="a280"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a281"></a><span class="src-doc">     *  Test whether there is a flash message to be shown</span></li>
+<li><a name="a282"></a><span class="src-doc">     *</span></li>
+<li><a name="a283"></a><span class="src-doc">     *  Check whether the</span></li>
+<li><a name="a284"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a285"></a><span class="src-doc">     *  array for this session contains a</span></li>
+<li><a name="a286"></a><span class="src-doc">     *  flash message to be shown to the user.</span></li>
+<li><a name="a287"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">mixed </span><span class="src-doc-var">$key </span><span class="src-doc">Key to identify one particular flash message</span></li>
+<li><a name="a288"></a><span class="src-doc">     *                     of potentially many for this session</span></li>
+<li><a name="a289"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a290"></a><span class="src-doc">     *           &lt;ul&gt;</span></li>
+<li><a name="a291"></a><span class="src-doc">     *             &lt;li&gt;true =&gt;  A flash message is present&lt;/li&gt;</span></li>
+<li><a name="a292"></a><span class="src-doc">     *             &lt;li&gt;false =&gt; No flash message is present&lt;/li&gt;</span></li>
+<li><a name="a293"></a><span class="src-doc">     *           &lt;/ul&gt;</span></li>
+<li><a name="a294"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a295"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a296"></a><span class="src-doc">     */</span></li>
+<li><a name="a297"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodisset_flash">isset_flash</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a298"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a299"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'flash'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a300"></a>                <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;    </span></li>
+<li><a name="a301"></a>            <span class="src-sym">}</span></li>
+<li><a name="a302"></a>        <span class="src-sym">}</span></li>
+<li><a name="a303"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a304"></a>    <span class="src-sym">}</span></li>
+<li><a name="a305"></a>&nbsp;</li>
+<li><a name="a306"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a307"></a><span class="src-doc">     *  Get or set a flash message</span></li>
+<li><a name="a308"></a><span class="src-doc">     *</span></li>
+<li><a name="a309"></a><span class="src-doc">     *  A flash message is a message that will appear prominently on</span></li>
+<li><a name="a310"></a><span class="src-doc">     *  the next screen to be sent to the user. Flash</span></li>
+<li><a name="a311"></a><span class="src-doc">     *  messages are intended to be shown to the user once then erased.</span></li>
+<li><a name="a312"></a><span class="src-doc">     *  They are stored in the</span></li>
+<li><a name="a313"></a><span class="src-doc">     *  </span><span class="src-doc-inlinetag">{@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}</span></li>
+<li><a name="a314"></a><span class="src-doc">     *  array for the user's session.</span></li>
+<li><a name="a315"></a><span class="src-doc">     *</span></li>
+<li><a name="a316"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">mixed </span><span class="src-doc-var">$key </span><span class="src-doc">Key to identify one particular flash message</span></li>
+<li><a name="a317"></a><span class="src-doc">     *                     of potentially many for this session</span></li>
+<li><a name="a318"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$value </span><span class="src-doc">Content of the flash message if present</span></li>
+<li><a name="a319"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">mixed </span><span class="src-doc">Content of the flash message with the specified</span></li>
+<li><a name="a320"></a><span class="src-doc">     *                 key if $value is null; otherwise null.</span></li>
+<li><a name="a321"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> get_hash()</span></li>
+<li><a name="a322"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> is_valid_host()</span></li>
+<li><a name="a323"></a><span class="src-doc">     */</span></li>
+<li><a name="a324"></a>    <span class="src-key">function </span><a href="../PHPonTrax/Session.html#methodflash">flash</a><span class="src-sym">(</span><span class="src-var">$key</span><span class="src-sym">, </span><span class="src-var">$value </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a325"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">is_valid_host</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a326"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$value</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a327"></a>                <span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'flash'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">] </span>= <span class="src-var">$value</span><span class="src-sym">;</span></li>
+<li><a name="a328"></a>            <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a329"></a>                <span class="src-var">$value </span>= <span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'flash'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a330"></a>                unset<span class="src-sym">(</span><span class="src-var">$_SESSION</span><span class="src-sym">[</span><span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">get_hash</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'flash'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-var">$key</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a331"></a>                <span class="src-key">return </span><span class="src-var">$value</span><span class="src-sym">;</span></li>
+<li><a name="a332"></a>            <span class="src-sym">}</span></li>
+<li><a name="a333"></a>        <span class="src-sym">}</span></li>
+<li><a name="a334"></a>    <span class="src-sym">}</span></li>
+<li><a name="a335"></a><span class="src-sym">}</span></li>
+<li><a name="a336"></a>&nbsp;</li>
+<li><a name="a337"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a338"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a339"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a340"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a341"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a342"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a343"></a><span class="src-comm">// End:</span></li>
+<li><a name="a344"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:16:41 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

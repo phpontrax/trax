@@ -1,0 +1,244 @@
+<html>
+<head>
+<title>File Source for ActionMailerTest.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTraxTest</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTraxTest.html" class="menu">class tree: PHPonTraxTest</a> ]
+		  [ <a href="../elementindex_PHPonTraxTest.html" class="menu">index: PHPonTraxTest</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file ActionMailerTest.php</h1>
+<p>Documentation is available at <a href="../PHPonTraxTest/_test_ActionMailerTest_php.html">ActionMailerTest.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a>#!/usr/bin/php -q</li>
+<li><a name="a2"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a3"></a><span class="src-doc">/**</span></li>
+<li><a name="a4"></a><span class="src-doc"> *  File for the ActionMailerTest class</span></li>
+<li><a name="a5"></a><span class="src-doc"> *</span></li>
+<li><a name="a6"></a><span class="src-doc"> * (PHP 5)</span></li>
+<li><a name="a7"></a><span class="src-doc"> *</span></li>
+<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
+<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
+<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: ActionMailerTest.php 159 2006-03-01 23:44:16Z haas $</span></li>
+<li><a name="a12"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
+<li><a name="a13"></a><span class="src-doc"> */</span></li>
+<li><a name="a14"></a>&nbsp;</li>
+<li><a name="a15"></a>echo <span class="src-str">&quot;testing ActionMailer\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a16"></a>&nbsp;</li>
+<li><a name="a17"></a><span class="src-comm">// Call ActionMailerTest::main() if this source file is executed directly.</span></li>
+<li><a name="a18"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;PHPUnit2_MAIN_METHOD&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a19"></a>    <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;PHPUnit2_MAIN_METHOD&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;ActionMailerTest::main&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a20"></a><span class="src-sym">}</span></li>
+<li><a name="a21"></a>&nbsp;</li>
+<li><a name="a22"></a><span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/Framework/TestCase.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a23"></a><span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/Framework/TestSuite.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a24"></a>&nbsp;</li>
+<li><a name="a25"></a><span class="src-comm">// You may remove the following line when all tests have been implemented.</span></li>
+<li><a name="a26"></a><span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/Framework/IncompleteTestError.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a27"></a>&nbsp;</li>
+<li><a name="a28"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../vendor/trax/action_mailer.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a29"></a>&nbsp;</li>
+<li><a name="a30"></a><span class="src-doc">/**</span></li>
+<li><a name="a31"></a><span class="src-doc"> * Test class for ActionMailer.</span></li>
+<li><a name="a32"></a><span class="src-doc"> * Generated by PHPUnit2_Util_Skeleton on 2006-03-01 at 13:18:09.</span></li>
+<li><a name="a33"></a><span class="src-doc"> */</span></li>
+<li><a name="a34"></a><span class="src-key">class </span><a href="../PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a> <span class="src-key">extends </span><span class="src-id">PHPUnit2_Framework_TestCase </span><span class="src-sym">{</span></li>
+<li><a name="a35"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a36"></a><span class="src-doc">     * Runs the test methods of this class.</span></li>
+<li><a name="a37"></a><span class="src-doc">     *</span></li>
+<li><a name="a38"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a39"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@static</span></li>
+<li><a name="a40"></a><span class="src-doc">     */</span></li>
+<li><a name="a41"></a>    <span class="src-key">public </span><span class="src-key">static </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a42"></a>        <span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/TextUI/TestRunner.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a43"></a>&nbsp;</li>
+<li><a name="a44"></a>        <span class="src-var">$suite  </span>= <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_TestSuite</span><span class="src-sym">(</span><span class="src-str">&quot;ActionMailerTest&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a45"></a>        <span class="src-var">$result </span>= <span class="src-id">PHPUnit2_TextUI_TestRunner</span><span class="src-sym">::</span><span class="src-id">run</span><span class="src-sym">(</span><span class="src-var">$suite</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a46"></a>    <span class="src-sym">}</span></li>
+<li><a name="a47"></a>&nbsp;</li>
+<li><a name="a48"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a49"></a><span class="src-doc">     * Sets up the fixture, for example, open a network connection.</span></li>
+<li><a name="a50"></a><span class="src-doc">     * This method is called before a test is executed.</span></li>
+<li><a name="a51"></a><span class="src-doc">     *</span></li>
+<li><a name="a52"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
+<li><a name="a53"></a><span class="src-doc">     */</span></li>
+<li><a name="a54"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodsetUp">setUp</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a55"></a>    <span class="src-sym">}</span></li>
+<li><a name="a56"></a>&nbsp;</li>
+<li><a name="a57"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a58"></a><span class="src-doc">     * Tears down the fixture, for example, close a network connection.</span></li>
+<li><a name="a59"></a><span class="src-doc">     * This method is called after a test is executed.</span></li>
+<li><a name="a60"></a><span class="src-doc">     *</span></li>
+<li><a name="a61"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
+<li><a name="a62"></a><span class="src-doc">     */</span></li>
+<li><a name="a63"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtearDown">tearDown</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a64"></a>    <span class="src-sym">}</span></li>
+<li><a name="a65"></a>&nbsp;</li>
+<li><a name="a66"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a67"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testAdd_to_address().</span></li>
+<li><a name="a68"></a><span class="src-doc">     */</span></li>
+<li><a name="a69"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestAdd_to_address">testAdd_to_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a70"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a71"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a72"></a>    <span class="src-sym">}</span></li>
+<li><a name="a73"></a>&nbsp;</li>
+<li><a name="a74"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a75"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testAdd_cc_address().</span></li>
+<li><a name="a76"></a><span class="src-doc">     */</span></li>
+<li><a name="a77"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestAdd_cc_address">testAdd_cc_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a78"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a79"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a80"></a>    <span class="src-sym">}</span></li>
+<li><a name="a81"></a>&nbsp;</li>
+<li><a name="a82"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a83"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testAdd_bcc_address().</span></li>
+<li><a name="a84"></a><span class="src-doc">     */</span></li>
+<li><a name="a85"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestAdd_bcc_address">testAdd_bcc_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a86"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a87"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a88"></a>    <span class="src-sym">}</span></li>
+<li><a name="a89"></a>&nbsp;</li>
+<li><a name="a90"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a91"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testAdd_replyto_address().</span></li>
+<li><a name="a92"></a><span class="src-doc">     */</span></li>
+<li><a name="a93"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestAdd_replyto_address">testAdd_replyto_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a94"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a95"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a96"></a>    <span class="src-sym">}</span></li>
+<li><a name="a97"></a>&nbsp;</li>
+<li><a name="a98"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a99"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_from_address().</span></li>
+<li><a name="a100"></a><span class="src-doc">     */</span></li>
+<li><a name="a101"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_from_address">testSet_from_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a102"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a103"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a104"></a>    <span class="src-sym">}</span></li>
+<li><a name="a105"></a>&nbsp;</li>
+<li><a name="a106"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a107"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_text_body().</span></li>
+<li><a name="a108"></a><span class="src-doc">     */</span></li>
+<li><a name="a109"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_text_body">testSet_text_body</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a110"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a111"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a112"></a>    <span class="src-sym">}</span></li>
+<li><a name="a113"></a>&nbsp;</li>
+<li><a name="a114"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a115"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_html_body().</span></li>
+<li><a name="a116"></a><span class="src-doc">     */</span></li>
+<li><a name="a117"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_html_body">testSet_html_body</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a118"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a119"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a120"></a>    <span class="src-sym">}</span></li>
+<li><a name="a121"></a>&nbsp;</li>
+<li><a name="a122"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a123"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_subject().</span></li>
+<li><a name="a124"></a><span class="src-doc">     */</span></li>
+<li><a name="a125"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_subject">testSet_subject</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a126"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a127"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a128"></a>    <span class="src-sym">}</span></li>
+<li><a name="a129"></a>&nbsp;</li>
+<li><a name="a130"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a131"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testAdd_attachment().</span></li>
+<li><a name="a132"></a><span class="src-doc">     */</span></li>
+<li><a name="a133"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestAdd_attachment">testAdd_attachment</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a134"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a135"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a136"></a>    <span class="src-sym">}</span></li>
+<li><a name="a137"></a>&nbsp;</li>
+<li><a name="a138"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a139"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testFormat_address().</span></li>
+<li><a name="a140"></a><span class="src-doc">     */</span></li>
+<li><a name="a141"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestFormat_address">testFormat_address</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a142"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a143"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a144"></a>    <span class="src-sym">}</span></li>
+<li><a name="a145"></a>&nbsp;</li>
+<li><a name="a146"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a147"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testValidate_email().</span></li>
+<li><a name="a148"></a><span class="src-doc">     */</span></li>
+<li><a name="a149"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestValidate_email">testValidate_email</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a150"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a151"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a152"></a>    <span class="src-sym">}</span></li>
+<li><a name="a153"></a>&nbsp;</li>
+<li><a name="a154"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a155"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_header_line().</span></li>
+<li><a name="a156"></a><span class="src-doc">     */</span></li>
+<li><a name="a157"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_header_line">testSet_header_line</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a158"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a159"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a160"></a>    <span class="src-sym">}</span></li>
+<li><a name="a161"></a>&nbsp;</li>
+<li><a name="a162"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a163"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSet_headers().</span></li>
+<li><a name="a164"></a><span class="src-doc">     */</span></li>
+<li><a name="a165"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSet_headers">testSet_headers</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a166"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a167"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a168"></a>    <span class="src-sym">}</span></li>
+<li><a name="a169"></a>&nbsp;</li>
+<li><a name="a170"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a171"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testSend().</span></li>
+<li><a name="a172"></a><span class="src-doc">     */</span></li>
+<li><a name="a173"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionMailerTest.html#methodtestSend">testSend</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a174"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a175"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a176"></a>    <span class="src-sym">}</span></li>
+<li><a name="a177"></a><span class="src-sym">}</span></li>
+<li><a name="a178"></a>&nbsp;</li>
+<li><a name="a179"></a><span class="src-comm">// Call ActionMailerTest::main() if this source file is executed directly.</span></li>
+<li><a name="a180"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_InputFilterTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;ActionMailerTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a181"></a>    <span class="src-id"><a href="../PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/ActionMailerTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a182"></a><span class="src-sym">}</span></li>
+<li><a name="a183"></a>&nbsp;</li>
+<li><a name="a184"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a185"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a186"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a187"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a188"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a189"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a190"></a><span class="src-comm">// End:</span></li>
+<li><a name="a191"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:15:24 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

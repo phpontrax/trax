@@ -1,0 +1,679 @@
+<html>
+<head>
+<title>ActionController</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTrax</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTrax.html" class="menu">class tree: PHPonTrax</a> ]
+		  [ <a href="../elementindex_PHPonTrax.html" class="menu">index: PHPonTrax</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+		<b>Tutorials/Manuals:</b><br />
+					<strong>Package-level:</strong>
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
+</ul>
+
+										<strong>Class-level:</strong>
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecordHelper.cls.html">ActiveRecordHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_FormTagHelper.cls.html">FormTagHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_Helpers.cls.html">Helpers</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_UrlHelper.cls.html">UrlHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_FormHelper.cls.html">FormHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_InputFilter.cls.html">InputFilter</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActionMailer.cls.html">ActionMailer</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ApplicationController.cls.html">ApplicationController</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActionController.cls.html">ActionController</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecord.cls.html">ActiveRecord</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_DateHelper.cls.html">DateHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_Router.cls.html">Router</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_FormOptionsHelper.cls.html">FormOptionsHelper</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_TraxGenerator.cls.html">TraxGenerator</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_Session.cls.html">Session</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_Inflector.cls.html">Inflector</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecordError.cls.html">ActiveRecordError</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActionControllerError.cls.html">ActionControllerError</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ScaffoldController.cls.html">ScaffoldController</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_Dispatcher.cls.html">Dispatcher</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_TraxError.cls.html">TraxError</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ApplicationMailer.cls.html">ApplicationMailer</a>
+</ul>
+
+							                        <b>Files:</b><br />
+      	  <div class="package">
+			<a href="../PHPonTrax/_vendor_trax_action_controller_php.html">		action_controller.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_mailer_php.html">		action_mailer.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_php.html">		action_view.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_active_record_php.html">		active_record.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html">		active_record_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_app_controllers_application_php.html">		application.php
+		</a><br>
+			<a href="../PHPonTrax/_app_helpers_application_helper_php.html">		application_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_app_application_mailer_php.html">		application_mailer.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html">		asset_tag_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_date_helper_php.html">		date_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_config_environments_development_php.html">		development.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_dispatcher_php.html">		dispatcher.php
+		</a><br>
+			<a href="../PHPonTrax/_config_environment_php.html">		environment.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html">		form_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html">		form_options_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html">		form_tag_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_input_filter_php.html">		input_filter.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html">		javascript_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_makepkg_php.html">		makepkg.php
+		</a><br>
+			<a href="../PHPonTrax/_config_environments_production_php.html">		production.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_router_php.html">		router.php
+		</a><br>
+			<a href="../PHPonTrax/_config_routes_php.html">		routes.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_scaffold_controller_php.html">		scaffold_controller.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_session_php.html">		session.php
+		</a><br>
+			<a href="../PHPonTrax/_config_environments_test_php.html">		test.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_trax_exceptions_php.html">		trax_exceptions.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_trax_generator_php.html">		trax_generator.php
+		</a><br>
+			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html">		url_helper.php
+		</a><br>
+	  </div><br />
+      
+            <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../PHPonTrax/ActionController.html">ActionController</a><br />
+	    		<a href="../PHPonTrax/ActionControllerError.html">ActionControllerError</a><br />
+	    		<a href="../PHPonTrax/ActionMailer.html">ActionMailer</a><br />
+	    		<a href="../PHPonTrax/ActiveRecord.html">ActiveRecord</a><br />
+	    		<a href="../PHPonTrax/ActiveRecordError.html">ActiveRecordError</a><br />
+	    		<a href="../PHPonTrax/ActiveRecordHelper.html">ActiveRecordHelper</a><br />
+	    		<a href="../PHPonTrax/ApplicationController.html">ApplicationController</a><br />
+	    		<a href="../PHPonTrax/ApplicationMailer.html">ApplicationMailer</a><br />
+	    		<a href="../PHPonTrax/AssetTagHelper.html">AssetTagHelper</a><br />
+	    		<a href="../PHPonTrax/DateHelper.html">DateHelper</a><br />
+	    		<a href="../PHPonTrax/Dispatcher.html">Dispatcher</a><br />
+	    		<a href="../PHPonTrax/FormHelper.html">FormHelper</a><br />
+	    		<a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a><br />
+	    		<a href="../PHPonTrax/FormTagHelper.html">FormTagHelper</a><br />
+	    		<a href="../PHPonTrax/Helpers.html">Helpers</a><br />
+	    		<a href="../PHPonTrax/Inflector.html">Inflector</a><br />
+	    		<a href="../PHPonTrax/InputFilter.html">InputFilter</a><br />
+	    		<a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a><br />
+	    		<a href="../PHPonTrax/Router.html">Router</a><br />
+	    		<a href="../PHPonTrax/ScaffoldController.html">ScaffoldController</a><br />
+	    		<a href="../PHPonTrax/Session.html">Session</a><br />
+	    		<a href="../PHPonTrax/TraxError.html">TraxError</a><br />
+	    		<a href="../PHPonTrax/TraxGenerator.html">TraxGenerator</a><br />
+	    		<a href="../PHPonTrax/UrlHelper.html">UrlHelper</a><br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="10%" align="left" valign="bottom"><a href=
+"../PHPonTrax/tutorial_ApplicationController.cls.html">Prev</a></td>
+<td width="80%" align="center" valign="bottom"></td>
+<td width="10%" align="right" valign="bottom"><a href=
+"../PHPonTrax/tutorial_ActiveRecord.cls.html">Next</a></td>
+</tr>
+</table>
+<div><a name=""></a><div class="ref-title-box">ActionController<h1 class="ref-title">ActionController</h1>
+  <h2 class="ref-purpose"></h2></div>
+ <div class="ref-synopsis"><span class="author">Walt Haas
+   <div class="author-blurb"><a href="mailto:haas@xmission.com">haas@xmission.com</a></div></span></div>
+ <h1 align="center">Table of Contents</h1>
+<ul>
+
+<a href="../PHPonTrax/tutorial_ActionController.cls.html#intro">Introduction</a><br />
+
+<a href="../PHPonTrax/tutorial_ActionController.cls.html#url">URL Processing</a><br />
+
+<a href="../PHPonTrax/tutorial_ActionController.cls.html#action">Action Call</a><br />
+
+&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.helpers">Helper Loading</a><br />
+
+&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.filters">Filters</a><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.filters.filter_inherit">Filter inheritance</a><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.filters.filter_types">Filter types</a><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.filters.filter_skip">Filter chain skipping</a><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../PHPonTrax/tutorial_ActionController.cls.html#action.filters.filter_conditions">Filter conditions</a><br />
+
+<a href="../PHPonTrax/tutorial_ActionController.cls.html#render">Redirect Browser or Render Output</a><br />
+</ul>
+
+ <span><a name="intro"></a><h2 class="title">Introduction</h2><p>The <a href="../PHPonTrax/ActionController.html">ActionController</a> base class does the
+  following:</p>
+  <ol><li>Accepts a URL as input</li>
+    <li>Translates the URL into a controller and action</li>
+    <li>Creates the indicated controller object (which is a subclass
+      of ActionController) and calls its action method</li>
+    <li>Redirects to another URL or renders the output of the
+    action method</li></ol></span>
+ <span is = "url"><h2 class="title">URL Processing</h2><p>When Apache receives an HTTP request addressed to a Trax
+   application,
+<a href="http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html">Apache mod_rewrite</a>
+   is invoked and rewrites the request to invoke Trax file
+   <code>dispatch.php</code>.  At this time the URL which was
+   input to the rewrite rules is in
+<a href="http://www.php.net/manual/en/reserved.variables.php#reserved.variables.server">$_SERVER</a>['REDIRECT_URL'].  
+   <code>dispatch.php</code> creates a new <a href="../PHPonTrax/Dispatcher.html">Dispatcher</a>
+   object and calls its 
+   <a href="../PHPonTrax/Dispatcher.html#methoddispatch">dispatch()</a> method. dispatch()
+   restores the state of the session identified by a cookie in the
+   request, or creates a session if none exists.  Then it creates a
+   new ActionController object and calls its
+   <a href="../PHPonTrax/ActionController.html#methodprocess_route"><literal>process_route()</literal></a> 
+   method.</p>
+
+  <p>The word &quot;route&quot; is used in Trax to describe a rule which
+   translates some URL into a particular controller object and method.
+   When <code>process_route()</code> receives control, it calls
+   <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a> to
+   parse the URL into controller, action and id
+   components. recognize_route() calls
+   <a href="../PHPonTrax/ActionController.html#methodload_router">load_router()</a> to load the
+   &quot;routing table&quot;, which is a list of one or more
+   <code>$router-&gt;connect()</code> calls, from
+   <a href="../PHPonTrax/_config_routes_php.html"><literal>config/routes.php</literal></a>.  
+   This list of calls define the rules for translating a URL into a
+   controller and action.</p>
+
+  <p>The translation rules work as follows:  Starting with the first
+   rule in <code>routes.php</code>, each rule is tested against
+   the URL to see 
+   whether the rule matches.  If a rule does not match, then the next
+   rule in the table is tested in turn, until a rule matches or the
+   table is exhausted.  If no matching rule is found,
+   recognize_route() tests the last route in the table to see whether
+   it is the default route <code>:controller/:action/:id</code>
+   .  If the last route is the default route, then
+   <code>recognize_route()</code>
+   returns it as a match, even if it does not in fact match.  But if
+   there is no matching route and the last route in the table is not
+   the default route, then recognize_route() returns 'failure' which is
+   equivalent to HTTP code '404&nbsp;Not&nbsp;found'.</p>
+
+  <p>Each entry in the route table contains two parts:
+   <ol><li>A <strong>path</strong>, which is a character string to
+     test against the URL.</li>
+    <li><strong>Parameters</strong>, which are not tested against
+     the URL and aren't involved unless the
+     <strong>path</strong> part of the entry matches the URL.
+     <strong>Parameters</strong> are optional (and frequently
+     omitted).</li></ol>
+   A <strong>path</strong> is a series of substrings separated
+   by '/' (forward slash) characters.  Each of these substrings can
+   contain any character except '/'.  The <strong>path</strong>
+   does not begin or end with '/'.  A substring may not be the null
+   (no characters) string, but it is legal for the entire
+   path to be the null string. Each substring is one of the following:
+   <ul><li><code>:controller</code></li>
+    <li><code>:action</code></li>
+    <li><code>:id</code></li>
+    <li>A
+     <a href="http://www.php.net/manual/en/ref.pcre.php">Perl regular expression</a>
+     that does not begin with ':' (colon)</li></ul>
+   The following are legal <strong>path</strong> values:
+   <ul><li><code>:controller/:action/:id</code>
+     This is the default <strong>path</strong>. It matches URLs
+     like <code>word1/word2/word3</code></li>
+    <li><code>catalog/product/:action/:id</code>
+     Remember that <code>catalog</code> is a Perl regular
+     expression that matches <code>catalog</code>, and
+     <code>product</code> is a Perl regular expression that
+     matches <code>product</code>, so this
+     <strong>path</strong> matches URLs like 
+     <code>catalog/product/word1/word2</code></li>
+    <li><code>''</code> matches '' (the empty string as a 
+     <strong>path</strong> value matches the empty string as a
+     URL).</li>
+    <li><code>member/name=.*</code> matches URLs like
+     <code>member/name=</code> or
+     <code>member/name=Tom.Jones</code> or
+     <code>member/name=Smith,J/since=1987/type=full</code> etc.</li></ul>
+   <code>:controller</code>, <code>:action</code> and
+   <code>:id</code> may each appear at most once in a 
+   <strong>path</strong>.</p>
+
+  <p>After the URL has been matched to a <strong>path</strong>,
+   the next step is to extract the name of the controller and action
+   to be invoked on this URL.  These must be valid names in the PHP
+   language consisting only of lower-case alphameric characters and
+   '_' (underscore), because the controller name will translate
+   directly into a file name and a class name, and the action name
+   will be used as the name of a method in that class.  The controller
+   and action names come from the route that matches the URL.</p>
+
+  <p>There are two places that a route can specify a controller or
+   action name: as part of the <strong>path</strong>, or in the 
+   <strong>parameters</strong>.  The
+   <strong>parameters</strong> are the optional second part of a
+   route.  The value of <strong>parameters</strong> is an array
+   with key values that may be <code>:controller</code> or
+   <code>:action</code>.  The following are legal
+   <strong>parameters</strong> values:
+   <ul><li><code>array(':controller' =&gt;
+     'new_product')</code></li> 
+    <li><code>array(':action' =&gt; 'enter')</code></li>
+    <li><code>array(':controller' =&gt; 'membership', ':action
+     =&gt; 'new')</code></li></ul></p>
+
+  <p>When a URL matches a route, the controller name is extracted as
+   follows:  First, if the <strong>parameters</strong> array
+   exists and has an element whose key is
+   <code>:controller</code>, then the value of that element is
+   used as the controller name.  If no <code>:controller</code>
+   is specified by the <strong>parameters</strong>, then the
+   <strong>path</strong> is tested for a substring whose value
+   is <code>:controller</code>.  If found, then the part of the
+   URL which matched that substring is used as the controller value.
+   A controller value must be specified by either the
+   <strong>parameters</strong> or the
+   <strong>path</strong>.  The action name is extracted by the
+   same process, substituting <code>:action</code> for 
+   <code>:controller</code>.  If the
+   <strong>path</strong> has a substring <code>:id</code>,
+   then the part of the URL which matched that substring is forced to
+   lower case and the result assigned to
+   <code>$_REQUEST['id']</code>.</p>
+
+  <p>If <code>routes.php</code> contains the following:
+   <pre class="example">router-&gt;connect('',array(':controller' =&gt; 'home'));
+router-&gt;connect('product\?.*',
+                array(':controller' =&gt; 'catalog', ':action' =&gt; 'find'));
+router-&gt;connect(':controller/:action/:id');</pre>
+   Then URLs will match routes as follows:
+   <ul><li>URL <code>''</code> (no characters) will select
+     controller <code>home</code>, action not specified.</li>
+    <li>URL <code>product?item=4317</code> will select
+     controller <code>catalog</code>, action
+     <code>find</code></li>
+    <li>URL <code>cart/add/4317</code> will select
+     controller <code>cart</code>, action <code>add</code></li></ul></p></span>
+ <span is = "action"><h2 class="title">Action Call</h2><p>When the names of the controller and action have been
+   successfully determined from the URL, the associated filesystem
+   paths are constructed and relevant files are loaded.
+   First file <code>app/controllers/application.php</code> is
+   loaded if it exists. This file contains the definition of the
+   <a href="../PHPonTrax/ApplicationController.html">ApplicationController</a> class, which extends
+   <code>ActionController</code>.
+   <code>ApplicationController</code> contains properties and
+   methods used by all the controller classes, which should extend
+   <code>ApplicationController</code> .
+   Then the controller name is used to find the file and class
+   containing the selected controller.  By Trax naming conventions, 
+   if the controller name is
+   <span class = "tute-comment">controller&nbsp;name</span>
+   then the controller file name is
+   <span class = "tute-comment">controller_name</span><code>_controller.php</code>
+   and the controller class name is
+   <span class = "tute-comment">ControllerName</span> .  So for a
+   &quot;catalog&nbsp;item&quot; controller, the controller file name is
+   <code>catalog_item_controller</code> and the controller class
+   name is <code>CatalogItem</code>.
+   The controller file is loaded and a new object of the controller
+   class is created.</p>
+
+  <p>Next any needed helper files are loaded.  Helper files contain PHP
+   code which helps prepare the output of an action method for
+   viewing. If file
+   <code>application_helper.php</code> exists, it is loaded.
+   <code>application_helper.php</code> contains
+   helpers that apply to every controller in the application.
+   Then the controller-specific helper file
+   <span class = "tute-comment">controller_name</span><code>_helper.php</code>
+   is loaded if it exists.  Finally any extra helper files, as
+   specified by calls to <a href="../PHPonTrax/ActionController.html#methodadd_helper">ActionController::add_helper()</a>, are
+   loaded.</p>
+
+  <p>When controller and helper files have been loaded, the before
+   filters are executed (<strong>FIXME:</strong> We should check
+   return but don't).  Next the controller object is tested for the
+   presence of a method with the name of the action as determined from
+   the URL. If such a method exists, it is called; if 
+   no such method exists, then the controller object is tested
+   for the presence of a method named <code>index()</code>.
+   If such a method exists it is called, otherwise the request fails
+   with 404&nbsp;Unknown&nbsp;action. If an action method was found
+   and called, the after filters are executed.</p>
+
+  <a name="action.helpers"></a><h3 class="title">Helper Loading</h3><p>Helpers are classes that provide view logic.  They exist to
+    hold view logic that would otherwise need to be added to a
+    template or controller.  Helper services that are applicable to
+    the entire application go into
+    <code>application_helper.php</code>, while
+    controller-specific helper functions go into a helper file named
+    after the controller, as 
+    <span class = "tute-comment">controller_name</span><code>_helper.php</code> 
+    . Helper classes are written as subclasses of class <a href="../PHPonTrax/Helpers.html">Helpers</a>,
+    which has a number of methods widely used by helper
+    subclasses.  You can add a helper to an
+    <code>ActionController</code> object by calling its
+    <a href="../PHPonTrax/ActionController.html#methodadd_helper">add_helper()</a> 
+    method, passing the name of the helper as an argument.</p>
+
+   <p>A number of predefined helper classes are distributed with Trax:
+    <ul><li><a href="../PHPonTrax/ActiveRecordHelper.html">ActiveRecordHelper</a></li>
+     <li><a href="../PHPonTrax/AssetTagHelper.html">AssetTagHelper</a></li>
+     <li><a href="../PHPonTrax/DateHelper.html">DateHelper</a></li>
+     <li><a href="../PHPonTrax/FormHelper.html">FormHelper</a></li>
+     <li><a href="../PHPonTrax/FormTagHelper.html">FormTagHelper</a></li>
+     <li><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></li>
+     <li><a href="../PHPonTrax/UrlHelper.html">UrlHelper</a></li></ul>
+    These classes are <strong>not</strong> automatically loaded,
+    you have to load them explicitly.</p>
+   <p></p><hr />
+
+  <a name="action.filters"></a><h3 class="title">Filters</h3><p>Filters enable controllers to run shared pre and post
+    processing code for its actions. These filters can be used to do
+    authentication, caching, or auditing before the intended action is
+    performed. Or to do localization or output compression after the
+    action has been performed.</p>
+
+   <p>Filters have access to the request, response, and all the
+    instance variables set by other filters in the chain or by the
+    action (in the case of after filters). Additionally, it's possible
+    for a pre-processing before_filter to halt the processing
+    before the intended action is processed by returning false or
+    performing a redirect or render. (FIXME: we don't implement this)
+    This is especially useful for
+    filters like authentication where you're not interested in
+    allowing the action to be  performed if the proper credentials are
+    not in order.</p>
+
+   <a name="action.filters.filter_inherit"></a><h4 class="title">Filter inheritance</h4><p>Controller inheritance hierarchies share filters downwards, but
+     subclasses can also add new filters without affecting the
+     superclass. For example:</p>
+
+    <pre class="example">class BankController extends ActionController
+{
+    $this-&gt;before_filter = audit();
+
+    private function audit() {
+        // record the action and parameters in an audit log
+    }
+}
+
+class VaultController extends BankController
+{
+    $this-&gt;before_filter = verify_credentials();
+
+    private function verify_credentials() {
+        // make sure the user is allowed into the vault
+    }
+}</pre>
+
+    <p>Now any actions performed on the BankController will have the
+     audit method called before. On the VaultController, first the
+     audit method is called, then the verify_credentials method. If the
+     audit method returns false, then verify_credentials and the
+     intended action are never called.  <strong>FIXME:
+     This is currently broken.</strong></p><br />
+
+    <a name="action.filters.filter_types"></a><h4 class="title">Filter types</h4><p>A filter can take one of three forms: method reference
+      (symbol), external class, or inline method (proc). The first is the
+      most common and works by referencing a protected or private method
+      somewhere in the inheritance hierarchy of the controller by use of
+      a symbol. In the bank example above, both BankController and
+      VaultController use this form.</p>
+
+     <p>Using an external class makes for more easily reused generic
+      filters, such as output compression. External filter classes are
+      implemented by having a static +filter+ method on any class and
+      then passing this class to the filter method. Example:</p>
+ 
+     <pre class="example">class OutputCompressionFilter
+{
+    static functionfilter(controller) {
+        controller.response.body = compress(controller.response.body)
+    }
+}
+
+class NewspaperController extends ActionController
+{
+    $this-&gt;after_filter = OutputCompressionFilter;
+}</pre>
+
+     <p>The filter method is passed the controller instance and is
+      hence granted access to all aspects of the controller and can
+      manipulate them as it sees fit.</p>
+
+     <p>The inline method (using a proc) can be used to quickly do
+      something small that doesn't require a lot of explanation.  Or
+      just as a quick test. It works like this:</p>
+ 
+     <pre class="example">class WeblogController extends ActionController
+{
+    before_filter { |controller| false if controller.params[&quot;stop_action&quot;] }
+}</pre>
+
+     <p>As you can see, the block expects to be passed the controller
+      after it has assigned the request to the internal variables.  This
+      means that the block has access to both the request and response
+      objects complete with convenience methods for params, session,
+      template, and assigns. Note: The inline method doesn't strictly
+      have to be a block; any object that responds to call and returns 1
+      or -1 on arity will do (such as a Proc or an Method object).</p><br />
+
+    <a name="action.filters.filter_skip"></a><h4 class="title">Filter chain skipping</h4><p>Some times its convenient to specify a filter chain in a
+      superclass that'll hold true for the majority of the subclasses,
+      but not necessarily all of them. The subclasses that behave in
+      exception can then specify which filters they would like to be
+      relieved of. Examples</p> 
+
+     <pre class="example">class ApplicationController extends ActionController
+{
+    $this-&gt;before_filter = authenticate();
+}
+
+class WeblogController extends ApplicationController
+{
+    // will run the authenticate() filter
+}</pre><br />
+
+    <a name="action.filters.filter_conditions"></a><h4 class="title">Filter conditions</h4><p>Filters can be limited to run for only specific
+      actions. This can be expressed either by listing the actions to
+      exclude or the actions to include when executing the
+      filter. Available conditions are +:only+ or +:except+, both of
+      which accept an arbitrary number of method references. For
+      example:</p> 
+
+     <pre class="example">class Journal extends ActionController
+{
+    // only require authentication if the current action is edit or delete
+    before_filter :authorize, :only =&gt; [ :edit, :delete ]
+    
+    private function authorize() {
+        // redirect to login unless authenticated
+    }
+}</pre>
+ 
+     <p>When setting conditions on inline method (proc) filters the
+      condition must come first and be placed in parentheses.</p>
+ 
+    <pre class="example">class UserPreferences extends ActionController
+{
+    before_filter(:except =&gt; :new) { ? some proc ... }
+    ...
+}</pre><br /><hr /></span>
+ <span><a name="render"></a><h2 class="title">Redirect Browser or Render Output</h2><p>After the controller object's action method has returned to
+   <code>ActionController::process_route()</code> and the after
+   filters have been executed, the controller object is examined for
+   a property named <code>redirect_to</code>.  If this
+   property exists and has a value, it means that the action method
+   has decided to redirect the user's browser to a different URL.  The
+   value of the <code>redirect_to</code> property is passed to
+   <a href="../PHPonTrax/ActionController.html#methodredirect_to"><literal>redirect_to()</literal></a>
+   which outputs a header redirecting the browser, then calls
+   <a href="http://www.php.net/manual/en/function.exit.php">exit</a> .</p>
+
+  <p>If the action didn't redirect the browser, it should have provided
+   output to send to the browser.  This is in the form of explicit
+   output produced by calls to
+   <a href="http://www.php.net/manual/en/function.echo.php">echo</a>,
+   <a href="http://www.php.net/manual/en/function.print.php">print</a> or
+   <a href="http://www.php.net/manual/en/function.printf.php">printf</a> ,
+   plus any properties of the controller object that are referenced in
+   the layout. <code>ActionController::process_route()</code>
+   collects all output produced by the controller's action method
+   in the output buffer, for presentation within a layout.</p>
+
+  <p>If the controller object has a property
+   <code>render_text</code> which contains a string, then this
+   string is sent directly to the browser and all output and view
+   files are ignored.</p>
+
+  <p>If <code>render_text</code> is undefined or empty, then the
+   saved output of the controller's action method is to be rendered.
+   A <strong>view file</strong> determined by the action is
+   found and included.  The view file for an action is
+   <code>app/views/</code><span class = "tute-comment">controller_name/action_name</span><code>.phtml</code> .
+   This file contains HTML, which goes to the output buffer after the
+   action method's output.  The output buffer is now assigned to
+   $content_for_layout.  Finally the layout file is loaded.  The
+   view file and layout file both contain HTML with
+   <a href="http://www.php.net/manual/en/language.basic-syntax.php">embedded PHP</a>
+   expressions to present action method output to the user.</p></span></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="33%" align="left" valign="top"><a href="../PHPonTrax/tutorial_ApplicationController.cls.html">Prev</a></td>
+<td width="34%" align="center" valign="top">&nbsp;</td>
+<td width="33%" align="right" valign="top"><a href=
+"../PHPonTrax/tutorial_ActiveRecord.cls.html">Next</a></td>
+</tr>
+
+<tr>
+<td width="33%" align="left" valign="top">ApplicationController</td>
+<td width="34%" align="center" valign="top"></td>
+<td width="33%" align="right" valign="top">ActiveRecord</td>
+</tr>
+</table>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:15:21 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

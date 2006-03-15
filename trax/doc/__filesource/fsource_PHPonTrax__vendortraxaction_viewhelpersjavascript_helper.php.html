@@ -1,0 +1,806 @@
+<html>
+<head>
+<title>File Source for javascript_helper.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTrax</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTrax.html" class="menu">class tree: PHPonTrax</a> ]
+		  [ <a href="../elementindex_PHPonTrax.html" class="menu">index: PHPonTrax</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file javascript_helper.php</h1>
+<p>Documentation is available at <a href="../PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html">javascript_helper.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  File containing the JavaScriptHelper class and support functions</span></li>
+<li><a name="a4"></a><span class="src-doc"> *</span></li>
+<li><a name="a5"></a><span class="src-doc"> *  (PHP 5)</span></li>
+<li><a name="a6"></a><span class="src-doc"> *</span></li>
+<li><a name="a7"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
+<li><a name="a8"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id$</span></li>
+<li><a name="a9"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) 2005 John Peterson</span></li>
+<li><a name="a10"></a><span class="src-doc"> *</span></li>
+<li><a name="a11"></a><span class="src-doc"> *   Permission is hereby granted, free of charge, to any person obtaining</span></li>
+<li><a name="a12"></a><span class="src-doc"> *   a copy of this software and associated documentation files (the</span></li>
+<li><a name="a13"></a><span class="src-doc"> *   &quot;Software&quot;), to deal in the Software without restriction, including</span></li>
+<li><a name="a14"></a><span class="src-doc"> *   without limitation the rights to use, copy, modify, merge, publish,</span></li>
+<li><a name="a15"></a><span class="src-doc"> *   distribute, sublicense, and/or sell copies of the Software, and to</span></li>
+<li><a name="a16"></a><span class="src-doc"> *   permit persons to whom the Software is furnished to do so, subject to</span></li>
+<li><a name="a17"></a><span class="src-doc"> *   the following conditions:</span></li>
+<li><a name="a18"></a><span class="src-doc"> *</span></li>
+<li><a name="a19"></a><span class="src-doc"> *   The above copyright notice and this permission notice shall be</span></li>
+<li><a name="a20"></a><span class="src-doc"> *   included in all copies or substantial portions of the Software.</span></li>
+<li><a name="a21"></a><span class="src-doc"> *</span></li>
+<li><a name="a22"></a><span class="src-doc"> *   THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span></li>
+<li><a name="a23"></a><span class="src-doc"> *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span></li>
+<li><a name="a24"></a><span class="src-doc"> *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</span></li>
+<li><a name="a25"></a><span class="src-doc"> *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE</span></li>
+<li><a name="a26"></a><span class="src-doc"> *   LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION</span></li>
+<li><a name="a27"></a><span class="src-doc"> *   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION</span></li>
+<li><a name="a28"></a><span class="src-doc"> *   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span></li>
+<li><a name="a29"></a><span class="src-doc"> */</span></li>
+<li><a name="a30"></a>&nbsp;</li>
+<li><a name="a31"></a><span class="src-doc">/**</span></li>
+<li><a name="a32"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this class</span></li>
+<li><a name="a33"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
+<li><a name="a34"></a><span class="src-doc"> */</span></li>
+<li><a name="a35"></a><span class="src-key">class </span><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a> <span class="src-key">extends </span><a href="../PHPonTrax/Helpers.html">Helpers</a> <span class="src-sym">{</span></li>
+<li><a name="a36"></a>&nbsp;</li>
+<li><a name="a37"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a38"></a><span class="src-doc">     * </span></li>
+<li><a name="a39"></a><span class="src-doc">     *</span></li>
+<li><a name="a40"></a><span class="src-doc">     */</span></li>
+<li><a name="a41"></a>    <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a42"></a>        <span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a43"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">javascript_callbacks </span>= <a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'JAVASCRIPT_CALLBACKS'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'JAVASCRIPT_CALLBACKS'</span><span class="src-sym">] </span>: <span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'uninitialized'</span><span class="src-sym">, </span><span class="src-str">'loading'</span><span class="src-sym">, </span><span class="src-str">'loaded'</span><span class="src-sym">, </span><span class="src-str">'interactive'</span><span class="src-sym">, </span><span class="src-str">'complete'</span><span class="src-sym">, </span><span class="src-str">'failure'</span><span class="src-sym">, </span><span class="src-str">'success'</span><span class="src-sym">)</span><span class="src-sym">;    </span></li>
+<li><a name="a44"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">ajax_options </span>= <a href="http://www.php.net/array_merge">array_merge</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'before'</span><span class="src-sym">, </span><span class="src-str">'after'</span><span class="src-sym">, </span><span class="src-str">'condition'</span><span class="src-sym">, </span><span class="src-str">'url'</span><span class="src-sym">, </span><span class="src-str">'asynchronous'</span><span class="src-sym">, </span><span class="src-str">'method'</span><span class="src-sym">, </span><span class="src-str">'insertion'</span><span class="src-sym">, </span><span class="src-str">'position'</span><span class="src-sym">, </span><span class="src-str">'form'</span><span class="src-sym">, </span><span class="src-str">'with'</span><span class="src-sym">, </span><span class="src-str">'update'</span><span class="src-sym">, </span><span class="src-str">'script'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">javascript_callbacks</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a45"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">javascript_path </span>= <a href="http://www.php.net/dirname">dirname</a><span class="src-sym">(</span>__FILE__<span class="src-sym">)</span>.<span class="src-str">'/javascripts'</span><span class="src-sym">;</span></li>
+<li><a name="a46"></a>&nbsp;</li>
+<li><a name="a47"></a>    <span class="src-sym">}</span></li>
+<li><a name="a48"></a>&nbsp;</li>
+<li><a name="a49"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a50"></a>        <span class="src-var">$javascript </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a51"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a52"></a>            <span class="src-var">$javascript </span>= <a href="http://www.php.net/array_map">array_map</a><span class="src-sym">(</span><a href="http://www.php.net/create_function">create_function</a><span class="src-sym">(</span><span class="src-str">'$k, $v'</span><span class="src-sym">, </span><span class="src-str">'return &quot;{$k}:{$v}&quot;;'</span><span class="src-sym">)</span><span class="src-sym">, </span><a href="http://www.php.net/array_keys">array_keys</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">, </span><a href="http://www.php.net/array_values">array_values</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a53"></a>            <a href="http://www.php.net/sort">sort</a><span class="src-sym">(</span><span class="src-var">$javascript</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a54"></a>        <span class="src-sym">}</span></li>
+<li><a name="a55"></a>        <span class="src-key">return </span><span class="src-str">'{' </span>. <a href="http://www.php.net/implode">implode</a><span class="src-sym">(</span><span class="src-str">', '</span><span class="src-sym">, </span><span class="src-var">$javascript</span><span class="src-sym">) </span>. <span class="src-str">'}'</span><span class="src-sym">;</span></li>
+<li><a name="a56"></a>    <span class="src-sym">}</span></li>
+<li><a name="a57"></a>    </li>
+<li><a name="a58"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodarray_or_string_for_javascript">array_or_string_for_javascript</a><span class="src-sym">(</span><span class="src-var">$option</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a59"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$option</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a60"></a>            <span class="src-var">$js_option </span>= <span class="src-str">&quot;['&quot; </span>. <a href="http://www.php.net/implode">implode</a><span class="src-sym">(</span><span class="src-str">'\',\''</span><span class="src-sym">, </span><span class="src-var">$option</span><span class="src-sym">) </span>. <span class="src-str">&quot;']&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a61"></a>        <span class="src-sym">} </span><span class="src-key">elseif </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_null">is_null</a><span class="src-sym">(</span><span class="src-var">$option</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a62"></a>            <span class="src-var">$js_option </span>= <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$option</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a63"></a>        <span class="src-sym">}</span></li>
+<li><a name="a64"></a>        <span class="src-key">return </span><span class="src-var">$js_option</span><span class="src-sym">;</span></li>
+<li><a name="a65"></a>    <span class="src-sym">}</span></li>
+<li><a name="a66"></a>    </li>
+<li><a name="a67"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_ajax">options_for_ajax</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a68"></a>        <span class="src-var">$js_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_callbacks">build_callbacks</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;    </span></li>
+<li><a name="a69"></a>        <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'asynchronous'</span><span class="src-sym">] </span>= <span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'type'</span><span class="src-sym">] </span>!= <span class="src-str">'synchronous'</span><span class="src-sym">) </span>? <span class="src-str">&quot;true&quot; </span>: <span class="src-str">&quot;false&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a70"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a71"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodmethod_option_to_s">method_option_to_s</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a72"></a>        <span class="src-sym">}</span></li>
+<li><a name="a73"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'position'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a74"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'insertion'</span><span class="src-sym">] </span>= <span class="src-str">&quot;Insertion.&quot; </span>. <span class="src-id"><a href="../PHPonTrax/Inflector.html">Inflector</a></span><span class="src-sym">::</span><a href="../PHPonTrax/Inflector.html#methodcamelize">camelize</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'position'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a75"></a>        <span class="src-sym">}</span></li>
+<li><a name="a76"></a>        <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'evalScripts'</span><span class="src-sym">] </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'script'</span><span class="src-sym">] </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'script'</span><span class="src-sym">] </span>: <span class="src-str">&quot;true&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a77"></a>        </li>
+<li><a name="a78"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'form'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a79"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'parameters'</span><span class="src-sym">] </span>= <span class="src-str">&quot;Form.serialize(this)&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a80"></a>        <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'submit'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a81"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'parameters'</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Form</span>.<span class="src-id">serialize</span>(<span class="src-id">document</span>.<span class="src-id">getElementById</span>('{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'submit'</span><span class="src-sym">]</span><span class="src-sym">}</span>'))</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a82"></a>        <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a83"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'parameters'</span><span class="src-sym">] </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a84"></a>        <span class="src-sym">}</span></li>
+<li><a name="a85"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$js_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a86"></a>    <span class="src-sym">}</span></li>
+<li><a name="a87"></a>    </li>
+<li><a name="a88"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodmethod_option_to_s">method_option_to_s</a><span class="src-sym">(</span><span class="src-var">$method</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a89"></a>        <span class="src-key">return </span><span class="src-sym">((</span><a href="http://www.php.net/is_string">is_string</a><span class="src-sym">(</span><span class="src-var">$method</span><span class="src-sym">) </span>&amp;&amp; <span class="src-sym">!</span><a href="http://www.php.net/strstr">strstr</a><span class="src-sym">(</span><span class="src-var">$method</span><span class="src-sym">, </span><span class="src-str">&quot;'&quot;</span><span class="src-sym">)) </span>? <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$method</span><span class="src-sym">}</span>'</span><span class="src-str">&quot; </span>: <span class="src-var">$method</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a90"></a>    <span class="src-sym">}</span></li>
+<li><a name="a91"></a>    </li>
+<li><a name="a92"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_observer">build_observer</a><span class="src-sym">(</span><span class="src-var">$klass</span><span class="src-sym">, </span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a93"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a94"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a95"></a>                <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">] </span>= <span class="src-str">'value'</span><span class="src-sym">;</span></li>
+<li><a name="a96"></a>            <span class="src-sym">}</span></li>
+<li><a name="a97"></a>        <span class="src-sym">}</span></li>
+<li><a name="a98"></a>        <span class="src-var">$callback </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a99"></a>        <span class="src-var">$javascript  </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">new</span> {<span class="src-var">$klass</span><span class="src-sym">}</span>('{<span class="src-var">$name</span><span class="src-sym">}</span>', </span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a100"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a101"></a>            <span class="src-var">$javascript </span>.= <span class="src-str">&quot;</span>{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">]</span><span class="src-str"></span><span class="src-sym">}</span>, </span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a102"></a>        <span class="src-sym">}</span></li>
+<li><a name="a103"></a>        <span class="src-var">$javascript </span>.= <span class="src-str">&quot;function(element, value) {&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a104"></a>        <span class="src-var">$javascript </span>.= <span class="src-str">&quot;</span>{<span class="src-var">$callback</span><span class="src-str"></span><span class="src-sym">}}</span>)</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a105"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-var">$javascript</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a106"></a>    <span class="src-sym">}</span></li>
+<li><a name="a107"></a>    </li>
+<li><a name="a108"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_callbacks">build_callbacks</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a109"></a>        <span class="src-var">$callbacks </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a110"></a>        <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$options </span><span class="src-key">as </span><span class="src-var">$callback </span>=&gt; <span class="src-var">$code</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a111"></a>            <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/in_array">in_array</a><span class="src-sym">(</span><span class="src-var">$callback</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">javascript_callbacks</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a112"></a>                <span class="src-var">$name </span>= <span class="src-str">'on' </span>. <span class="src-id"><a href="../PHPonTrax/Inflector.html">Inflector</a></span><span class="src-sym">::</span><a href="../PHPonTrax/Inflector.html#methodcapitalize">capitalize</a><span class="src-sym">(</span><span class="src-var">$callback</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a113"></a>                <span class="src-var">$callbacks</span><span class="src-sym">[</span><span class="src-var">$name</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">function</span>(<span class="src-id">request</span>)<span class="src-sym">{</span>{<span class="src-var">$code</span><span class="src-sym">}}</span></span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a114"></a>            <span class="src-sym">}</span></li>
+<li><a name="a115"></a>        <span class="src-sym">}</span></li>
+<li><a name="a116"></a>        <span class="src-key">return </span><span class="src-var">$callbacks</span><span class="src-sym">;</span></li>
+<li><a name="a117"></a>    <span class="src-sym">}</span></li>
+<li><a name="a118"></a>    </li>
+<li><a name="a119"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodremove_ajax_options">remove_ajax_options</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a120"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a121"></a>            <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'ajax_options'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">ajax_options</span><span class="src-sym">;</span></li>
+<li><a name="a122"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$options </span><span class="src-key">as </span><span class="src-var">$option_key </span>=&gt; <span class="src-var">$option_value</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a123"></a>                <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/in_array">in_array</a><span class="src-sym">(</span><span class="src-var">$option_key</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">ajax_options</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a124"></a>                    <span class="src-var">$new_options</span><span class="src-sym">[</span><span class="src-var">$option_key</span><span class="src-sym">] </span>= <span class="src-var">$option_value</span><span class="src-sym">;  </span></li>
+<li><a name="a125"></a>                <span class="src-sym">}  </span></li>
+<li><a name="a126"></a>            <span class="src-sym">} </span></li>
+<li><a name="a127"></a>            <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$new_options</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a128"></a>                <span class="src-var">$options </span>= <span class="src-var">$new_options</span><span class="src-sym">; </span></li>
+<li><a name="a129"></a>            <span class="src-sym">}           </span></li>
+<li><a name="a130"></a>        <span class="src-sym">}    </span></li>
+<li><a name="a131"></a>        <span class="src-key">return </span><span class="src-var">$options</span><span class="src-sym">;    </span></li>
+<li><a name="a132"></a>    <span class="src-sym">}</span></li>
+<li><a name="a133"></a>       </li>
+<li><a name="a134"></a>    <span class="src-comm"># Returns a link that'll trigger a javascript $function using the </span></li>
+<li><a name="a135"></a>    <span class="src-comm"># onclick handler and return false after the fact.</span></li>
+<li><a name="a136"></a>    <span class="src-comm">#</span></li>
+<li><a name="a137"></a>    <span class="src-comm"># Examples:</span></li>
+<li><a name="a138"></a>    <span class="src-comm">#   link_to_function(&quot;Greeting&quot;, &quot;alert('Hello world!')&quot;)</span></li>
+<li><a name="a139"></a>    <span class="src-comm">#   link_to_function(image_tag(&quot;delete&quot;), &quot;if confirm('Really?'){ do_delete(); }&quot;)</span></li>
+<li><a name="a140"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodlink_to_function">link_to_function</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$function</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a141"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">&quot;a&quot;</span><span class="src-sym">, </span><span class="src-var">$name</span><span class="src-sym">, </span><a href="http://www.php.net/array_merge">array_merge</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'href' </span>=&gt; <span class="src-str">&quot;#&quot;</span><span class="src-sym">, </span><span class="src-str">'onclick' </span>=&gt; <span class="src-str">&quot;</span>{<span class="src-var">$function</span><span class="src-str"></span><span class="src-sym">}</span>; <span class="src-id">return</span> <span class="src-id">false</span>;</span><span class="src-str">&quot;</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a142"></a>    <span class="src-sym">}</span></li>
+<li><a name="a143"></a>    </li>
+<li><a name="a144"></a>    <span class="src-comm"># Returns a link to a remote action defined by &lt;tt&gt;$options['url']&lt;/tt&gt; </span></li>
+<li><a name="a145"></a>    <span class="src-comm"># (using the url_for() format) that's called in the background using </span></li>
+<li><a name="a146"></a>    <span class="src-comm"># XMLHttpRequest. The result of that request can then be inserted into a</span></li>
+<li><a name="a147"></a>    <span class="src-comm"># DOM object whose id can be specified with &lt;tt&gt;$options['update']&lt;/tt&gt;. </span></li>
+<li><a name="a148"></a>    <span class="src-comm"># Usually, the result would be a partial prepared by the controller with</span></li>
+<li><a name="a149"></a>    <span class="src-comm"># render_partial. </span></li>
+<li><a name="a150"></a>    <span class="src-comm">#</span></li>
+<li><a name="a151"></a>    <span class="src-comm"># Examples:</span></li>
+<li><a name="a152"></a>    <span class="src-comm">#  link_to_remote(&quot;Delete this post&quot;, array(&quot;update&quot; =&gt; &quot;posts&quot;, array(&quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;destroy&quot;, &quot;:id&quot; =&gt; $post-&gt;id)))</span></li>
+<li><a name="a153"></a>    <span class="src-comm">#  link_to_remote(image_tag(&quot;refresh&quot;), array(&quot;update&quot; =&gt; &quot;emails&quot;, &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;list_emails&quot;)))</span></li>
+<li><a name="a154"></a>    <span class="src-comm">#  link_to_remote(image_tag(&quot;refresh&quot;), array(&quot;update&quot; =&gt; &quot;emails&quot;, &quot;url&quot; =&gt; &quot;/posts/list_emails&quot;))</span></li>
+<li><a name="a155"></a>    <span class="src-comm">#</span></li>
+<li><a name="a156"></a>    <span class="src-comm"># You can also specify a hash for &lt;tt&gt;$options['update']&lt;/tt&gt; to allow for</span></li>
+<li><a name="a157"></a>    <span class="src-comm"># easy redirection of output to an other DOM element if a server-side error occurs:</span></li>
+<li><a name="a158"></a>    <span class="src-comm">#</span></li>
+<li><a name="a159"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a160"></a>    <span class="src-comm">#  link_to_remote(&quot;Delete this post&quot;, array(</span></li>
+<li><a name="a161"></a>    <span class="src-comm">#      &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;destroy&quot;, &quot;:id&quot; =&gt; $post-&gt;id),</span></li>
+<li><a name="a162"></a>    <span class="src-comm">#      &quot;update&quot; =&gt; array(&quot;success&quot; =&gt; &quot;posts&quot;, &quot;failure&quot; =&gt; &quot;error&quot;)</span></li>
+<li><a name="a163"></a>    <span class="src-comm">#      ))</span></li>
+<li><a name="a164"></a>    <span class="src-comm">#</span></li>
+<li><a name="a165"></a>    <span class="src-comm"># Optionally, you can use the &lt;tt&gt;$options['position']&lt;/tt&gt; parameter to influence</span></li>
+<li><a name="a166"></a>    <span class="src-comm"># how the target DOM element is updated. It must be one of </span></li>
+<li><a name="a167"></a>    <span class="src-comm"># &lt;tt&gt;before&lt;/tt&gt;, &lt;tt&gt;top&lt;/tt&gt;, &lt;tt&gt;bottom&lt;/tt&gt;, or &lt;tt&gt;after&lt;/tt&gt;.</span></li>
+<li><a name="a168"></a>    <span class="src-comm">#</span></li>
+<li><a name="a169"></a>    <span class="src-comm"># By default, these remote requests are processed asynchronous during </span></li>
+<li><a name="a170"></a>    <span class="src-comm"># which various JavaScript callbacks can be triggered (for progress indicators and</span></li>
+<li><a name="a171"></a>    <span class="src-comm"># the likes). All callbacks get access to the &lt;tt&gt;request&lt;/tt&gt; object,</span></li>
+<li><a name="a172"></a>    <span class="src-comm"># which holds the underlying XMLHttpRequest. </span></li>
+<li><a name="a173"></a>    <span class="src-comm">#</span></li>
+<li><a name="a174"></a>    <span class="src-comm"># To access the server response, use &lt;tt&gt;request.responseText&lt;/tt&gt;, to</span></li>
+<li><a name="a175"></a>    <span class="src-comm"># find out the HTTP status, use &lt;tt&gt;request.status&lt;/tt&gt;.</span></li>
+<li><a name="a176"></a>    <span class="src-comm">#</span></li>
+<li><a name="a177"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a178"></a>    <span class="src-comm">#   link_to_remote($word, array(</span></li>
+<li><a name="a179"></a>    <span class="src-comm">#       &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;undo&quot;, &quot;n&quot; =&gt; $word_counter ),</span></li>
+<li><a name="a180"></a>    <span class="src-comm">#       &quot;complete&quot; =&gt; &quot;undoRequestCompleted(request)&quot;))</span></li>
+<li><a name="a181"></a>    <span class="src-comm">#</span></li>
+<li><a name="a182"></a>    <span class="src-comm"># The callbacks that may be specified are (in order):</span></li>
+<li><a name="a183"></a>    <span class="src-comm">#</span></li>
+<li><a name="a184"></a>    <span class="src-comm"># &lt;tt&gt;loading&lt;/tt&gt;::       Called when the remote document is being </span></li>
+<li><a name="a185"></a>    <span class="src-comm">#                           loaded with data by the browser.</span></li>
+<li><a name="a186"></a>    <span class="src-comm"># &lt;tt&gt;loaded&lt;/tt&gt;::        Called when the browser has finished loading</span></li>
+<li><a name="a187"></a>    <span class="src-comm">#                           the remote document.</span></li>
+<li><a name="a188"></a>    <span class="src-comm"># &lt;tt&gt;interactive&lt;/tt&gt;::   Called when the user can interact with the </span></li>
+<li><a name="a189"></a>    <span class="src-comm">#                           remote document, even though it has not </span></li>
+<li><a name="a190"></a>    <span class="src-comm">#                           finished loading.</span></li>
+<li><a name="a191"></a>    <span class="src-comm"># &lt;tt&gt;success&lt;/tt&gt;::       Called when the XMLHttpRequest is completed,</span></li>
+<li><a name="a192"></a>    <span class="src-comm">#                           and the HTTP status code is in the 2XX range.</span></li>
+<li><a name="a193"></a>    <span class="src-comm"># &lt;tt&gt;failure&lt;/tt&gt;::       Called when the XMLHttpRequest is completed,</span></li>
+<li><a name="a194"></a>    <span class="src-comm">#                           and the HTTP status code is not in the 2XX</span></li>
+<li><a name="a195"></a>    <span class="src-comm">#                           range.</span></li>
+<li><a name="a196"></a>    <span class="src-comm"># &lt;tt&gt;complete&lt;/tt&gt;::      Called when the XMLHttpRequest is complete </span></li>
+<li><a name="a197"></a>    <span class="src-comm">#                           (fires after success/failure if they are present).,</span></li>
+<li><a name="a198"></a>    <span class="src-comm">#                     </span></li>
+<li><a name="a199"></a>    <span class="src-comm"># You can further refine &lt;tt&gt;success&lt;/tt&gt; and &lt;tt&gt;failure&lt;/tt&gt; by adding additional </span></li>
+<li><a name="a200"></a>    <span class="src-comm"># callbacks for specific status codes:</span></li>
+<li><a name="a201"></a>    <span class="src-comm">#</span></li>
+<li><a name="a202"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a203"></a>    <span class="src-comm">#   link_to_remote($word,</span></li>
+<li><a name="a204"></a>    <span class="src-comm">#       &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;action&quot;),</span></li>
+<li><a name="a205"></a>    <span class="src-comm">#       &quot;failure&quot; =&gt; &quot;alert('HTTP Error ' + request.status + '!')&quot;)</span></li>
+<li><a name="a206"></a>    <span class="src-comm">#</span></li>
+<li><a name="a207"></a>    <span class="src-comm"># A status code callback overrides the success/failure handlers if present.</span></li>
+<li><a name="a208"></a>    <span class="src-comm">#</span></li>
+<li><a name="a209"></a>    <span class="src-comm"># If you for some reason or another need synchronous processing (that'll</span></li>
+<li><a name="a210"></a>    <span class="src-comm"># block the browser while the request is happening), you can specify </span></li>
+<li><a name="a211"></a>    <span class="src-comm"># &lt;tt&gt;$options['type'] = &quot;synchronous&quot;&lt;/tt&gt;.</span></li>
+<li><a name="a212"></a>    <span class="src-comm">#</span></li>
+<li><a name="a213"></a>    <span class="src-comm"># You can customize further browser side call logic by passing</span></li>
+<li><a name="a214"></a>    <span class="src-comm"># in JavaScript code snippets via some optional parameters. In</span></li>
+<li><a name="a215"></a>    <span class="src-comm"># their order of use these are:</span></li>
+<li><a name="a216"></a>    <span class="src-comm">#</span></li>
+<li><a name="a217"></a>    <span class="src-comm"># &lt;tt&gt;confirm&lt;/tt&gt;::      Adds confirmation dialog.</span></li>
+<li><a name="a218"></a>    <span class="src-comm"># &lt;tt&gt;condition&lt;/tt&gt;::    Perform remote request conditionally</span></li>
+<li><a name="a219"></a>    <span class="src-comm">#                          by this expression. Use this to</span></li>
+<li><a name="a220"></a>    <span class="src-comm">#                          describe browser-side conditions when</span></li>
+<li><a name="a221"></a>    <span class="src-comm">#                          request should not be initiated.</span></li>
+<li><a name="a222"></a>    <span class="src-comm"># &lt;tt&gt;before&lt;/tt&gt;::       Called before request is initiated.</span></li>
+<li><a name="a223"></a>    <span class="src-comm"># &lt;tt&gt;after&lt;/tt&gt;::        Called immediately after request was</span></li>
+<li><a name="a224"></a>    <span class="src-comm">#                          initiated and before &lt;tt&gt;:loading&lt;/tt&gt;.</span></li>
+<li><a name="a225"></a>    <span class="src-comm"># &lt;tt&gt;submit&lt;/tt&gt;::       Specifies the DOM element ID that's used</span></li>
+<li><a name="a226"></a>    <span class="src-comm">#                          as the parent of the form elements. By </span></li>
+<li><a name="a227"></a>    <span class="src-comm">#                          default this is the current form, but</span></li>
+<li><a name="a228"></a>    <span class="src-comm">#                          it could just as well be the ID of a</span></li>
+<li><a name="a229"></a>    <span class="src-comm">#                          table row or any other DOM element.</span></li>
+<li><a name="a230"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodlink_to_remote">link_to_remote</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a231"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodlink_to_function">link_to_function</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a232"></a>    <span class="src-sym">}</span></li>
+<li><a name="a233"></a>    </li>
+<li><a name="a234"></a>    <span class="src-comm"># Periodically calls the specified url (&lt;tt&gt;$options['url']&lt;/tt&gt;) every &lt;tt&gt;options[:frequency]&lt;/tt&gt; seconds (default is 10).</span></li>
+<li><a name="a235"></a>    <span class="src-comm"># Usually used to update a specified div (&lt;tt&gt;$options['update']&lt;/tt&gt;) with the results of the remote call.</span></li>
+<li><a name="a236"></a>    <span class="src-comm"># The options for specifying the target with 'url' and defining callbacks is the same as link_to_remote().</span></li>
+<li><a name="a237"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodperiodically_call_remote">periodically_call_remote</a><span class="src-sym">(</span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a238"></a>        <span class="src-var">$frequency </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">] </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">] </span>: <span class="src-num">10</span><span class="src-sym">; </span><span class="src-comm"># every ten seconds by default</span></li>
+<li><a name="a239"></a>        <span class="src-var">$code </span>= <span class="src-str">&quot;new PeriodicalExecuter(function() {&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;</span><span class="src-str"><span class="src-sym">}</span>, {<span class="src-var">$frequency</span><span class="src-sym">}</span>)</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a240"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-var">$code</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a241"></a>    <span class="src-sym">}</span></li>
+<li><a name="a242"></a>    </li>
+<li><a name="a243"></a>    <span class="src-comm"># Returns a form tag that will submit using XMLHttpRequest in the background instead of the regular </span></li>
+<li><a name="a244"></a>    <span class="src-comm"># reloading POST arrangement. Even though it's using JavaScript to serialize the form elements, the form submission </span></li>
+<li><a name="a245"></a>    <span class="src-comm"># will work just like a regular submission as viewed by the receiving side (all elements available in $_REQUEST).</span></li>
+<li><a name="a246"></a>    <span class="src-comm"># The options for specifying the target with :url and defining callbacks is the same as link_to_remote().</span></li>
+<li><a name="a247"></a>    <span class="src-comm">#</span></li>
+<li><a name="a248"></a>    <span class="src-comm"># A &quot;fall-through&quot; target for browsers that doesn't do JavaScript can be specified with the :action/:method options on :html</span></li>
+<li><a name="a249"></a>    <span class="src-comm">#</span></li>
+<li><a name="a250"></a>    <span class="src-comm">#   form_remote_tag(&quot;html&quot; =&gt; array(&quot;action&quot; =&gt; url_for(&quot;:controller&quot; =&gt; &quot;some&quot;, &quot;:action&quot; =&gt; &quot;place&quot;)))</span></li>
+<li><a name="a251"></a>    <span class="src-comm"># The Hash passed to the 'html' key is equivalent to the options (2nd) argument in the FormTagHelper::form_tag() method.</span></li>
+<li><a name="a252"></a>    <span class="src-comm">#</span></li>
+<li><a name="a253"></a>    <span class="src-comm"># By default the fall-through action is the same as the one specified in the 'url' (and the default method is 'post').</span></li>
+<li><a name="a254"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodform_remote_tag">form_remote_tag</a><span class="src-sym">(</span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a255"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'form'</span><span class="src-sym">] </span>= <span class="src-id">true</span><span class="src-sym">;       </span></li>
+<li><a name="a256"></a>        <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a257"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">] </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a258"></a>        <span class="src-sym">}</span></li>
+<li><a name="a259"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'onsubmit'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;; return false;&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a260"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'action'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a261"></a>            <span class="src-var">$url_for_options </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'action'</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a262"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a263"></a>            <span class="src-var">$url_for_options </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionurl_for">url_for</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'url'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;    </span></li>
+<li><a name="a264"></a>        <span class="src-sym">}</span></li>
+<li><a name="a265"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a266"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'method'</span><span class="src-sym">] </span>= <span class="src-str">&quot;post&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a267"></a>        <span class="src-sym">}</span></li>
+<li><a name="a268"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodtag">tag</a><span class="src-sym">(</span><span class="src-str">&quot;form&quot;</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">, </span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a269"></a>    <span class="src-sym">}</span></li>
+<li><a name="a270"></a>        </li>
+<li><a name="a271"></a>    <span class="src-comm"># Returns a button input tag that will submit form using XMLHttpRequest in the background instead of regular</span></li>
+<li><a name="a272"></a>    <span class="src-comm"># reloading POST arrangement. &lt;tt&gt;$options&lt;/tt&gt; argument is the same as in &lt;tt&gt;form_remote_tag()&lt;/tt&gt;</span></li>
+<li><a name="a273"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodsubmit_to_remote">submit_to_remote</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$value</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a274"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span>isset<span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a275"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">] </span>= <span class="src-str">'Form.serialize(this.form)'</span><span class="src-sym">;</span></li>
+<li><a name="a276"></a>        <span class="src-sym">}</span></li>
+<li><a name="a277"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a278"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">] </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a279"></a>        <span class="src-sym">}</span></li>
+<li><a name="a280"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'type'</span><span class="src-sym">] </span>= <span class="src-str">'button'</span><span class="src-sym">;</span></li>
+<li><a name="a281"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'onclick'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;; return false;&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a282"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'name'</span><span class="src-sym">] </span>= <span class="src-var">$name</span><span class="src-sym">;</span></li>
+<li><a name="a283"></a>        <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'value'</span><span class="src-sym">] </span>= <span class="src-var">$value</span><span class="src-sym">;      </span></li>
+<li><a name="a284"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodtag">tag</a><span class="src-sym">(</span><span class="src-str">&quot;input&quot;</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'html'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a285"></a>    <span class="src-sym">}</span></li>
+<li><a name="a286"></a>    </li>
+<li><a name="a287"></a>    <span class="src-comm"># Returns a Javascript function (or expression) that'll update a DOM element according to the options passed.</span></li>
+<li><a name="a288"></a>    <span class="src-comm">#</span></li>
+<li><a name="a289"></a>    <span class="src-comm"># * &lt;tt&gt;content&lt;/tt&gt;: The content to use for updating. Can be left out if using block, see example.</span></li>
+<li><a name="a290"></a>    <span class="src-comm"># * &lt;tt&gt;action&lt;/tt&gt;: Valid options are :update (assumed by default), :empty, :remove</span></li>
+<li><a name="a291"></a>    <span class="src-comm"># * &lt;tt&gt;position&lt;/tt&gt; If the :action is :update, you can optionally specify one of the following positions: :before, :top, :bottom, :after.</span></li>
+<li><a name="a292"></a>    <span class="src-comm">#</span></li>
+<li><a name="a293"></a>    <span class="src-comm"># Examples:</span></li>
+<li><a name="a294"></a>    <span class="src-comm">#   javascript_tag(update_element_function(</span></li>
+<li><a name="a295"></a>    <span class="src-comm">#         &quot;products&quot;, :position =&gt; :bottom, :content =&gt; &quot;&lt;p&gt;New product!&lt;/p&gt;&quot;)) </span></li>
+<li><a name="a296"></a>    <span class="src-comm">#</span></li>
+<li><a name="a297"></a>    <span class="src-comm">#    replacement_function = update_element_function(&quot;products&quot;) do </span></li>
+<li><a name="a298"></a>    <span class="src-comm">#     &lt;p&gt;Product 1&lt;/p&gt;</span></li>
+<li><a name="a299"></a>    <span class="src-comm">#     &lt;p&gt;Product 2&lt;/p&gt;</span></li>
+<li><a name="a300"></a>    <span class="src-comm">#    end </span></li>
+<li><a name="a301"></a>    <span class="src-comm">#   javascript_tag(replacement_function) </span></li>
+<li><a name="a302"></a>    <span class="src-comm">#</span></li>
+<li><a name="a303"></a>    <span class="src-comm"># This method can also be used in combination with remote method call where the result is evaluated afterwards to cause</span></li>
+<li><a name="a304"></a>    <span class="src-comm"># multiple updates on a page. Example:</span></li>
+<li><a name="a305"></a>    <span class="src-comm">#</span></li>
+<li><a name="a306"></a>    <span class="src-comm">#   # Calling view</span></li>
+<li><a name="a307"></a>    <span class="src-comm">#    form_remote_tag(array(&quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;buy&quot;), &quot;complete&quot; =&gt; evaluate_remote_response())) </span></li>
+<li><a name="a308"></a>    <span class="src-comm">#    all the inputs here...</span></li>
+<li><a name="a309"></a>    <span class="src-comm">#</span></li>
+<li><a name="a310"></a>    <span class="src-comm">#   # Controller action</span></li>
+<li><a name="a311"></a>    <span class="src-comm">#   function buy() {</span></li>
+<li><a name="a312"></a>    <span class="src-comm">#       $product = new Product;</span></li>
+<li><a name="a313"></a>    <span class="src-comm">#       $this-&gt;product = $product-&gt;find(1);</span></li>
+<li><a name="a314"></a>    <span class="src-comm">#   }</span></li>
+<li><a name="a315"></a>    <span class="src-comm">#</span></li>
+<li><a name="a316"></a>    <span class="src-comm">#   # Returning view</span></li>
+<li><a name="a317"></a>    <span class="src-comm">#    update_element_function(</span></li>
+<li><a name="a318"></a>    <span class="src-comm">#         &quot;cart&quot;, array(&quot;:action&quot; =&gt; &quot;update&quot;, &quot;position&quot; =&gt; &quot;bottom&quot;, </span></li>
+<li><a name="a319"></a>    <span class="src-comm">#         &quot;content&quot; =&gt; &quot;&lt;p&gt;New Product: #{$product-&gt;name}&lt;/p&gt;&quot;)) </span></li>
+<li><a name="a320"></a>    <span class="src-comm">#    update_element_function(&quot;status&quot;, array(&quot;binding&quot; =&gt; $binding) do </span></li>
+<li><a name="a321"></a>    <span class="src-comm">#     You've bought a new product!</span></li>
+<li><a name="a322"></a>    <span class="src-comm">#    end </span></li>
+<li><a name="a323"></a>    <span class="src-comm">#</span></li>
+<li><a name="a324"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodupdate_element_function">update_element_function</a><span class="src-sym">(</span><span class="src-var">$element_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$block </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{   </span></li>
+<li><a name="a325"></a>        <span class="src-var">$content </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodescape_javascript">escape_javascript</a><span class="src-sym">((</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'content'</span><span class="src-sym">] </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'content'</span><span class="src-sym">] </span>: <span class="src-id">null</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a326"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_null">is_null</a><span class="src-sym">(</span><span class="src-var">$block</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a327"></a>            <span class="src-var">$content </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodescape_javascript">escape_javascript</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">capture</span><span class="src-sym">(</span><span class="src-var">$block</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a328"></a>        <span class="src-sym">}</span></li>
+<li><a name="a329"></a>        <span class="src-key">switch</span><span class="src-sym">((</span>isset<span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'action'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'action'</span><span class="src-sym">] </span>: <span class="src-str">'update'</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a330"></a>            <span class="src-key">case </span><span class="src-str">'update'</span>:</li>
+<li><a name="a331"></a>                <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'position'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a332"></a>                    <span class="src-var">$javascript_function </span>= <span class="src-str">&quot;new Insertion.&quot; </span>. <span class="src-id"><a href="../PHPonTrax/Inflector.html">Inflector</a></span><span class="src-sym">::</span><a href="../PHPonTrax/Inflector.html#methodcamelize">camelize</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'position'</span><span class="src-sym">]</span><span class="src-sym">) </span>. <span class="src-str">&quot;</span><span class="src-str">('{<span class="src-var">$element_id</span><span class="src-sym">}</span>','{<span class="src-var">$content</span><span class="src-sym">}</span>')</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a333"></a>                <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a334"></a>                    <span class="src-var">$javascript_function </span>= <span class="src-str">&quot;</span><span class="src-str">$('{<span class="src-var">$element_id</span><span class="src-sym">}</span>').<span class="src-id">innerHTML</span> = '{<span class="src-var">$content</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a335"></a>                <span class="src-sym">}</span></li>
+<li><a name="a336"></a>                <span class="src-key">break</span><span class="src-sym">;</span></li>
+<li><a name="a337"></a>            <span class="src-key">case </span><span class="src-str">'empty'</span>:</li>
+<li><a name="a338"></a>                <span class="src-var">$javascript_function </span>= <span class="src-str">&quot;</span><span class="src-str">$('{<span class="src-var">$element_id</span><span class="src-sym">}</span>').<span class="src-id">innerHTML</span> = ''</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a339"></a>                <span class="src-key">break</span><span class="src-sym">;</span></li>
+<li><a name="a340"></a>            <span class="src-key">case </span><span class="src-str">'remove'</span>:</li>
+<li><a name="a341"></a>                <span class="src-var">$javascript_function </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Element</span>.<span class="src-id">remove</span>('{<span class="src-var">$element_id</span><span class="src-sym">}</span>')</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a342"></a>                <span class="src-key">break</span><span class="src-sym">;</span></li>
+<li><a name="a343"></a>            <span class="src-key">default</span>:</li>
+<li><a name="a344"></a>                <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">controller_object</span><span class="src-sym">-&gt;</span><span class="src-id">raise</span><span class="src-sym">(</span><span class="src-str">&quot;Invalid action, choose one of 'update', 'remove', 'empty'&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;ArgumentError&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a345"></a>        <span class="src-sym">}       </span></li>
+<li><a name="a346"></a>        <span class="src-var">$javascript_function </span>.= <span class="src-str">&quot;;\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a347"></a>        <span class="src-key">return </span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'binding'</span><span class="src-sym">] </span>? <span class="src-var">$javascript_function </span>. <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'binding'</span><span class="src-sym">] </span>: <span class="src-var">$javascript_function</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a348"></a>    <span class="src-sym">}</span></li>
+<li><a name="a349"></a>    </li>
+<li><a name="a350"></a>    <span class="src-comm"># Returns 'eval(request.responseText)' which is the Javascript function that form_remote_tag can call in :complete to</span></li>
+<li><a name="a351"></a>    <span class="src-comm"># evaluate a multiple update return document using update_element_function calls.</span></li>
+<li><a name="a352"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodevaluate_remote_response">evaluate_remote_response</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a353"></a>        <span class="src-key">return </span><span class="src-str">&quot;eval(request.responseText)&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a354"></a>    <span class="src-sym">}</span></li>
+<li><a name="a355"></a>    </li>
+<li><a name="a356"></a>    </li>
+<li><a name="a357"></a>    <span class="src-comm">/*</span></li>
+<li><a name="a358"></a><span class="src-comm">    # Returns the javascript needed for a remote function.</span></li>
+<li><a name="a359"></a><span class="src-comm">    # Takes the same arguments as link_to_remote.</span></li>
+<li><a name="a360"></a><span class="src-comm">    # </span></li>
+<li><a name="a361"></a><span class="src-comm">    # Example:</span></li>
+<li><a name="a362"></a><span class="src-comm">    #   &lt;select id=&quot;options&quot; onchange=&quot;&lt;?= remote_function(array(&quot;update&quot; =&gt; &quot;options&quot;, &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;update_options&quot;))) ?&gt;&quot;&gt;</span></li>
+<li><a name="a363"></a><span class="src-comm">    #     &lt;option value=&quot;0&quot;&gt;Hello&lt;/option&gt;</span></li>
+<li><a name="a364"></a><span class="src-comm">    #     &lt;option value=&quot;1&quot;&gt;World&lt;/option&gt;</span></li>
+<li><a name="a365"></a><span class="src-comm">    #   &lt;/select&gt;</span></li>
+<li><a name="a366"></a><span class="src-comm">    */</span></li>
+<li><a name="a367"></a>    <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a368"></a>        <span class="src-var">$javascript_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_ajax">options_for_ajax</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;       </span></li>
+<li><a name="a369"></a>        <span class="src-var">$update </span>= <span class="src-str">''</span><span class="src-sym">;</span></li>
+<li><a name="a370"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a371"></a>            <span class="src-var">$update  </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a372"></a>            <span class="src-key">if</span><span class="src-sym">(</span>isset<span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'success'</span><span class="src-sym">]</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a373"></a>                <span class="src-var">$update</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">success</span>:'{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'success'</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a374"></a>            <span class="src-sym">}</span></li>
+<li><a name="a375"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'failure'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a376"></a>                <span class="src-var">$update</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">failure</span>:'{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'failure'</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a377"></a>            <span class="src-sym">}</span></li>
+<li><a name="a378"></a>            <span class="src-var">$update </span>= <span class="src-str">'{' </span>. <a href="http://www.php.net/implode">implode</a><span class="src-sym">(</span><span class="src-str">','</span><span class="src-sym">, </span><span class="src-var">$update</span><span class="src-sym">) </span>. <span class="src-str">'}'</span><span class="src-sym">;</span></li>
+<li><a name="a379"></a>        <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a380"></a>            <span class="src-var">$update </span>.= <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'update'</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a381"></a>        <span class="src-sym">}   </span></li>
+<li><a name="a382"></a>            </li>
+<li><a name="a383"></a>        <span class="src-var">$function  </span>= <span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$update</span><span class="src-sym">) </span>? <span class="src-str">&quot;new Ajax.Request(&quot; </span>: <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">new</span> <span class="src-id">Ajax</span>.<span class="src-id">Updater</span>({<span class="src-var">$update</span><span class="src-sym">}</span>, </span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a384"></a>        <span class="src-var">$function </span>.= <span class="src-str">&quot;'&quot; </span>. <a href="../PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionurl_for">url_for</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'url'</span><span class="src-sym">]</span><span class="src-sym">) </span>. <span class="src-str">&quot;'&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a385"></a>        <span class="src-var">$function </span>.= <span class="src-str">&quot;, &quot; </span>. <span class="src-var">$javascript_options </span>. <span class="src-str">&quot;)&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a386"></a>        </li>
+<li><a name="a387"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'before'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a388"></a>            <span class="src-var">$function </span>= <span class="src-str">&quot;</span>{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'before'</span><span class="src-sym">]</span><span class="src-str"></span><span class="src-sym">}</span>; {<span class="src-var">$function</span><span class="src-sym">}</span></span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a389"></a>        <span class="src-sym">}</span></li>
+<li><a name="a390"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'after'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{ </span></li>
+<li><a name="a391"></a>            <span class="src-var">$function </span>= <span class="src-str">&quot;</span>{<span class="src-var">$function</span><span class="src-str"></span><span class="src-sym">}</span>; {<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'after'</span><span class="src-sym">]</span><span class="src-sym">}</span></span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a392"></a>        <span class="src-sym">}</span></li>
+<li><a name="a393"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'condition'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a394"></a>            <span class="src-var">$function </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">if</span> ({<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'condition'</span><span class="src-sym">]</span><span class="src-sym">}</span>) <span class="src-sym">{</span> {<span class="src-var">$function</span><span class="src-sym">}</span>; <span class="src-sym">}</span></span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a395"></a>        <span class="src-sym">}</span></li>
+<li><a name="a396"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'confirm'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a397"></a>            <span class="src-var">$function </span>= <span class="src-str">&quot;if (confirm('&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodescape_javascript">escape_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'confirm'</span><span class="src-sym">]</span><span class="src-sym">) </span>. <span class="src-str">&quot;</span><span class="src-str">')) <span class="src-sym">{</span> {<span class="src-var">$function</span><span class="src-sym">}</span>; <span class="src-sym">}</span></span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a398"></a>        <span class="src-sym">}</span></li>
+<li><a name="a399"></a>        <span class="src-key">return </span><span class="src-var">$function</span><span class="src-sym">;</span></li>
+<li><a name="a400"></a>    <span class="src-sym">}</span></li>
+<li><a name="a401"></a>    </li>
+<li><a name="a402"></a>    <span class="src-comm"># Includes the Action Pack JavaScript libraries inside a single &lt;script&gt; </span></li>
+<li><a name="a403"></a>    <span class="src-comm"># tag. The function first includes prototype.js and then its core extensions,</span></li>
+<li><a name="a404"></a>    <span class="src-comm"># (determined by filenames starting with &quot;prototype&quot;).</span></li>
+<li><a name="a405"></a>    <span class="src-comm"># Afterwards, any additional scripts will be included in random order.</span></li>
+<li><a name="a406"></a>    <span class="src-comm">#</span></li>
+<li><a name="a407"></a>    <span class="src-comm"># Note: The recommended approach is to copy the contents of</span></li>
+<li><a name="a408"></a>    <span class="src-comm"># action_view/helpers/javascripts/ into your application's</span></li>
+<li><a name="a409"></a>    <span class="src-comm"># public/javascripts/ directory, and use javascript_include_tag() to </span></li>
+<li><a name="a410"></a>    <span class="src-comm"># create remote &lt;script&gt; links.</span></li>
+<li><a name="a411"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methoddefine_javascript_functions">define_javascript_functions</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a412"></a>        <span class="src-var">$javascript </span>= <span class="src-str">'&lt;script type=&quot;text/javascript&quot;&gt;'</span><span class="src-sym">;</span></li>
+<li><a name="a413"></a>        </li>
+<li><a name="a414"></a>        <span class="src-comm"># load prototype.js and all .js files</span></li>
+<li><a name="a415"></a>        <span class="src-var">$prototype_libs </span>= <a href="http://www.php.net/glob">glob</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">javascript_path</span>.<span class="src-str">'/*.js'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a416"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/count">count</a><span class="src-sym">(</span><span class="src-var">$prototype_libs</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a417"></a>            <a href="http://www.php.net/rsort">rsort</a><span class="src-sym">(</span><span class="src-var">$prototype_libs</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a418"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$prototype_libs </span><span class="src-key">as </span><span class="src-var">$filename</span><span class="src-sym">) </span><span class="src-sym">{ </span></li>
+<li><a name="a419"></a>                <span class="src-var">$javascript </span>.= <span class="src-str">&quot;\n&quot; </span>. <a href="http://www.php.net/file_get_contents">file_get_contents</a><span class="src-sym">(</span><span class="src-var">$filename</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a420"></a>            <span class="src-sym">}</span></li>
+<li><a name="a421"></a>        <span class="src-sym">}</span></li>
+<li><a name="a422"></a>        </li>
+<li><a name="a423"></a>        <span class="src-key">return </span><span class="src-var">$javascript </span>. <span class="src-str">'&lt;/script&gt;'</span><span class="src-sym">;</span></li>
+<li><a name="a424"></a>    <span class="src-sym">}</span></li>
+<li><a name="a425"></a>    </li>
+<li><a name="a426"></a>    <span class="src-comm"># Observes the field with the DOM ID specified by +field_id+ and makes</span></li>
+<li><a name="a427"></a>    <span class="src-comm"># an AJAX call when its contents have changed.</span></li>
+<li><a name="a428"></a>    <span class="src-comm"># </span></li>
+<li><a name="a429"></a>    <span class="src-comm"># Required $options are:</span></li>
+<li><a name="a430"></a>    <span class="src-comm"># &lt;tt&gt;url&lt;/tt&gt;::       +url_for+-style options for the action to call</span></li>
+<li><a name="a431"></a>    <span class="src-comm">#                       when the field has changed.</span></li>
+<li><a name="a432"></a>    <span class="src-comm"># </span></li>
+<li><a name="a433"></a>    <span class="src-comm"># Additional options are:</span></li>
+<li><a name="a434"></a>    <span class="src-comm"># &lt;tt&gt;frequency&lt;/tt&gt;:: The frequency (in seconds) at which changes to</span></li>
+<li><a name="a435"></a>    <span class="src-comm">#                       this field will be detected. Not setting this</span></li>
+<li><a name="a436"></a>    <span class="src-comm">#                       option at all or to a value equal to or less than</span></li>
+<li><a name="a437"></a>    <span class="src-comm">#                       zero will use event based observation instead of</span></li>
+<li><a name="a438"></a>    <span class="src-comm">#                       time based observation.</span></li>
+<li><a name="a439"></a>    <span class="src-comm"># &lt;tt&gt;update&lt;/tt&gt;::    Specifies the DOM ID of the element whose </span></li>
+<li><a name="a440"></a>    <span class="src-comm">#                       innerHTML should be updated with the</span></li>
+<li><a name="a441"></a>    <span class="src-comm">#                       XMLHttpRequest response text.</span></li>
+<li><a name="a442"></a>    <span class="src-comm"># &lt;tt&gt;with&lt;/tt&gt;::      A JavaScript expression specifying the</span></li>
+<li><a name="a443"></a>    <span class="src-comm">#                       parameters for the XMLHttpRequest. This defaults</span></li>
+<li><a name="a444"></a>    <span class="src-comm">#                       to 'value', which in the evaluated context </span></li>
+<li><a name="a445"></a>    <span class="src-comm">#                       refers to the new field value.</span></li>
+<li><a name="a446"></a>    <span class="src-comm">#</span></li>
+<li><a name="a447"></a>    <span class="src-comm"># Additionally, you may specify any of the options documented in</span></li>
+<li><a name="a448"></a>    <span class="src-comm"># link_to_remote().</span></li>
+<li><a name="a449"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodobserve_field">observe_field</a><span class="src-sym">(</span><span class="src-var">$field_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a450"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">] </span>&gt; <span class="src-num">0</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a451"></a>            <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_observer">build_observer</a><span class="src-sym">(</span><span class="src-str">'Form.Element.Observer'</span><span class="src-sym">, </span><span class="src-var">$field_id</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a452"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a453"></a>            <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_observer">build_observer</a><span class="src-sym">(</span><span class="src-str">'Form.Element.EventObserver'</span><span class="src-sym">, </span><span class="src-var">$field_id</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a454"></a>        <span class="src-sym">}</span></li>
+<li><a name="a455"></a>    <span class="src-sym">}</span></li>
+<li><a name="a456"></a>    </li>
+<li><a name="a457"></a>    <span class="src-comm"># Like observe_field(), but operates on an entire form identified by the</span></li>
+<li><a name="a458"></a>    <span class="src-comm"># DOM ID $form_id. $options are the same as observe_field(), except </span></li>
+<li><a name="a459"></a>    <span class="src-comm"># the default value of the &lt;tt&gt;with&lt;/tt&gt; option evaluates to the</span></li>
+<li><a name="a460"></a>    <span class="src-comm"># serialized (request string) value of the form.</span></li>
+<li><a name="a461"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodobserve_form">observe_form</a><span class="src-sym">(</span><span class="src-var">$form_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a462"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'frequency'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a463"></a>            <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_observer">build_observer</a><span class="src-sym">(</span><span class="src-str">'Form.Observer'</span><span class="src-sym">, </span><span class="src-var">$form_id</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a464"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a465"></a>            <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodbuild_observer">build_observer</a><span class="src-sym">(</span><span class="src-str">'Form.EventObserver'</span><span class="src-sym">, </span><span class="src-var">$form_id</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a466"></a>        <span class="src-sym">}</span></li>
+<li><a name="a467"></a>    <span class="src-sym">}</span></li>
+<li><a name="a468"></a>    </li>
+<li><a name="a469"></a>    <span class="src-comm"># Returns a JavaScript snippet to be used on the AJAX callbacks for starting</span></li>
+<li><a name="a470"></a>    <span class="src-comm"># visual effects.</span></li>
+<li><a name="a471"></a>    <span class="src-comm">#</span></li>
+<li><a name="a472"></a>    <span class="src-comm"># This method requires the inclusion of the script.aculo.us JavaScript library.</span></li>
+<li><a name="a473"></a>    <span class="src-comm">#</span></li>
+<li><a name="a474"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a475"></a>    <span class="src-comm">#   link_to_remote(&quot;Reload&quot;, array(&quot;update&quot; =&gt; &quot;posts&quot;, </span></li>
+<li><a name="a476"></a>    <span class="src-comm">#         &quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;reload&quot;), </span></li>
+<li><a name="a477"></a>    <span class="src-comm">#         &quot;complete&quot; =&gt; visual_effect(&quot;highlight&quot;, &quot;posts&quot;, array(&quot;duration&quot; =&gt; 0.5)))</span></li>
+<li><a name="a478"></a>    <span class="src-comm">#</span></li>
+<li><a name="a479"></a>    <span class="src-comm"># If no element_id is given, it assumes &quot;element&quot; which should be a local</span></li>
+<li><a name="a480"></a>    <span class="src-comm"># variable in the generated JavaScript execution context. This can be used</span></li>
+<li><a name="a481"></a>    <span class="src-comm"># for example with drop_receiving_element:</span></li>
+<li><a name="a482"></a>    <span class="src-comm">#</span></li>
+<li><a name="a483"></a>    <span class="src-comm">#   drop_receving_element (...), &quot;loading&quot; =&gt; visual_effect(&quot;fade&quot;)</span></li>
+<li><a name="a484"></a>    <span class="src-comm">#</span></li>
+<li><a name="a485"></a>    <span class="src-comm"># This would fade the element that was dropped on the drop receiving element.</span></li>
+<li><a name="a486"></a>    <span class="src-comm">#</span></li>
+<li><a name="a487"></a>    <span class="src-comm"># You can change the behaviour with various options, see</span></li>
+<li><a name="a488"></a>    <span class="src-comm"># http://script.aculo.us for more documentation.</span></li>
+<li><a name="a489"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodvisual_effect">visual_effect</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">, </span><span class="src-var">$element_id </span>= <span class="src-id">false</span><span class="src-sym">, </span><span class="src-var">$js_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a490"></a>        <span class="src-var">$element </span>= <span class="src-sym">(</span><span class="src-var">$element_id </span>? <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$element_id</span><span class="src-sym">}</span>'</span><span class="src-str">&quot; </span>: <span class="src-str">&quot;element&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a491"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'queue'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a492"></a>            <span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'queue'</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$js_options</span><span class="src-sym">[</span><span class="src-str">'queue'</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a493"></a>        <span class="src-sym">}</span></li>
+<li><a name="a494"></a>        <span class="src-key">return </span><span class="src-str">&quot;new Effect.&quot; </span>. <span class="src-id"><a href="../PHPonTrax/Inflector.html">Inflector</a></span><span class="src-sym">::</span><a href="../PHPonTrax/Inflector.html#methodcamelize">camelize</a><span class="src-sym">(</span><span class="src-var">$name</span><span class="src-sym">) </span>. <span class="src-str">&quot;</span><span class="src-str">({<span class="src-var">$element</span><span class="src-sym">}</span>,</span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$js_options</span><span class="src-sym">) </span>. <span class="src-str">&quot;);&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a495"></a>    <span class="src-sym">}</span></li>
+<li><a name="a496"></a>    </li>
+<li><a name="a497"></a>    <span class="src-comm"># Makes the element with the DOM ID specified by +element_id+ sortable</span></li>
+<li><a name="a498"></a>    <span class="src-comm"># by drag-and-drop and make an AJAX call whenever the sort order has</span></li>
+<li><a name="a499"></a>    <span class="src-comm"># changed. By default, the action called gets the serialized sortable</span></li>
+<li><a name="a500"></a>    <span class="src-comm"># element as parameters.</span></li>
+<li><a name="a501"></a>    <span class="src-comm">#</span></li>
+<li><a name="a502"></a>    <span class="src-comm"># This method requires the inclusion of the script.aculo.us JavaScript library.</span></li>
+<li><a name="a503"></a>    <span class="src-comm">#</span></li>
+<li><a name="a504"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a505"></a>    <span class="src-comm">#    sortable_element(&quot;my_list&quot;, array(&quot;url&quot; =&gt; array(&quot;:action&quot; =&gt; &quot;order&quot;))) </span></li>
+<li><a name="a506"></a>    <span class="src-comm">#</span></li>
+<li><a name="a507"></a>    <span class="src-comm"># In the example, the action gets a &quot;my_list&quot; array parameter </span></li>
+<li><a name="a508"></a>    <span class="src-comm"># containing the values of the ids of elements the sortable consists </span></li>
+<li><a name="a509"></a>    <span class="src-comm"># of, in the current order.</span></li>
+<li><a name="a510"></a>    <span class="src-comm">#</span></li>
+<li><a name="a511"></a>    <span class="src-comm"># You can change the behaviour with various options, see</span></li>
+<li><a name="a512"></a>    <span class="src-comm"># http://script.aculo.us for more documentation.</span></li>
+<li><a name="a513"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodsortable_element">sortable_element</a><span class="src-sym">(</span><span class="src-var">$element_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a514"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a515"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Sortable</span>.<span class="src-id">serialize</span>('{<span class="src-var">$element_id</span><span class="src-sym">}</span>')</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a516"></a>        <span class="src-sym">}</span></li>
+<li><a name="a517"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'onUpdate'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a518"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'onUpdate'</span><span class="src-sym">] </span>= <span class="src-str">&quot;function(){&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;}&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a519"></a>        <span class="src-sym">}</span></li>
+<li><a name="a520"></a>        <span class="src-var">$options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremove_ajax_options">remove_ajax_options</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a521"></a>        <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'tag'</span><span class="src-sym">, </span><span class="src-str">'overlap'</span><span class="src-sym">, </span><span class="src-str">'constraint'</span><span class="src-sym">, </span><span class="src-str">'handle'</span><span class="src-sym">) </span><span class="src-key">as </span><span class="src-var">$option</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a522"></a>            <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-var">$option</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a523"></a>                <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-var">$option</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-var">$option</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a524"></a>            <span class="src-sym">}</span></li>
+<li><a name="a525"></a>        <span class="src-sym">}</span></li>
+<li><a name="a526"></a>        </li>
+<li><a name="a527"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'containment'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a528"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'containment'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodarray_or_string_for_javascript">array_or_string_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'containment'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a529"></a>        <span class="src-sym">}</span></li>
+<li><a name="a530"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'only'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a531"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'only'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodarray_or_string_for_javascript">array_or_string_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'only'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a532"></a>        <span class="src-sym">}</span></li>
+<li><a name="a533"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Sortable</span>.<span class="src-id">create</span>('{<span class="src-var">$element_id</span><span class="src-sym">}</span>', </span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;)&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a534"></a>    <span class="src-sym">}</span></li>
+<li><a name="a535"></a>    </li>
+<li><a name="a536"></a>    <span class="src-comm"># Makes the element with the DOM ID specified by $element_id draggable.</span></li>
+<li><a name="a537"></a>    <span class="src-comm">#</span></li>
+<li><a name="a538"></a>    <span class="src-comm"># This method requires the inclusion of the script.aculo.us JavaScript library.</span></li>
+<li><a name="a539"></a>    <span class="src-comm">#</span></li>
+<li><a name="a540"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a541"></a>    <span class="src-comm">#    draggable_element(&quot;my_image&quot;, array(&quot;revert&quot; =&gt; true))</span></li>
+<li><a name="a542"></a>    <span class="src-comm"># </span></li>
+<li><a name="a543"></a>    <span class="src-comm"># You can change the behaviour with various options, see</span></li>
+<li><a name="a544"></a>    <span class="src-comm"># http://script.aculo.us for more documentation. </span></li>
+<li><a name="a545"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methoddraggable_element">draggable_element</a><span class="src-sym">(</span><span class="src-var">$element_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a546"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str"><span class="src-id">new</span> <span class="src-id">Draggable</span>('{<span class="src-var">$element_id</span><span class="src-sym">}</span>', </span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;)&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a547"></a>    <span class="src-sym">}</span></li>
+<li><a name="a548"></a>    </li>
+<li><a name="a549"></a>    <span class="src-comm"># Makes the element with the DOM ID specified by $element_id receive</span></li>
+<li><a name="a550"></a>    <span class="src-comm"># dropped draggable elements (created by draggable_element).</span></li>
+<li><a name="a551"></a>    <span class="src-comm"># and make an AJAX call  By default, the action called gets the DOM ID of the</span></li>
+<li><a name="a552"></a>    <span class="src-comm"># element as parameter.</span></li>
+<li><a name="a553"></a>    <span class="src-comm">#</span></li>
+<li><a name="a554"></a>    <span class="src-comm"># This method requires the inclusion of the script.aculo.us JavaScript library.</span></li>
+<li><a name="a555"></a>    <span class="src-comm">#</span></li>
+<li><a name="a556"></a>    <span class="src-comm"># Example:</span></li>
+<li><a name="a557"></a>    <span class="src-comm">#    drop_receiving_element(&quot;my_cart&quot;, array(&quot;url&quot; =&gt; array(&quot;:controller&quot; =&gt; &quot;cart&quot;, &quot;:action&quot; =&gt; &quot;add&quot;))) </span></li>
+<li><a name="a558"></a>    <span class="src-comm">#</span></li>
+<li><a name="a559"></a>    <span class="src-comm"># You can change the behaviour with various options, see</span></li>
+<li><a name="a560"></a>    <span class="src-comm"># http://script.aculo.us for more documentation.</span></li>
+<li><a name="a561"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methoddrop_receiving_element">drop_receiving_element</a><span class="src-sym">(</span><span class="src-var">$element_id</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a562"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a563"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'with'</span><span class="src-sym">] </span>= <span class="src-str">&quot;'id=' + encodeURIComponent(element.id)&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a564"></a>        <span class="src-sym">}</span></li>
+<li><a name="a565"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'onUpdate'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a566"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'onUpdate'</span><span class="src-sym">] </span>= <span class="src-str">&quot;function(element){&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;}&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a567"></a>        <span class="src-sym">}</span></li>
+<li><a name="a568"></a>        <span class="src-var">$options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodremove_ajax_options">remove_ajax_options</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a569"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'accept'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a570"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'accept'</span><span class="src-sym">] </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodarray_or_string_for_javascript">array_or_string_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'accept'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;  </span></li>
+<li><a name="a571"></a>        <span class="src-sym">}  </span></li>
+<li><a name="a572"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'hoverclass'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a573"></a>            <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'hoverclass'</span><span class="src-sym">] </span>= <span class="src-str">&quot;</span><span class="src-str">'{<span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'hoverclass'</span><span class="src-sym">]</span><span class="src-sym">}</span>'</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a574"></a>        <span class="src-sym">}</span></li>
+<li><a name="a575"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Droppables</span>.<span class="src-id">add</span>('{<span class="src-var">$element_id</span><span class="src-sym">}</span>', </span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodoptions_for_javascript">options_for_javascript</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">) </span>. <span class="src-str">&quot;)&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a576"></a>    <span class="src-sym">}</span></li>
+<li><a name="a577"></a>    </li>
+<li><a name="a578"></a>    <span class="src-comm"># Escape carrier returns and single and double quotes for JavaScript segments.</span></li>
+<li><a name="a579"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodescape_javascript">escape_javascript</a><span class="src-sym">(</span><span class="src-var">$javascript</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a580"></a>        <span class="src-key">return </span><a href="http://www.php.net/preg_replace">preg_replace</a><span class="src-sym">(</span><span class="src-str">'/\r\n|\n|\r/'</span><span class="src-sym">, </span><span class="src-str">&quot;\\n&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a581"></a>               <a href="http://www.php.net/preg_replace_callback">preg_replace_callback</a><span class="src-sym">(</span><span class="src-str">'/[&quot;\']/'</span><span class="src-sym">, </span><a href="http://www.php.net/create_function">create_function</a><span class="src-sym">(</span><span class="src-str">'$m'</span><span class="src-sym">, </span><span class="src-str">'return &quot;\\{$m}&quot;;'</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a582"></a>               <span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_null">is_null</a><span class="src-sym">(</span><span class="src-var">$javascript</span><span class="src-sym">) </span>? <span class="src-var">$javascript </span>: <span class="src-str">''</span><span class="src-sym">)))</span><span class="src-sym">;</span></li>
+<li><a name="a583"></a>    <span class="src-sym">}</span></li>
+<li><a name="a584"></a>    </li>
+<li><a name="a585"></a>    <span class="src-comm"># Returns a JavaScript tag with the $content inside. Example:</span></li>
+<li><a name="a586"></a>    <span class="src-comm">#   javascript_tag(&quot;alert('All is good')&quot;) =&gt; &lt;script type=&quot;text/javascript&quot;&gt;alert('All is good')&lt;/script&gt;</span></li>
+<li><a name="a587"></a>        <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-var">$content</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a588"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">&quot;script&quot;</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_cdata_section">javascript_cdata_section</a><span class="src-sym">(</span><span class="src-var">$content</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'type' </span>=&gt; <span class="src-str">&quot;text/javascript&quot;</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a589"></a>    <span class="src-sym">}</span></li>
+<li><a name="a590"></a>    </li>
+<li><a name="a591"></a>    <span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_cdata_section">javascript_cdata_section</a><span class="src-sym">(</span><span class="src-var">$content</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a592"></a>        <span class="src-key">return </span><span class="src-str">&quot;\n//&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcdata_section">cdata_section</a><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str">\n{<span class="src-var">$content</span><span class="src-sym">}</span>\n//</span><span class="src-str">&quot;</span><span class="src-sym">) </span>. <span class="src-str">&quot;\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a593"></a>    <span class="src-sym">}</span></li>
+<li><a name="a594"></a>    </li>
+<li><a name="a595"></a><span class="src-sym">}</span></li>
+<li><a name="a596"></a>&nbsp;</li>
+<li><a name="a597"></a>&nbsp;</li>
+<li><a name="a598"></a><span class="src-doc">/**</span></li>
+<li><a name="a599"></a><span class="src-doc">  *  Avialble functions for use in views</span></li>
+<li><a name="a600"></a><span class="src-doc">  *  link_to_remote($name, $options = array(), $html_options = array())</span></li>
+<li><a name="a601"></a><span class="src-doc">  */</span></li>
+<li><a name="a602"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodlink_to_remote">link_to_remote</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a603"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a604"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a605"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'link_to_remote'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a606"></a><span class="src-sym">}</span></li>
+<li><a name="a607"></a>&nbsp;</li>
+<li><a name="a608"></a><span class="src-doc">/**</span></li>
+<li><a name="a609"></a><span class="src-doc">  *  link_to_function($name, $function, $html_options = array())</span></li>
+<li><a name="a610"></a><span class="src-doc">  */</span></li>
+<li><a name="a611"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodlink_to_function">link_to_function</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a612"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a613"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a614"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'link_to_function'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a615"></a><span class="src-sym">}</span></li>
+<li><a name="a616"></a>&nbsp;</li>
+<li><a name="a617"></a>&nbsp;</li>
+<li><a name="a618"></a><span class="src-doc">/**</span></li>
+<li><a name="a619"></a><span class="src-doc">  *  periodically_call_remote($options = array())</span></li>
+<li><a name="a620"></a><span class="src-doc">  */</span></li>
+<li><a name="a621"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodperiodically_call_remote">periodically_call_remote</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a622"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a623"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a624"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'periodically_call_remote'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a625"></a><span class="src-sym">}</span></li>
+<li><a name="a626"></a>&nbsp;</li>
+<li><a name="a627"></a><span class="src-doc">/**</span></li>
+<li><a name="a628"></a><span class="src-doc">  *  form_remote_tag($options = array())</span></li>
+<li><a name="a629"></a><span class="src-doc">  */</span></li>
+<li><a name="a630"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodform_remote_tag">form_remote_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a631"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a632"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a633"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'form_remote_tag'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a634"></a><span class="src-sym">} </span></li>
+<li><a name="a635"></a>&nbsp;</li>
+<li><a name="a636"></a><span class="src-doc">/**</span></li>
+<li><a name="a637"></a><span class="src-doc">  *  submit_to_remote($name, $value, $options = array())</span></li>
+<li><a name="a638"></a><span class="src-doc">  */</span></li>
+<li><a name="a639"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodsubmit_to_remote">submit_to_remote</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a640"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a641"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a642"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'submit_to_remote'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a643"></a><span class="src-sym">} </span></li>
+<li><a name="a644"></a>&nbsp;</li>
+<li><a name="a645"></a><span class="src-doc">/**</span></li>
+<li><a name="a646"></a><span class="src-doc">  *  update_element_function($element_id, $options = array(), $block = null)</span></li>
+<li><a name="a647"></a><span class="src-doc">  */</span></li>
+<li><a name="a648"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodupdate_element_function">update_element_function</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a649"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a650"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a651"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'update_element_function'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a652"></a><span class="src-sym">} </span></li>
+<li><a name="a653"></a>&nbsp;</li>
+<li><a name="a654"></a><span class="src-doc">/**</span></li>
+<li><a name="a655"></a><span class="src-doc">  *  evaluate_remote_response()</span></li>
+<li><a name="a656"></a><span class="src-doc">  */</span></li>
+<li><a name="a657"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodevaluate_remote_response">evaluate_remote_response</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a658"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a659"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a660"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'evaluate_remote_response'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a661"></a><span class="src-sym">} </span></li>
+<li><a name="a662"></a>&nbsp;</li>
+<li><a name="a663"></a><span class="src-doc">/**</span></li>
+<li><a name="a664"></a><span class="src-doc">  *  remote_function($options)</span></li>
+<li><a name="a665"></a><span class="src-doc">  */</span></li>
+<li><a name="a666"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodremote_function">remote_function</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a667"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a668"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a669"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'remote_function'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a670"></a><span class="src-sym">} </span></li>
+<li><a name="a671"></a>&nbsp;</li>
+<li><a name="a672"></a><span class="src-doc">/**</span></li>
+<li><a name="a673"></a><span class="src-doc">  *  observe_field($field_id, $options = array())</span></li>
+<li><a name="a674"></a><span class="src-doc">  */</span></li>
+<li><a name="a675"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodobserve_field">observe_field</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a676"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a677"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a678"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'observe_field'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a679"></a><span class="src-sym">} </span></li>
+<li><a name="a680"></a>&nbsp;</li>
+<li><a name="a681"></a><span class="src-doc">/**</span></li>
+<li><a name="a682"></a><span class="src-doc">  *  observe_form($form_id, $options = array())</span></li>
+<li><a name="a683"></a><span class="src-doc">  */</span></li>
+<li><a name="a684"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodobserve_form">observe_form</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a685"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a686"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a687"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'observe_form'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a688"></a><span class="src-sym">} </span></li>
+<li><a name="a689"></a>&nbsp;</li>
+<li><a name="a690"></a><span class="src-doc">/**</span></li>
+<li><a name="a691"></a><span class="src-doc">  *  visual_effect($name, $element_id = false, $js_options = array())</span></li>
+<li><a name="a692"></a><span class="src-doc">  */</span></li>
+<li><a name="a693"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodvisual_effect">visual_effect</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a694"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a695"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a696"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'visual_effect'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a697"></a><span class="src-sym">} </span></li>
+<li><a name="a698"></a>&nbsp;</li>
+<li><a name="a699"></a><span class="src-doc">/**</span></li>
+<li><a name="a700"></a><span class="src-doc">  *  sortable_element($element_id, $options = array())</span></li>
+<li><a name="a701"></a><span class="src-doc">  */</span></li>
+<li><a name="a702"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodsortable_element">sortable_element</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a703"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a704"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a705"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'sortable_element'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a706"></a><span class="src-sym">} </span></li>
+<li><a name="a707"></a>&nbsp;</li>
+<li><a name="a708"></a><span class="src-doc">/**</span></li>
+<li><a name="a709"></a><span class="src-doc">  *  draggable_element($element_id, $options = array())</span></li>
+<li><a name="a710"></a><span class="src-doc">  */</span></li>
+<li><a name="a711"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methoddraggable_element">draggable_element</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a712"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a713"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a714"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'draggable_element'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a715"></a><span class="src-sym">}</span></li>
+<li><a name="a716"></a>&nbsp;</li>
+<li><a name="a717"></a><span class="src-doc">/**</span></li>
+<li><a name="a718"></a><span class="src-doc">  *  drop_receiving_element($element_id, $options = array())</span></li>
+<li><a name="a719"></a><span class="src-doc">  */</span></li>
+<li><a name="a720"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methoddrop_receiving_element">drop_receiving_element</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a721"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a722"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a723"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'drop_receiving_element'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a724"></a><span class="src-sym">}</span></li>
+<li><a name="a725"></a>&nbsp;</li>
+<li><a name="a726"></a><span class="src-doc">/**</span></li>
+<li><a name="a727"></a><span class="src-doc">  *  escape_javascript($javascript)</span></li>
+<li><a name="a728"></a><span class="src-doc">  */</span></li>
+<li><a name="a729"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodescape_javascript">escape_javascript</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a730"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a731"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a732"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'escape_javascript'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a733"></a><span class="src-sym">}</span></li>
+<li><a name="a734"></a>&nbsp;</li>
+<li><a name="a735"></a><span class="src-doc">/**</span></li>
+<li><a name="a736"></a><span class="src-doc">  *  javascript_tag($content)</span></li>
+<li><a name="a737"></a><span class="src-doc">  */</span></li>
+<li><a name="a738"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">javascript_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a739"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a740"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a741"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'javascript_tag'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a742"></a><span class="src-sym">}</span></li>
+<li><a name="a743"></a>&nbsp;</li>
+<li><a name="a744"></a><span class="src-doc">/**</span></li>
+<li><a name="a745"></a><span class="src-doc">  *  javascript_cdata_section($content)</span></li>
+<li><a name="a746"></a><span class="src-doc">  */</span></li>
+<li><a name="a747"></a><span class="src-key">function </span><a href="../PHPonTrax/JavaScriptHelper.html#methodjavascript_cdata_section">javascript_cdata_section</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a748"></a>    <span class="src-var">$javascript_helper </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a749"></a>    <span class="src-var">$args </span>= <a href="http://www.php.net/func_get_args">func_get_args</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a750"></a>    <span class="src-key">return </span><a href="http://www.php.net/call_user_func_array">call_user_func_array</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$javascript_helper</span><span class="src-sym">, </span><span class="src-str">'javascript_cdata_section'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$args</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a751"></a><span class="src-sym">}</span></li>
+<li><a name="a752"></a>&nbsp;</li>
+<li><a name="a753"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:16:37 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

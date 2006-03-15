@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>File Source for environment.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTrax</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTrax.html" class="menu">class tree: PHPonTrax</a> ]
+		  [ <a href="../elementindex_PHPonTrax.html" class="menu">index: PHPonTrax</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file environment.php</h1>
+<p>Documentation is available at <a href="../PHPonTrax/_config_environment_php.html">environment.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
+<li><a name="a4"></a><span class="src-doc"> */</span></li>
+<li><a name="a5"></a><span class="src-comm"># include path for your php libs (PEAR etc)</span></li>
+<li><a name="a6"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;PHP_LIB_ROOT&quot;</span><span class="src-sym">,          </span><span class="src-str">&quot;/usr/local/lib/php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a7"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_ROOT&quot;</span><span class="src-sym">,             </span><span class="src-id">dirname</span><span class="src-sym">(</span><span class="src-id">dirname</span><span class="src-sym">(</span>__FILE__<span class="src-sym">)) </span>. <span class="src-str">&quot;/&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a8"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_PUBLIC&quot;</span><span class="src-sym">,           </span><span class="src-id">dirname</span><span class="src-sym">(</span><span class="src-id">dirname</span><span class="src-sym">(</span><span class="src-id">dirname</span><span class="src-sym">(</span>__FILE__<span class="src-sym">)))</span>.<span class="src-str">&quot;/public_html&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a9"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_URL_PREFIX&quot;</span><span class="src-sym">,       </span><span class="src-str">&quot;~haas&quot;</span><span class="src-sym">)</span><span class="src-sym">; </span><span class="src-comm"># no leading or trailing slashes</span></li>
+<li><a name="a10"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_VIEWS_EXTENTION&quot;</span><span class="src-sym">,  </span><span class="src-str">&quot;phtml&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a11"></a>&nbsp;</li>
+<li><a name="a12"></a><span class="src-comm"># Set in the Apache Vhost (SetEnv TRAX_MODE development)</span></li>
+<li><a name="a13"></a><span class="src-key">if</span><span class="src-sym">(</span>isset<span class="src-sym">(</span><span class="src-var">$_SERVER</span><span class="src-sym">) </span>&amp;&amp; <a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">'TRAX_MODE'</span><span class="src-sym">,</span><span class="src-var">$_SERVER</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a14"></a>    <span class="src-comm"># Set from Env production / development / test</span></li>
+<li><a name="a15"></a>        <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_MODE&quot;</span><span class="src-sym">,   </span><span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'TRAX_MODE'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a16"></a><span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a17"></a>    <span class="src-comm"># Manually set production / development / test</span></li>
+<li><a name="a18"></a>        <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_MODE&quot;</span><span class="src-sym">,   </span><span class="src-str">&quot;development&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a19"></a><span class="src-sym">}</span></li>
+<li><a name="a20"></a>&nbsp;</li>
+<li><a name="a21"></a><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">] </span>=</li>
+<li><a name="a22"></a>    <span class="src-key">array</span><span class="src-sym">( </span><span class="src-str">&quot;models&quot; </span>=&gt; <span class="src-str">&quot;app/models&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a23"></a>           <span class="src-str">&quot;views&quot; </span>=&gt; <span class="src-str">&quot;app/views&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a24"></a>           <span class="src-str">&quot;controllers&quot; </span>=&gt; <span class="src-str">&quot;app/controllers&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a25"></a>           <span class="src-str">&quot;helpers&quot; </span>=&gt; <span class="src-str">&quot;app/helpers&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a26"></a>           <span class="src-str">&quot;layouts&quot; </span>=&gt; <span class="src-str">&quot;app/views/layouts&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a27"></a>           <span class="src-str">&quot;config&quot; </span>=&gt; <span class="src-str">&quot;config&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a28"></a>           <span class="src-str">&quot;environments&quot; </span>=&gt; <span class="src-str">&quot;config/environments&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a29"></a>           <span class="src-str">&quot;lib&quot; </span>=&gt; <span class="src-str">&quot;lib&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a30"></a>           <span class="src-str">&quot;app&quot; </span>=&gt; <span class="src-str">&quot;app&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a31"></a>           <span class="src-str">&quot;log&quot; </span>=&gt; <span class="src-str">&quot;log&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a32"></a>           <span class="src-str">&quot;vendor&quot; </span>=&gt; <span class="src-str">&quot;vendor&quot; </span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a33"></a>&nbsp;</li>
+<li><a name="a34"></a><span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/substr">substr</a><span class="src-sym">(</span><span class="src-id">PHP_OS</span><span class="src-sym">, </span><span class="src-num">0</span><span class="src-sym">, </span><span class="src-num">3</span><span class="src-sym">) </span>== <span class="src-str">'WIN'</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a35"></a>    <span class="src-comm"># Windows</span></li>
+<li><a name="a36"></a>        <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_PATH_SEPERATOR&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;;&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a37"></a><span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a38"></a>    <span class="src-comm"># Unix</span></li>
+<li><a name="a39"></a>        <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_PATH_SEPERATOR&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;:&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a40"></a><span class="src-sym">}</span></li>
+<li><a name="a41"></a>&nbsp;</li>
+<li><a name="a42"></a><span class="src-comm"># Set which file to log php errors to for this application</span></li>
+<li><a name="a43"></a><span class="src-comm"># As well in your application you can do error_log(&quot;whatever&quot;) and it will go to this log file.</span></li>
+<li><a name="a44"></a><a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">&quot;log_errors&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;On&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a45"></a><a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">&quot;error_log&quot;</span><span class="src-sym">, </span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'log'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/&quot;</span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_MODE">TRAX_MODE</a></span>.<span class="src-str">&quot;.log&quot;</span><span class="src-sym">)</span><span class="src-sym">; </span></li>
+<li><a name="a46"></a>&nbsp;</li>
+<li><a name="a47"></a><span class="src-key">if</span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_MODE">TRAX_MODE</a> </span>== <span class="src-str">&quot;development&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a48"></a>    <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;DEBUG&quot;</span><span class="src-sym">, </span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a49"></a>    <span class="src-comm"># Display errors to browser if in development mode for debugging</span></li>
+<li><a name="a50"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">&quot;display_errors&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;On&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a51"></a><span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a52"></a>    <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;DEBUG&quot;</span><span class="src-sym">, </span><span class="src-id">false</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a53"></a>    <span class="src-comm"># Hide errors from browser if not in development mode</span></li>
+<li><a name="a54"></a>        <a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">&quot;display_errors&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;Off&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a55"></a><span class="src-sym">}</span></li>
+<li><a name="a56"></a>&nbsp;</li>
+<li><a name="a57"></a><span class="src-comm"># Load databse settings</span></li>
+<li><a name="a58"></a><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_DB_SETTINGS'</span><span class="src-sym">] </span>= <a href="http://www.php.net/parse_ini_file">parse_ini_file</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'config'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/database.ini&quot;</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a59"></a>&nbsp;</li>
+<li><a name="a60"></a><span class="src-comm"># Should we use local copy of the Trax libs in vendor/trax or</span></li>
+<li><a name="a61"></a><span class="src-comm"># the server Trax libs in the php libs dir defined in PHP_LIB_ROOT</span></li>
+<li><a name="a62"></a><span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'vendor'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/trax&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a63"></a>    <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_LIB_ROOT&quot;</span><span class="src-sym">, </span><span class="src-id">TRAX_ROOT</span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'vendor'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/trax&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a64"></a><span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#definePHP_LIB_ROOT">PHP_LIB_ROOT</a></span>.<span class="src-str">&quot;/trax&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a65"></a>    <a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_LIB_ROOT&quot;</span><span class="src-sym">, </span><span class="src-id">PHP_LIB_ROOT</span>.<span class="src-str">&quot;/trax&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a66"></a><span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a67"></a>    echo <span class="src-str">&quot;Can't determine where your Trax Libs are located.&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a68"></a>    <span class="src-key">exit</span><span class="src-sym">;</span></li>
+<li><a name="a69"></a><span class="src-sym">}</span></li>
+<li><a name="a70"></a>&nbsp;</li>
+<li><a name="a71"></a><span class="src-comm"># Set the include_path</span></li>
+<li><a name="a72"></a><a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">&quot;include_path&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a73"></a>        <span class="src-str">&quot;.&quot;</span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_PATH_SEPERATOR">TRAX_PATH_SEPERATOR</a></span>.   <span class="src-comm"># current directory</span></li>
+<li><a name="a74"></a>                <span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_LIB_ROOT">TRAX_LIB_ROOT</a></span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_PATH_SEPERATOR">TRAX_PATH_SEPERATOR</a></span>.  <span class="src-comm"># trax libs (vendor/trax or server trax libs)</span></li>
+<li><a name="a75"></a>                <span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#definePHP_LIB_ROOT">PHP_LIB_ROOT</a></span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_PATH_SEPERATOR">TRAX_PATH_SEPERATOR</a></span>.  <span class="src-comm"># php libs dir (ex: /usr/local/lib/php)</span></li>
+<li><a name="a76"></a>                <span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'lib'</span><span class="src-sym">]</span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_PATH_SEPERATOR">TRAX_PATH_SEPERATOR</a></span>. <span class="src-comm"># app specific libs extra libs to include</span></li>
+<li><a name="a77"></a>                <a href="http://www.php.net/ini_get">ini_get</a><span class="src-sym">(</span><span class="src-str">&quot;include_path&quot;</span><span class="src-sym">))</span><span class="src-sym">; </span><span class="src-comm"># add on old include_path to end</span></li>
+<li><a name="a78"></a>&nbsp;</li>
+<li><a name="a79"></a><span class="src-comm"># Include Trax library files.</span></li>
+<li><a name="a80"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;session.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a81"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;input_filter.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a82"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;trax_exceptions.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a83"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;inflector.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a84"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;active_record.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a85"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;action_view.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a86"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;action_controller.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a87"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;action_mailer.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a88"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;dispatcher.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a89"></a><span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-str">&quot;router.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a90"></a>&nbsp;</li>
+<li><a name="a91"></a><span class="src-comm"># Include the ApplicationMailer Class which extends ActionMailer for application specific mailing functions</span></li>
+<li><a name="a92"></a><span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'app'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/application_mailer.php&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a93"></a>    <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id">TRAX_ROOT</span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'app'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/application_mailer.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a94"></a><span class="src-sym">}</span></li>
+<li><a name="a95"></a>&nbsp;</li>
+<li><a name="a96"></a><span class="src-comm"># Include the application environment specific config file</span></li>
+<li><a name="a97"></a><span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'environments'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/&quot;</span>.<span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_MODE">TRAX_MODE</a></span>.<span class="src-str">&quot;.php&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a98"></a>    <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id">TRAX_ROOT</span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'environments'</span><span class="src-sym">]</span>.<span class="src-str">&quot;/&quot;</span>.<span class="src-id">TRAX_MODE</span>.<span class="src-str">&quot;.php&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a99"></a><span class="src-sym">}</span></li>
+<li><a name="a100"></a>&nbsp;</li>
+<li><a name="a101"></a><span class="src-comm">##############################################</span></li>
+<li><a name="a102"></a><span class="src-comm"># Auto include model / controller / other app specific libs files</span></li>
+<li><a name="a103"></a><span class="src-comm">##############################################</span></li>
+<li><a name="a104"></a><span class="src-key">function </span><a href="../PHPonTrax/_config_environment_php.html#function__autoload">__autoload</a><span class="src-sym">(</span><span class="src-var">$class_name</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a105"></a>    <span class="src-var">$file </span>= <span class="src-id"><a href="../PHPonTrax/Inflector.html">Inflector</a></span><span class="src-sym">::</span><a href="../PHPonTrax/Inflector.html#methodunderscore">underscore</a><span class="src-sym">(</span><span class="src-var">$class_name</span><span class="src-sym">)</span>.<span class="src-str">&quot;.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a106"></a>    <span class="src-var">$file_org </span>= <span class="src-var">$class_name</span>.<span class="src-str">&quot;.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a107"></a>&nbsp;</li>
+<li><a name="a108"></a>    <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'models'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a109"></a>        <span class="src-comm"># Include model classes</span></li>
+<li><a name="a110"></a>        <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'models'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a111"></a>    <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'controllers'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a112"></a>        <span class="src-comm"># Include extra controller classes</span></li>
+<li><a name="a113"></a>        <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'controllers'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a114"></a>    <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'lib'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a115"></a>        <span class="src-comm"># Include users application libs</span></li>
+<li><a name="a116"></a>        <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'lib'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file</span></span><span class="src-str">&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a117"></a>    <span class="src-sym">} </span><span class="src-key">elseif</span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'lib'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file_org</span></span><span class="src-str">&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a118"></a>        <span class="src-comm"># Include users application libs</span></li>
+<li><a name="a119"></a>        <span class="src-inc">include_once</span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTrax/_config_environment_php.html#defineTRAX_ROOT">TRAX_ROOT</a></span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-str">'lib'</span><span class="src-sym">]</span>.<span class="src-str">&quot;</span><span class="src-str">/<span class="src-var">$file_org</span></span><span class="src-str">&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a120"></a>    <span class="src-sym">}</span></li>
+<li><a name="a121"></a><span class="src-sym">}</span></li>
+<li><a name="a122"></a>&nbsp;</li>
+<li><a name="a123"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Wed, 15 Mar 2006 16:16:22 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
