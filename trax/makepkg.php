@@ -6,7 +6,7 @@
  *  (PHP 5)
  *
  *  To make a package, connect to the top directory and type
- *  php makepkg.php (or on Unix-type systems, ./makepkg.php)
+ *  <b>php makepkg.php</b> (or on Unix-type systems, <b>./makepkg.php</b>).
  *  Information about how to build the package and what to put in it
  *  comes from two sources: this script, and the information
  *  maintained by {@link http://subversion.tigris.org Subversion} in
@@ -21,6 +21,24 @@
  *  {@link http://www.php.net/manual/en/language.oop5.cloning.php clone}
  *  which is a reserved word in PHP 5.  The fix is 
  *  easy, just edit XML_Tree to change every use of 'clone' to 'clone4'.
+ *
+ *  PackageFileManager has several undocumented limitations that
+ *  seriously affect what you can do with it:
+ *  <ul>
+ *    <li>PackageFileManager will not add an empty directory to a
+ *      package.  Therefore you need to put at least one file in any
+ *      directory that is to go into a package.</li>
+ *    <li>The Pear Installer will not install an empty file. Therefore
+ *      you need to put at least one character into any file to be
+ *      installed as part of a package.</li> 
+ *    <li>The PackageFileManager options 'include' and 'ignore' use a
+ *      regular expression match to identify the files and directories
+ *      that they affect.  For each file and directory managed by
+ *      Subversion, PackageFileManager first attempts to apply the
+ *      RE pattern as coded.  Then it appends leading and trailing '/'
+ *      to the pattern and tries again.  The results are hard to
+ *      predict.</li>
+ *  </ul>
  *
  *  @package PHPonTrax
  *  @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -44,14 +62,16 @@ $e = $packagexml->setOptions(
                 'state' => 'alpha',
                 'filelistgenerator' => 'svn', // generate from svn
                 'notes' => 'We\'ve implemented many new and exciting features',
-                'ignore' => array('app/', 'components/', 'config/', 'db/',
-                                  'log/'),
+//                'include' => array('data/', 'doc/', 'script/', 'test/',
+//                                   'vendor/'),
                 'dir_roles' => array('doc' => 'doc',
                                      'test' => 'test',
                                      'data' => 'data'),
-                'exceptions' => array('pear-trax' => 'script'),
+                'exceptions' => array('pear-trax' => 'script',
+                                      'pear-trax.bat' => 'script',),
                 'installexceptions' => array('pear-trax' => '/'),
-                'installas' => array('pear-trax' => 'trax')
+                'installas' => array('pear-trax' => 'trax',
+                                     'pear-trax.bat' => 'trax')
                 ));
 if (PEAR::isError($e)) {
     echo $e->getMessage();

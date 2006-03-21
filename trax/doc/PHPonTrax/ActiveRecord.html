@@ -137,7 +137,11 @@
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html">		active_record_helper.php
 		</a><br>
+			<a href="../PHPonTrax/_data_app_controllers_application_php.html">		application.php
+		</a><br>
 			<a href="../PHPonTrax/_app_controllers_application_php.html">		application.php
+		</a><br>
+			<a href="../PHPonTrax/_data_app_helpers_application_helper_php.html">		application_helper.php
 		</a><br>
 			<a href="../PHPonTrax/_app_helpers_application_helper_php.html">		application_helper.php
 		</a><br>
@@ -149,15 +153,21 @@
 		</a><br>
 			<a href="../PHPonTrax/_config_environments_development_php.html">		development.php
 		</a><br>
+			<a href="../PHPonTrax/_data_config_environments_development_php.html">		development.php
+		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_dispatcher_php.html">		dispatcher.php
 		</a><br>
 			<a href="../PHPonTrax/_config_environment_php.html">		environment.php
+		</a><br>
+			<a href="../PHPonTrax/_data_config_environment_php.html">		environment.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html">		form_helper.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html">		form_options_helper.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html">		form_tag_helper.php
+		</a><br>
+			<a href="../PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
 			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
 		</a><br>
@@ -171,17 +181,23 @@
 		</a><br>
 			<a href="../PHPonTrax/_makepkg_php.html">		makepkg.php
 		</a><br>
+			<a href="../PHPonTrax/_data_config_environments_production_php.html">		production.php
+		</a><br>
 			<a href="../PHPonTrax/_config_environments_production_php.html">		production.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_router_php.html">		router.php
 		</a><br>
 			<a href="../PHPonTrax/_config_routes_php.html">		routes.php
 		</a><br>
+			<a href="../PHPonTrax/_data_config_routes_php.html">		routes.php
+		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_scaffold_controller_php.html">		scaffold_controller.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_session_php.html">		session.php
 		</a><br>
 			<a href="../PHPonTrax/_config_environments_test_php.html">		test.php
+		</a><br>
+			<a href="../PHPonTrax/_data_config_environments_test_php.html">		test.php
 		</a><br>
 			<a href="../PHPonTrax/_trax_php.html">		trax.php
 		</a><br>
@@ -392,7 +408,7 @@ Source Location: /vendor/trax/active_record.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 61]<br />
+[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a61">61</a>]<br />
 Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of this class is associated with a database table   in the Model section of the Model-View-Controller architecture.   By convention, the name of each subclass is the CamelCase singular   form of the table name, which is in the lower_case_underscore   plural notation.  For example,   a table named &quot;order_details&quot; would be associated with a subclass   of ActiveRecord named &quot;OrderDetail&quot;, and a table named &quot;people&quot;   would be associated with subclass &quot;Person&quot;.</p><p>For a discussion of the ActiveRecord design pattern, see   &quot;Patterns of Enterprise   Application Architecture&quot; by Martin Fowler, pp. 160-164.</p><p>Unit tester: <a href="../PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a></p><p></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -412,7 +428,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$aggregrations"></a>
 	<p></p>
 	<h4>$aggregrations = <span class="value">array(&quot;count&quot;,&quot;sum&quot;,&quot;avg&quot;,&quot;max&quot;,&quot;min&quot;)</span></h4>
-	<p>[line 245]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a245">245</a>]</p>
   SQL aggregate functions that may be applied to the associated   table.<br /><br /><p>SQL defines aggregate functions AVG, COUNT, MAX, MIN and SUM.   Not all of these functions are implemented by all DBMS's</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -439,7 +455,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$auto_create_timestamps"></a>
 	<p></p>
 	<h4>$auto_create_timestamps = <span class="value">array(&quot;created_at&quot;,&quot;created_on&quot;)</span></h4>
-	<p>[line 208]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a208">208</a>]</p>
   Names of automatic create timestamp columns<br /><br /><p>When a row containing one of these columns is created and   <a href="../PHPonTrax/ActiveRecord.html#var$auto_timestamps">$auto_timestamps</a> is true, store the current date and   time in the timestamp columns.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -472,7 +488,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$auto_save_associations"></a>
 	<p></p>
 	<h4>$auto_save_associations = <span class="value">&nbsp;true</span></h4>
-	<p>[line 173]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a173">173</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -508,7 +524,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$auto_save_habtm"></a>
 	<p></p>
 	<h4>$auto_save_habtm = <span class="value">&nbsp;true</span></h4>
-	<p>[line 304]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a304">304</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -538,7 +554,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$auto_timestamps"></a>
 	<p></p>
 	<h4>$auto_timestamps = <span class="value">&nbsp;true</span></h4>
-	<p>[line 299]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a299">299</a>]</p>
   Whether to automatically update timestamps in certain columns<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -571,7 +587,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$auto_update_timestamps"></a>
 	<p></p>
 	<h4>$auto_update_timestamps = <span class="value">array(&quot;updated_at&quot;,&quot;updated_on&quot;)</span></h4>
-	<p>[line 196]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a196">196</a>]</p>
   Names of automatic update timestamp columns<br /><br /><p>When a row containing one of these columns is updated and   <a href="../PHPonTrax/ActiveRecord.html#var$auto_timestamps">$auto_timestamps</a> is true, update the contents of the   timestamp columns with the current date and time.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -604,7 +620,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$begin_executed"></a>
 	<p></p>
 	<h4>$begin_executed = <span class="value">&nbsp;false</span></h4>
-	<p>[line 310]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a310">310</a>]</p>
   Transactions (only use if your db supports it)<br /><br /><p><strong>FIXME: static should be after private</strong></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -631,7 +647,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$belongs_to"></a>
 	<p></p>
 	<h4>$belongs_to = <span class="value">&nbsp;null</span></h4>
-	<p>[line 157]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a157">157</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -667,7 +683,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$content_columns"></a>
 	<p></p>
 	<h4>$content_columns = <span class="value">&nbsp;null</span></h4>
-	<p>[line 95]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a95">95</a>]</p>
   Description of a row in the associated table in the database<br /><br /><p>Retrieved from the RDBMS by <a href="../PHPonTrax/ActiveRecord.html#methodset_content_columns">set_content_columns()</a>.   See <a href="http://pear.php.net/manual/en/package.database.db.db-common.tableinfo.php">DB_common::tableInfo()</a> for the format.  <strong>NOTE:</strong> Some   RDBMS's don't return all values.</p><p>An additional element 'human_name' is added to each column   by <a href="../PHPonTrax/ActiveRecord.html#methodset_content_columns">set_content_columns()</a>.  The actual value contained   in each column is stored in an object variable with the name   given by the 'name' element of the column description for each   column.</p><p><strong>NOTE:</strong>The information from the database about which   columns are primary keys is <strong>not used</strong>.  Instead, the   primary keys in the table are listed in <a href="../PHPonTrax/ActiveRecord.html#var$primary_keys">$primary_keys</a>,   which is maintained independently.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -712,7 +728,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$database_name"></a>
 	<p></p>
 	<h4>$database_name = <span class="value">&nbsp;null</span></h4>
-	<p>[line 114]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a114">114</a>]</p>
   Database name override<br /><br /><p>Name of the database to use, if you are not using the value   read from file config/database.ini</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -739,7 +755,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$date_format"></a>
 	<p></p>
 	<h4>$date_format = <span class="value">&nbsp;&quot;Y-m-d&quot;</span></h4>
-	<p>[line 217]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a217">217</a>]</p>
   Date format for use with auto timestamping<br /><br /><p>The format for this should be compatiable with the php date() function.   http://www.php.net/date</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -763,7 +779,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$db"></a>
 	<p></p>
 	<h4>$db = <span class="value">&nbsp;null</span></h4>
-	<p>[line 69]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a69">69</a>]</p>
   Reference to the object returned by PEAR DB::Connect()<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -817,7 +833,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$display"></a>
 	<p></p>
 	<h4>$display = <span class="value">&nbsp;10</span></h4>
-	<p>[line 273]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a273">273</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -844,7 +860,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$errors"></a>
 	<p></p>
 	<h4>$errors = <span class="value">array()</span></h4>
-	<p>[line 290]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a290">290</a>]</p>
   Description of non-fatal errors found<br /><br /><p>For every non-fatal error found, an element describing the   error is added to $errors.  Initialized to an empty array in   <a href="../PHPonTrax/ActiveRecord.html#methodvalid">valid()</a> before validating object.  When an error   message is associated with a particular attribute, the message   should be stored with the attribute name as its key.  If the   message is independent of attributes, store it with a numeric   key beginning with 0.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -892,7 +908,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$fetch_mode"></a>
 	<p></p>
 	<h4>$fetch_mode = <span class="value">&nbsp;DB_FETCHMODE_ASSOC</span></h4>
-	<p>[line 124]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a124">124</a>]</p>
   Mode to use when fetching data from database<br /><br /><p>See <a href="http://pear.php.net/manual/en/package.database.db.db-common.setfetchmode.php">the relevant PEAR DB class documentation</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -916,7 +932,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$force_reconnect"></a>
 	<p></p>
 	<h4>$force_reconnect = <span class="value">&nbsp;false</span></h4>
-	<p>[line 131]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a131">131</a>]</p>
   Force reconnect to database<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -943,7 +959,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$habtm_attributes"></a>
 	<p></p>
 	<h4>$habtm_attributes = <span class="value">&nbsp;null</span></h4>
-	<p>[line 163]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a163">163</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -970,7 +986,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$has_and_belongs_to_many"></a>
 	<p></p>
 	<h4>$has_and_belongs_to_many = <span class="value">&nbsp;null</span></h4>
-	<p>[line 151]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a151">151</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1009,7 +1025,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$has_many"></a>
 	<p></p>
 	<h4>$has_many = <span class="value">&nbsp;null</span></h4>
-	<p>[line 139]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a139">139</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1045,7 +1061,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$has_one"></a>
 	<p></p>
 	<h4>$has_one = <span class="value">&nbsp;null</span></h4>
-	<p>[line 145]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a145">145</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1081,7 +1097,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$index_on"></a>
 	<p></p>
 	<h4>$index_on = <span class="value">&nbsp;&quot;id&quot;</span></h4>
-	<p>[line 132]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a132">132</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1105,7 +1121,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$new_record"></a>
 	<p></p>
 	<h4>$new_record = <span class="value">&nbsp;true</span></h4>
-	<p>[line 184]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a184">184</a>]</p>
   Whether this object represents a new record<br /><br /><p>true =&gt; This object was created without reading a row from the           database, so use SQL 'INSERT' to put it in the database.   false =&gt; This object was a row read from the database, so use            SQL 'UPDATE' to update database with new values.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1147,7 +1163,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$preserve_null_dates"></a>
 	<p></p>
 	<h4>$preserve_null_dates = <span class="value">&nbsp;true</span></h4>
-	<p>[line 235]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a235">235</a>]</p>
   Whether to keep date/datetime fields NULL if not set<br /><br /><p>true =&gt; If date field is not set it try to preserve NULL   false =&gt; Don't try to preserve NULL if field is already NULL</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1171,7 +1187,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$primary_keys"></a>
 	<p></p>
 	<h4>$primary_keys = <span class="value">array(&quot;id&quot;)</span></h4>
-	<p>[line 262]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a262">262</a>]</p>
   Primary key of the associated table<br /><br /><p>Array element(s) name the primary key column(s), as used to   specify the row to be updated or deleted.  To be a primary key   a column must be listed both here and in <a href="../PHPonTrax/ActiveRecord.html#var$content_columns">$content_columns</a>.  <strong>NOTE:</strong>This   field is maintained by hand.  It is not derived from the table   description read from the database.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1210,7 +1226,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$rows_per_page_default"></a>
 	<p></p>
 	<h4>$rows_per_page_default = <span class="value">&nbsp;20</span></h4>
-	<p>[line 268]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a268">268</a>]</p>
   Default for how many rows to return from find_all()<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1237,7 +1253,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$save_associations"></a>
 	<p></p>
 	<h4>$save_associations = <span class="value">array()</span></h4>
-	<p>[line 168]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a168">168</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1264,7 +1280,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$table_name"></a>
 	<p></p>
 	<h4>$table_name = <span class="value">&nbsp;null</span></h4>
-	<p>[line 105]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a105">105</a>]</p>
   Table name<br /><br /><p>Name of the table in the database associated with the subclass.   Normally set to the pluralized lower case underscore form of   the class name by the constructor.  May be overridden.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1294,7 +1310,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$time_format"></a>
 	<p></p>
 	<h4>$time_format = <span class="value">&nbsp;&quot;H:i:s&quot;</span></h4>
-	<p>[line 226]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a226">226</a>]</p>
   Time format for use with auto timestamping<br /><br /><p>The format for this should be compatiable with the php date() function.   http://www.php.net/date</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1318,7 +1334,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 	<a name="var$use_transactions"></a>
 	<p></p>
 	<h4>$use_transactions = <span class="value">&nbsp;false</span></h4>
-	<p>[line 315]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a315">315</a>]</p>
   <strong>FIXME: static should be after public</strong><br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1350,7 +1366,7 @@ Base class for the ActiveRecord design pattern<br /><br /><p>Each subclass of th
 <div class="tags">
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line 333]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a333">333</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1398,7 +1414,7 @@ $attributes = null])</code>
   </div>
   <hr />
 	<a name="methodadd_error"></a>
-	<h3>method add_error <span class="smalllinenumber">[line 1949]</span></h3>
+	<h3>method add_error <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1949">1949</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1440,7 +1456,7 @@ $key = null])</code>
   </div>
   <hr />
 	<a name="methodadd_habtm_records"></a>
-	<h3>method add_habtm_records <span class="smalllinenumber">[line 1533]</span></h3>
+	<h3>method add_habtm_records <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1533">1533</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1481,7 +1497,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodadd_record"></a>
-	<h3>method add_record <span class="smalllinenumber">[line 1272]</span></h3>
+	<h3>method add_record <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1272">1272</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1542,7 +1558,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodadd_record_or_update_record"></a>
-	<h3>method add_record_or_update_record <span class="smalllinenumber">[line 1232]</span></h3>
+	<h3>method add_record_or_update_record <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1232">1232</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1594,7 +1610,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_create"></a>
-	<h3>method after_create <span class="smalllinenumber">[line 2172]</span></h3>
+	<h3>method after_create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2172">2172</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1622,7 +1638,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_delete"></a>
-	<h3>method after_delete <span class="smalllinenumber">[line 2196]</span></h3>
+	<h3>method after_delete <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2196">2196</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1647,7 +1663,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_save"></a>
-	<h3>method after_save <span class="smalllinenumber">[line 2160]</span></h3>
+	<h3>method after_save <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2160">2160</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1672,7 +1688,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_update"></a>
-	<h3>method after_update <span class="smalllinenumber">[line 2184]</span></h3>
+	<h3>method after_update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2184">2184</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1700,7 +1716,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_validation"></a>
-	<h3>method after_validation <span class="smalllinenumber">[line 2124]</span></h3>
+	<h3>method after_validation <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2124">2124</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1725,7 +1741,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_validation_on_create"></a>
-	<h3>method after_validation_on_create <span class="smalllinenumber">[line 2136]</span></h3>
+	<h3>method after_validation_on_create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2136">2136</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1750,7 +1766,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodafter_validation_on_update"></a>
-	<h3>method after_validation_on_update <span class="smalllinenumber">[line 2148]</span></h3>
+	<h3>method after_validation_on_update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2148">2148</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1775,7 +1791,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodaggregrate_all"></a>
-	<h3>method aggregrate_all <span class="smalllinenumber">[line 710]</span></h3>
+	<h3>method aggregrate_all <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a710">710</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1833,7 +1849,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_create"></a>
-	<h3>method before_create <span class="smalllinenumber">[line 2166]</span></h3>
+	<h3>method before_create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2166">2166</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1864,7 +1880,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_delete"></a>
-	<h3>method before_delete <span class="smalllinenumber">[line 2190]</span></h3>
+	<h3>method before_delete <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2190">2190</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1889,7 +1905,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_save"></a>
-	<h3>method before_save <span class="smalllinenumber">[line 2154]</span></h3>
+	<h3>method before_save <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2154">2154</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1917,7 +1933,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_update"></a>
-	<h3>method before_update <span class="smalllinenumber">[line 2178]</span></h3>
+	<h3>method before_update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2178">2178</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1942,7 +1958,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_validation"></a>
-	<h3>method before_validation <span class="smalllinenumber">[line 2118]</span></h3>
+	<h3>method before_validation <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2118">2118</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1967,7 +1983,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_validation_on_create"></a>
-	<h3>method before_validation_on_create <span class="smalllinenumber">[line 2130]</span></h3>
+	<h3>method before_validation_on_create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2130">2130</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1992,7 +2008,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbefore_validation_on_update"></a>
-	<h3>method before_validation_on_update <span class="smalllinenumber">[line 2142]</span></h3>
+	<h3>method before_validation_on_update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2142">2142</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2017,7 +2033,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodbegin"></a>
-	<h3>method begin <span class="smalllinenumber">[line 800]</span></h3>
+	<h3>method begin <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a800">800</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2045,7 +2061,7 @@ $agrregrate_type)</code>
   </div>
   <hr />
 	<a name="methodcheck_datetime"></a>
-	<h3>method check_datetime <span class="smalllinenumber">[line 1605]</span></h3>
+	<h3>method check_datetime <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1605">1605</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2105,7 +2121,7 @@ $value)</code>
   </div>
   <hr />
 	<a name="methodcolumn_attribute_exists"></a>
-	<h3>method column_attribute_exists <span class="smalllinenumber">[line 762]</span></h3>
+	<h3>method column_attribute_exists <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a762">762</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2122,7 +2138,7 @@ $attribute)</code>
   </div>
   <hr />
 	<a name="methodcolumn_for_attribute"></a>
-	<h3>method column_for_attribute <span class="smalllinenumber">[line 748]</span></h3>
+	<h3>method column_for_attribute <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a748">748</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2151,7 +2167,7 @@ $attribute)</code>
   </div>
   <hr />
 	<a name="methodcommit"></a>
-	<h3>method commit <span class="smalllinenumber">[line 811]</span></h3>
+	<h3>method commit <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a811">811</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2179,7 +2195,7 @@ $attribute)</code>
   </div>
   <hr />
 	<a name="methodcreate"></a>
-	<h3>method create <span class="smalllinenumber">[line 1128]</span></h3>
+	<h3>method create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1128">1128</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2206,7 +2222,7 @@ $dont_validate = false])</code>
   </div>
   <hr />
 	<a name="methoddelete"></a>
-	<h3>method delete <span class="smalllinenumber">[line 1442]</span></h3>
+	<h3>method delete <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1442">1442</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2235,7 +2251,7 @@ $id = null])</code>
   </div>
   <hr />
 	<a name="methoddelete_all"></a>
-	<h3>method delete_all <span class="smalllinenumber">[line 1476]</span></h3>
+	<h3>method delete_all <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1476">1476</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2286,7 +2302,7 @@ $conditions = null])</code>
   </div>
   <hr />
 	<a name="methoddelete_habtm_records"></a>
-	<h3>method delete_habtm_records <span class="smalllinenumber">[line 1568]</span></h3>
+	<h3>method delete_habtm_records <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1568">1568</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2324,7 +2340,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodestablish_connection"></a>
-	<h3>method establish_connection <span class="smalllinenumber">[line 1885]</span></h3>
+	<h3>method establish_connection <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1885">1885</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2333,7 +2349,7 @@ $this_foreign_value)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Open a database connection if one is not currently open<br /><br /><p>The name of the database normally comes from   $GLOBALS['TRAX_DB_SETTINGS'] which is set in <a href="../PHPonTrax/_config_environment_php.html">environment.php</a> by reading file config/database.ini. The   database name may be overridden by assigning a different name   to <a href="../PHPonTrax/ActiveRecord.html#var$database_name">$database_name</a>.</p><p>If there is a connection now open, as indicated by the saved   value of a DB object in $GLOBALS['ACTIVE_RECORD_DB'], and   <a href="../PHPonTrax/ActiveRecord.html#var$force_reconnect">force_reconnect</a> is not true, then set the database   fetch mode and return.</p><p>If there is no connection, open one and save a reference to   it in $GLOBALS['ACTIVE_RECORD_DB'].</p><br /><br /><br />
+		Open a database connection if one is not currently open<br /><br /><p>The name of the database normally comes from   $GLOBALS['TRAX_DB_SETTINGS'] which is set in <a href="../PHPonTrax/_data_config_environment_php.html">environment.php</a> by reading file config/database.ini. The   database name may be overridden by assigning a different name   to <a href="../PHPonTrax/ActiveRecord.html#var$database_name">$database_name</a>.</p><p>If there is a connection now open, as indicated by the saved   value of a DB object in $GLOBALS['ACTIVE_RECORD_DB'], and   <a href="../PHPonTrax/ActiveRecord.html#var$force_reconnect">force_reconnect</a> is not true, then set the database   fetch mode and return.</p><p>If there is no connection, open one and save a reference to   it in $GLOBALS['ACTIVE_RECORD_DB'].</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -2364,7 +2380,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodfind"></a>
-	<h3>method find <span class="smalllinenumber">[line 1038]</span></h3>
+	<h3>method find <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1038">1038</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2430,7 +2446,7 @@ $joins = null])</code>
   </div>
   <hr />
 	<a name="methodfind_all"></a>
-	<h3>method find_all <span class="smalllinenumber">[line 940]</span></h3>
+	<h3>method find_all <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a940">940</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2520,7 +2536,7 @@ $joins = null])</code>
   </div>
   <hr />
 	<a name="methodfind_all_habtm"></a>
-	<h3>method find_all_habtm <span class="smalllinenumber">[line 519]</span></h3>
+	<h3>method find_all_habtm <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a519">519</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2553,7 +2569,7 @@ $parameters = null])</code>
   </div>
   <hr />
 	<a name="methodfind_all_has_many"></a>
-	<h3>method find_all_has_many <span class="smalllinenumber">[line 574]</span></h3>
+	<h3>method find_all_has_many <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a574">574</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2586,7 +2602,7 @@ $parameters = null])</code>
   </div>
   <hr />
 	<a name="methodfind_by"></a>
-	<h3>method find_by <span class="smalllinenumber">[line 868]</span></h3>
+	<h3>method find_by <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a868">868</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2623,7 +2639,7 @@ $find_all = false])</code>
   </div>
   <hr />
 	<a name="methodfind_by_sql"></a>
-	<h3>method find_by_sql <span class="smalllinenumber">[line 1090]</span></h3>
+	<h3>method find_by_sql <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1090">1090</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2650,7 +2666,7 @@ $sql)</code>
   </div>
   <hr />
 	<a name="methodfind_first"></a>
-	<h3>method find_first <span class="smalllinenumber">[line 1079]</span></h3>
+	<h3>method find_first <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1079">1079</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2716,7 +2732,7 @@ $joins = null])</code>
   </div>
   <hr />
 	<a name="methodfind_one_belongs_to"></a>
-	<h3>method find_one_belongs_to <span class="smalllinenumber">[line 663]</span></h3>
+	<h3>method find_one_belongs_to <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a663">663</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2749,7 +2765,7 @@ $parameters = null])</code>
   </div>
   <hr />
 	<a name="methodfind_one_has_one"></a>
-	<h3>method find_one_has_one <span class="smalllinenumber">[line 631]</span></h3>
+	<h3>method find_one_has_one <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a631">631</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2782,7 +2798,7 @@ $parameters = null])</code>
   </div>
   <hr />
 	<a name="methodget_association_type"></a>
-	<h3>method get_association_type <span class="smalllinenumber">[line 1351]</span></h3>
+	<h3>method get_association_type <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1351">1351</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2835,7 +2851,7 @@ $association_name)</code>
   </div>
   <hr />
 	<a name="methodget_attributes"></a>
-	<h3>method get_attributes <span class="smalllinenumber">[line 1696]</span></h3>
+	<h3>method get_attributes <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1696">1696</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2872,7 +2888,7 @@ $association_name)</code>
   </div>
   <hr />
 	<a name="methodget_errors"></a>
-	<h3>method get_errors <span class="smalllinenumber">[line 1971]</span></h3>
+	<h3>method get_errors <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1971">1971</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2922,7 +2938,7 @@ $return_string
   </div>
   <hr />
 	<a name="methodget_errors_as_string"></a>
-	<h3>method get_errors_as_string <span class="smalllinenumber">[line 1988]</span></h3>
+	<h3>method get_errors_as_string <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1988">1988</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2958,7 +2974,7 @@ $seperator = "<br>"])</code>
   </div>
   <hr />
 	<a name="methodget_insert_id"></a>
-	<h3>method get_insert_id <span class="smalllinenumber">[line 1854]</span></h3>
+	<h3>method get_insert_id <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1854">1854</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2995,7 +3011,7 @@ $seperator = "<br>"])</code>
   </div>
   <hr />
 	<a name="methodget_join_table_name"></a>
-	<h3>method get_join_table_name <span class="smalllinenumber">[line 497]</span></h3>
+	<h3>method get_join_table_name <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a497">497</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3025,7 +3041,7 @@ $second_table)</code>
   </div>
   <hr />
 	<a name="methodget_primary_key_conditions"></a>
-	<h3>method get_primary_key_conditions <span class="smalllinenumber">[line 1762]</span></h3>
+	<h3>method get_primary_key_conditions <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1762">1762</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3062,7 +3078,7 @@ $second_table)</code>
   </div>
   <hr />
 	<a name="methodget_updates_sql"></a>
-	<h3>method get_updates_sql <span class="smalllinenumber">[line 1792]</span></h3>
+	<h3>method get_updates_sql <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1792">1792</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3093,7 +3109,7 @@ $second_table)</code>
   </div>
   <hr />
 	<a name="methodis_error"></a>
-	<h3>method is_error <span class="smalllinenumber">[line 1920]</span></h3>
+	<h3>method is_error <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1920">1920</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3165,7 +3181,7 @@ $obj)</code>
   </div>
   <hr />
 	<a name="methodis_new_record"></a>
-	<h3>method is_new_record <span class="smalllinenumber">[line 739]</span></h3>
+	<h3>method is_new_record <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a739">739</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3193,7 +3209,7 @@ $obj)</code>
   </div>
   <hr />
 	<a name="methodlimit_select"></a>
-	<h3>method limit_select <span class="smalllinenumber">[line 2208]</span></h3>
+	<h3>method limit_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2208">2208</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3220,7 +3236,7 @@ $additional_query = null])</code>
   </div>
   <hr />
 	<a name="methodload"></a>
-	<h3>method load <span class="smalllinenumber">[line 1116]</span></h3>
+	<h3>method load <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1116">1116</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3237,7 +3253,7 @@ $conditions = null])</code>
   </div>
   <hr />
 	<a name="methodlog_query"></a>
-	<h3>method log_query <span class="smalllinenumber">[line 2198]</span></h3>
+	<h3>method log_query <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2198">2198</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3254,7 +3270,7 @@ $sql)</code>
   </div>
   <hr />
 	<a name="methodpage_list"></a>
-	<h3>method page_list <span class="smalllinenumber">[line 2228]</span></h3>
+	<h3>method page_list <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2228">2228</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3279,7 +3295,7 @@ $sql)</code>
   </div>
   <hr />
 	<a name="methodquery"></a>
-	<h3>method query <span class="smalllinenumber">[line 836]</span></h3>
+	<h3>method query <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a836">836</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3348,7 +3364,7 @@ $sql)</code>
   </div>
   <hr />
 	<a name="methodquoted_attributes"></a>
-	<h3>method quoted_attributes <span class="smalllinenumber">[line 1725]</span></h3>
+	<h3>method quoted_attributes <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1725">1725</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3396,7 +3412,7 @@ $attributes = null])</code>
   </div>
   <hr />
 	<a name="methodraise"></a>
-	<h3>method raise <span class="smalllinenumber">[line 1933]</span></h3>
+	<h3>method raise <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1933">1933</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3431,7 +3447,7 @@ $message)</code>
   </div>
   <hr />
 	<a name="methodreload"></a>
-	<h3>method reload <span class="smalllinenumber">[line 1099]</span></h3>
+	<h3>method reload <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1099">1099</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3460,7 +3476,7 @@ $conditions = null])</code>
   </div>
   <hr />
 	<a name="methodrollback"></a>
-	<h3>method rollback <span class="smalllinenumber">[line 822]</span></h3>
+	<h3>method rollback <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a822">822</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3488,7 +3504,7 @@ $conditions = null])</code>
   </div>
   <hr />
 	<a name="methodsave"></a>
-	<h3>method save <span class="smalllinenumber">[line 1202]</span></h3>
+	<h3>method save <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1202">1202</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3539,7 +3555,7 @@ $dont_validate = false])</code>
   </div>
   <hr />
 	<a name="methodsave_association"></a>
-	<h3>method save_association <span class="smalllinenumber">[line 1419]</span></h3>
+	<h3>method save_association <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1419">1419</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3569,7 +3585,7 @@ $type)</code>
   </div>
   <hr />
 	<a name="methodsave_associations"></a>
-	<h3>method save_associations <span class="smalllinenumber">[line 1397]</span></h3>
+	<h3>method save_associations <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1397">1397</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3600,7 +3616,7 @@ $type)</code>
   </div>
   <hr />
 	<a name="methodsave_without_validation"></a>
-	<h3>method save_without_validation <span class="smalllinenumber">[line 1181]</span></h3>
+	<h3>method save_without_validation <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1181">1181</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3626,7 +3642,7 @@ $attributes = null])</code>
   </div>
   <hr />
 	<a name="methodsend"></a>
-	<h3>method send <span class="smalllinenumber">[line 781]</span></h3>
+	<h3>method send <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a781">781</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3661,7 +3677,7 @@ $column)</code>
   </div>
   <hr />
 	<a name="methodset_content_columns"></a>
-	<h3>method set_content_columns <span class="smalllinenumber">[line 1836]</span></h3>
+	<h3>method set_content_columns <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1836">1836</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3712,7 +3728,7 @@ $table_name)</code>
   </div>
   <hr />
 	<a name="methodset_habtm_attributes"></a>
-	<h3>method set_habtm_attributes <span class="smalllinenumber">[line 1499]</span></h3>
+	<h3>method set_habtm_attributes <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1499">1499</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3744,7 +3760,7 @@ $attributes)</code>
   </div>
   <hr />
 	<a name="methodset_table_name_using_class_name"></a>
-	<h3>method set_table_name_using_class_name <span class="smalllinenumber">[line 1815]</span></h3>
+	<h3>method set_table_name_using_class_name <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1815">1815</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3772,7 +3788,7 @@ $attributes)</code>
   </div>
   <hr />
 	<a name="methodupdate"></a>
-	<h3>method update <span class="smalllinenumber">[line 1145]</span></h3>
+	<h3>method update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1145">1145</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3800,7 +3816,7 @@ $dont_validate = false])</code>
   </div>
   <hr />
 	<a name="methodupdate_all"></a>
-	<h3>method update_all <span class="smalllinenumber">[line 1167]</span></h3>
+	<h3>method update_all <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1167">1167</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3836,7 +3852,7 @@ $conditions = null])</code>
   </div>
   <hr />
 	<a name="methodupdate_attributes"></a>
-	<h3>method update_attributes <span class="smalllinenumber">[line 1638]</span></h3>
+	<h3>method update_attributes <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1638">1638</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3881,7 +3897,7 @@ $attributes)</code>
   </div>
   <hr />
 	<a name="methodupdate_habtm_records"></a>
-	<h3>method update_habtm_records <span class="smalllinenumber">[line 1522]</span></h3>
+	<h3>method update_habtm_records <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1522">1522</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3913,7 +3929,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodupdate_record"></a>
-	<h3>method update_record <span class="smalllinenumber">[line 1314]</span></h3>
+	<h3>method update_record <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a1314">1314</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -3968,7 +3984,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodvalid"></a>
-	<h3>method valid <span class="smalllinenumber">[line 2013]</span></h3>
+	<h3>method valid <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2013">2013</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4030,7 +4046,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodvalidate"></a>
-	<h3>method validate <span class="smalllinenumber">[line 2100]</span></h3>
+	<h3>method validate <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2100">2100</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4055,7 +4071,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodvalidate_model_attributes"></a>
-	<h3>method validate_model_attributes <span class="smalllinenumber">[line 2060]</span></h3>
+	<h3>method validate_model_attributes <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2060">2060</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4090,7 +4106,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodvalidate_on_create"></a>
-	<h3>method validate_on_create <span class="smalllinenumber">[line 2106]</span></h3>
+	<h3>method validate_on_create <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2106">2106</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4115,7 +4131,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="methodvalidate_on_update"></a>
-	<h3>method validate_on_update <span class="smalllinenumber">[line 2112]</span></h3>
+	<h3>method validate_on_update <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a2112">2112</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4140,7 +4156,7 @@ $this_foreign_value)</code>
   </div>
   <hr />
 	<a name="method__call"></a>
-	<h3>method __call <span class="smalllinenumber">[line 444]</span></h3>
+	<h3>method __call <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a444">444</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4194,7 +4210,7 @@ $parameters)</code>
   </div>
   <hr />
 	<a name="method__get"></a>
-	<h3>method __get <span class="smalllinenumber">[line 367]</span></h3>
+	<h3>method __get <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a367">367</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4247,7 +4263,7 @@ $key)</code>
   </div>
   <hr />
 	<a name="method__set"></a>
-	<h3>method __set <span class="smalllinenumber">[line 407]</span></h3>
+	<h3>method __set <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxactive_record.php.html#a407">407</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -4283,7 +4299,7 @@ $value)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 20 Mar 2006 17:06:28 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Tue, 21 Mar 2006 16:09:13 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

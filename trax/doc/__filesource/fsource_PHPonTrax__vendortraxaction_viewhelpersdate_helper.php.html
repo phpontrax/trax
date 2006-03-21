@@ -350,10 +350,10 @@
 <li><a name="a310"></a><span class="src-doc">     *  set the &lt;tt&gt;:add_month_numbers&lt;/tt&gt; key in +options+ to true. Examples:</span></li>
 <li><a name="a311"></a><span class="src-doc">     *</span></li>
 <li><a name="a312"></a><span class="src-doc">     *   select_month(Date.today)                             # Will use keys like &quot;January&quot;, &quot;March&quot;</span></li>
-<li><a name="a313"></a><span class="src-doc">    *   select_month(Date.today, :use_month_numbers =&gt; true) # Will use keys like &quot;1&quot;, &quot;3&quot;</span></li>
-<li><a name="a314"></a><span class="src-doc">    *   select_month(Date.today, :add_month_numbers =&gt; true) # Will use keys like &quot;1 - January&quot;, &quot;3 - March&quot;</span></li>
-<li><a name="a315"></a><span class="src-doc">    *</span></li>
-<li><a name="a316"></a><span class="src-doc">    *  Override the field name using the &lt;tt&gt;:field_name&lt;/tt&gt; option, 'month' by default.</span></li>
+<li><a name="a313"></a><span class="src-doc">     *   select_month(Date.today, :use_month_numbers =&gt; true) # Will use keys like &quot;1&quot;, &quot;3&quot;</span></li>
+<li><a name="a314"></a><span class="src-doc">     *   select_month(Date.today, :add_month_numbers =&gt; true) # Will use keys like &quot;1 - January&quot;, &quot;3 - March&quot;</span></li>
+<li><a name="a315"></a><span class="src-doc">     *</span></li>
+<li><a name="a316"></a><span class="src-doc">     *  Override the field name using the &lt;tt&gt;:field_name&lt;/tt&gt; option, 'month' by default.</span></li>
 <li><a name="a317"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
 <li><a name="a318"></a><span class="src-doc">   */</span></li>
 <li><a name="a319"></a>    <span class="src-key">function </span><a href="../PHPonTrax/DateHelper.html#methodselect_month">select_month</a><span class="src-sym">(</span><span class="src-var">$date</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
@@ -390,9 +390,9 @@
 <li><a name="a350"></a><span class="src-doc">     * substituted for a year given as a number. Example:</span></li>
 <li><a name="a351"></a><span class="src-doc">     *</span></li>
 <li><a name="a352"></a><span class="src-doc">     *   select_year(Date.today, :start_year =&gt; 1992, :end_year =&gt; 2007)  # ascending year values</span></li>
-<li><a name="a353"></a><span class="src-doc">    *   select_year(Date.today, :start_year =&gt; 2005, :end_year =&gt; 1900)  # descending year values</span></li>
-<li><a name="a354"></a><span class="src-doc">    *</span></li>
-<li><a name="a355"></a><span class="src-doc">    * Override the field name using the &lt;tt&gt;:field_name&lt;/tt&gt; option, 'year' by default.</span></li>
+<li><a name="a353"></a><span class="src-doc">     *   select_year(Date.today, :start_year =&gt; 2005, :end_year =&gt; 1900)  # descending year values</span></li>
+<li><a name="a354"></a><span class="src-doc">     *</span></li>
+<li><a name="a355"></a><span class="src-doc">     * Override the field name using the &lt;tt&gt;:field_name&lt;/tt&gt; option, 'year' by default.</span></li>
 <li><a name="a356"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
 <li><a name="a357"></a><span class="src-doc">    */</span></li>
 <li><a name="a358"></a>    <span class="src-key">function </span><a href="../PHPonTrax/DateHelper.html#methodselect_year">select_year</a><span class="src-sym">(</span><span class="src-var">$date</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
@@ -406,8 +406,8 @@
 <li><a name="a366"></a>            <span class="src-var">$date_year </span>= <span class="src-var">$date </span>? <a href="http://www.php.net/date">date</a><span class="src-sym">(</span><span class="src-str">&quot;Y&quot;</span><span class="src-sym">,</span><a href="http://www.php.net/strtotime">strtotime</a><span class="src-sym">(</span><span class="src-var">$date</span><span class="src-sym">)) </span>: <a href="http://www.php.net/date">date</a><span class="src-sym">(</span><span class="src-str">&quot;Y&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a367"></a>        <span class="src-sym">} </span></li>
 <li><a name="a368"></a>&nbsp;</li>
-<li><a name="a369"></a>        <span class="src-var">$start_year </span>= <span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'start_year'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'start_year'</span><span class="src-sym">] </span>: <span class="src-var">$y </span>- <span class="src-num">5</span><span class="src-sym">;</span></li>
-<li><a name="a370"></a>        <span class="src-var">$end_year </span>= <span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'end_year'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'end_year'</span><span class="src-sym">] </span>: <span class="src-var">$y </span>+ <span class="src-num">5</span><span class="src-sym">;</span></li>
+<li><a name="a369"></a>        <span class="src-var">$start_year </span>= <span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'start_year'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'start_year'</span><span class="src-sym">] </span>: <span class="src-var">$date_year </span>- <span class="src-num">5</span><span class="src-sym">;</span></li>
+<li><a name="a370"></a>        <span class="src-var">$end_year </span>= <span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'end_year'</span><span class="src-sym">]</span><span class="src-sym">) </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'end_year'</span><span class="src-sym">] </span>: <span class="src-var">$date_year </span>+ <span class="src-num">5</span><span class="src-sym">;</span></li>
 <li><a name="a371"></a>&nbsp;</li>
 <li><a name="a372"></a>        <span class="src-key">for</span><span class="src-sym">(</span><span class="src-var">$year </span>= <span class="src-var">$start_year</span><span class="src-sym">; </span><span class="src-var">$year </span>&lt;= <span class="src-var">$end_year</span><span class="src-sym">; </span><span class="src-var">$year</span>++<span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a373"></a>            <span class="src-var">$year_options </span>.= <span class="src-sym">(</span><span class="src-var">$date </span>&amp;&amp; <span class="src-sym">(</span><span class="src-var">$date_year </span>== <span class="src-var">$year</span><span class="src-sym">)) </span>?</li>
@@ -486,7 +486,7 @@
 <li><a name="a446"></a></span><span class="src-str">            <span class="src-var">$value</span> = <span class="src-var">$this</span></span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/DateHelper.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a447"></a>            <span class="src-var">$datetime </span>= <span class="src-var">$value </span>? <span class="src-var">$value </span>: <span class="src-id">date</span><span class="src-sym">(</span><span class="src-str">&quot;Y-m-d H:i:s&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a448"></a>        </span><span class="src-str"><span class="src-sym">}</span></span></li>
-<li><a name="a449"></a>&nbsp;</li>
+<li><a name="a449"></a></span><span class="src-str">    </span></li>
 <li><a name="a450"></a></span><span class="src-str">        <span class="src-var">$datetime_select</span> = <span class="src-var">$this</span></span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/DateHelper.html#methodselect_year">select_year</a><span class="src-sym">(</span><span class="src-var">$datetime</span><span class="src-sym">, </span><span class="src-var">$options_with_prefix</span><span class="src-sym">[</span><span class="src-num">1</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a451"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'discard_month'</span><span class="src-sym">]</span><span class="src-sym">)</span></li>
 <li><a name="a452"></a>            <span class="src-var">$datetime_select </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/DateHelper.html#methodselect_month">select_month</a><span class="src-sym">(</span><span class="src-var">$datetime</span><span class="src-sym">, </span><span class="src-var">$options_with_prefix</span><span class="src-sym">[</span><span class="src-num">2</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
@@ -616,7 +616,7 @@
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Wed, 15 Mar 2006 16:16:16 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Tue, 21 Mar 2006 16:09:19 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>
