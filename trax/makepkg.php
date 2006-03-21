@@ -1,16 +1,26 @@
-#!/usr/bin/php
+#!@PHP-BIN@
 <?php
 /**
  *  Make a Pear installable package of the PHPonTrax distribution
  *
  *  (PHP 5)
- *  Requires Pear package PEAR_PackageFileManager.  It's Subversion
- *  plugin uses XML_Tree.  Unfortunately XML_Tree has a couple of
- *  methods named clone which is a reserved word in PHP 5.  The fix is
- *  easy, just edit XML_Tree to change every use of 'clone' to 'clone4'.
  *
  *  To make a package, connect to the top directory and type
- *  php makepkg.php (or in Unix-type systems, ./makepkg.php)
+ *  php makepkg.php (or on Unix-type systems, ./makepkg.php)
+ *  Information about how to build the package and what to put in it
+ *  comes from two sources: this script, and the information
+ *  maintained by {@link http://subversion.tigris.org Subversion} in
+ *  the various .svn directories that identifies which files are part
+ *  of the distribution.
+ *  
+ *  Requires Pear package
+ *  {@link http://pear.php.net/package/PEAR_PackageFileManager PEAR_PackageFileManager} .
+ *  The Subversion plugin uses
+ *  {@link http://pear.php.net/package/XML_Tree XML_Tree} .
+ *  Unfortunately XML_Tree has a couple of methods named
+ *  {@link http://www.php.net/manual/en/language.oop5.cloning.php clone}
+ *  which is a reserved word in PHP 5.  The fix is 
+ *  easy, just edit XML_Tree to change every use of 'clone' to 'clone4'.
  *
  *  @package PHPonTrax
  *  @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -36,11 +46,12 @@ $e = $packagexml->setOptions(
                 'notes' => 'We\'ve implemented many new and exciting features',
                 'ignore' => array('app/', 'components/', 'config/', 'db/',
                                   'log/'),
-//  'installexceptions' => array('phpdoc' => '/*'), // baseinstalldir ="/" for phpdoc
                 'dir_roles' => array('doc' => 'doc',
-                                     'tutorials' => 'doc',
-                                     'test' => 'test'),
-//                'exceptions' => array('README' => 'doc')
+                                     'test' => 'test',
+                                     'data' => 'data'),
+                'exceptions' => array('pear-trax' => 'script'),
+                'installexceptions' => array('pear-trax' => '/'),
+                'installas' => array('pear-trax' => 'trax')
                 ));
 if (PEAR::isError($e)) {
     echo $e->getMessage();
@@ -107,51 +118,84 @@ if (PEAR::isError($e)) {
 
  }
 
-/*
- * $e = $test->addPlatformException('pear-phpdoc.bat', 'windows');
- * if (PEAR::isError($e)) {
- *     echo $e->getMessage();
- *     exit;
- * }
- */
-//$packagexml->addRole('pkg', 'doc'); // add a new role mapping
-//if (PEAR::isError($e)) {
-//    echo $e->getMessage();
-//    exit;
-// }
+//  Substitute local configuration values for these symbols
+$e = $packagexml->addGlobalReplacement('pear-config', '@BIN-DIR@',
+                                       'bin_dir');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
 
-/*
- * // replace @PHP-BIN@ in this file with the path to php executable!  pretty neat
- * $e = $test->addReplacement('pear-phpdoc', 'pear-config', '@PHP-BIN@', 'php_bin');
- * if (PEAR::isError($e)) {
- *     echo $e->getMessage();
- *     exit;
- * }
- * $e = $test->addReplacement('pear-phpdoc.bat', 'pear-config', '@PHP-BIN@', 'php_bin');
- * if (PEAR::isError($e)) {
- *     echo $e->getMessage();
- *     exit;
- * }
- */
-// note use of {@link debugPackageFile()} - this is VERY important
-//if (isset($_GET['make']) || (isset($_SERVER['argv'][2]) &&
-//       $_SERVER['argv'][2] == 'make')) {
-     $e = $packagexml->writePackageFile();
-// } else {
+ }
 
-//  Needs: XML_Tree with patch s/clone/clone4/g
-//$e = $packagexml->debugPackageFile();
+$e = $packagexml->addGlobalReplacement('pear-config', '@DOC-DIR@',
+                                       'doc_dir');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
 
-// }
+ }
 
+$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-DIR@',
+                                       'php_dir');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
+
+ }
+
+$e = $packagexml->addGlobalReplacement('pear-config', '@DATA-DIR@',
+                                       'data_dir');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
+
+ }
+
+$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-BIN@',
+                                       'php_bin');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
+
+ }
+
+$e = $packagexml->addGlobalReplacement('pear-config', '@TEST-DIR@',
+                                       'test_dir');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
+
+ }
+
+//  Platform-dependent command lines
+$e = $packagexml->addPlatformException('pear-trax.bat', 'windows');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    exit;
+ }
+
+$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux');
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    exit;
+ }
+
+//  Study the Subversion .svn directories to see what goes in the
+//  package, then write package.xml
+//  (Needs: XML_Tree with patch s/clone/clone4/g)
+$e = $packagexml->writePackageFile();
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     die();
  }
 
+//  Make a tarball of the files listed in package.xml
 $packager = new PEAR_Packager;
-
-$packager->package();
+$e = $packager->package();
+if (PEAR::isError($e)) {
+    echo $e->getMessage();
+    die();
+ }
 
 // -- set Emacs parameters --
 // Local variables:

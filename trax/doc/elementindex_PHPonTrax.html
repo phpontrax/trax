@@ -38,6 +38,10 @@
 
 										<strong>Class-level:</strong>
 							<ul>
+	<li type="square"><a href="PHPonTrax/tutorial_ApplicationController.cls.html">ApplicationController</a>
+</ul>
+
+							<ul>
 	<li type="square"><a href="PHPonTrax/tutorial_ActiveRecordHelper.cls.html">ActiveRecordHelper</a>
 </ul>
 
@@ -66,7 +70,7 @@
 </ul>
 
 							<ul>
-	<li type="square"><a href="PHPonTrax/tutorial_ApplicationController.cls.html">ApplicationController</a>
+	<li type="square"><a href="PHPonTrax/tutorial_FormOptionsHelper.cls.html">FormOptionsHelper</a>
 </ul>
 
 							<ul>
@@ -86,7 +90,7 @@
 </ul>
 
 							<ul>
-	<li type="square"><a href="PHPonTrax/tutorial_FormOptionsHelper.cls.html">FormOptionsHelper</a>
+	<li type="square"><a href="PHPonTrax/tutorial_ActiveRecordError.cls.html">ActiveRecordError</a>
 </ul>
 
 							<ul>
@@ -99,10 +103,6 @@
 
 							<ul>
 	<li type="square"><a href="PHPonTrax/tutorial_Inflector.cls.html">Inflector</a>
-</ul>
-
-							<ul>
-	<li type="square"><a href="PHPonTrax/tutorial_ActiveRecordError.cls.html">ActiveRecordError</a>
 </ul>
 
 							<ul>
@@ -182,6 +182,8 @@
 			<a href="PHPonTrax/_vendor_trax_session_php.html">		session.php
 		</a><br>
 			<a href="PHPonTrax/_config_environments_test_php.html">		test.php
+		</a><br>
+			<a href="PHPonTrax/_trax_php.html">		trax.php
 		</a><br>
 			<a href="PHPonTrax/_vendor_trax_trax_exceptions_php.html">		trax_exceptions.php
 		</a><br>
@@ -302,8 +304,6 @@
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action">ActionController::$action</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Name of the action method in the controller class</dd>
 							<dt><b>$action_called</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action_called">ActionController::$action_called</a></dd>
-							<dt><b>$action_render_performed</b></dt>
-				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action_render_performed">ActionController::$action_render_performed</a></dd>
 							<dt><b>$added_path</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$added_path">ActionController::$added_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Path to add to other filesystem paths</dd>
 							<dt><b>$after_filter</b></dt>
@@ -1098,6 +1098,8 @@
 	<div>
 		<h2>r</h2>
 		<dl>
+							<dt><b>$render_performed</b></dt>
+				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$render_performed">ActionController::$render_performed</a></dd>
 							<dt><b>$replyto_addresses</b></dt>
 				<dd>in file action_mailer.php, variable <a href="PHPonTrax/ActionMailer.html#var$replyto_addresses">ActionMailer::$replyto_addresses</a></dd>
 							<dt><b>$router_loaded</b></dt>
@@ -1117,9 +1119,9 @@
 							<dt><b>radio_button_tag</b></dt>
 				<dd>in file form_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html#functionradio_button_tag">radio_button_tag()</a></dd>
 							<dt><b>raise</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodraise">ActiveRecord::raise()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Throw an exception describing an error in this object</dd>
-							<dt><b>raise</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#methodraise">ActionController::raise()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Raise an ActionControllerError exception</dd>
+							<dt><b>raise</b></dt>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodraise">ActiveRecord::raise()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Throw an exception describing an error in this object</dd>
 							<dt><b>recognize_route</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#methodrecognize_route">ActionController::recognize_route()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Convert URL to controller, action and id</dd>
 							<dt><b>redirect_to</b></dt>
@@ -1351,9 +1353,9 @@
 							<dt><b>text_field</b></dt>
 				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functiontext_field">text_field()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
 							<dt><b>text_field_tag</b></dt>
-				<dd>in file form_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html#functiontext_field_tag">text_field_tag()</a></dd>
-							<dt><b>text_field_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodtext_field_tag">FormTagHelper::text_field_tag()</a></dd>
+							<dt><b>text_field_tag</b></dt>
+				<dd>in file form_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html#functiontext_field_tag">text_field_tag()</a></dd>
 							<dt><b>to_boolean_select_tag</b></dt>
 				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methodto_boolean_select_tag">FormHelper::to_boolean_select_tag()</a></dd>
 							<dt><b>to_check_box_tag</b></dt>
@@ -1365,9 +1367,9 @@
 							<dt><b>to_country_select_tag</b></dt>
 				<dd>in file form_options_helper.php, method <a href="PHPonTrax/FormOptionsHelper.html#methodto_country_select_tag">FormOptionsHelper::to_country_select_tag()</a></dd>
 							<dt><b>to_datetime_select_tag</b></dt>
-				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodto_datetime_select_tag">ActiveRecordHelper::to_datetime_select_tag()</a></dd>
-							<dt><b>to_datetime_select_tag</b></dt>
 				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodto_datetime_select_tag">DateHelper::to_datetime_select_tag()</a></dd>
+							<dt><b>to_datetime_select_tag</b></dt>
+				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodto_datetime_select_tag">ActiveRecordHelper::to_datetime_select_tag()</a></dd>
 							<dt><b>to_datetime_select_tag_without_error_wrapping</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodto_datetime_select_tag_without_error_wrapping">ActiveRecordHelper::to_datetime_select_tag_without_error_wrapping()</a></dd>
 							<dt><b>to_date_select_tag</b></dt>
@@ -1390,6 +1392,8 @@
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodto_tag">ActiveRecordHelper::to_tag()</a></dd>
 							<dt><b>to_text_area_tag</b></dt>
 				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methodto_text_area_tag">FormHelper::to_text_area_tag()</a></dd>
+							<dt><b>trax</b></dt>
+				<dd>in file trax.php, function <a href="PHPonTrax/_trax_php.html#functiontrax">trax()</a></dd>
 							<dt><b>TraxError</b></dt>
 				<dd>in file trax_exceptions.php, class <a href="PHPonTrax/TraxError.html">TraxError</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Trax base class for Exception handling</dd>
 							<dt><b>TraxGenerator</b></dt>
@@ -1400,6 +1404,8 @@
 				<dd>in file environment.php, constant <a href="PHPonTrax/_config_environment_php.html#defineTRAX_MODE">TRAX_MODE</a></dd>
 							<dt><b>TRAX_PATH_SEPERATOR</b></dt>
 				<dd>in file environment.php, constant <a href="PHPonTrax/_config_environment_php.html#defineTRAX_PATH_SEPERATOR">TRAX_PATH_SEPERATOR</a></dd>
+							<dt><b>trax.php</b></dt>
+				<dd>procedural page <a href="PHPonTrax/_trax_php.html">trax.php</a></dd>
 							<dt><b>TRAX_PUBLIC</b></dt>
 				<dd>in file environment.php, constant <a href="PHPonTrax/_config_environment_php.html#defineTRAX_PUBLIC">TRAX_PUBLIC</a></dd>
 							<dt><b>TRAX_ROOT</b></dt>
@@ -1509,7 +1515,7 @@
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Wed, 15 Mar 2006 16:15:22 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 20 Mar 2006 17:06:25 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

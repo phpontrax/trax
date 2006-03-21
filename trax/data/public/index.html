@@ -1,0 +1,81 @@
+<html>
+<head>
+  <title>Trax: Welcome on board</title>
+  <style>
+    body { background-color: #fff; color: #333; }
+
+    body, p, ol, ul, td {
+      font-family: verdana, arial, helvetica, sans-serif;
+      font-size:   12px;
+      line-height: 18px;
+    }
+
+    li {
+      margin-bottom: 7px;
+    }
+
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      font-size: 11px;
+    }
+
+    a { color: #000; }
+    a:visited { color: #666; }
+    a:hover { color: #fff; background-color:#000; }
+  </style>
+</head>
+<body>
+
+<h1>Congratulations, you've put PHP on Trax!</h1>
+
+<p><b>Before you move on</b>, verify that the following conditions have been met:</p>
+
+<ol>
+  <li>The log files must be writable to the web server (<code>chmod 775 log/*</code>).
+  <li>
+    Trax on Apache needs to have mod_rewrite enabled.  <br/>
+    Somewhere in your httpd.conf, you should have:<br/>
+    <code>LoadModule rewrite_module     libexec/httpd/mod_rewrite.so</code><br/>
+    <code>AddModule mod_rewrite.c</code>
+  </li>
+  <li>
+    Edit <code>public_html|public/.htaccess</code> and add to the end of the <code>include_path</code> the path to the trax/config dir
+    <br><small>example: <code>php_value include_path .:/usr/local/lib/php:/home/&lt;username&gt;/config</code></small>
+  </li>
+</ol>
+
+<p>Take the following steps to get started:</p>
+
+<ol>
+  <li>Create empty development and test databases for your application.<br/>
+    <small>Recommendation: Use *_development and *_test names, such as database_development and database_test</small><br/>
+  <li>Edit config/database.ini with your database settings.
+  <li>Create controllers and models using the generator in <code>script/generate.php</code> <br/>
+    <small>Help: Run the generator with no arguments for documentation or with only model or controller for each instructions</small>
+  <li>
+    main site layouts should be in <code>app/views/layouts</code><br>
+    default: <code>public.phtml</code><br>
+    content from view files are displayed in the layout phtml file<br>
+    by using the variable <code>$content_for_layout</code><br>
+  <li>Develop your Trax application!
+</ol>
+
+<p>
+  Trying to setup a default page for Trax using Routes? You'll have to delete this file (public/index.html) to get under way. Then define a new route in <tt>trax/config/routes.php</tt> of the form:
+  
+  <pre>
+    # this is for the root directory
+    $router->connect( "", array(":controller" => "welcome") );
+    # this is the default route
+    $router->connect( ":controller/:action/:id" );      
+  </pre>
+</p>
+
+<p>
+  Having problems getting up and running? First try debugging it yourself by looking at the php error log files for your app in the trax/log directory. <br/>
+  Support is also available via Mailing list trax@phpontrax.com or IRC irc.freenode.net channel trax.
+</p>
+
+</body>
+</html>

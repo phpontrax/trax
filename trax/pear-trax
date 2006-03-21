@@ -1,0 +1,28 @@
+#!@PHP-BIN@
+<?php
+/**
+ *  Copy directory Pear data_dir/PHPonTrax/data/
+ *
+ *  (PHP 5)
+ *
+ *  This is the Linux/Unix version of the console command that creates
+ *  the skeleton directories for a PHPonTrax application
+ *  @package PHPonTrax
+ *  @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ *  @copyright (c) Walter O. Haas 2006
+ *  @version $Id$
+ *  @author Walt Haas <haas@xmission.com>
+ */
+
+require_once "PHPonTrax/trax.php";
+
+// -- set Emacs parameters --
+// Local variables:
+// mode: php
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
+
+?>
