@@ -71,7 +71,19 @@ $e = $packagexml->setOptions(
                                       'pear-trax.bat' => 'script',),
                 'installexceptions' => array('pear-trax' => '/'),
                 'installas' => array('pear-trax' => 'trax',
-                                     'pear-trax.bat' => 'trax')
+                                     'pear-trax.bat' => 'trax',
+      'vendor/trax/action_controller.php' => 'action_controller.php',
+      'vendor/trax/action_mailer.php' => 'action_mailer.php',
+      'vendor/trax/action_view.php' => 'action_view.php',
+      'vendor/trax/active_record.php' => 'active_record.php',
+      'vendor/trax/dispatcher.php' => 'dispatcher.php',
+      'vendor/trax/inflector.php' => 'inflector.php',
+      'vendor/trax/input_filter.php' => 'input_filter.php',
+      'vendor/trax/router.php' => 'router.php',
+      'vendor/trax/scaffold_controller.php' => 'scaffold_controller.php',
+      'vendor/trax/session.php' => 'session.php',
+      'vendor/trax/trax_exceptions.php' => 'trax_exceptions.php',
+                                     )
                 ));
 if (PEAR::isError($e)) {
     echo $e->getMessage();
@@ -194,7 +206,7 @@ if (PEAR::isError($e)) {
     exit;
  }
 
-$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux');
+$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux|*BSD');
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     exit;
