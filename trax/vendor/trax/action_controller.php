@@ -401,8 +401,11 @@ class ActionController {
         }
 
         # current url
-        #$browser_url = $_SERVER['REDIRECT_URL'];
-        $browser_url = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?"));
+        $browser_url = $_SERVER['REDIRECT_URL'];
+        #if(strstr($_SERVER['REQUEST_URI'], "?"))
+        #    $browser_url = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?"));
+        #else
+        #    $browser_url = $_SERVER['REQUEST_URI'];    
         
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
