@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copy Pear directory data_dir/PHPonTrax/data/ to user's work area
+ *  Create Trax application work area
  *
  *  (PHP 5)
  *
@@ -11,37 +11,52 @@
  *  @author Walt Haas <haas@xmission.com>
  */
 
+/**
+ *  Define where to find files to copy to the work area
+ *
+ *  Set automatically by the Pear installer when you install Trax with
+ *  the <b>pear install</b> command.  If you are prevented from using
+ *  <b>pear install</b>, change "@DATA-DIR@/PHPonTrax" by hand to the
+ *  full filesystem path of the location where you installed the Trax
+ *  distribution 
+ */
+define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
+
 function trax() {
-    //  Set default destination directory
-    $dstdir = "./";
 
     //  Get command line argument, if any
-    if (array_key_exists('argc',$GLOBALS) && ($GLOBALS['argc'] > 1)) {
-
-        //  Check for excess arguments
-        if ($GLOBALS['argc'] > 2) {
-            echo "unrecognized command argument ".$GLOBALS['argv'][2]."\n";
-            return;
-        }
-
-        //  Destination directory on command line
-        $dstdir = $GLOBALS['argv'][1];
-
-        //  Guarantee it ends with '/'
-        if (substr($dstdir,-1,1) != '/') {
-            $dstdir .= '/';
-        }
-        if (!create_dir($dstdir)) {
-            return;
-        }
+    if (!array_key_exists('argc',$GLOBALS)
+        || ($GLOBALS['argc'] < 2)) {
+        usage();                // print Usage message and exit
     }
-    $srcdir = "@DATA-DIR@/PHPonTrax/data/";
+
+    //  Check for excess arguments
+    if ($GLOBALS['argc'] > 2) {
+        echo "unrecognized command argument ".$GLOBALS['argv'][2]."\n";
+        usage();
+    }
+
+    //  Destination directory on command line
+    $dstdir = $GLOBALS['argv'][1];
+
+    //  Guarantee it ends with '/'
+    if (substr($dstdir,-1,1) != '/') {
+        $dstdir .= '/';
+    }
+    if (!create_dir($dstdir)) {
+        return;
+    }
+
+    $srcdir = SOURCE_DIR;
     //  copy source directory to destination directory
     copy_dir($srcdir,$dstdir);
 }
 
 /**
  *  Copy a directory with all its contents
+ *
+ *  When a file whose filename ends '.log' is created, its permissions
+ *  are set to be world writable.
  *  @param string $src_path  Path to source directory
  *  @param string $dst_path  Path to destination directory
  *  @return boolean true=>success, false=>failure.
@@ -107,6 +122,11 @@ function copy_dir($src_path,$dst_path) {
             if (!copy($src_path . $src_file, $dst_path . $src_file)) {
                 return false;
             }
+
+            //  Log files need to be world writeable
+            if (substr($src_file,-4,4) == '.log') {
+                chmod($dst_path . $src_file, 0666);
+            }
             echo  "$dst_path$src_file created\n";
         } else {
 
@@ -166,6 +186,27 @@ function create_dir($dst_dir) {
     }
     echo "$dst_dir/ created\n";
     return true;
+}
+
+/**
+ *  Output a Usage message and exit
+ */
+function usage() {
+    echo <<<END
+Usage: @BIN-DIR@/trax /path/to/your/app
+
+Description:
+    The 'trax' command creates a new Trax application with a default
+    directory structure and configuration at the path you specify.
+
+Example:
+    trax /var/www/html
+
+    This generates a skeletal Trax installation in /var/www/html.
+    See the README in the newly created application to get going.
+
+END;
+    exit;
 }
 
 /**
