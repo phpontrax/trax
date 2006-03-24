@@ -22,6 +22,29 @@
  */
 define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
 
+/**
+ *  Symbol substitution tables
+ *
+ *  $search and $replace below are used to perform substitutions of
+ *  symbols in a file being copied.  $search is an array of
+ *  Perl-compatible regular expressions, and $replace is a congruent
+ *  array of replacements for RE matches.  So everywhere that the RE
+ *  in, for example, $search[3] is matched in a file, the matching
+ *  string is replaced by the contents of $replace[3].
+ */
+$search = array(
+                '@TRAX-CONFIG@' // symbol for the full filesystem path
+                                // to the Trax config/ directory in
+                                // the user's work area
+                );
+
+$replace = array(
+                 ''             // actual value of the full filesystem
+                                // path to the Trax config/ directory
+                                // in the user's work area
+                 );
+
+
 function trax() {
 
     //  Get command line argument, if any
@@ -39,13 +62,19 @@ function trax() {
     //  Destination directory on command line
     $dstdir = $GLOBALS['argv'][1];
 
-    //  Guarantee it ends with '/'
-    if (substr($dstdir,-1,1) != '/') {
-        $dstdir .= '/';
+    //  Guarantee it ends with DIRECTORY_SEPARATOR
+    if (substr($dstdir,-1,1) != DIRECTORY_SEPARATOR) {
+        $dstdir .= DIRECTORY_SEPARATOR;
     }
     if (!create_dir($dstdir)) {
         return;
     }
+
+    //  Assign real values for symbol substitution
+    $replace[0] = $dstdir.'config'; // actual value of the full
+                                    // filesystem path to the Trax
+                                    // config/ directory in the user's
+                                    // work area 
 
     $srcdir = SOURCE_DIR;
     //  copy source directory to destination directory
@@ -119,7 +148,7 @@ function copy_dir($src_path,$dst_path) {
             }
 
             //  Destination file does not exist.  Create it
-            if (!copy($src_path . $src_file, $dst_path . $src_file)) {
+            if (!copy_file($src_path . $src_file, $dst_path . $src_file)) {
                 return false;
             }
 
@@ -140,8 +169,8 @@ function copy_dir($src_path,$dst_path) {
             }
 
             //  Recursive call to copy directory
-            if (!copy_dir($src_path . $src_file.'/',
-                          $dst_path . $src_file . '/')) {
+            if (!copy_dir($src_path . $src_file . DIRECTORY_SEPARATOR,
+                          $dst_path . $src_file . DIRECTORY_SEPARATOR)) {
                 return false;
             }
         }
@@ -164,7 +193,7 @@ function create_dir($dst_dir) {
         if (is_dir( $dst_dir )) {
 
             //  A destination directory with this name exists.
-            echo "$dst_dir/ exists\n";
+            echo "$dst_dir".DIRECTORY_SEPARATOR." exists\n";
             return true;
         }
 
@@ -184,7 +213,28 @@ function create_dir($dst_dir) {
     if (!mkdir($dst_dir,0775,true)) {
         return false;
     }
-    echo "$dst_dir/ created\n";
+    echo "$dst_dir".DIRECTORY_SEPARATOR." created\n";
+    return true;
+}
+
+/**
+ *  Copy a Trax file into user's work area, substituting @TRAX-...@
+ *
+ *  @param string $src_path  Path to source file
+ *  @param string $dst_path  Path to destination file
+ *  @return boolean true=>success, false=>failure.
+ */
+function copy_file($src_path, $dst_path) {
+
+    //  Read source file into a string
+    if (!$file = file_get_contents($src_path)) {
+        return false;
+    }
+
+    //  Substitute @TRAX-...@ symbols for appropriate values
+
+    //  Write out file contents
+    @file_put_contents($dst_path, $file);
     return true;
 }
 
@@ -192,20 +242,23 @@ function create_dir($dst_dir) {
  *  Output a Usage message and exit
  */
 function usage() {
-    echo <<<END
-Usage: @BIN-DIR@/trax /path/to/your/app
+    echo "Usage: @BIN-DIR@".DIRECTORY_SEPARATOR."trax"
+        ." ".DIRECTORY_SEPARATOR."path".DIRECTORY_SEPARATOR."to"
+        .DIRECTORY_SEPARATOR."your".DIRECTORY_SEPARATOR."app
 
 Description:
     The 'trax' command creates a new Trax application with a default
     directory structure and configuration at the path you specify.
 
 Example:
-    trax /var/www/html
+    trax ".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."www"
+        .DIRECTORY_SEPARATOR."html
 
-    This generates a skeletal Trax installation in /var/www/html.
+    This generates a skeletal Trax installation in "
+    .DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."www"
+    .DIRECTORY_SEPARATOR."html.
     See the README in the newly created application to get going.
-
-END;
+\n";
     exit;
 }
 
