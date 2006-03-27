@@ -34,13 +34,18 @@
 					<strong>Package-level:</strong>
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
+<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
+<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_troubleshoot.pkg.html">Troubleshooting</a>
+</ul>
+<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_reference.pkg.html">Reference</a>
+</ul>
+</li></ul>
 
 										<strong>Class-level:</strong>
-							<ul>
-	<li type="square"><a href="../PHPonTrax/tutorial_ApplicationController.cls.html">ApplicationController</a>
-</ul>
-
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecordHelper.cls.html">ActiveRecordHelper</a>
 </ul>
@@ -70,7 +75,7 @@
 </ul>
 
 							<ul>
-	<li type="square"><a href="../PHPonTrax/tutorial_FormOptionsHelper.cls.html">FormOptionsHelper</a>
+	<li type="square"><a href="../PHPonTrax/tutorial_ApplicationController.cls.html">ApplicationController</a>
 </ul>
 
 							<ul>
@@ -90,7 +95,7 @@
 </ul>
 
 							<ul>
-	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecordError.cls.html">ActiveRecordError</a>
+	<li type="square"><a href="../PHPonTrax/tutorial_FormOptionsHelper.cls.html">FormOptionsHelper</a>
 </ul>
 
 							<ul>
@@ -103,6 +108,10 @@
 
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_Inflector.cls.html">Inflector</a>
+</ul>
+
+							<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_ActiveRecordError.cls.html">ActiveRecordError</a>
 </ul>
 
 							<ul>
@@ -139,25 +148,19 @@
 		</a><br>
 			<a href="../PHPonTrax/_data_app_controllers_application_php.html">		application.php
 		</a><br>
-			<a href="../PHPonTrax/_app_controllers_application_php.html">		application.php
-		</a><br>
 			<a href="../PHPonTrax/_data_app_helpers_application_helper_php.html">		application_helper.php
 		</a><br>
-			<a href="../PHPonTrax/_app_helpers_application_helper_php.html">		application_helper.php
-		</a><br>
-			<a href="../PHPonTrax/_app_application_mailer_php.html">		application_mailer.php
+			<a href="../PHPonTrax/_data_app_application_mailer_php.html">		application_mailer.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html">		asset_tag_helper.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_date_helper_php.html">		date_helper.php
 		</a><br>
-			<a href="../PHPonTrax/_config_environments_development_php.html">		development.php
-		</a><br>
 			<a href="../PHPonTrax/_data_config_environments_development_php.html">		development.php
 		</a><br>
-			<a href="../PHPonTrax/_vendor_trax_dispatcher_php.html">		dispatcher.php
+			<a href="../PHPonTrax/_data_public_dispatch_php.html">		dispatch.php
 		</a><br>
-			<a href="../PHPonTrax/_config_environment_php.html">		environment.php
+			<a href="../PHPonTrax/_vendor_trax_dispatcher_php.html">		dispatcher.php
 		</a><br>
 			<a href="../PHPonTrax/_data_config_environment_php.html">		environment.php
 		</a><br>
@@ -168,8 +171,6 @@
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html">		form_tag_helper.php
 		</a><br>
 			<a href="../PHPonTrax/_data_script_generate_php.html">		generate.php
-		</a><br>
-			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
@@ -183,19 +184,13 @@
 		</a><br>
 			<a href="../PHPonTrax/_data_config_environments_production_php.html">		production.php
 		</a><br>
-			<a href="../PHPonTrax/_config_environments_production_php.html">		production.php
-		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_router_php.html">		router.php
-		</a><br>
-			<a href="../PHPonTrax/_config_routes_php.html">		routes.php
 		</a><br>
 			<a href="../PHPonTrax/_data_config_routes_php.html">		routes.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_scaffold_controller_php.html">		scaffold_controller.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_session_php.html">		session.php
-		</a><br>
-			<a href="../PHPonTrax/_config_environments_test_php.html">		test.php
 		</a><br>
 			<a href="../PHPonTrax/_data_config_environments_test_php.html">		test.php
 		</a><br>
@@ -248,7 +243,7 @@ Source Location: /trax.php<br /><br />
 
 
 <h2>Page Details:</h2>
-Copy Pear directory data_dir/PHPonTrax/data/ to user's work area<br /><br /><p>(PHP 5)</p><br /><br /><br />
+Create Trax application work area<br /><br /><p>(PHP 5)</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -272,10 +267,23 @@ Copy Pear directory data_dir/PHPonTrax/data/ to user's work area<br /><br /><p>(
 <br /><br />
 <br /><br />
 <br /><br />
+  <hr />
+	<a name="defineSOURCE_DIR"></a>
+	<h3>SOURCE_DIR <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a23">23</a>]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>SOURCE_DIR = &quot;@DATA-DIR@/PHPonTrax/data/&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+    Define where to find files to copy to the work area<br /><br /><p>Set automatically by the Pear installer when you install Trax with   the <strong>pear install</strong> command.  If you are prevented from using   <strong>pear install</strong>, change &quot;@DATA-DIR@/PHPonTrax&quot; by hand to the   full filesystem path of the location where you installed the Trax   distribution</p><br />    <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 <br />
   <hr />
 	<a name="functioncopy_dir"></a>
-	<h3>copy_dir <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a49">49</a>]</span></h3>
+	<h3>copy_dir <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a95">95</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -284,7 +292,7 @@ string $src_path, string $dst_path)</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Copy a directory with all its contents<br /><br /><br /><br />
+		Copy a directory with all its contents<br /><br /><p>When a file whose filename ends '.log' is created, its permissions   are set to be world writable.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -311,8 +319,45 @@ string $src_path, string $dst_path)</code>
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
+	<a name="functioncopy_file"></a>
+	<h3>copy_file <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a229">229</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>boolean copy_file(
+string $src_path, string $dst_path)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+
+		Copy a Trax file into user's work area, substituting @TRAX-...@<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>true=&gt;success, false=&gt;failure.</td>
+  </tr>
+</table>
+</div>
+    <br /><br />
+	
+    		<h4>Parameters</h4>
+    <table border="0" cellspacing="0" cellpadding="0">
+		      <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$src_path</b>&nbsp;&nbsp;</td>
+        <td>Path to source file</td>
+      </tr>
+		      <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$dst_path</b>&nbsp;&nbsp;</td>
+        <td>Path to destination file</td>
+      </tr>
+				</table>
+    	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+	</div>
+  <hr />
 	<a name="functioncreate_dir"></a>
-	<h3>create_dir <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a138">138</a>]</span></h3>
+	<h3>create_dir <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a189">189</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -344,7 +389,7 @@ string $dst_dir)</code>
 	</div>
   <hr />
 	<a name="functiontrax"></a>
-	<h3>trax <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a14">14</a>]</span></h3>
+	<h3>trax <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a48">48</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -353,14 +398,29 @@ string $dst_dir)</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		    <br /><br />
+		Symbol substitution tables<br /><br /><p>$search and $replace below are used to perform substitutions of   symbols in a file being copied.  $search is an array of   Perl-compatible regular expressions, and $replace is a congruent   array of replacements for RE matches.  So everywhere that the RE   in, for example, $search[3] is matched in a file, the matching   string is replaced by the contents of $replace[3].</p><br />    <br /><br />
+	
+    	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+	</div>
+  <hr />
+	<a name="functionusage"></a>
+	<h3>usage <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__trax.php.html#a249">249</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void usage(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+
+		Output a Usage message and exit<br /><br />    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 21 Mar 2006 16:09:41 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 27 Mar 2006 14:54:50 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

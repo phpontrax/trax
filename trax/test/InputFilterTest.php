@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the InputFilterTest class
@@ -13,6 +12,7 @@
  */
 
 echo "testing InputFilter\n";
+require_once 'testenv.php';
 
 // Call InputFilterTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,7 +25,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../vendor/trax/input_filter.php";
+require_once "input_filter.php";
 
 /**
  * Test class for InputFilter.

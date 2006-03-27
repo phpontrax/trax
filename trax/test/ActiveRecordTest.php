@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the ActiveRecordTest class
@@ -13,12 +12,13 @@
  */
 
 echo "testing ActiveRecord\n";
+require_once 'testenv.php';
 
 //  We need to load a mock DB class to test ActiveRecord.
 //  Change the include path to put the mockDB/ directory first, so
 //  that when ActiveRecord loads it will pick up the mock class.
 @ini_set('include_path','./mockDB:'.ini_get('include_path'));
-require_once "../vendor/trax/active_record.php";
+require_once "active_record.php";
 
 // Call ActiveRecordTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -31,8 +31,8 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 /**
  *  Require classes that are too trivial to bother making mocks
  */
-require_once '../vendor/trax/trax_exceptions.php';
-require_once '../vendor/trax/inflector.php';
+require_once 'trax_exceptions.php';
+require_once 'inflector.php';
 
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";

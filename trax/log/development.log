@@ -1,1 +1,4 @@
 
+[22-Mar-2006 15:23:15] PHP Warning:  ActionController::load_router(/home/haas/trax/config/routes.php) [<a href='function.load-router'>function.load-router</a>]: failed to open stream: No such file or directory in /home/haas/trax/vendor/trax/action_controller.php on line 356
+[22-Mar-2006 15:23:15] PHP Fatal error:  ActionController::load_router() [<a href='function.require'>function.require</a>]: Failed opening required '/home/haas/trax/config/routes.php' (include_path='.:/home/haas/trax/vendor/trax:/usr/local/lib/php:/home/haas/trax/lib:.:/usr/share/pear:/home/haas/trax/config') in /home/haas/trax/vendor/trax/action_controller.php on line 356
+[22-Mar-2006 15:23:58] PHP Notice:  Undefined index:  ACTIVE_RECORD_SQL_LOG in /home/haas/trax/vendor/trax/templates/error.phtml on line 51

@@ -23,13 +23,10 @@ directory and type
  php runtests.php
 
 on the command line.  All tests will be run automatically.
-(on Linux and other Unix-like systems, you can type ./runtests.php)
 
 Or you can run a single test, for example the test of the ActiveRecord
 class, from the command line:
 
- phpunit ActiveRecord
-
-(on Linux and other Unix-like systems, you can type ./ActiveRecord.php)
+ php ActiveRecord.php
 
 

@@ -671,7 +671,9 @@ class ActionController {
                     $content_for_layout = ob_get_contents();
                     ob_end_clean();
         
-                    if($this->controller_object->render_layout !== false && $layout_file) {
+                    if(isset($this->controller_object->render_layout)
+                       && ($this->controller_object->render_layout !== false)
+                       && $layout_file) {
                         $locals['content_for_layout'] = $content_for_layout;
                         # render the layout
                         //error_log("rendering layout: $layout_file");

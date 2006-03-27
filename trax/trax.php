@@ -33,7 +33,7 @@ define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
  *  string is replaced by the contents of $replace[3].
  */
 $search = array(
-                '@TRAX-CONFIG@' // symbol for the full filesystem path
+                '/@TRAX-CONFIG@/' // symbol for the full filesystem path
                                 // to the Trax config/ directory in
                                 // the user's work area
                 );
@@ -46,6 +46,8 @@ $replace = array(
 
 
 function trax() {
+
+    global $search, $replace;
 
     //  Get command line argument, if any
     if (!array_key_exists('argc',$GLOBALS)
@@ -71,10 +73,10 @@ function trax() {
     }
 
     //  Assign real values for symbol substitution
-    $replace[0] = $dstdir.'config'; // actual value of the full
-                                    // filesystem path to the Trax
-                                    // config/ directory in the user's
-                                    // work area 
+    $replace[0] = realpath('./'.$dstdir.'config'); // actual value of
+                                // the full filesystem path to the
+                                // Trax config/ directory in the
+                                // user's work area
 
     $srcdir = SOURCE_DIR;
     //  copy source directory to destination directory
@@ -226,12 +228,15 @@ function create_dir($dst_dir) {
  */
 function copy_file($src_path, $dst_path) {
 
+    global $search, $replace;
+
     //  Read source file into a string
     if (!$file = file_get_contents($src_path)) {
         return false;
     }
 
     //  Substitute @TRAX-...@ symbols for appropriate values
+    $file = preg_replace($search, $replace, $file);
 
     //  Write out file contents
     @file_put_contents($dst_path, $file);

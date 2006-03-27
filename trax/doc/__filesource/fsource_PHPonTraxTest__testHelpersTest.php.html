@@ -38,21 +38,21 @@
 <h1 align="center">Source for file HelpersTest.php</h1>
 <p>Documentation is available at <a href="../PHPonTraxTest/_test_HelpersTest_php.html">HelpersTest.php</a></p>
 <div class="php">
-<div class="listing"><pre><ol><li><a name="a1"></a>#!/usr/bin/php -q</li>
-<li><a name="a2"></a><span class="src-php">&lt;?php</span></li>
-<li><a name="a3"></a><span class="src-doc">/**</span></li>
-<li><a name="a4"></a><span class="src-doc"> *  File for the HelpersTest class</span></li>
-<li><a name="a5"></a><span class="src-doc"> *</span></li>
-<li><a name="a6"></a><span class="src-doc"> * (PHP 5)</span></li>
-<li><a name="a7"></a><span class="src-doc"> *</span></li>
-<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
-<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
-<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
-<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: HelpersTest.php 165 2006-03-09 19:50:58Z haas $</span></li>
-<li><a name="a12"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
-<li><a name="a13"></a><span class="src-doc"> */</span></li>
-<li><a name="a14"></a>&nbsp;</li>
-<li><a name="a15"></a>echo <span class="src-str">&quot;testing Helpers\n&quot;</span><span class="src-sym">;</span></li>
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  File for the HelpersTest class</span></li>
+<li><a name="a4"></a><span class="src-doc"> *</span></li>
+<li><a name="a5"></a><span class="src-doc"> * (PHP 5)</span></li>
+<li><a name="a6"></a><span class="src-doc"> *</span></li>
+<li><a name="a7"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
+<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
+<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: HelpersTest.php 165 2006-03-09 19:50:58Z haas $</span></li>
+<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
+<li><a name="a12"></a><span class="src-doc"> */</span></li>
+<li><a name="a13"></a>&nbsp;</li>
+<li><a name="a14"></a>echo <span class="src-str">&quot;testing Helpers\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a15"></a><span class="src-inc">require_once </span><span class="src-str">'testenv.php'</span><span class="src-sym">;</span></li>
 <li><a name="a16"></a>&nbsp;</li>
 <li><a name="a17"></a><span class="src-comm">// Call HelpersTest::main() if this source file is executed directly.</span></li>
 <li><a name="a18"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;PHPUnit2_MAIN_METHOD&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
@@ -67,256 +67,255 @@
 <li><a name="a27"></a>&nbsp;</li>
 <li><a name="a28"></a><span class="src-comm">//  root Trax files in the test directory</span></li>
 <li><a name="a29"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_ROOT&quot;</span><span class="src-sym">, </span><span class="src-id">dirname</span><span class="src-sym">(</span>__FILE__<span class="src-sym">) </span>. <span class="src-str">&quot;/&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a30"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_LIB_ROOT&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;../vendor/trax&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a31"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_VIEWS_EXTENTION&quot;</span><span class="src-sym">,  </span><span class="src-str">&quot;phtml&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a32"></a><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">] </span>=</li>
-<li><a name="a33"></a>    <span class="src-key">array</span><span class="src-sym">( </span><span class="src-str">&quot;config&quot;      </span>=&gt; <span class="src-str">&quot;config&quot;</span><span class="src-sym">,</span></li>
-<li><a name="a34"></a>           <span class="src-str">&quot;controllers&quot; </span>=&gt; <span class="src-str">&quot;controllers&quot;</span><span class="src-sym">,</span></li>
-<li><a name="a35"></a>           <span class="src-str">&quot;helpers&quot;     </span>=&gt; <span class="src-str">&quot;helpers&quot;</span><span class="src-sym">,</span></li>
-<li><a name="a36"></a>           <span class="src-str">&quot;layouts&quot;     </span>=&gt; <span class="src-str">&quot;layouts&quot;</span><span class="src-sym">,</span></li>
-<li><a name="a37"></a>           <span class="src-str">&quot;views&quot;       </span>=&gt; <span class="src-str">&quot;views&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a38"></a>&nbsp;</li>
-<li><a name="a39"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../vendor/trax/action_view/helpers.php&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a40"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../vendor/trax/action_controller.php&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a41"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../vendor/trax/router.php&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a42"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../app/controllers/application.php&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a43"></a>&nbsp;</li>
-<li><a name="a44"></a><span class="src-doc">/**</span></li>
-<li><a name="a45"></a><span class="src-doc"> *  Extend Helpers class to test protected methods</span></li>
-<li><a name="a46"></a><span class="src-doc"> */</span></li>
-<li><a name="a47"></a><span class="src-key">class </span><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a> <span class="src-key">extends </span><a href="../PHPonTrax/Helpers.html">Helpers</a></li>
-<li><a name="a48"></a><span class="src-sym">{</span></li>
-<li><a name="a49"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-var">$object_name </span>= <span class="src-id">null</span><span class="src-sym">, </span><span class="src-var">$attribute_name </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a50"></a>        <span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a51"></a>    <span class="src-sym">}</span></li>
-<li><a name="a52"></a>&nbsp;</li>
-<li><a name="a53"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodboolean_attribute">boolean_attribute</a><span class="src-sym">(</span><span class="src-sym">&amp;</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$attribute</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a54"></a>        <span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodboolean_attribute">boolean_attribute</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$attribute</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a55"></a>    <span class="src-sym">}</span></li>
-<li><a name="a56"></a>&nbsp;</li>
-<li><a name="a57"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodconvert_options">convert_options</a><span class="src-sym">(</span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a58"></a>        <span class="src-key">return </span><span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodconvert_options">convert_options</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a59"></a>    <span class="src-sym">}</span></li>
-<li><a name="a60"></a>&nbsp;</li>
-<li><a name="a61"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodobject">object</a><span class="src-sym">(</span><span class="src-var">$object_name </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a62"></a>        <span class="src-key">return </span><span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodobject">object</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a63"></a>    <span class="src-sym">}</span></li>
-<li><a name="a64"></a><span class="src-sym">}                         </span><span class="src-comm">// class ExtHelpers extends Helpers</span></li>
-<li><a name="a65"></a>&nbsp;</li>
-<li><a name="a66"></a><span class="src-doc">/**</span></li>
-<li><a name="a67"></a><span class="src-doc"> *  Dummy controller object</span></li>
-<li><a name="a68"></a><span class="src-doc"> */</span></li>
-<li><a name="a69"></a><span class="src-key">class </span><a href="../PHPonTraxTest/DummyController.html">DummyController</a> <span class="src-key">extends </span><a href="../PHPonTrax/ApplicationController.html">ApplicationController</a></li>
-<li><a name="a70"></a><span class="src-sym">{</span></li>
-<li><a name="a71"></a>    <span class="src-key">var </span><a href="../PHPonTraxTest/DummyController.html#var$some_attr">$some_attr</a> = <span class="src-str">'attr value'</span><span class="src-sym">;</span></li>
-<li><a name="a72"></a><span class="src-sym">}                         </span><span class="src-comm">// class DummyController</span></li>
-<li><a name="a73"></a>&nbsp;</li>
-<li><a name="a74"></a><span class="src-doc">/**</span></li>
-<li><a name="a75"></a><span class="src-doc"> * Test class for Helpers.</span></li>
-<li><a name="a76"></a><span class="src-doc"> * Generated by PHPUnit2_Util_Skeleton on 2006-03-01 at 13:23:35.</span></li>
-<li><a name="a77"></a><span class="src-doc"> */</span></li>
-<li><a name="a78"></a><span class="src-key">class </span><a href="../PHPonTraxTest/HelpersTest.html">HelpersTest</a> <span class="src-key">extends </span><span class="src-id">PHPUnit2_Framework_TestCase </span><span class="src-sym">{</span></li>
-<li><a name="a79"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a80"></a><span class="src-doc">     * Runs the test methods of this class.</span></li>
-<li><a name="a81"></a><span class="src-doc">     *</span></li>
-<li><a name="a82"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
-<li><a name="a83"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@static</span></li>
-<li><a name="a84"></a><span class="src-doc">     */</span></li>
-<li><a name="a85"></a>    <span class="src-key">public </span><span class="src-key">static </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a86"></a>        <span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/TextUI/TestRunner.php&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a87"></a>&nbsp;</li>
-<li><a name="a88"></a>        <span class="src-var">$suite  </span>= <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_TestSuite</span><span class="src-sym">(</span><span class="src-str">&quot;HelpersTest&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a89"></a>        <span class="src-var">$result </span>= <span class="src-id">PHPUnit2_TextUI_TestRunner</span><span class="src-sym">::</span><span class="src-id">run</span><span class="src-sym">(</span><span class="src-var">$suite</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a90"></a>    <span class="src-sym">}</span></li>
-<li><a name="a91"></a>&nbsp;</li>
-<li><a name="a92"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a93"></a><span class="src-doc">     * Sets up the fixture, for example, open a network connection.</span></li>
-<li><a name="a94"></a><span class="src-doc">     * This method is called before a test is executed.</span></li>
-<li><a name="a95"></a><span class="src-doc">     *</span></li>
-<li><a name="a96"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
-<li><a name="a97"></a><span class="src-doc">     */</span></li>
-<li><a name="a98"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodsetUp">setUp</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a99"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_name'</span><span class="src-sym">] </span>= <span class="src-str">'foo_controller'</span><span class="src-sym">;</span></li>
-<li><a name="a100"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_path'</span><span class="src-sym">] </span>= <span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">;</span></li>
-<li><a name="a101"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_object'</span><span class="src-sym">] </span>= <span class="src-str">'nonobject'</span><span class="src-sym">;</span></li>
-<li><a name="a102"></a>    <span class="src-sym">}</span></li>
-<li><a name="a103"></a>&nbsp;</li>
-<li><a name="a104"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a105"></a><span class="src-doc">     * Tears down the fixture, for example, close a network connection.</span></li>
-<li><a name="a106"></a><span class="src-doc">     * This method is called after a test is executed.</span></li>
-<li><a name="a107"></a><span class="src-doc">     *</span></li>
-<li><a name="a108"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
-<li><a name="a109"></a><span class="src-doc">     */</span></li>
-<li><a name="a110"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtearDown">tearDown</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a111"></a>    <span class="src-sym">}</span></li>
+<li><a name="a30"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_VIEWS_EXTENTION&quot;</span><span class="src-sym">,  </span><span class="src-str">&quot;phtml&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a31"></a><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">] </span>=</li>
+<li><a name="a32"></a>    <span class="src-key">array</span><span class="src-sym">( </span><span class="src-str">&quot;config&quot;      </span>=&gt; <span class="src-str">&quot;config&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a33"></a>           <span class="src-str">&quot;controllers&quot; </span>=&gt; <span class="src-str">&quot;controllers&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a34"></a>           <span class="src-str">&quot;helpers&quot;     </span>=&gt; <span class="src-str">&quot;helpers&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a35"></a>           <span class="src-str">&quot;layouts&quot;     </span>=&gt; <span class="src-str">&quot;layouts&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a36"></a>           <span class="src-str">&quot;views&quot;       </span>=&gt; <span class="src-str">&quot;views&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a37"></a>&nbsp;</li>
+<li><a name="a38"></a><span class="src-inc">require_once </span><span class="src-str">&quot;action_view/helpers.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a39"></a><span class="src-inc">require_once </span><span class="src-str">&quot;action_controller.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a40"></a><span class="src-inc">require_once </span><span class="src-str">&quot;router.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a41"></a><span class="src-inc">require_once </span><span class="src-str">&quot;controllers/application.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a42"></a>&nbsp;</li>
+<li><a name="a43"></a><span class="src-doc">/**</span></li>
+<li><a name="a44"></a><span class="src-doc"> *  Extend Helpers class to test protected methods</span></li>
+<li><a name="a45"></a><span class="src-doc"> */</span></li>
+<li><a name="a46"></a><span class="src-key">class </span><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a> <span class="src-key">extends </span><a href="../PHPonTrax/Helpers.html">Helpers</a></li>
+<li><a name="a47"></a><span class="src-sym">{</span></li>
+<li><a name="a48"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-var">$object_name </span>= <span class="src-id">null</span><span class="src-sym">, </span><span class="src-var">$attribute_name </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a49"></a>        <span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a50"></a>    <span class="src-sym">}</span></li>
+<li><a name="a51"></a>&nbsp;</li>
+<li><a name="a52"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodboolean_attribute">boolean_attribute</a><span class="src-sym">(</span><span class="src-sym">&amp;</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$attribute</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a53"></a>        <span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodboolean_attribute">boolean_attribute</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$attribute</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a54"></a>    <span class="src-sym">}</span></li>
+<li><a name="a55"></a>&nbsp;</li>
+<li><a name="a56"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodconvert_options">convert_options</a><span class="src-sym">(</span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a57"></a>        <span class="src-key">return </span><span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodconvert_options">convert_options</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a58"></a>    <span class="src-sym">}</span></li>
+<li><a name="a59"></a>&nbsp;</li>
+<li><a name="a60"></a>    <span class="src-key">function </span><a href="../PHPonTraxTest/ExtHelpers.html#methodobject">object</a><span class="src-sym">(</span><span class="src-var">$object_name </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a61"></a>        <span class="src-key">return </span><span class="src-id">parent</span><span class="src-sym">::</span><a href="../PHPonTrax/Helpers.html#methodobject">object</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a62"></a>    <span class="src-sym">}</span></li>
+<li><a name="a63"></a><span class="src-sym">}                         </span><span class="src-comm">// class ExtHelpers extends Helpers</span></li>
+<li><a name="a64"></a>&nbsp;</li>
+<li><a name="a65"></a><span class="src-doc">/**</span></li>
+<li><a name="a66"></a><span class="src-doc"> *  Dummy controller object</span></li>
+<li><a name="a67"></a><span class="src-doc"> */</span></li>
+<li><a name="a68"></a><span class="src-key">class </span><a href="../PHPonTraxTest/DummyController.html">DummyController</a> <span class="src-key">extends </span><a href="../PHPonTrax/ApplicationController.html">ApplicationController</a></li>
+<li><a name="a69"></a><span class="src-sym">{</span></li>
+<li><a name="a70"></a>    <span class="src-key">var </span><a href="../PHPonTraxTest/DummyController.html#var$some_attr">$some_attr</a> = <span class="src-str">'attr value'</span><span class="src-sym">;</span></li>
+<li><a name="a71"></a><span class="src-sym">}                         </span><span class="src-comm">// class DummyController</span></li>
+<li><a name="a72"></a>&nbsp;</li>
+<li><a name="a73"></a><span class="src-doc">/**</span></li>
+<li><a name="a74"></a><span class="src-doc"> * Test class for Helpers.</span></li>
+<li><a name="a75"></a><span class="src-doc"> * Generated by PHPUnit2_Util_Skeleton on 2006-03-01 at 13:23:35.</span></li>
+<li><a name="a76"></a><span class="src-doc"> */</span></li>
+<li><a name="a77"></a><span class="src-key">class </span><a href="../PHPonTraxTest/HelpersTest.html">HelpersTest</a> <span class="src-key">extends </span><span class="src-id">PHPUnit2_Framework_TestCase </span><span class="src-sym">{</span></li>
+<li><a name="a78"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a79"></a><span class="src-doc">     * Runs the test methods of this class.</span></li>
+<li><a name="a80"></a><span class="src-doc">     *</span></li>
+<li><a name="a81"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a82"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@static</span></li>
+<li><a name="a83"></a><span class="src-doc">     */</span></li>
+<li><a name="a84"></a>    <span class="src-key">public </span><span class="src-key">static </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a85"></a>        <span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/TextUI/TestRunner.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a86"></a>&nbsp;</li>
+<li><a name="a87"></a>        <span class="src-var">$suite  </span>= <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_TestSuite</span><span class="src-sym">(</span><span class="src-str">&quot;HelpersTest&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a88"></a>        <span class="src-var">$result </span>= <span class="src-id">PHPUnit2_TextUI_TestRunner</span><span class="src-sym">::</span><span class="src-id">run</span><span class="src-sym">(</span><span class="src-var">$suite</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a89"></a>    <span class="src-sym">}</span></li>
+<li><a name="a90"></a>&nbsp;</li>
+<li><a name="a91"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a92"></a><span class="src-doc">     * Sets up the fixture, for example, open a network connection.</span></li>
+<li><a name="a93"></a><span class="src-doc">     * This method is called before a test is executed.</span></li>
+<li><a name="a94"></a><span class="src-doc">     *</span></li>
+<li><a name="a95"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
+<li><a name="a96"></a><span class="src-doc">     */</span></li>
+<li><a name="a97"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodsetUp">setUp</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a98"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_name'</span><span class="src-sym">] </span>= <span class="src-str">'foo_controller'</span><span class="src-sym">;</span></li>
+<li><a name="a99"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_path'</span><span class="src-sym">] </span>= <span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">;</span></li>
+<li><a name="a100"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_object'</span><span class="src-sym">] </span>= <span class="src-str">'nonobject'</span><span class="src-sym">;</span></li>
+<li><a name="a101"></a>    <span class="src-sym">}</span></li>
+<li><a name="a102"></a>&nbsp;</li>
+<li><a name="a103"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a104"></a><span class="src-doc">     * Tears down the fixture, for example, close a network connection.</span></li>
+<li><a name="a105"></a><span class="src-doc">     * This method is called after a test is executed.</span></li>
+<li><a name="a106"></a><span class="src-doc">     *</span></li>
+<li><a name="a107"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> protected</span></li>
+<li><a name="a108"></a><span class="src-doc">     */</span></li>
+<li><a name="a109"></a>    <span class="src-key">protected </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtearDown">tearDown</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a110"></a>    <span class="src-sym">}</span></li>
+<li><a name="a111"></a>&nbsp;</li>
 <li><a name="a112"></a>&nbsp;</li>
-<li><a name="a113"></a>&nbsp;</li>
-<li><a name="a114"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a115"></a><span class="src-doc">     *  Test constructor</span></li>
-<li><a name="a116"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Figure out how to test first argument</span></li>
-<li><a name="a117"></a><span class="src-doc">     */</span></li>
-<li><a name="a118"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtest__construct">test__construct</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a119"></a>        <span class="src-comm">//  No arguments to constructor</span></li>
-<li><a name="a120"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a121"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertFalse</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">auto_index</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a122"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">''</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a123"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertNull</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a124"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'foo_controller'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a125"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_path</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a126"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'nonobject'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_object</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a127"></a>        <span class="src-comm">//  Only attribute argument to constructor</span></li>
-<li><a name="a128"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">(</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-str">'someattr'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a129"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertFalse</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">auto_index</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a130"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">''</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a131"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'someattr'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a132"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'foo_controller'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a133"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_path</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a134"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'nonobject'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_object</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a135"></a>&nbsp;</li>
-<li><a name="a136"></a>        <span class="src-comm">//  Need to figure out how the first argument is used</span></li>
-<li><a name="a137"></a>        <span class="src-comm">//  and write a test for it.</span></li>
-<li><a name="a138"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
-<li><a name="a139"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
-<li><a name="a140"></a>    <span class="src-sym">}</span></li>
-<li><a name="a141"></a>&nbsp;</li>
-<li><a name="a142"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a143"></a><span class="src-doc">     * Test cdata_section().</span></li>
-<li><a name="a144"></a><span class="src-doc">     */</span></li>
-<li><a name="a145"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestCdata_section">testCdata_section</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a146"></a>        <span class="src-comm">//  Test the cdata_section() method of the object</span></li>
-<li><a name="a147"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a148"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">cdata_section</span><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a149"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;![CDATA[foo]]&gt;&quot;</span><span class="src-sym">, </span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a150"></a>        <span class="src-comm">//  Test the file function that calls cdata_section()</span></li>
-<li><a name="a151"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncdata_section">cdata_section</a><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a152"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;![CDATA[foo]]&gt;&quot;</span><span class="src-sym">, </span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a153"></a>    <span class="src-sym">}</span></li>
-<li><a name="a154"></a>&nbsp;</li>
-<li><a name="a155"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a156"></a><span class="src-doc">     *  Test tag()</span></li>
-<li><a name="a157"></a><span class="src-doc">     */</span></li>
-<li><a name="a158"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestTag">testTag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a159"></a>        <span class="src-comm">//  Test the tag() method of the object</span></li>
-<li><a name="a160"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a161"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a162"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p  /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a163"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a164"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a165"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot; /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a166"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a167"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a168"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a169"></a>        <span class="src-comm">//  Test the file function that calls tag()</span></li>
-<li><a name="a170"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a171"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p  /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a172"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a173"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot; /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a174"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a175"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a176"></a>    <span class="src-sym">}</span></li>
-<li><a name="a177"></a>&nbsp;</li>
-<li><a name="a178"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a179"></a><span class="src-doc">     *  Test content_tag()</span></li>
-<li><a name="a180"></a><span class="src-doc">     */</span></li>
-<li><a name="a181"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestContent_tag">testContent_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a182"></a>        <span class="src-comm">//  Test the content_tag() method of the object</span></li>
-<li><a name="a183"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a184"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a185"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p &gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a186"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a187"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'class'</span>=&gt;<span class="src-str">'content'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a188"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p class=\&quot;content\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a189"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a190"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a191"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a192"></a>        <span class="src-comm">//  Test the file function that calls content_tag()</span></li>
-<li><a name="a193"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a194"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p &gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a195"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'class'</span>=&gt;<span class="src-str">'content'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a196"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p class=\&quot;content\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a197"></a>    <span class="src-sym">}</span></li>
-<li><a name="a198"></a>&nbsp;</li>
-<li><a name="a199"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a200"></a><span class="src-doc">     * Test boolean_attribute().</span></li>
-<li><a name="a201"></a><span class="src-doc">     */</span></li>
-<li><a name="a202"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestBoolean_attribute">testBoolean_attribute</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a203"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a204"></a>        <span class="src-var">$k </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span>=&gt;<span class="src-str">'bar'</span><span class="src-sym">, </span><span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a205"></a>        <span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">boolean_attribute</span><span class="src-sym">(</span><span class="src-var">$k</span><span class="src-sym">,</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a206"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span>=&gt;<span class="src-str">'foo'</span><span class="src-sym">, </span><span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$k</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a207"></a>    <span class="src-sym">}</span></li>
-<li><a name="a208"></a>&nbsp;</li>
-<li><a name="a209"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a210"></a><span class="src-doc">     * Test convert_options().</span></li>
-<li><a name="a211"></a><span class="src-doc">     */</span></li>
-<li><a name="a212"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestConvert_options">testConvert_options</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a213"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a214"></a>        <span class="src-var">$k </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'disabled'</span>=&gt;<span class="src-str">'foo'</span><span class="src-sym">,</span></li>
-<li><a name="a215"></a>                   <span class="src-str">'readonly'</span>=&gt;<span class="src-str">'bar'</span><span class="src-sym">,</span></li>
-<li><a name="a216"></a>                   <span class="src-str">'multiple'</span>=&gt;<span class="src-str">'whocares'</span><span class="src-sym">,</span></li>
-<li><a name="a217"></a>                   <span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a218"></a>        <span class="src-var">$r </span>= <span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">convert_options</span><span class="src-sym">(</span><span class="src-var">$k</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a219"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'disabled'</span>=&gt;<span class="src-str">'disabled'</span><span class="src-sym">,</span></li>
-<li><a name="a220"></a>                                  <span class="src-str">'readonly'</span>=&gt;<span class="src-str">'readonly'</span><span class="src-sym">,</span></li>
-<li><a name="a221"></a>                                  <span class="src-str">'multiple'</span>=&gt;<span class="src-str">'multiple'</span><span class="src-sym">,</span></li>
-<li><a name="a222"></a>                                  <span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
-<li><a name="a223"></a>                            <span class="src-var">$r</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a224"></a>    <span class="src-sym">}</span></li>
-<li><a name="a225"></a>&nbsp;</li>
-<li><a name="a226"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a227"></a><span class="src-doc">     * Test object()</span></li>
-<li><a name="a228"></a><span class="src-doc">     */</span></li>
-<li><a name="a229"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestObject">testObject</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a230"></a>        <span class="src-comm">//  Constructing with no object name and then</span></li>
-<li><a name="a231"></a>        <span class="src-comm">//  calling object with no argument should return null</span></li>
-<li><a name="a232"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a233"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertNull</span><span class="src-sym">(</span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a234"></a>        <span class="src-comm">//  Create a dummy controller object</span></li>
-<li><a name="a235"></a>        <span class="src-var">$d </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/DummyController.html">DummyController</a></span><span class="src-sym">;</span></li>
-<li><a name="a236"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_object'</span><span class="src-sym">] </span>= <span class="src-var">$d</span><span class="src-sym">;</span></li>
-<li><a name="a237"></a>        <span class="src-comm">//  This should inherit value of current_controller_object</span></li>
-<li><a name="a238"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
-<li><a name="a239"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'attr value'</span><span class="src-sym">, </span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-str">'some_attr'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a240"></a>        <span class="src-comm">//  This should inherit object name from constructor</span></li>
-<li><a name="a241"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">(</span><span class="src-str">'some_attr'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a242"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'attr value'</span><span class="src-sym">, </span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a243"></a>    <span class="src-sym">}</span></li>
-<li><a name="a244"></a>&nbsp;</li>
-<li><a name="a245"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a246"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testTo_content_tag().</span></li>
-<li><a name="a247"></a><span class="src-doc">     */</span></li>
-<li><a name="a248"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestTo_content_tag">testTo_content_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a249"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
-<li><a name="a250"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
-<li><a name="a251"></a>    <span class="src-sym">}</span></li>
-<li><a name="a252"></a>&nbsp;</li>
-<li><a name="a253"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a254"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testValue().</span></li>
-<li><a name="a255"></a><span class="src-doc">     */</span></li>
-<li><a name="a256"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestValue">testValue</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a257"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
-<li><a name="a258"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
-<li><a name="a259"></a>    <span class="src-sym">}</span></li>
-<li><a name="a260"></a><span class="src-sym">}</span></li>
-<li><a name="a261"></a>&nbsp;</li>
-<li><a name="a262"></a><span class="src-comm">// Call HelpersTest::main() if this source file is executed directly.</span></li>
-<li><a name="a263"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_InputFilterTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;HelpersTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a264"></a>    <span class="src-id"><a href="../PHPonTraxTest/HelpersTest.html">HelpersTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/HelpersTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a265"></a><span class="src-sym">}</span></li>
-<li><a name="a266"></a>&nbsp;</li>
-<li><a name="a267"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
-<li><a name="a268"></a><span class="src-comm">// Local variables:</span></li>
-<li><a name="a269"></a><span class="src-comm">// tab-width: 4</span></li>
-<li><a name="a270"></a><span class="src-comm">// c-basic-offset: 4</span></li>
-<li><a name="a271"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
-<li><a name="a272"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
-<li><a name="a273"></a><span class="src-comm">// End:</span></li>
-<li><a name="a274"></a><span class="src-php">?&gt;</span></li>
+<li><a name="a113"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a114"></a><span class="src-doc">     *  Test constructor</span></li>
+<li><a name="a115"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Figure out how to test first argument</span></li>
+<li><a name="a116"></a><span class="src-doc">     */</span></li>
+<li><a name="a117"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtest__construct">test__construct</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a118"></a>        <span class="src-comm">//  No arguments to constructor</span></li>
+<li><a name="a119"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a120"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertFalse</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">auto_index</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a121"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">''</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a122"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertNull</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a123"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'foo_controller'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a124"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_path</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a125"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'nonobject'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_object</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a126"></a>        <span class="src-comm">//  Only attribute argument to constructor</span></li>
+<li><a name="a127"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">(</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-str">'someattr'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a128"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertFalse</span><span class="src-sym">(</span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">auto_index</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a129"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">''</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">object_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a130"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'someattr'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a131"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'foo_controller'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a132"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'/foo/bar/mumble'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_path</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a133"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'nonobject'</span><span class="src-sym">, </span><span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">controller_object</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a134"></a>&nbsp;</li>
+<li><a name="a135"></a>        <span class="src-comm">//  Need to figure out how the first argument is used</span></li>
+<li><a name="a136"></a>        <span class="src-comm">//  and write a test for it.</span></li>
+<li><a name="a137"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a138"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a139"></a>    <span class="src-sym">}</span></li>
+<li><a name="a140"></a>&nbsp;</li>
+<li><a name="a141"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a142"></a><span class="src-doc">     * Test cdata_section().</span></li>
+<li><a name="a143"></a><span class="src-doc">     */</span></li>
+<li><a name="a144"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestCdata_section">testCdata_section</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a145"></a>        <span class="src-comm">//  Test the cdata_section() method of the object</span></li>
+<li><a name="a146"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a147"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">cdata_section</span><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a148"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;![CDATA[foo]]&gt;&quot;</span><span class="src-sym">, </span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a149"></a>        <span class="src-comm">//  Test the file function that calls cdata_section()</span></li>
+<li><a name="a150"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncdata_section">cdata_section</a><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a151"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;![CDATA[foo]]&gt;&quot;</span><span class="src-sym">, </span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a152"></a>    <span class="src-sym">}</span></li>
+<li><a name="a153"></a>&nbsp;</li>
+<li><a name="a154"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a155"></a><span class="src-doc">     *  Test tag()</span></li>
+<li><a name="a156"></a><span class="src-doc">     */</span></li>
+<li><a name="a157"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestTag">testTag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a158"></a>        <span class="src-comm">//  Test the tag() method of the object</span></li>
+<li><a name="a159"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a160"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a161"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p  /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a162"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a163"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a164"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot; /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a165"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a166"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a167"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a168"></a>        <span class="src-comm">//  Test the file function that calls tag()</span></li>
+<li><a name="a169"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a170"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p  /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a171"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a172"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot; /&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a173"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">, </span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a174"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a175"></a>    <span class="src-sym">}</span></li>
+<li><a name="a176"></a>&nbsp;</li>
+<li><a name="a177"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a178"></a><span class="src-doc">     *  Test content_tag()</span></li>
+<li><a name="a179"></a><span class="src-doc">     */</span></li>
+<li><a name="a180"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestContent_tag">testContent_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a181"></a>        <span class="src-comm">//  Test the content_tag() method of the object</span></li>
+<li><a name="a182"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a183"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a184"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p &gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a185"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a186"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'class'</span>=&gt;<span class="src-str">'content'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a187"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p class=\&quot;content\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a188"></a>        <span class="src-var">$h </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/Helpers.html">Helpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a189"></a>        <span class="src-var">$s </span>= <span class="src-var">$h</span><span class="src-sym">-&gt;</span><span class="src-id">content_tag</span><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'id'</span>=&gt;<span class="src-str">'a&amp;b'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a190"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p id=\&quot;a&amp;amp;b\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a191"></a>        <span class="src-comm">//  Test the file function that calls content_tag()</span></li>
+<li><a name="a192"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a193"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p &gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a194"></a>        <span class="src-var">$s </span>= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">'p'</span><span class="src-sym">,</span><span class="src-str">'hello world'</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'class'</span>=&gt;<span class="src-str">'content'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a195"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">&quot;&lt;p class=\&quot;content\&quot;&gt;hello world&lt;/p&gt;\n&quot;</span><span class="src-sym">,</span><span class="src-var">$s</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a196"></a>    <span class="src-sym">}</span></li>
+<li><a name="a197"></a>&nbsp;</li>
+<li><a name="a198"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a199"></a><span class="src-doc">     * Test boolean_attribute().</span></li>
+<li><a name="a200"></a><span class="src-doc">     */</span></li>
+<li><a name="a201"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestBoolean_attribute">testBoolean_attribute</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a202"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a203"></a>        <span class="src-var">$k </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span>=&gt;<span class="src-str">'bar'</span><span class="src-sym">, </span><span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a204"></a>        <span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">boolean_attribute</span><span class="src-sym">(</span><span class="src-var">$k</span><span class="src-sym">,</span><span class="src-str">'foo'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a205"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span>=&gt;<span class="src-str">'foo'</span><span class="src-sym">, </span><span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$k</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a206"></a>    <span class="src-sym">}</span></li>
+<li><a name="a207"></a>&nbsp;</li>
+<li><a name="a208"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a209"></a><span class="src-doc">     * Test convert_options().</span></li>
+<li><a name="a210"></a><span class="src-doc">     */</span></li>
+<li><a name="a211"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestConvert_options">testConvert_options</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a212"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a213"></a>        <span class="src-var">$k </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'disabled'</span>=&gt;<span class="src-str">'foo'</span><span class="src-sym">,</span></li>
+<li><a name="a214"></a>                   <span class="src-str">'readonly'</span>=&gt;<span class="src-str">'bar'</span><span class="src-sym">,</span></li>
+<li><a name="a215"></a>                   <span class="src-str">'multiple'</span>=&gt;<span class="src-str">'whocares'</span><span class="src-sym">,</span></li>
+<li><a name="a216"></a>                   <span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a217"></a>        <span class="src-var">$r </span>= <span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">convert_options</span><span class="src-sym">(</span><span class="src-var">$k</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a218"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'disabled'</span>=&gt;<span class="src-str">'disabled'</span><span class="src-sym">,</span></li>
+<li><a name="a219"></a>                                  <span class="src-str">'readonly'</span>=&gt;<span class="src-str">'readonly'</span><span class="src-sym">,</span></li>
+<li><a name="a220"></a>                                  <span class="src-str">'multiple'</span>=&gt;<span class="src-str">'multiple'</span><span class="src-sym">,</span></li>
+<li><a name="a221"></a>                                  <span class="src-str">'mumble'</span>=&gt;<span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a222"></a>                            <span class="src-var">$r</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a223"></a>    <span class="src-sym">}</span></li>
+<li><a name="a224"></a>&nbsp;</li>
+<li><a name="a225"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a226"></a><span class="src-doc">     * Test object()</span></li>
+<li><a name="a227"></a><span class="src-doc">     */</span></li>
+<li><a name="a228"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestObject">testObject</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a229"></a>        <span class="src-comm">//  Constructing with no object name and then</span></li>
+<li><a name="a230"></a>        <span class="src-comm">//  calling object with no argument should return null</span></li>
+<li><a name="a231"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a232"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertNull</span><span class="src-sym">(</span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a233"></a>        <span class="src-comm">//  Create a dummy controller object</span></li>
+<li><a name="a234"></a>        <span class="src-var">$d </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/DummyController.html">DummyController</a></span><span class="src-sym">;</span></li>
+<li><a name="a235"></a>        <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'current_controller_object'</span><span class="src-sym">] </span>= <span class="src-var">$d</span><span class="src-sym">;</span></li>
+<li><a name="a236"></a>        <span class="src-comm">//  This should inherit value of current_controller_object</span></li>
+<li><a name="a237"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">;</span></li>
+<li><a name="a238"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'attr value'</span><span class="src-sym">, </span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-str">'some_attr'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a239"></a>        <span class="src-comm">//  This should inherit object name from constructor</span></li>
+<li><a name="a240"></a>        <span class="src-var">$e </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a></span><span class="src-sym">(</span><span class="src-str">'some_attr'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a241"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'attr value'</span><span class="src-sym">, </span><span class="src-var">$e</span><span class="src-sym">-&gt;</span><span class="src-id">object</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a242"></a>    <span class="src-sym">}</span></li>
+<li><a name="a243"></a>&nbsp;</li>
+<li><a name="a244"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a245"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testTo_content_tag().</span></li>
+<li><a name="a246"></a><span class="src-doc">     */</span></li>
+<li><a name="a247"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestTo_content_tag">testTo_content_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a248"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a249"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a250"></a>    <span class="src-sym">}</span></li>
+<li><a name="a251"></a>&nbsp;</li>
+<li><a name="a252"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a253"></a><span class="src-doc">     * </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Implement testValue().</span></li>
+<li><a name="a254"></a><span class="src-doc">     */</span></li>
+<li><a name="a255"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/HelpersTest.html#methodtestValue">testValue</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a256"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a257"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a258"></a>    <span class="src-sym">}</span></li>
+<li><a name="a259"></a><span class="src-sym">}</span></li>
+<li><a name="a260"></a>&nbsp;</li>
+<li><a name="a261"></a><span class="src-comm">// Call HelpersTest::main() if this source file is executed directly.</span></li>
+<li><a name="a262"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_FormOptionsHelperTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;HelpersTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a263"></a>    <span class="src-id"><a href="../PHPonTraxTest/HelpersTest.html">HelpersTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/HelpersTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a264"></a><span class="src-sym">}</span></li>
+<li><a name="a265"></a>&nbsp;</li>
+<li><a name="a266"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a267"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a268"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a269"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a270"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a271"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a272"></a><span class="src-comm">// End:</span></li>
+<li><a name="a273"></a><span class="src-php">?&gt;</span></li>
 </ol></pre></div>
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 21 Mar 2006 16:09:32 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 27 Mar 2006 14:54:41 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

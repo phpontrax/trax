@@ -25,7 +25,7 @@
     action method</listitem> 
   </orderedlist>
  </refsect1>
- <refsect1 is="{@id url}">
+ <refsect1 id="{@id url}">
   <title>URL Processing</title>
 
   <para>
@@ -207,7 +207,7 @@ router->connect(':controller/:action/:id');
   </para>
 
  </refsect1>
- <refsect1 is="{@id action}">
+ <refsect1 id="{@id action}">
   <title>Action Call</title>
   <para>When the names of the controller and action have been
    successfully determined from the URL, the associated filesystem

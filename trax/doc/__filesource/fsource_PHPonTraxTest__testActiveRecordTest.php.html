@@ -38,27 +38,27 @@
 <h1 align="center">Source for file ActiveRecordTest.php</h1>
 <p>Documentation is available at <a href="../PHPonTraxTest/_test_ActiveRecordTest_php.html">ActiveRecordTest.php</a></p>
 <div class="php">
-<div class="listing"><pre><ol><li><a name="a1"></a>#!/usr/bin/php -q</li>
-<li><a name="a2"></a><span class="src-php">&lt;?php</span></li>
-<li><a name="a3"></a><span class="src-doc">/**</span></li>
-<li><a name="a4"></a><span class="src-doc"> *  File for the ActiveRecordTest class</span></li>
-<li><a name="a5"></a><span class="src-doc"> *</span></li>
-<li><a name="a6"></a><span class="src-doc"> * (PHP 5)</span></li>
-<li><a name="a7"></a><span class="src-doc"> *</span></li>
-<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
-<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
-<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
-<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: ActiveRecordTest.php 159 2006-03-01 23:44:16Z haas $</span></li>
-<li><a name="a12"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
-<li><a name="a13"></a><span class="src-doc"> */</span></li>
-<li><a name="a14"></a>&nbsp;</li>
-<li><a name="a15"></a>echo <span class="src-str">&quot;testing ActiveRecord\n&quot;</span><span class="src-sym">;</span></li>
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  File for the ActiveRecordTest class</span></li>
+<li><a name="a4"></a><span class="src-doc"> *</span></li>
+<li><a name="a5"></a><span class="src-doc"> * (PHP 5)</span></li>
+<li><a name="a6"></a><span class="src-doc"> *</span></li>
+<li><a name="a7"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
+<li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
+<li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: ActiveRecordTest.php 159 2006-03-01 23:44:16Z haas $</span></li>
+<li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
+<li><a name="a12"></a><span class="src-doc"> */</span></li>
+<li><a name="a13"></a>&nbsp;</li>
+<li><a name="a14"></a>echo <span class="src-str">&quot;testing ActiveRecord\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a15"></a><span class="src-inc">require_once </span><span class="src-str">'testenv.php'</span><span class="src-sym">;</span></li>
 <li><a name="a16"></a>&nbsp;</li>
 <li><a name="a17"></a><span class="src-comm">//  We need to load a mock DB class to test ActiveRecord.</span></li>
 <li><a name="a18"></a><span class="src-comm">//  Change the include path to put the mockDB/ directory first, so</span></li>
 <li><a name="a19"></a><span class="src-comm">//  that when ActiveRecord loads it will pick up the mock class.</span></li>
 <li><a name="a20"></a><span class="src-sym">@</span><a href="http://www.php.net/ini_set">ini_set</a><span class="src-sym">(</span><span class="src-str">'include_path'</span><span class="src-sym">,</span><span class="src-str">'./mockDB:'</span>.<a href="http://www.php.net/ini_get">ini_get</a><span class="src-sym">(</span><span class="src-str">'include_path'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
-<li><a name="a21"></a><span class="src-inc">require_once </span><span class="src-str">&quot;../vendor/trax/active_record.php&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a21"></a><span class="src-inc">require_once </span><span class="src-str">&quot;active_record.php&quot;</span><span class="src-sym">;</span></li>
 <li><a name="a22"></a>&nbsp;</li>
 <li><a name="a23"></a><span class="src-comm">// Call ActiveRecordTest::main() if this source file is executed directly.</span></li>
 <li><a name="a24"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/defined">defined</a><span class="src-sym">(</span><span class="src-str">&quot;PHPUnit2_MAIN_METHOD&quot;</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
@@ -71,8 +71,8 @@
 <li><a name="a31"></a><span class="src-doc">/**</span></li>
 <li><a name="a32"></a><span class="src-doc"> *  Require classes that are too trivial to bother making mocks</span></li>
 <li><a name="a33"></a><span class="src-doc"> */</span></li>
-<li><a name="a34"></a><span class="src-inc">require_once </span><span class="src-str">'../vendor/trax/trax_exceptions.php'</span><span class="src-sym">;</span></li>
-<li><a name="a35"></a><span class="src-inc">require_once </span><span class="src-str">'../vendor/trax/inflector.php'</span><span class="src-sym">;</span></li>
+<li><a name="a34"></a><span class="src-inc">require_once </span><span class="src-str">'trax_exceptions.php'</span><span class="src-sym">;</span></li>
+<li><a name="a35"></a><span class="src-inc">require_once </span><span class="src-str">'inflector.php'</span><span class="src-sym">;</span></li>
 <li><a name="a36"></a>&nbsp;</li>
 <li><a name="a37"></a><span class="src-comm">// You may remove the following line when all tests have been implemented.</span></li>
 <li><a name="a38"></a><span class="src-inc">require_once </span><span class="src-str">&quot;PHPUnit2/Framework/IncompleteTestError.php&quot;</span><span class="src-sym">;</span></li>
@@ -1048,7 +1048,7 @@
 <li><a name="a1008"></a><span class="src-sym">}</span></li>
 <li><a name="a1009"></a>&nbsp;</li>
 <li><a name="a1010"></a><span class="src-comm">// Call ActiveRecordTest::main() if this source file is executed directly.</span></li>
-<li><a name="a1011"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_InputFilterTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;ActiveRecordTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a1011"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_FormOptionsHelperTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;ActiveRecordTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a1012"></a>    <span class="src-id"><a href="../PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/ActiveRecordTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a1013"></a><span class="src-sym">}</span></li>
 <li><a name="a1014"></a>&nbsp;</li>
@@ -1064,7 +1064,7 @@
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 21 Mar 2006 16:09:07 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 27 Mar 2006 14:53:42 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

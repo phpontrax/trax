@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the HelpersTest class
@@ -13,6 +12,7 @@
  */
 
 echo "testing Helpers\n";
+require_once 'testenv.php';
 
 // Call HelpersTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -27,7 +27,6 @@ require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
 //  root Trax files in the test directory
 define("TRAX_ROOT", dirname(__FILE__) . "/");
-define("TRAX_LIB_ROOT", "../vendor/trax");
 define("TRAX_VIEWS_EXTENTION",  "phtml");
 $GLOBALS['TRAX_INCLUDES'] =
     array( "config"      => "config",
@@ -36,10 +35,10 @@ $GLOBALS['TRAX_INCLUDES'] =
            "layouts"     => "layouts",
            "views"       => "views");
 
-require_once "../vendor/trax/action_view/helpers.php";
-require_once "../vendor/trax/action_controller.php";
-require_once "../vendor/trax/router.php";
-require_once "../app/controllers/application.php";
+require_once "action_view/helpers.php";
+require_once "action_controller.php";
+require_once "router.php";
+require_once "controllers/application.php";
 
 /**
  *  Extend Helpers class to test protected methods

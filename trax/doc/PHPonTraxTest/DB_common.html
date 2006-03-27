@@ -50,6 +50,8 @@
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordTest_php.html">		ActiveRecordTest.php
 		</a><br>
+			<a href="../PHPonTraxTest/_test_controllers_application_php.html">		application.php
+		</a><br>
 			<a href="../PHPonTraxTest/_test_ApplicationControllerTest_php.html">		ApplicationControllerTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ApplicationMailerTest_php.html">		ApplicationMailerTest.php
@@ -89,6 +91,8 @@
 			<a href="../PHPonTraxTest/_test_ScaffoldControllerTest_php.html">		ScaffoldControllerTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_SessionTest_php.html">		SessionTest.php
+		</a><br>
+			<a href="../PHPonTraxTest/_test_testenv_php.html">		testenv.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_TraxErrorTest_php.html">		TraxErrorTest.php
 		</a><br>
@@ -276,12 +280,12 @@ Mock DB_common for testing<br /><br /><br /><br />
 <div class="tags">
 	<a name="var$database"></a>
 	<p></p>
-	<h4>$database = <span class="value">array('person_names'&nbsp;=&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array('info'&nbsp;=&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(array('table'&nbsp;=&gt;&nbsp;'person_names',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name'&nbsp;&nbsp;=&gt;&nbsp;'id',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'type'&nbsp;&nbsp;=&gt;&nbsp;'int',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'len'&nbsp;&nbsp;&nbsp;=&gt;&nbsp;'11',<br>
+	<h4>$database = <span class="value">array('person_names'&nbsp;=&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array('info'&nbsp;=&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(array('table'&nbsp;=&gt;&nbsp;'person_names',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name'&nbsp;&nbsp;=&gt;&nbsp;'id',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'type'&nbsp;&nbsp;=&gt;&nbsp;'int',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'len'&nbsp;&nbsp;&nbsp;=&gt;&nbsp;'11',<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'flags'&nbsp;=&gt;&nbsp;'primary_key&nbsp;not_null'),array('table'=&gt;'person_names','name'=&gt;'prefix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'first_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'mi','type'=&gt;'string','len'=&gt;'1','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'last_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'suffix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),),'data'=&gt;array()))</span></h4>
 	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a655">655</a>]</p>
   Mock Database<br /><br /><br /><br />
@@ -405,15 +409,15 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br />
 	<a name="var$options"></a>
 	<p></p>
-	<h4>$options = <span class="value">array(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'result_buffering'&nbsp;=&gt;&nbsp;500,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'persistent'&nbsp;=&gt;&nbsp;false,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ssl'&nbsp;=&gt;&nbsp;false,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'debug'&nbsp;=&gt;&nbsp;0,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'seqname_format'&nbsp;=&gt;&nbsp;'%s_seq',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'autofree'&nbsp;=&gt;&nbsp;false,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'portability'&nbsp;=&gt;&nbsp;DB_PORTABILITY_NONE,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'optimize'&nbsp;=&gt;&nbsp;'performance',&nbsp;&nbsp;//&nbsp;Deprecated.&nbsp;&nbsp;Use&nbsp;'portability'.<br>
+	<h4>$options = <span class="value">array(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'result_buffering'&nbsp;=&gt;&nbsp;500,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'persistent'&nbsp;=&gt;&nbsp;false,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ssl'&nbsp;=&gt;&nbsp;false,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'debug'&nbsp;=&gt;&nbsp;0,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'seqname_format'&nbsp;=&gt;&nbsp;'%s_seq',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'autofree'&nbsp;=&gt;&nbsp;false,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'portability'&nbsp;=&gt;&nbsp;DB_PORTABILITY_NONE,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'optimize'&nbsp;=&gt;&nbsp;'performance',&nbsp;&nbsp;//&nbsp;Deprecated.&nbsp;&nbsp;Use&nbsp;'portability'.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;)</span></h4>
 	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a700">700</a>]</p>
   Run-time configuration options<br /><br /><br /><br />
@@ -2720,7 +2724,7 @@ array
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 21 Mar 2006 16:09:22 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 27 Mar 2006 14:54:29 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

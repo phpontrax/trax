@@ -1,0 +1,130 @@
+{@toc}
+<refsect1 id="{@id simpleapp}">
+ <title>Build A Simple Trax Application</title>
+  <para>Let's learn about Trax by using it to build a simple
+   application. We assume you have installed Trax on your system as
+   described {@tutorial PHPonTrax.pkg#welcome.welcome-how above}.
+We'll also assume that we are building our web site in the Apache
+  {@link http://httpd.apache.org/docs/2.0/mod/core.html#documentroot DocumentRoot}
+  directory which is set to <literal>/var/www/html</literal>, and
+  that the computer we are building on can be accessed from a browser as
+  <literal>localhost</literal> .</para>
+
+ <refsect2 id="{@id simpleapp_workarea}">
+  <title>Create The Trax Work Area</title>
+  <para>The first step is to create a Trax work area for the site.
+   This work area will hold files describing the site.  For security
+   reasons, we don't want those files accessible from the Internet,
+   so we avoid putting them under <literal>/var/www/html</literal>.
+   We use the <command>trax</command> command and give it a location to
+   build the work area.  We choose the
+   <literal>/var/www/trax</literal> directory because it is not
+   accessible from the Internet.
+   <example>
+$ <important>trax /var/www/trax</important>
+/var/www/trax// created
+/var/www/trax/lib/ created
+/var/www/trax/vendor/ created
+/var/www/trax/script/ created
+/var/www/trax/script/generate.php created
+/var/www/trax/README created
+/var/www/trax/db/ created
+/var/www/trax/components/ created
+/var/www/trax/public/ created
+/var/www/trax/public/stylesheets/ created
+/var/www/trax/public/images/ created
+/var/www/trax/public/robots.txt created
+/var/www/trax/public/dispatch.php created
+/var/www/trax/public/.htaccess created
+/var/www/trax/public/index.html created
+/var/www/trax/public/javascripts/ created
+/var/www/trax/public/javascripts/controls.js created
+/var/www/trax/public/javascripts/dragdrop.js created
+/var/www/trax/public/javascripts/effects.js created
+/var/www/trax/public/javascripts/prototype.js created
+/var/www/trax/app/ created
+/var/www/trax/app/views/ created
+/var/www/trax/app/views/layouts/ created
+/var/www/trax/app/views/layouts/application.phtml created
+/var/www/trax/app/helpers/ created
+/var/www/trax/app/helpers/application_helper.php created
+/var/www/trax/app/models/ created
+/var/www/trax/app/controllers/ created
+/var/www/trax/app/controllers/application.php created
+/var/www/trax/app/application_mailer.php created
+/var/www/trax/test/ created
+/var/www/trax/config/ created
+/var/www/trax/config/routes.php created
+/var/www/trax/config/environment.php created
+/var/www/trax/config/environments/ created
+/var/www/trax/config/environments/production.php created
+/var/www/trax/config/environments/test.php created
+/var/www/trax/config/environments/development.php created
+/var/www/trax/config/database.ini created
+/var/www/trax/log/ created
+/var/www/trax/log/test.log created
+/var/www/trax/log/production.log created
+/var/www/trax/log/server.log created
+/var/www/trax/log/development.log created
+/var/www/trax/doc/ created
+/var/www/trax/doc/README_FOR_APP created
+   </example>
+   <command>trax</command> creates a number of directories and
+   installs files in some of them.  <command>trax</command> tells you
+   what it is doing.</para>
+
+  <para>One of the directories <command>trax</command> created is
+   <literal>/var/www/trax/public</literal> .  Let's look inside:
+   <example>
+$ <important>ls -Al /var/www/trax/public</important>
+total 28
+-rw-rw-r--  1 haas haas  217 Mar 26 19:55 dispatch.php
+-rw-rw-r--  1 haas haas 1039 Mar 26 19:55 .htaccess
+drwxrwxr-x  2 haas haas 4096 Mar 26 19:55 images
+-rw-rw-r--  1 haas haas 2829 Mar 26 19:55 index.html
+drwxrwxr-x  2 haas haas 4096 Mar 26 19:55 javascripts
+-rw-rw-r--  1 haas haas  106 Mar 26 19:55 robots.txt
+drwxrwxr-x  2 haas haas 4096 Mar 26 19:55 stylesheets
+   </example>
+   These files are meant to be visible to the Internet, unlike the
+   other files in the Trax work area.  We need to move them to where
+   Apache can serve them:
+   <example>
+$ <important>mv /var/www/trax/public/* /var/www/html</important>
+   </example>
+   Now a browser should be able to visit the
+   <literal>index.html</literal> file.  We verify this by browsing
+   <literal>http://localhost</literal> where we see
+   <important>Congratulations, you've put PHP on Trax!</important>
+   (if you don't see this, refer to {@tutorial troubleshoot.pkg}).</para>
+  <para></para>
+
+ </refsect2>
+ <refsect2 id="{@id simpleapp_database}">
+  <title>Create A Database and User</title>
+  <para>
+
+</para>
+  <para></para>
+  <para></para>
+  <para></para>
+ </refsect2>
+ <refsect2 id="{@id simpleapp_table}">
+  <title>Define A Table</title>
+  <para>
+
+</para>
+  <para></para>
+  <para></para>
+  <para></para>
+ </refsect2>
+ <refsect2 id="{@id simpleapp_dowhat}">
+  <title>Do what? ...</title>
+  <para>
+
+</para>
+  <para></para>
+  <para></para>
+  <para></para>
+ </refsect2>
+</refsect1>

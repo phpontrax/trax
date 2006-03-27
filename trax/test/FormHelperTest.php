@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the FormHelperTest class
@@ -13,6 +12,7 @@
  */
 
 echo "testing FormHelper\n";
+require_once 'testenv.php';
 
 // Call FormHelperTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,8 +25,8 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../vendor/trax/action_view/helpers.php";
-require_once "../vendor/trax/action_view/helpers/form_helper.php";
+require_once "action_view/helpers.php";
+require_once "action_view/helpers/form_helper.php";
 
 /**
  * Test class for FormHelper.

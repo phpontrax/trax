@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  Regression test for the {@link Inflector} class
@@ -13,6 +12,7 @@
  */
 
 echo "testing Inflector\n";
+require_once 'testenv.php';
 
 // Call InflectorTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,7 +25,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 /**
  *  Require class to be tested
  */
-require_once "../vendor/trax/inflector.php";
+require_once "inflector.php";
 
 /**
  * Test class for Inflector.

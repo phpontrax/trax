@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the SessionTest class
@@ -13,6 +12,7 @@
  */
 
 echo "testing Session\n";
+require_once 'testenv.php';
 
 // Call SessionTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,7 +25,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../vendor/trax/session.php";
+require_once "session.php";
 
 /**
  * Test class for Session.

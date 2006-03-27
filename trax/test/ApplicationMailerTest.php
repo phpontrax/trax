@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the ApplicationMailerTest class
@@ -13,6 +12,7 @@
  */
 
 echo "testing ApplicationMailer\n";
+require_once 'testenv.php';
 
 // Call ApplicationMailerTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -25,8 +25,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../vendor/trax/action_mailer.php";
-require_once "../app/application_mailer.php";
+require_once "action_mailer.php";
 
 /**
  * Test class for ApplicationMailer.

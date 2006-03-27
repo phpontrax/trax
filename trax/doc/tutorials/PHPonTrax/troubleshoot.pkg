@@ -1,0 +1,77 @@
+{@toc}
+<refsect1 id="{@id troubleshoot}">
+ <title>Troubleshooting</title>
+  <refsect2 id="{@id troubleshoot_noindex.html}">
+   <title>Can't see index.html after installation</title>
+   <orderedlist>
+    <listitem>Verify that Apache is actually running.  On a Linux or
+     Unix platform, Apache usually runs as
+     <literal>httpd</literal>, so try:
+     <example>
+$ <important>ps -ef|grep httpd</important>
+     </example>
+     The normal result is a list of several processes running
+     <literal>httpd</literal>.  If Apache is not running, start it.
+     The usual way to start Apache is to run, as superuser:
+     <example>
+# <important>apachectl start</important>
+     </example>
+</listitem>
+
+    <listitem>Find the Apache configuration file that is actually
+     being used by the running Apache.  The usual location is
+     <literal>/etc/httpd/conf/httpd.conf</literal> but it may be
+     elsewhere. Don't ignore the possibility that there is more than
+     one <literal>httpd.conf</literal> on the system, in which case
+     you need to figure out which is in use.  Examine the value
+     assigned to <literal>DocumentRoot</literal> in the configuration
+     and verify that it is what you expected.</listitem>
+
+    <listitem>Examine the Apache log files for clues.  The location of
+     the error log file is determined by the value assigned to
+     <literal>ErrorLog</literal> in
+     <literal>httpd.conf</literal>.</listitem> 
+
+    <listitem>Is Apache able to access
+     <literal>index.html</literal>?  Check the Unix permissions on that
+     file and all the directories that contain it.  The permissions
+     must permit Apache to read all containing directories and
+     the file.</listitem>  
+   </orderedlist>
+  </refsect2>
+  <refsect2 id="{@id troubleshoot_}">
+   <title></title>
+  <orderedlist>
+   <listitem>
+   Verify the name of the per-directory configuration file.
+   File <literal>httpd.conf</literal> should contain a line
+   like that below:
+   <example>
+AccessFileName .htaccess
+   </example>
+   If <literal>AccessFileName</literal> is not
+   <literal>.htaccess</literal>, change the name of
+   <literal>.htaccess</literal> to whatever the configuration wants.
+   </listitem>
+
+   <listitem>
+   Verify that Apache will follow commands from a
+   <literal>.htaccess</literal> file in 
+   subdirectory <literal>public_html</literal>.
+   File <literal>httpd.conf</literal> should permit the access file
+   (normally <literal>.htaccess</literal> unless changed) to override
+   the configuration.
+   </listitem>
+  </orderedlist>
+  </refsect2>
+  <refsect2 id="{@id troubleshoot_}">
+   <title></title>
+  </refsect2>
+  <refsect2 id="{@id troubleshoot_}">
+   <title></title>
+  </refsect2>
+  <refsect2 id="{@id troubleshoot_}">
+   <title></title>
+  </refsect2>
+
+</refsect1>  

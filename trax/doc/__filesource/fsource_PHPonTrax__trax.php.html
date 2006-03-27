@@ -1,0 +1,337 @@
+<html>
+<head>
+<title>File Source for trax.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">PHPonTrax</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_PHPonTrax.html" class="menu">class tree: PHPonTrax</a> ]
+		  [ <a href="../elementindex_PHPonTrax.html" class="menu">index: PHPonTrax</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="../todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="../li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="../li_PHPonTraxTest.html">PHPonTraxTest</a><br />
+            <br /><br />
+                  
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Source for file trax.php</h1>
+<p>Documentation is available at <a href="../PHPonTrax/_trax_php.html">trax.php</a></p>
+<div class="php">
+<div class="listing"><pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-doc">/**</span></li>
+<li><a name="a3"></a><span class="src-doc"> *  Create Trax application work area</span></li>
+<li><a name="a4"></a><span class="src-doc"> *</span></li>
+<li><a name="a5"></a><span class="src-doc"> *  (PHP 5)</span></li>
+<li><a name="a6"></a><span class="src-doc"> *</span></li>
+<li><a name="a7"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
+<li><a name="a8"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
+<li><a name="a9"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
+<li><a name="a10"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id$</span></li>
+<li><a name="a11"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
+<li><a name="a12"></a><span class="src-doc"> */</span></li>
+<li><a name="a13"></a>&nbsp;</li>
+<li><a name="a14"></a><span class="src-doc">/**</span></li>
+<li><a name="a15"></a><span class="src-doc"> *  Define where to find files to copy to the work area</span></li>
+<li><a name="a16"></a><span class="src-doc"> *</span></li>
+<li><a name="a17"></a><span class="src-doc"> *  Set automatically by the Pear installer when you install Trax with</span></li>
+<li><a name="a18"></a><span class="src-doc"> *  the &lt;b&gt;pear install&lt;/b&gt; command.  If you are prevented from using</span></li>
+<li><a name="a19"></a><span class="src-doc"> *  &lt;b&gt;pear install&lt;/b&gt;, change &quot;@DATA-DIR@/PHPonTrax&quot; by hand to the</span></li>
+<li><a name="a20"></a><span class="src-doc"> *  full filesystem path of the location where you installed the Trax</span></li>
+<li><a name="a21"></a><span class="src-doc"> *  distribution</span></li>
+<li><a name="a22"></a><span class="src-doc"> */</span></li>
+<li><a name="a23"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;SOURCE_DIR&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;@DATA-DIR@/PHPonTrax/data/&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a24"></a>&nbsp;</li>
+<li><a name="a25"></a><span class="src-doc">/**</span></li>
+<li><a name="a26"></a><span class="src-doc"> *  Symbol substitution tables</span></li>
+<li><a name="a27"></a><span class="src-doc"> *</span></li>
+<li><a name="a28"></a><span class="src-doc"> *  $search and $replace below are used to perform substitutions of</span></li>
+<li><a name="a29"></a><span class="src-doc"> *  symbols in a file being copied.  $search is an array of</span></li>
+<li><a name="a30"></a><span class="src-doc"> *  Perl-compatible regular expressions, and $replace is a congruent</span></li>
+<li><a name="a31"></a><span class="src-doc"> *  array of replacements for RE matches.  So everywhere that the RE</span></li>
+<li><a name="a32"></a><span class="src-doc"> *  in, for example, $search[3] is matched in a file, the matching</span></li>
+<li><a name="a33"></a><span class="src-doc"> *  string is replaced by the contents of $replace[3].</span></li>
+<li><a name="a34"></a><span class="src-doc"> */</span></li>
+<li><a name="a35"></a><span class="src-var">$search </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a36"></a>                <span class="src-str">'/@TRAX-CONFIG@/' </span><span class="src-comm">// symbol for the full filesystem path</span></li>
+<li><a name="a37"></a>                                <span class="src-comm">// to the Trax config/ directory in</span></li>
+<li><a name="a38"></a>                                <span class="src-comm">// the user's work area</span></li>
+<li><a name="a39"></a>                                <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a40"></a>&nbsp;</li>
+<li><a name="a41"></a><span class="src-var">$replace </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a42"></a>                 <span class="src-str">''             </span><span class="src-comm">// actual value of the full filesystem</span></li>
+<li><a name="a43"></a>                                <span class="src-comm">// path to the Trax config/ directory</span></li>
+<li><a name="a44"></a>                                <span class="src-comm">// in the user's work area</span></li>
+<li><a name="a45"></a>                                  <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a46"></a>&nbsp;</li>
+<li><a name="a47"></a>&nbsp;</li>
+<li><a name="a48"></a><span class="src-key">function </span><a href="../PHPonTrax/_trax_php.html#functiontrax">trax</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a49"></a>&nbsp;</li>
+<li><a name="a50"></a>    <span class="src-key">global </span><span class="src-var">$search</span><span class="src-sym">, </span><span class="src-var">$replace</span><span class="src-sym">;</span></li>
+<li><a name="a51"></a>&nbsp;</li>
+<li><a name="a52"></a>    <span class="src-comm">//  Get command line argument, if any</span></li>
+<li><a name="a53"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">'argc'</span><span class="src-sym">,</span><span class="src-var">$GLOBALS</span><span class="src-sym">)</span></li>
+<li><a name="a54"></a>        || <span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'argc'</span><span class="src-sym">] </span>&lt; <span class="src-num">2</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a55"></a>        <a href="../PHPonTrax/_trax_php.html#functionusage">usage</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;                </span><span class="src-comm">// print Usage message and exit</span></li>
+<li><a name="a56"></a>    <span class="src-sym">}</span></li>
+<li><a name="a57"></a>&nbsp;</li>
+<li><a name="a58"></a>    <span class="src-comm">//  Check for excess arguments</span></li>
+<li><a name="a59"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'argc'</span><span class="src-sym">] </span>&gt; <span class="src-num">2</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a60"></a>        echo <span class="src-str">&quot;unrecognized command argument &quot;</span>.<span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'argv'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-num">2</span><span class="src-sym">]</span>.<span class="src-str">&quot;\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a61"></a>        <a href="../PHPonTrax/_trax_php.html#functionusage">usage</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a62"></a>    <span class="src-sym">}</span></li>
+<li><a name="a63"></a>&nbsp;</li>
+<li><a name="a64"></a>    <span class="src-comm">//  Destination directory on command line</span></li>
+<li><a name="a65"></a>    <span class="src-var">$dstdir </span>= <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'argv'</span><span class="src-sym">]</span><span class="src-sym">[</span><span class="src-num">1</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a66"></a>&nbsp;</li>
+<li><a name="a67"></a>    <span class="src-comm">//  Guarantee it ends with DIRECTORY_SEPARATOR</span></li>
+<li><a name="a68"></a>    <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/substr">substr</a><span class="src-sym">(</span><span class="src-var">$dstdir</span><span class="src-sym">,</span>-<span class="src-num">1</span><span class="src-sym">,</span><span class="src-num">1</span><span class="src-sym">) </span>!= <span class="src-id">DIRECTORY_SEPARATOR</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a69"></a>        <span class="src-var">$dstdir </span>.= <span class="src-id">DIRECTORY_SEPARATOR</span><span class="src-sym">;</span></li>
+<li><a name="a70"></a>    <span class="src-sym">}</span></li>
+<li><a name="a71"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="../PHPonTrax/_trax_php.html#functioncreate_dir">create_dir</a><span class="src-sym">(</span><span class="src-var">$dstdir</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a72"></a>        <span class="src-key">return</span><span class="src-sym">;</span></li>
+<li><a name="a73"></a>    <span class="src-sym">}</span></li>
+<li><a name="a74"></a>&nbsp;</li>
+<li><a name="a75"></a>    <span class="src-comm">//  Assign real values for symbol substitution</span></li>
+<li><a name="a76"></a>    <span class="src-var">$replace</span><span class="src-sym">[</span><span class="src-num">0</span><span class="src-sym">] </span>= <a href="http://www.php.net/realpath">realpath</a><span class="src-sym">(</span><span class="src-str">'./'</span>.<span class="src-var">$dstdir</span>.<span class="src-str">'config'</span><span class="src-sym">)</span><span class="src-sym">; </span><span class="src-comm">// actual value of</span></li>
+<li><a name="a77"></a>                                <span class="src-comm">// the full filesystem path to the</span></li>
+<li><a name="a78"></a>                                <span class="src-comm">// Trax config/ directory in the</span></li>
+<li><a name="a79"></a>                                <span class="src-comm">// user's work area</span></li>
+<li><a name="a80"></a>&nbsp;</li>
+<li><a name="a81"></a>    <span class="src-var">$srcdir </span>= <span class="src-id"><a href="../PHPonTrax/_trax_php.html#defineSOURCE_DIR">SOURCE_DIR</a></span><span class="src-sym">;</span></li>
+<li><a name="a82"></a>    <span class="src-comm">//  copy source directory to destination directory</span></li>
+<li><a name="a83"></a>    <a href="../PHPonTrax/_trax_php.html#functioncopy_dir">copy_dir</a><span class="src-sym">(</span><span class="src-var">$srcdir</span><span class="src-sym">,</span><span class="src-var">$dstdir</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a84"></a><span class="src-sym">}</span></li>
+<li><a name="a85"></a>&nbsp;</li>
+<li><a name="a86"></a><span class="src-doc">/**</span></li>
+<li><a name="a87"></a><span class="src-doc"> *  Copy a directory with all its contents</span></li>
+<li><a name="a88"></a><span class="src-doc"> *</span></li>
+<li><a name="a89"></a><span class="src-doc"> *  When a file whose filename ends '.log' is created, its permissions</span></li>
+<li><a name="a90"></a><span class="src-doc"> *  are set to be world writable.</span></li>
+<li><a name="a91"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$src_path </span><span class="src-doc"> Path to source directory</span></li>
+<li><a name="a92"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$dst_path </span><span class="src-doc"> Path to destination directory</span></li>
+<li><a name="a93"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span><span class="src-doc">true=&gt;success, false=&gt;failure.</span></li>
+<li><a name="a94"></a><span class="src-doc"> */</span></li>
+<li><a name="a95"></a><span class="src-key">function </span><a href="../PHPonTrax/_trax_php.html#functioncopy_dir">copy_dir</a><span class="src-sym">(</span><span class="src-var">$src_path</span><span class="src-sym">,</span><span class="src-var">$dst_path</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a96"></a>&nbsp;</li>
+<li><a name="a97"></a>    <span class="src-comm">//  Make sure we have directories as arguments</span></li>
+<li><a name="a98"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_dir">is_dir</a><span class="src-sym">(</span><span class="src-var">$src_path</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a99"></a>        echo <span class="src-var">$src_path</span>.<span class="src-str">&quot; is not a directory\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a100"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a101"></a>    <span class="src-sym">}</span></li>
+<li><a name="a102"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_dir">is_dir</a><span class="src-sym">(</span><span class="src-var">$dst_path</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a103"></a>        echo <span class="src-var">$dst_path</span>.<span class="src-str">&quot; is not a directory\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a104"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a105"></a>    <span class="src-sym">}</span></li>
+<li><a name="a106"></a>&nbsp;</li>
+<li><a name="a107"></a>    <span class="src-comm">//  Open the source directory</span></li>
+<li><a name="a108"></a>    <span class="src-var">$src_handle </span>= <a href="http://www.php.net/opendir">opendir</a><span class="src-sym">(</span><span class="src-var">$src_path</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a109"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$src_handle</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a110"></a>        echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">unable</span> <span class="src-id">to</span> <span class="src-id">open</span> <span class="src-var">$src_path</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a111"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a112"></a>    <span class="src-sym">}</span></li>
+<li><a name="a113"></a>&nbsp;</li>
+<li><a name="a114"></a>    <span class="src-comm">//  Copy contents of source directory</span></li>
+<li><a name="a115"></a>    <span class="src-key">while </span><span class="src-sym">(</span><span class="src-id">false </span>!== <span class="src-sym">(</span><span class="src-var">$src_file </span>= <a href="http://www.php.net/readdir">readdir</a><span class="src-sym">(</span><span class="src-var">$src_handle</span><span class="src-sym">))) </span><span class="src-sym">{</span></li>
+<li><a name="a116"></a>        <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/is_dir">is_dir</a><span class="src-sym">(</span><span class="src-var">$src_path </span>. <span class="src-var">$src_file</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a117"></a>&nbsp;</li>
+<li><a name="a118"></a>            <span class="src-comm">//  If this file exists only to make the directory</span></li>
+<li><a name="a119"></a>            <span class="src-comm">//  non-empty so that PackageFileManager will add it to</span></li>
+<li><a name="a120"></a>            <span class="src-comm">//  the installable package, don't bother to copy it.</span></li>
+<li><a name="a121"></a>            <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$src_file </span>== <span class="src-str">'.delete_this_file'</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a122"></a>                <span class="src-key">continue</span><span class="src-sym">;</span></li>
+<li><a name="a123"></a>            <span class="src-sym">}</span></li>
+<li><a name="a124"></a>&nbsp;</li>
+<li><a name="a125"></a>            <span class="src-comm">//  This is a regular file, need to copy it</span></li>
+<li><a name="a126"></a>            <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">( </span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file </span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a127"></a>&nbsp;</li>
+<li><a name="a128"></a>                <span class="src-comm">//  A destination file or directory with this name exists</span></li>
+<li><a name="a129"></a>                <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/is_file">is_file</a><span class="src-sym">( </span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file </span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a130"></a>&nbsp;</li>
+<li><a name="a131"></a>                    <span class="src-comm">//  A regular destination file with this name exists.</span></li>
+<li><a name="a132"></a>                    <span class="src-comm">//  Check whether it's different from source.</span></li>
+<li><a name="a133"></a>                    <span class="src-var">$src_content </span>= <a href="http://www.php.net/file_get_contents">file_get_contents</a><span class="src-sym">(</span><span class="src-var">$src_path </span>. <span class="src-var">$src_file</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a134"></a>                    <span class="src-var">$dst_content </span>= <a href="http://www.php.net/file_get_contents">file_get_contents</a><span class="src-sym">(</span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a135"></a>                    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$src_content </span>== <span class="src-var">$dst_content</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a136"></a>                        <span class="src-comm">//  Source and destination are identical</span></li>
+<li><a name="a137"></a>                        echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$dst_path$src_file</span> <span class="src-id">exists</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a138"></a>                        <span class="src-key">continue</span><span class="src-sym">;</span></li>
+<li><a name="a139"></a>                    <span class="src-sym">}</span></li>
+<li><a name="a140"></a>                <span class="src-sym">}</span></li>
+<li><a name="a141"></a>&nbsp;</li>
+<li><a name="a142"></a>                <span class="src-comm">//  New and old files differ.  Save the old file.</span></li>
+<li><a name="a143"></a>                <span class="src-var">$stat </span>= <a href="http://www.php.net/stat">stat</a><span class="src-sym">(</span><span class="src-var">$dst_path</span>.<span class="src-var">$src_file</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a144"></a>                <span class="src-var">$new_name </span>= <span class="src-var">$dst_path</span>.<span class="src-var">$src_file</span>.<span class="src-str">'.'</span>.<span class="src-var">$stat</span><span class="src-sym">[</span><span class="src-num">9</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a145"></a>                <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/rename">rename</a><span class="src-sym">(</span><span class="src-var">$dst_path</span>.<span class="src-var">$src_file</span><span class="src-sym">,</span><span class="src-var">$new_name</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a146"></a>                    echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">unable</span> <span class="src-id">to</span> <span class="src-id">rename</span> <span class="src-var">$dst_path$src_file</span> <span class="src-id">to</span> <span class="src-var">$new_name</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a147"></a>                    <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a148"></a>                <span class="src-sym">}</span></li>
+<li><a name="a149"></a>                echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">renamed</span> <span class="src-var">$dst_path$src_file</span> <span class="src-id">to</span> <span class="src-var">$new_name</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a150"></a>            <span class="src-sym">}</span></li>
+<li><a name="a151"></a>&nbsp;</li>
+<li><a name="a152"></a>            <span class="src-comm">//  Destination file does not exist.  Create it</span></li>
+<li><a name="a153"></a>            <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="../PHPonTrax/_trax_php.html#functioncopy_file">copy_file</a><span class="src-sym">(</span><span class="src-var">$src_path </span>. <span class="src-var">$src_file</span><span class="src-sym">, </span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a154"></a>                <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a155"></a>            <span class="src-sym">}</span></li>
+<li><a name="a156"></a>&nbsp;</li>
+<li><a name="a157"></a>            <span class="src-comm">//  Log files need to be world writeable</span></li>
+<li><a name="a158"></a>            <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/substr">substr</a><span class="src-sym">(</span><span class="src-var">$src_file</span><span class="src-sym">,</span>-<span class="src-num">4</span><span class="src-sym">,</span><span class="src-num">4</span><span class="src-sym">) </span>== <span class="src-str">'.log'</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a159"></a>                <a href="http://www.php.net/chmod">chmod</a><span class="src-sym">(</span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file</span><span class="src-sym">, </span><span class="src-num">0666</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a160"></a>            <span class="src-sym">}</span></li>
+<li><a name="a161"></a>            echo  <span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$dst_path$src_file</span> <span class="src-id">created</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a162"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a163"></a>&nbsp;</li>
+<li><a name="a164"></a>            <span class="src-comm">//  This is a directory.  Ignore '.' and '..'</span></li>
+<li><a name="a165"></a>            <span class="src-key">if </span><span class="src-sym">( (</span><span class="src-var">$src_file </span>== <span class="src-str">'.'</span><span class="src-sym">) </span>|| <span class="src-sym">(</span><span class="src-var">$src_file </span>== <span class="src-str">'..'</span><span class="src-sym">) ) </span><span class="src-sym">{</span></li>
+<li><a name="a166"></a>                <span class="src-key">continue</span><span class="src-sym">;</span></li>
+<li><a name="a167"></a>            <span class="src-sym">}</span></li>
+<li><a name="a168"></a>            <span class="src-comm">//  This directory needs to be copied.</span></li>
+<li><a name="a169"></a>            <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="../PHPonTrax/_trax_php.html#functioncreate_dir">create_dir</a><span class="src-sym">( </span><span class="src-var">$dst_path </span>. <span class="src-var">$src_file </span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a170"></a>                <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a171"></a>            <span class="src-sym">}</span></li>
+<li><a name="a172"></a>&nbsp;</li>
+<li><a name="a173"></a>            <span class="src-comm">//  Recursive call to copy directory</span></li>
+<li><a name="a174"></a>            <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="../PHPonTrax/_trax_php.html#functioncopy_dir">copy_dir</a><span class="src-sym">(</span><span class="src-var">$src_path </span>. <span class="src-var">$src_file </span>. <span class="src-id">DIRECTORY_SEPARATOR</span><span class="src-sym">,</span></li>
+<li><a name="a175"></a>                          <span class="src-var">$dst_path </span>. <span class="src-var">$src_file </span>. <span class="src-id">DIRECTORY_SEPARATOR</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a176"></a>                <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a177"></a>            <span class="src-sym">}</span></li>
+<li><a name="a178"></a>        <span class="src-sym">}</span></li>
+<li><a name="a179"></a>    <span class="src-sym">}</span></li>
+<li><a name="a180"></a>    <a href="http://www.php.net/closedir">closedir</a><span class="src-sym">(</span><span class="src-var">$src_handle</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a181"></a>    <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a182"></a><span class="src-sym">}                               </span><span class="src-comm">// function copy_dir()</span></li>
+<li><a name="a183"></a>&nbsp;</li>
+<li><a name="a184"></a><span class="src-doc">/**</span></li>
+<li><a name="a185"></a><span class="src-doc"> *  Create a directory if it doesn't exist</span></li>
+<li><a name="a186"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$dst_dir </span><span class="src-doc"> Path of directory to create</span></li>
+<li><a name="a187"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span><span class="src-doc"> true=&gt;success, false=&gt;failed</span></li>
+<li><a name="a188"></a><span class="src-doc"> */</span></li>
+<li><a name="a189"></a><span class="src-key">function </span><a href="../PHPonTrax/_trax_php.html#functioncreate_dir">create_dir</a><span class="src-sym">(</span><span class="src-var">$dst_dir</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a190"></a>&nbsp;</li>
+<li><a name="a191"></a>    <span class="src-comm">//  Does a directory of this name exist?</span></li>
+<li><a name="a192"></a>    <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/file_exists">file_exists</a><span class="src-sym">( </span><span class="src-var">$dst_dir </span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a193"></a>&nbsp;</li>
+<li><a name="a194"></a>        <span class="src-comm">//  A destination file or directory with this name exists</span></li>
+<li><a name="a195"></a>        <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/is_dir">is_dir</a><span class="src-sym">( </span><span class="src-var">$dst_dir </span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a196"></a>&nbsp;</li>
+<li><a name="a197"></a>            <span class="src-comm">//  A destination directory with this name exists.</span></li>
+<li><a name="a198"></a>            echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$dst_dir</span></span><span class="src-str">&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot; exists\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a199"></a>            <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a200"></a>        <span class="src-sym">}</span></li>
+<li><a name="a201"></a>&nbsp;</li>
+<li><a name="a202"></a>        <span class="src-comm">//  There is an old destination file with the same</span></li>
+<li><a name="a203"></a>        <span class="src-comm">//  name as the new destination directory. </span></li>
+<li><a name="a204"></a>        <span class="src-comm">//  Save the old file.</span></li>
+<li><a name="a205"></a>        <span class="src-var">$stat </span>= <a href="http://www.php.net/stat">stat</a><span class="src-sym">(</span><span class="src-var">$dst_dir</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a206"></a>        <span class="src-var">$new_name </span>= <span class="src-var">$dst_dir</span>.<span class="src-str">'.'</span>.<span class="src-var">$stat</span><span class="src-sym">[</span><span class="src-num">9</span><span class="src-sym">]</span><span class="src-sym">;</span></li>
+<li><a name="a207"></a>        <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/rename">rename</a><span class="src-sym">(</span><span class="src-var">$dst_dir</span><span class="src-sym">,</span><span class="src-var">$new_name</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a208"></a>            echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">unable</span> <span class="src-id">to</span> <span class="src-id">rename</span> <span class="src-var">$dst_dir</span> <span class="src-id">to</span> <span class="src-var">$new_name</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a209"></a>            <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a210"></a>        <span class="src-sym">}</span></li>
+<li><a name="a211"></a>        echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">renamed</span> <span class="src-var">$dst_dir</span> <span class="src-id">to</span> <span class="src-var">$new_name</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a212"></a>    <span class="src-sym">}</span></li>
+<li><a name="a213"></a>&nbsp;</li>
+<li><a name="a214"></a>    <span class="src-comm">//  Destination directory does not exist.  Create it</span></li>
+<li><a name="a215"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><a href="http://www.php.net/mkdir">mkdir</a><span class="src-sym">(</span><span class="src-var">$dst_dir</span><span class="src-sym">,</span><span class="src-num">0775</span><span class="src-sym">,</span><span class="src-id">true</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a216"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a217"></a>    <span class="src-sym">}</span></li>
+<li><a name="a218"></a>    echo <span class="src-str">&quot;</span><span class="src-str"><span class="src-var">$dst_dir</span></span><span class="src-str">&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot; created\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a219"></a>    <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a220"></a><span class="src-sym">}</span></li>
+<li><a name="a221"></a>&nbsp;</li>
+<li><a name="a222"></a><span class="src-doc">/**</span></li>
+<li><a name="a223"></a><span class="src-doc"> *  Copy a Trax file into user's work area, substituting @TRAX-...@</span></li>
+<li><a name="a224"></a><span class="src-doc"> *</span></li>
+<li><a name="a225"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$src_path </span><span class="src-doc"> Path to source file</span></li>
+<li><a name="a226"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$dst_path </span><span class="src-doc"> Path to destination file</span></li>
+<li><a name="a227"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span><span class="src-doc">true=&gt;success, false=&gt;failure.</span></li>
+<li><a name="a228"></a><span class="src-doc"> */</span></li>
+<li><a name="a229"></a><span class="src-key">function </span><a href="../PHPonTrax/_trax_php.html#functioncopy_file">copy_file</a><span class="src-sym">(</span><span class="src-var">$src_path</span><span class="src-sym">, </span><span class="src-var">$dst_path</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a230"></a>&nbsp;</li>
+<li><a name="a231"></a>    <span class="src-key">global </span><span class="src-var">$search</span><span class="src-sym">, </span><span class="src-var">$replace</span><span class="src-sym">;</span></li>
+<li><a name="a232"></a>&nbsp;</li>
+<li><a name="a233"></a>    <span class="src-comm">//  Read source file into a string</span></li>
+<li><a name="a234"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-var">$file </span>= <a href="http://www.php.net/file_get_contents">file_get_contents</a><span class="src-sym">(</span><span class="src-var">$src_path</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a235"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a236"></a>    <span class="src-sym">}</span></li>
+<li><a name="a237"></a>&nbsp;</li>
+<li><a name="a238"></a>    <span class="src-comm">//  Substitute @TRAX-...@ symbols for appropriate values</span></li>
+<li><a name="a239"></a>    <span class="src-var">$file </span>= <a href="http://www.php.net/preg_replace">preg_replace</a><span class="src-sym">(</span><span class="src-var">$search</span><span class="src-sym">, </span><span class="src-var">$replace</span><span class="src-sym">, </span><span class="src-var">$file</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a240"></a>&nbsp;</li>
+<li><a name="a241"></a>    <span class="src-comm">//  Write out file contents</span></li>
+<li><a name="a242"></a>    <span class="src-sym">@</span><a href="http://www.php.net/file_put_contents">file_put_contents</a><span class="src-sym">(</span><span class="src-var">$dst_path</span><span class="src-sym">, </span><span class="src-var">$file</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a243"></a>    <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a244"></a><span class="src-sym">}</span></li>
+<li><a name="a245"></a>&nbsp;</li>
+<li><a name="a246"></a><span class="src-doc">/**</span></li>
+<li><a name="a247"></a><span class="src-doc"> *  Output a Usage message and exit</span></li>
+<li><a name="a248"></a><span class="src-doc"> */</span></li>
+<li><a name="a249"></a><span class="src-key">function </span><a href="../PHPonTrax/_trax_php.html#functionusage">usage</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a250"></a>    echo <span class="src-str">&quot;Usage: @BIN-DIR@&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;trax&quot;</span></li>
+<li><a name="a251"></a>        .<span class="src-str">&quot; &quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;path&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;to&quot;</span></li>
+<li><a name="a252"></a>        .<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;your&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;app</span></li>
+<li><a name="a253"></a>&nbsp;</li>
+<li><a name="a254"></a><span class="src-str">Description:</span></li>
+<li><a name="a255"></a><span class="src-str">    The 'trax' command creates a new Trax application with a default</span></li>
+<li><a name="a256"></a><span class="src-str">    directory structure and configuration at the path you specify.</span></li>
+<li><a name="a257"></a>&nbsp;</li>
+<li><a name="a258"></a><span class="src-str">Example:</span></li>
+<li><a name="a259"></a><span class="src-str">    trax &quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;var&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;www&quot;</span></li>
+<li><a name="a260"></a>        .<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;html</span></li>
+<li><a name="a261"></a>&nbsp;</li>
+<li><a name="a262"></a><span class="src-str">    This generates a skeletal Trax installation in &quot;</span></li>
+<li><a name="a263"></a>    .<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;var&quot;</span>.<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;www&quot;</span></li>
+<li><a name="a264"></a>    .<span class="src-id">DIRECTORY_SEPARATOR</span>.<span class="src-str">&quot;html.</span></li>
+<li><a name="a265"></a><span class="src-str">    See the README in the newly created application to get going.</span></li>
+<li><a name="a266"></a><span class="src-str">\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a267"></a>    <span class="src-key">exit</span><span class="src-sym">;</span></li>
+<li><a name="a268"></a><span class="src-sym">}</span></li>
+<li><a name="a269"></a>&nbsp;</li>
+<li><a name="a270"></a><span class="src-doc">/**</span></li>
+<li><a name="a271"></a><span class="src-doc"> *  Main program</span></li>
+<li><a name="a272"></a><span class="src-doc"> */</span></li>
+<li><a name="a273"></a><a href="../PHPonTrax/_trax_php.html#functiontrax">trax</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a274"></a>&nbsp;</li>
+<li><a name="a275"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a276"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a277"></a><span class="src-comm">// mode: php</span></li>
+<li><a name="a278"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a279"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a280"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a281"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a282"></a><span class="src-comm">// End:</span></li>
+<li><a name="a283"></a>&nbsp;</li>
+<li><a name="a284"></a><span class="src-php">?&gt;</span></li>
+</ol></pre></div>
+</div>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Mon, 27 Mar 2006 14:54:51 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

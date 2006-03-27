@@ -1,0 +1,146 @@
+ <refsect1  id="{@id reference}">
+  <title>Reference</title>
+  <refsect2 id="{@id ref_defines}">
+   <title>Defines</title>
+   All the definitions below are set in file
+  {@link environment.php config/environment.php}
+   <itemizedlist>
+
+    <listitem><command>DEBUG</command>
+     <cmdsynopsis>boolean set to true if TRAX_MODE is 'development',
+     false otherwise.  Determines whether PHP error messages should be
+     sent to the browser; true means show error messages on the
+     browser as well as the error log, false means send error messages
+     to only the error log.  Implemented by calling
+     {@link http://www.php.net/ini_set ini_set()}
+     at the time DEBUG is defined.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>PHP_LIB_ROOT</command>
+     <cmdsynopsis>Directory containing PHP libraries.  This directory
+     will be added to the PHP
+     {@link http://www.php.net/manual/en/ini.core.php#ini.include-path include path}.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_LIB_ROOT</command>
+     <cmdsynopsis>Directory containing Trax libraries.  Set to a
+     subdirectory of TRAX_ROOT or PHP_LIB_ROOT and added to the PHP
+     {@link http://www.php.net/manual/en/ini.core.php#ini.include-path include path}.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_MODE</command>
+     <cmdsynopsis>Contains one of 'test', 'development' or 'production'.
+      Determines which  database to use.
+      Get it from $_SERVER['TRAX_MODE'] if that exists</cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_PATH_SEPERATOR</command>
+     <cmdsynopsis>Character to use as the separator when defining the
+     PHP include path. ';' for Windows, otherwise ':'.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_PUBLIC</command>
+     <cmdsynopsis>Subdirectory of the user's home directory referenced
+     by the Apache configuration variable <literal>UserDir</literal>.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_ROOT</command>
+     <cmdsynopsis>Filesystem path to the top of the Trax file tree.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_URL_PREFIX</command>
+     <cmdsynopsis>That part of a URL which refers to a Trax
+     application that comes after the domain name and before the
+     controller.  Usually empty.  In the case of a Trax application in
+     the home directory of user <literal>username</literal>,
+     <command>TRAX_URL_PREFIX</command> would be set to 
+     '<literal>~username</literal>'.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>TRAX_VIEWS_EXTENTION</command>
+     <cmdsynopsis>File extension for views, default
+     'phtml'.</cmdsynopsis>
+    </listitem>
+
+   </itemizedlist>
+  </refsect2>
+  <refsect2 id="{@id ref_globals}">
+   <title>Globals</title>
+   <itemizedlist>
+
+    <listitem><command>$GLOBALS['ACTIVE_RECORD_DB']</command>
+     <cmdsynopsis>Database connection resource for the currently open
+     database connection, or {@link http://pear.php.net PEAR} or
+     {@link http://pear.php.net/package/DB DB} error if
+     the connection attempt failed.  Set in 
+    {@link ActiveRecord::establish_connection()}.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['current_action_name']</command>
+     <cmdsynopsis>
+     Name of action parsed from the URL.
+     Set in {@link ActionController::process_route()}
+     Value stored before knowing whether the method for this action
+     actually exists in the relevant controller.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['current_controller_name']</command>
+     <cmdsynopsis>
+     Name of the controller as parsed from the URL.  The name is in
+     lower case without the "_controller" suffix.
+     Set in {@link ActionController::process_route()}.  Not set until
+     the controller PHP file has been opened and the controller object
+     created successfully.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['current_controller_object']</command>
+     <cmdsynopsis>
+     Successfully created controller object.
+     Set in {@link ActionController::process_route()}
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['current_controller_path']</command>
+     <cmdsynopsis>
+     Controller URL path below <command>TRAX_URL_PREFIX</command>.
+     Set in {@link ActionController::process_route()}.  Not set until
+     the controller PHP file has been opened and the controller object
+     created successfully.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['TRAX_DB_SETTINGS']</command>
+     <cmdsynopsis>
+     Array with keys 'test', 'development' and 'production' specifying
+     the database connection parameters for each of the three modes of
+     operation. 
+     Set in file {@link environment.php config/environment.php}
+     from values parsed from file database.ini.
+     Used when opening a connection to the database.
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['TRAX_INCLUDES']</command>
+     <cmdsynopsis>Array with keys "models", "views", "controllers",
+      "helpers", "layouts", "config", "environments", "lib", "app",
+     "log" and  "vendor".  Values are the subdirectories of
+     <command>TRAX_ROOT</command> where Trax files of the
+     corresponding category are stored.  Used to create filesystem
+     paths to access Trax files.
+     Set in file {@link environment.php config/environment.php}
+     </cmdsynopsis>
+    </listitem>
+
+   </itemizedlist>
+  </refsect2>
+ </refsect1>

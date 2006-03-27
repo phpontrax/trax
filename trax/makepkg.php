@@ -57,33 +57,20 @@ $e = $packagexml->setOptions(
                 'summary' => 'Rapid Application Development Made Easy',
                 'description' => 'PHP port of Ruby on Rails',
                 'baseinstalldir' => 'PHPonTrax',
-                'version' => '0.12.2',
+                'version' => '192svn',
                 'packagedirectory' => '.',
                 'state' => 'alpha',
                 'filelistgenerator' => 'svn', // generate from svn
                 'notes' => 'We\'ve implemented many new and exciting features',
-//                'include' => array('data/', 'doc/', 'script/', 'test/',
-//                                   'vendor/'),
                 'dir_roles' => array('doc' => 'doc',
                                      'test' => 'test',
                                      'data' => 'data'),
                 'exceptions' => array('pear-trax' => 'script',
-                                      'pear-trax.bat' => 'script',),
-                'installexceptions' => array('pear-trax' => '/'),
+                                      'pear-trax.bat' => 'script'),
+                'installexceptions' => array('pear-trax' => '/',
+                                             'dispatch.php' => 'public'),
                 'installas' => array('pear-trax' => 'trax',
-                                     'pear-trax.bat' => 'trax',
-      'vendor/trax/action_controller.php' => 'action_controller.php',
-      'vendor/trax/action_mailer.php' => 'action_mailer.php',
-      'vendor/trax/action_view.php' => 'action_view.php',
-      'vendor/trax/active_record.php' => 'active_record.php',
-      'vendor/trax/dispatcher.php' => 'dispatcher.php',
-      'vendor/trax/inflector.php' => 'inflector.php',
-      'vendor/trax/input_filter.php' => 'input_filter.php',
-      'vendor/trax/router.php' => 'router.php',
-      'vendor/trax/scaffold_controller.php' => 'scaffold_controller.php',
-      'vendor/trax/session.php' => 'session.php',
-      'vendor/trax/trax_exceptions.php' => 'trax_exceptions.php',
-                                     )
+                                     'pear-trax.bat' => 'trax')
                 ));
 if (PEAR::isError($e)) {
     echo $e->getMessage();

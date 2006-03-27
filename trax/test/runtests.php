@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  Regression test for the {@link PHPonTrax} package
@@ -11,6 +10,7 @@
  * @version $Id$
  * @author Walt Haas <haas@xmission.com>
  */
+
 
 //  Control order of tests
 $tests = array(

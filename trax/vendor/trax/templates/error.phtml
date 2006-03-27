@@ -48,7 +48,8 @@
 <pre id="framework_trace" style="display:none"><code><?php echo $trace ?></code></pre>
 <?php endif; ?>
 
-<?php if(count($GLOBALS['ACTIVE_RECORD_SQL_LOG'])): ?>
+<?php if(array_key_exists('ACTIVE_RECORD_SQL_LOG',$GLOBALS)
+	 && count($GLOBALS['ACTIVE_RECORD_SQL_LOG'])): ?>
 <p><a href="#" onclick="expandContract('sql_trace')">Show SQL trace</a>
 <pre id="sql_trace" style="display:none">
 <code style="word-wrap: break-word;">

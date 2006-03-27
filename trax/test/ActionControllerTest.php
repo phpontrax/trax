@@ -1,4 +1,3 @@
-#!/usr/bin/php -q
 <?php
 /**
  *  File for the ActionControllerTest class
@@ -13,9 +12,10 @@
  */
 
 echo "testing ActionController\n";
+require_once 'testenv.php';
+
 //  root Trax files in the test directory
 define("TRAX_ROOT", dirname(__FILE__) . "/");
-define("TRAX_LIB_ROOT", "../vendor/trax");
 define("TRAX_VIEWS_EXTENTION",  "phtml");
 //  you don't really need a 'haas' account to test,
 //  the use of this prefix is purely syntactic
@@ -38,11 +38,10 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-require_once "../vendor/trax/router.php";
-require_once "../vendor/trax/inflector.php";
-require_once "../vendor/trax/trax_exceptions.php";
-require_once "../vendor/trax/action_controller.php";
-require_once "../app/controllers/application.php";
+require_once "router.php";
+require_once "inflector.php";
+require_once "trax_exceptions.php";
+require_once "action_controller.php";
 
 /**
  * Test class for ActionController.

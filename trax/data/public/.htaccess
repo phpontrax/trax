@@ -1,5 +1,7 @@
-# php include_path to Trax config directory
-php_value include_path .:/home/<username>/trax/config
+#
+#    PHP include_path to Trax config directory
+#
+php_value include_path .:@TRAX-CONFIG@
 
 # Redirect all requests not available on the filesystem to Trax
 RewriteEngine On
