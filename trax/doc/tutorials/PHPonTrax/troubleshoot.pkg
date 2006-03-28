@@ -40,28 +40,108 @@ $ <important>ps -ef|grep httpd</important>
    </orderedlist>
   </refsect2>
   <refsect2 id="{@id troubleshoot_}">
-   <title></title>
+   <title>Don't see 'Controller not found' after deleting index.html</title>
+   <para>Normal Trax processing of a request goes through the following
+    steps:</para> 
+   <orderedlist>
+    <listitem>The browser sends Apache a URL which is in the area of
+     the Trax application.</listitem> 
+
+    <listitem>Apache starts visiting the directories in that area,
+     starting with the top (leftmost in the URL).</listitem> 
+
+    <listitem>In the top Trax application directory it finds file
+     <literal>.htaccess</literal> which contains Apache configuration
+      directives, which Apache interprets.  The
+      {@link http://www.php.net/manual/en/configuration.changes.php php_value}
+      directive sets the list of
+      directories where Apache should look for PHP files.  The
+      following <literal>Rewrite...</literal> directives are the steps
+      that Apache is to take in transforming the URL into a Trax
+      command. Apache rewrites the URL, with the result that file
+      {@link dispatch.php} is loaded and
+      executed.</listitem> 
+
+     <listitem><literal>dispatch.php</literal> loads the Trax
+      application description file
+      {@link environment.php}, which it finds in one of the
+      directories listed in the <literal>php_value</literal>
+      directive.</listitem>
+
+    <listitem>With the Trax environment established, an instance of 
+     {@link Dispatcher} is created and its
+     {@link Dispatcher::dispatch() dispatch()}
+     method is invoked.  This finds and calls the Trax action
+     controller which interprets the URL.</listitem> 
+   </orderedlist>
+   <para>Do the following to check the various places where the
+    process can break down:</para>
+
   <orderedlist>
    <listitem>
    Verify the name of the per-directory configuration file.
    File <literal>httpd.conf</literal> should contain a line
-   like that below:
+   like:
    <example>
 AccessFileName .htaccess
    </example>
    If <literal>AccessFileName</literal> is not
-   <literal>.htaccess</literal>, change the name of
+   <literal>.htaccess</literal>, change the name of file
    <literal>.htaccess</literal> to whatever the configuration wants.
    </listitem>
 
    <listitem>
-   Verify that Apache will follow commands from a
-   <literal>.htaccess</literal> file in 
-   subdirectory <literal>public_html</literal>.
-   File <literal>httpd.conf</literal> should permit the access file
-   (normally <literal>.htaccess</literal> unless changed) to override
-   the configuration.
-   </listitem>
+   Verify that Apache is configured to follow commands from a
+   <literal>.htaccess</literal> file in the Trax application
+   directory.  File <literal>httpd.conf</literal> should permit the
+   access file (normally <literal>.htaccess</literal> unless changed)
+   to override the configuration.  The Apache directive is
+   {@link http://httpd.apache.org/docs/2.0/mod/core.html#allowoverride AllowOverride}
+   all and it must apply to the
+   directory with the Trax application.</listitem>
+
+   <listitem>Verify that <literal>dispatch.php</literal> is being
+    loaded and executed by editting it to insert
+    <literal>echo</literal> statements before and after
+    <literal>require_once("environment.php");</literal>.  The browser
+    should display the output of both <literal>echo</literal>
+    statements.  If neither is displayed then there is a problem with
+    the rewrite rules.  If only the first <literal>echo</literal> is
+    displayed then the <literal>require</literal> failed, meaning that
+    <literal>mod_php</literal> couldn't find
+    <literal>environment.php</literal> in the directories listed in
+    the <literal>php_value</literal> statement.</listitem>
+
+  <listitem>If you need to test the Apache Rewrite rules, the way to
+   watch them operate is with the
+   {@link http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html#rewritelog RewriteLog} 
+   and
+   {@link http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html#rewriteloglevel RewriteLogLevel} 
+   directives.  You must add them to
+   <literal>httpd.conf</literal> since Apache won't honor them if they
+   appear in <literal>.htaccess</literal>.  An example of what you
+   might add is:
+   <example>
+RewriteLog /tmp/rewrite
+RewriteLogLevel 9
+   </example>
+   This will write a description of each stage of rewrite processing
+   to file <literal>/tmp/rewrite</literal>.  The overhead is
+   considerable so be sure to remove this from the configuration when
+   you don't need it.</listitem>
+
+  <listitem>If <literal>require_once("environment.php");</literal>
+   fails, check that the list of directories set by
+   <literal>php_value</literal> in
+   <literal>.htaccess</literal> matches the actual location of 
+   <literal>environment.php</literal> and that the permissions on the
+   files and directories permit Apache to read them.  Check the
+   Apache error log for relevant messages.  Since one of the functions
+   of <literal>environment.php</literal> is to switch Apache error
+   logging to the Trax log selected by the configured value of
+   TRAX_MODE, check the Trax logs for relevant messages.
+  </listitem>
+ 
   </orderedlist>
   </refsect2>
   <refsect2 id="{@id troubleshoot_}">
@@ -73,5 +153,13 @@ AccessFileName .htaccess
   <refsect2 id="{@id troubleshoot_}">
    <title></title>
   </refsect2>
+
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
 
 </refsect1>  

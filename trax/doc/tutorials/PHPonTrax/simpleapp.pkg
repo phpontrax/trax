@@ -90,14 +90,25 @@ drwxrwxr-x  2 haas haas 4096 Mar 26 19:55 stylesheets
    other files in the Trax work area.  We need to move them to where
    Apache can serve them:
    <example>
-$ <important>mv /var/www/trax/public/* /var/www/html</important>
+$ <important>mv /var/www/trax/public/* /var/www/trax/public/.htaccess /var/www/html</important>
    </example>
    Now a browser should be able to visit the
    <literal>index.html</literal> file.  We verify this by browsing
    <literal>http://localhost</literal> where we see
    <important>Congratulations, you've put PHP on Trax!</important>
    (if you don't see this, refer to {@tutorial troubleshoot.pkg}).</para>
-  <para></para>
+
+  <para>The <literal>index.html</literal> file has done its work by
+   showing us that Apache accesses our directory.  It does not play
+   any part in normal Trax operation, so we delete it:
+   <example>
+$ <important>rm /var/www/html/index.html</important>
+   </example>
+   and again browse to <literal>http://localhost</literal>.  This time
+   we see <important>Controller not found</important> (if you don't
+   see this, refer to {@tutorial troubleshoot.pkg}).</para>
+
+  <para>This completes the basic installation of Trax.</para>
 
  </refsect2>
  <refsect2 id="{@id simpleapp_database}">
@@ -127,4 +138,13 @@ $ <important>mv /var/www/trax/public/* /var/www/html</important>
   <para></para>
   <para></para>
  </refsect2>
+
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
+
 </refsect1>

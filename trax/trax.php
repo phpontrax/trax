@@ -73,7 +73,7 @@ function trax() {
     }
 
     //  Assign real values for symbol substitution
-    $replace[0] = realpath('./'.$dstdir.'config'); // actual value of
+    $replace[0] = realpath($dstdir).'/config'; // actual value of
                                 // the full filesystem path to the
                                 // Trax config/ directory in the
                                 // user's work area
