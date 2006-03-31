@@ -276,6 +276,14 @@ class ActionController {
     public $views_file_extention = TRAX_VIEWS_EXTENTION;
 
     /**
+     *  Render controllers layout
+     *
+     *  Can be overridden in the child controller to false
+     *  @var boolean
+     */
+    public $render_layout = true;
+    
+    /**
      *  Whether to keep flash message after displaying it
      *  @var boolean
      */
@@ -520,8 +528,7 @@ class ActionController {
      *  @return boolean true
      */
     function process_route() {
-
-        $render_layout = true;
+    
         # First try to load the routes and setup the paths to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
@@ -679,6 +686,7 @@ class ActionController {
                         //error_log("rendering layout: $layout_file");
                         if(!$this->controller_object->render_file($layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
+                            echo "HERE";
                             echo $content_for_layout;        
                         }
                     } else {
