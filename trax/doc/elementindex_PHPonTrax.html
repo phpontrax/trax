@@ -38,6 +38,15 @@
 	<li type="square"><a href="PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
+	<li type="square"><a href="PHPonTrax/tutorial_database.pkg.html">Create A Database and User</a>
+</ul>
+<ul>
+	<li type="square"><a href="PHPonTrax/tutorial_advbuild.pkg.html">Advanced Application Build Topics</a>
+</ul>
+<ul>
+	<li type="square"><a href="PHPonTrax/tutorial_naming.pkg.html">The Trax Naming Convention</a>
+</ul>
+<ul>
 	<li type="square"><a href="PHPonTrax/tutorial_troubleshoot.pkg.html">Troubleshooting</a>
 </ul>
 <ul>
@@ -172,6 +181,8 @@
 		</a><br>
 			<a href="PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
+			<a href="PHPonTrax/_script_generate_php.html">		generate.php
+		</a><br>
 			<a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
 			<a href="PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
@@ -268,7 +279,7 @@
 		<h2>_</h2>
 		<dl>
 							<dt><b>__autoload</b></dt>
-				<dd>in file environment.php, function <a href="PHPonTrax/_data_config_environment_php.html#function__autoload">__autoload()</a></dd>
+				<dd>in file environment.php, function <a href="PHPonTrax/_data_config_environment_php.html#function__autoload">__autoload()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Automatically load a file containing a specified class</dd>
 							<dt><b>__call</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__call">ActiveRecord::__call()</a></dd>
 							<dt><b>__call</b></dt>
@@ -501,14 +512,16 @@
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controllers_path">ActionController::$controllers_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to ../app/controllers/ directory</dd>
 							<dt><b>$controller_class</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Class name of the controller</dd>
+							<dt><b>$controller_class</b></dt>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a><br>&nbsp;&nbsp;&nbsp;&nbsp;CamelCase name of the controller class</dd>
 							<dt><b>$controller_file</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the PHP program file for this controller</dd>
 							<dt><b>$controller_object</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_object">ActionController::$controller_object</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Instance of the controller class</dd>
 							<dt><b>$controller_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/controllers directory in the Trax work area</dd>
 							<dt><b>$controller_template_file</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_template_file">TraxGenerator::$controller_template_file</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_template_file">TraxGenerator::$controller_template_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the templates/controller.php file</dd>
 							<dt><b>$crlf</b></dt>
 				<dd>in file action_mailer.php, variable <a href="PHPonTrax/ActionMailer.html#var$crlf">ActionMailer::$crlf</a></dd>
 							<dt><b>camelize</b></dt>
@@ -516,9 +529,9 @@
 							<dt><b>capitalize</b></dt>
 				<dd>in file inflector.php, method <a href="PHPonTrax/Inflector.html#methodcapitalize">Inflector::capitalize()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Capitalize a word making it all lower case with first letter uppercase</dd>
 							<dt><b>cdata_section</b></dt>
-				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodcdata_section">Helpers::cdata_section()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Wrap CDATA begin and end tags around argument</dd>
-							<dt><b>cdata_section</b></dt>
 				<dd>in file helpers.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncdata_section">cdata_section()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a Helpers object and call its cdata_section() method</dd>
+							<dt><b>cdata_section</b></dt>
+				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodcdata_section">Helpers::cdata_section()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Wrap CDATA begin and end tags around argument</dd>
 							<dt><b>check_box</b></dt>
 				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functioncheck_box">check_box()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a checkbox tag tailored for accessing a specified attribute (identified by $field) on an object</dd>
 							<dt><b>check_box_tag</b></dt>
@@ -546,11 +559,11 @@
 							<dt><b>connect</b></dt>
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodconnect">Router::connect()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Accessor method to add a route to the route table</dd>
 							<dt><b>content_tag</b></dt>
-				<dd>in file helpers.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a Helpers object and call its content_tag() method</dd>
-							<dt><b>content_tag</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcontent_tag">ActiveRecordHelper::content_tag()</a></dd>
 							<dt><b>content_tag</b></dt>
 				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodcontent_tag">Helpers::content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an open/close pair of tags with content between</dd>
+							<dt><b>content_tag</b></dt>
+				<dd>in file helpers.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a Helpers object and call its content_tag() method</dd>
 							<dt><b>content_tag_without_error_wrapping</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcontent_tag_without_error_wrapping">ActiveRecordHelper::content_tag_without_error_wrapping()</a></dd>
 							<dt><b>controller_help</b></dt>
@@ -572,13 +585,13 @@
 							<dt><b>create</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcreate">ActiveRecord::create()</a></dd>
 							<dt><b>create_controller</b></dt>
-				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a></dd>
+				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a controller file with optional view methods</dd>
 							<dt><b>create_dir</b></dt>
 				<dd>in file trax.php, function <a href="PHPonTrax/_trax_php.html#functioncreate_dir">create_dir()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a directory if it doesn't exist</dd>
 							<dt><b>create_helper</b></dt>
-				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a></dd>
+				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a helper file for a controller</dd>
 							<dt><b>create_view</b></dt>
-				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a></dd>
+				<dd>in file trax_generator.php, method <a href="PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a view file if it doesn't exist</dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
@@ -659,6 +672,8 @@
 				<dd>in file action_mailer.php, variable <a href="PHPonTrax/ActionMailer.html#var$error">ActionMailer::$error</a></dd>
 							<dt><b>$errors</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$errors">ActiveRecord::$errors</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Description of non-fatal errors found</dd>
+							<dt><b>$extra_path</b></dt>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$extra_path">TraxGenerator::$extra_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generated subdirectories in the Trax work area</dd>
 							<dt><b>environment.php</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_data_config_environment_php.html">environment.php</a></dd>
 							<dt><b>edit</b></dt>
@@ -672,9 +687,9 @@
 							<dt><b>error_messages_for</b></dt>
 				<dd>in file active_record_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html#functionerror_messages_for">error_messages_for()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;error_messages_for($object_name, $options = array())</dd>
 							<dt><b>error_message_on</b></dt>
-				<dd>in file active_record_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html#functionerror_message_on">error_message_on()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
-							<dt><b>error_message_on</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methoderror_message_on">ActiveRecordHelper::error_message_on()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a string containing the error message attached to the +method+ on the +object+, if one exists.</dd>
+							<dt><b>error_message_on</b></dt>
+				<dd>in file active_record_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html#functionerror_message_on">error_message_on()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
 							<dt><b>error_wrapping</b></dt>
 				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methoderror_wrapping">FormHelper::error_wrapping()</a></dd>
 							<dt><b>error_wrapping</b></dt>
@@ -819,6 +834,8 @@
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodget_selected_route">Router::get_selected_route()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Accessor method to return contents of $selected_route</dd>
 							<dt><b>get_updates_sql</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_updates_sql">ActiveRecord::get_updates_sql()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return column values of object formatted for SQL update statement</dd>
+							<dt><b>generate.php</b></dt>
+				<dd>procedural page <a href="PHPonTrax/_script_generate_php.html">generate.php</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
@@ -844,9 +861,9 @@
 							<dt><b>$helper_file</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$helper_file">ActionController::$helper_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the controllername_helper.php file</dd>
 							<dt><b>$helper_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$helper_path">TraxGenerator::$helper_path</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$helper_path">TraxGenerator::$helper_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/helpers directory in the Trax work area</dd>
 							<dt><b>$helper_template_file</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$helper_template_file">TraxGenerator::$helper_template_file</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$helper_template_file">TraxGenerator::$helper_template_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the templates/helper.php file</dd>
 							<dt><b>Helpers</b></dt>
 				<dd>in file helpers.php, class <a href="PHPonTrax/Helpers.html">Helpers</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Basic helper functions</dd>
 							<dt><b>hidden_field</b></dt>
@@ -888,7 +905,7 @@
 							<dt><b>index</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#methodindex">ScaffoldController::index()</a></dd>
 							<dt><b>Inflector</b></dt>
-				<dd>in file inflector.php, class <a href="PHPonTrax/Inflector.html">Inflector</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Inflector contains static methods to convert English words between   singular and plural, and phrases between the camel case form and   the lower case underscore form.</dd>
+				<dd>in file inflector.php, class <a href="PHPonTrax/Inflector.html">Inflector</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Implement the Trax naming convention</dd>
 							<dt><b>input</b></dt>
 				<dd>in file active_record_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html#functioninput">input()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a default input tag for the type of object returned by the method. Example</dd>
 							<dt><b>input</b></dt>
@@ -962,11 +979,11 @@
 							<dt><b>$layouts_base_path</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$layouts_base_path">ActionController::$layouts_base_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to ../app/views/layouts/ directory</dd>
 							<dt><b>$layouts_path</b></dt>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$layouts_path">TraxGenerator::$layouts_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/views/layouts/ directory in the</dd>
+							<dt><b>$layouts_path</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$layouts_path">ActionController::$layouts_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to ../app/views/layouts/<em>extras</em> directory</dd>
 							<dt><b>$layout_filename</b></dt>
 				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$layout_filename">TraxGenerator::$layout_filename</a></dd>
-							<dt><b>$layout_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$layout_path">TraxGenerator::$layout_path</a></dd>
 							<dt><b>$loaded</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$loaded">ActionController::$loaded</a><br>&nbsp;&nbsp;&nbsp;&nbsp;URL recognized, paths resoved, controller file found</dd>
 							<dt><b>leading_zero_on_single_digits</b></dt>
@@ -1006,11 +1023,11 @@
 							<dt><b>$mail_mime</b></dt>
 				<dd>in file action_mailer.php, variable <a href="PHPonTrax/ActionMailer.html#var$mail_mime">ActionMailer::$mail_mime</a></dd>
 							<dt><b>$mkdir_cmd</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$mkdir_cmd">TraxGenerator::$mkdir_cmd</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$mkdir_cmd">TraxGenerator::$mkdir_cmd</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Platform-dependent command to make a directory</dd>
 							<dt><b>$model_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$model_path">TraxGenerator::$model_path</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$model_path">TraxGenerator::$model_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/model directory in the Trax work area</dd>
 							<dt><b>$model_template_file</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$model_template_file">TraxGenerator::$model_template_file</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$model_template_file">TraxGenerator::$model_template_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the templates/model.php file</dd>
 							<dt><b>makepkg.php</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_makepkg_php.html">makepkg.php</a></dd>
 							<dt><b>method_option_to_s</b></dt>
@@ -1117,6 +1134,8 @@
 	<div>
 		<h2>r</h2>
 		<dl>
+							<dt><b>$render_layout</b></dt>
+				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$render_layout">ActionController::$render_layout</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Render controllers layout</dd>
 							<dt><b>$render_performed</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$render_performed">ActionController::$render_performed</a></dd>
 							<dt><b>$replyto_addresses</b></dt>
@@ -1148,9 +1167,9 @@
 							<dt><b>reload</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodreload">ActiveRecord::reload()</a></dd>
 							<dt><b>remote_function</b></dt>
-				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionremote_function">remote_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;remote_function($options)</dd>
-							<dt><b>remote_function</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodremote_function">JavaScriptHelper::remote_function()</a></dd>
+							<dt><b>remote_function</b></dt>
+				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionremote_function">remote_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;remote_function($options)</dd>
 							<dt><b>remove</b></dt>
 				<dd>in file input_filter.php, method <a href="PHPonTrax/InputFilter.html#methodremove">InputFilter::remove()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Remove forbidden tags and attributes from a string iteratively</dd>
 							<dt><b>remove_ajax_options</b></dt>
@@ -1194,7 +1213,7 @@
 							<dt><b>$scaffolding</b></dt>
 				<dd>in file active_record_helper.php, variable <a href="PHPonTrax/ActiveRecordHelper.html#var$scaffolding">ActiveRecordHelper::$scaffolding</a></dd>
 							<dt><b>$scaffold_template_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$scaffold_template_path">TraxGenerator::$scaffold_template_path</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$scaffold_template_path">TraxGenerator::$scaffold_template_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to templates/scaffolds/generator_templates directory</dd>
 							<dt><b>$selected_route</b></dt>
 				<dd>in file router.php, variable <a href="PHPonTrax/Router.html#var$selected_route">Router::$selected_route</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Last route found by a call to find_route()</dd>
 							<dt><b>$selected_years</b></dt>
@@ -1418,7 +1437,7 @@
 							<dt><b>TraxError</b></dt>
 				<dd>in file trax_exceptions.php, class <a href="PHPonTrax/TraxError.html">TraxError</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Trax base class for Exception handling</dd>
 							<dt><b>TraxGenerator</b></dt>
-				<dd>in file trax_generator.php, class <a href="PHPonTrax/TraxGenerator.html">TraxGenerator</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Implement the commands of <a href="PHPonTrax/_data_script_generate_php.html">script/generate.php</a></dd>
+				<dd>in file trax_generator.php, class <a href="PHPonTrax/TraxGenerator.html">TraxGenerator</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate application files in the Trax work area</dd>
 							<dt><b>TRAX_LIB_ROOT</b></dt>
 				<dd>in file environment.php, constant <a href="PHPonTrax/_data_config_environment_php.html#defineTRAX_LIB_ROOT">TRAX_LIB_ROOT</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Define location of the Trax PHP modules</dd>
 							<dt><b>TRAX_MODE</b></dt>
@@ -1496,11 +1515,11 @@
 							<dt><b>$view_file</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$view_file">ActionController::$view_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the view file selected for this action</dd>
 							<dt><b>$view_file_extention</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_file_extention">TraxGenerator::$view_file_extention</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_file_extention">TraxGenerator::$view_file_extention</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Value of the view files extension (usually '.phtml')</dd>
 							<dt><b>$view_path</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_path">TraxGenerator::$view_path</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_path">TraxGenerator::$view_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/views directory in the Trax work area</dd>
 							<dt><b>$view_template_file</b></dt>
-				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_template_file">TraxGenerator::$view_template_file</a></dd>
+				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$view_template_file">TraxGenerator::$view_template_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the templates/view.phtml file</dd>
 							<dt><b>valid</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalid">ActiveRecord::valid()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Runs validation routines for update or create</dd>
 							<dt><b>validate</b></dt>
@@ -1536,7 +1555,7 @@
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 28 Mar 2006 12:54:17 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 03 Apr 2006 16:12:51 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

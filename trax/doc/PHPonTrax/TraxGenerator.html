@@ -38,6 +38,15 @@
 	<li type="square"><a href="../PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_database.pkg.html">Create A Database and User</a>
+</ul>
+<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_advbuild.pkg.html">Advanced Application Build Topics</a>
+</ul>
+<ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_naming.pkg.html">The Trax Naming Convention</a>
+</ul>
+<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_troubleshoot.pkg.html">Troubleshooting</a>
 </ul>
 <ul>
@@ -172,6 +181,8 @@
 		</a><br>
 			<a href="../PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
+			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
+		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
@@ -244,7 +255,7 @@ Source Location: /vendor/trax/trax_generator.php<br /><br />
 
 <h3><a href="#class_details">Class Overview</a></h3>
 <pre></pre><br />
-<div class="description">Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">script/generate.php</a></div><br /><br />
+<div class="description">Generate application files in the Trax work area</div><br /><br />
 
 
 
@@ -257,12 +268,14 @@ Source Location: /vendor/trax/trax_generator.php<br /><br />
 <td valign="top">
 <h3><a href="#class_vars">Variables</a></h3>
 <ul>
+    <li><a href="../PHPonTrax/TraxGenerator.html#var$controller_class">$controller_class</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$controller_path">$controller_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$controller_template_file">$controller_template_file</a></li>
+    <li><a href="../PHPonTrax/TraxGenerator.html#var$extra_path">$extra_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$helper_path">$helper_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$helper_template_file">$helper_template_file</a></li>
+    <li><a href="../PHPonTrax/TraxGenerator.html#var$layouts_path">$layouts_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$layout_filename">$layout_filename</a></li>
-    <li><a href="../PHPonTrax/TraxGenerator.html#var$layout_path">$layout_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$mkdir_cmd">$mkdir_cmd</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$model_path">$model_path</a></li>
     <li><a href="../PHPonTrax/TraxGenerator.html#var$model_template_file">$model_template_file</a></li>
@@ -310,174 +323,39 @@ Source Location: /vendor/trax/trax_generator.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a43">43</a>]<br />
-Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">script/generate.php</a><br /><br /><p>Legal commands:</p><p><ul><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">controller</a></li><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">model</a></li><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">scaffold</a></li></ul></p><br /></div><br /><br />
+[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a44">44</a>]<br />
+Generate application files in the Trax work area<br /><br /><p>Implements the commands of <a href="../PHPonTrax/_script_generate_php.html">script/generate.php</a>   &lt;p&gt;Legal commands:&lt;/p&gt;   <ul><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">controller</a></li><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">model</a></li><li><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">scaffold</a></li></ul></p><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
 <hr />
 <a name="class_vars"></a>
 <h3>Class Variables</h3>
 <div class="tags">
-	<a name="var$controller_path"></a>
+	<a name="var$controller_class"></a>
 	<p></p>
-	<h4>$controller_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a47">47</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$controller_template_file"></a>
-	<p></p>
-	<h4>$controller_template_file = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a51">51</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$helper_path"></a>
-	<p></p>
-	<h4>$helper_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a48">48</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$helper_template_file"></a>
-	<p></p>
-	<h4>$helper_template_file = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a52">52</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$layout_filename"></a>
-	<p></p>
-	<h4>$layout_filename = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a57">57</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$layout_path"></a>
-	<p></p>
-	<h4>$layout_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a56">56</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$mkdir_cmd"></a>
-	<p></p>
-	<h4>$mkdir_cmd = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a50">50</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$model_path"></a>
-	<p></p>
-	<h4>$model_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a49">49</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$model_template_file"></a>
-	<p></p>
-	<h4>$model_template_file = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a54">54</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$scaffold_template_path"></a>
-	<p></p>
-	<h4>$scaffold_template_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a55">55</a>]</p>
-  
-  <br />
-	<div class="tags">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
-    </tr>
-      </table>
-	</div><br /><br />
-	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$view_file_extention"></a>
-	<p></p>
-	<h4>$view_file_extention = <span class="value">&nbsp;TRAX_VIEWS_EXTENTION</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a59">59</a>]</p>
-  <br /><br />
+	<h4>$controller_class = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a135">135</a>]</p>
+  CamelCase name of the controller class<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a> - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a> - Must be set before call.
+                              Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a> - Must be set before call.
+                            Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
   </tr>
 </table>
 </div>
@@ -487,16 +365,238 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
+      <td>string</td>
     </tr>
       </table>
 	</div><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br />
-	<a name="var$view_path"></a>
+	<a name="var$controller_path"></a>
 	<p></p>
-	<h4>$view_path = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a46">46</a>]</p>
+	<h4>$controller_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a56">56</a>]</p>
+  Filesystem path to the app/controllers directory in the Trax work area<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a> - Must be set before call.
+                            Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$controller_template_file"></a>
+	<p></p>
+	<h4>$controller_template_file = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a89">89</a>]</p>
+  Filesystem path to the templates/controller.php file<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a> - Must be set before call.
+                            Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$extra_path"></a>
+	<p></p>
+	<h4>$extra_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a77">77</a>]</p>
+  Generated subdirectories in the Trax work area<br /><br /><p>When a controller is generated with a name that includes '/',   $extra_path is set to the implied subdirectories.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$helper_path"></a>
+	<p></p>
+	<h4>$helper_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a62">62</a>]</p>
+  Filesystem path to the app/helpers directory in the Trax work area<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a> - Must be set before call.
+                              Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$helper_template_file"></a>
+	<p></p>
+	<h4>$helper_template_file = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a95">95</a>]</p>
+  Filesystem path to the templates/helper.php file<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a> - Must be set before call.
+                              Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$layouts_path"></a>
+	<p></p>
+	<h4>$layouts_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a120">120</a>]</p>
+  Filesystem path to the app/views/layouts/ directory in the<br /><br /><p>Trax work area</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$layout_filename"></a>
+	<p></p>
+	<h4>$layout_filename = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a129">129</a>]</p>
   <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">TraxGenerator::generate_scaffold()</a> - Set as output from
+                                  generate_controller().
+                                  Not changed afterward.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td><p>Document this variable</p><p>Value is set by <a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">generate_controller()</a> and used by   <a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">generate_scaffold()</a></p></td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$mkdir_cmd"></a>
+	<p></p>
+	<h4>$mkdir_cmd = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a83">83</a>]</p>
+  Platform-dependent command to make a directory<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -511,7 +611,154 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$model_path"></a>
+	<p></p>
+	<h4>$model_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a68">68</a>]</p>
+  Filesystem path to the app/model directory in the Trax work area<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">TraxGenerator::generate_model()</a> - Must be set before call.
+                             Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$model_template_file"></a>
+	<p></p>
+	<h4>$model_template_file = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a107">107</a>]</p>
+  Filesystem path to the templates/model.php file<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">TraxGenerator::generate_model()</a> - Must be set before call.
+                             Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$scaffold_template_path"></a>
+	<p></p>
+	<h4>$scaffold_template_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a113">113</a>]</p>
+  Filesystem path to templates/scaffolds/generator_templates directory<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$view_file_extention"></a>
+	<p></p>
+	<h4>$view_file_extention = <span class="value">&nbsp;TRAX_VIEWS_EXTENTION</span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a141">141</a>]</p>
+  Value of the view files extension (usually '.phtml')<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$view_path"></a>
+	<p></p>
+	<h4>$view_path = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a50">50</a>]</p>
+  Filesystem path to the app/views directory in the Trax work area<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a> - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string</td>
     </tr>
       </table>
 	</div><br /><br />
@@ -519,14 +766,30 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
 	<a name="var$view_template_file"></a>
 	<p></p>
 	<h4>$view_template_file = <span class="value"></span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a53">53</a>]</p>
-  
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a101">101</a>]</p>
+  Filesystem path to the templates/view.phtml file<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a> - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#method__construct">TraxGenerator::__construct()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
   <br />
 	<div class="tags">
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
+      <td>string</td>
     </tr>
       </table>
 	</div><br /><br />
@@ -539,7 +802,7 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
 <div class="tags">
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a68">68</a>]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a163">163</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -548,10 +811,40 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
     </td></tr></table>
     </td></tr></table><br />
 	
-		Constructor for the TraxGenerator object<br /><br /><br /><br />
+		Constructor for the TraxGenerator object<br /><br /><p>Compute and store filesystem paths to the various   subdirectories of the Trax work area and the template files   used to generate application files</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$model_template_file">TraxGenerator::$model_template_file</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$scaffold_template_path">TraxGenerator::$scaffold_template_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$view_path">TraxGenerator::$view_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$view_template_file">TraxGenerator::$view_template_file</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$model_path">TraxGenerator::$model_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$layouts_path">TraxGenerator::$layouts_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_template_file">TraxGenerator::$controller_template_file</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$helper_path">TraxGenerator::$helper_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$helper_template_file">TraxGenerator::$helper_template_file</a></td>
+  </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td>$GLOBALS['TRAX_INCLUDES']</td>
   </tr>
@@ -564,7 +857,7 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
   </div>
   <hr />
 	<a name="methodcontroller_help"></a>
-	<h3>method controller_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a528">528</a>]</span></h3>
+	<h3>method controller_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a773">773</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -574,93 +867,191 @@ Implement the commands of <a href="../PHPonTrax/_data_script_generate_php.html">
     </td></tr></table><br />
 	
 		Output console help message for &quot;generate controller&quot;<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodcreate_controller"></a>
-	<h3>method create_controller <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a421">421</a>]</span></h3>
+	<h3>method create_controller <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a620">620</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void create_controller(
-mixed
-$controller, [mixed
+string
+$controller, [string[]
 $views = ""])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
+		Create a controller file with optional view methods<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a></td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Should return succeed/fail indication</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_template_file">TraxGenerator::$controller_template_file</a> - Must be set before call.
+                            Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a> - Must be set before call.
+                            Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a> - Must be set before call.
+                            Not changed during call.</td>
   </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$controller</b>&nbsp;&nbsp;</td>
+        <td>Name of the controller</td>
+      </tr>
+          <tr>
+        <td class="type">string[]&nbsp;&nbsp;</td>
+        <td><b>$views</b>&nbsp;&nbsp;</td>
+        <td>Name(s) of view(s), if any</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodcreate_helper"></a>
-	<h3>method create_helper <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a455">455</a>]</span></h3>
+	<h3>method create_helper <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a680">680</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void create_helper(
-mixed
+string
 $controller)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
+		Create a helper file for a controller<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a></td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Should return succeed/fail indication</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$helper_template_file">TraxGenerator::$helper_template_file</a> - Must be set before call.
+                              Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$helper_path">TraxGenerator::$helper_path</a> - Must be set before call.
+                              Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a> - Must be set before call.
+                              Not changed during call.</td>
   </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$controller</b>&nbsp;&nbsp;</td>
+        <td>Name of the controller</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodcreate_view"></a>
-	<h3>method create_view <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a481">481</a>]</span></h3>
+	<h3>method create_view <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a722">722</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void create_view(
-mixed
-$view, mixed
+string
+$view, string
 $controller)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
+		Create a view file if it doesn't exist<br /><br /><p>Create a view file in the Trax work area if the required file   does not yet exist.  Generate the view file contents by   customizing the view template file with information about the   controller and view names.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Should return succeed/fail indication</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$view_template_file">TraxGenerator::$view_template_file</a> - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$view_path">TraxGenerator::$view_path</a> - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td>view_file_extension - Must be set before call.
+                                Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a> - Must be set before call.
+                                Not changed during call.</td>
   </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$view</b>&nbsp;&nbsp;</td>
+        <td>Name of the view</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$controller</b>&nbsp;&nbsp;</td>
+        <td>Name of the controller</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodexec"></a>
-	<h3>method exec <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a507">507</a>]</span></h3>
+	<h3>method exec <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a751">751</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -671,6 +1062,15 @@ $cmd)</code>
     </td></tr></table><br />
 	
 		Execute an operating system command<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Replace with calls to filesystem methods</td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <h4>Parameters:</h4>
@@ -687,7 +1087,7 @@ $cmd)</code>
   </div>
   <hr />
 	<a name="methodfix_php_brackets"></a>
-	<h3>method fix_php_brackets <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a521">521</a>]</span></h3>
+	<h3>method fix_php_brackets <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a765">765</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -703,6 +1103,9 @@ $string)</code>
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><b>return:</b>&nbsp;&nbsp;</td><td>Edited input string</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">TraxGenerator::generate_scaffold()</a></td>
   </tr>
 </table>
 </div>
@@ -723,7 +1126,7 @@ $string)</code>
   </div>
   <hr />
 	<a name="methodgenerate_controller"></a>
-	<h3>method generate_controller <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a166">166</a>]</span></h3>
+	<h3>method generate_controller <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a329">329</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -743,6 +1146,51 @@ $scaffolding = false])</code>
   <samp>app/helpers/</samp><em>some_name</em><samp>_helper.php</samp></li><li>a directory
   <samp>app/views/</samp><em>some_name</em></li></ul>
   Optionally, one or more views can be appended to the command:<br />   <samp>php script/generate.php controller</samp>   <em>SomeName view1 view2</em><br />   which will additionally generate files:<br />   <samp>app/views/</samp><em>some_name/view1</em><samp>.phtml</samp><br />   <samp>app/views/</samp><em>some_name/view2</em><samp>.phtml</samp></p><p></p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$layout_filename">TraxGenerator::$layout_filename</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$layouts_path">TraxGenerator::$layouts_path</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$view_path">TraxGenerator::$view_path</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">TraxGenerator::generate_scaffold()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$helper_path">TraxGenerator::$helper_path</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$extra_path">TraxGenerator::$extra_path</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a> - Must be set before call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a> - Set during call</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_controller">TraxGenerator::create_controller()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_helper">TraxGenerator::create_helper()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcreate_view">TraxGenerator::create_view()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodunderscore">Inflector::underscore()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <h4>Parameters:</h4>
@@ -751,7 +1199,7 @@ $scaffolding = false])</code>
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
         <td><b>$name</b>&nbsp;&nbsp;</td>
-        <td>Name of the controller to generate in camel case</td>
+        <td>Name in CamelCase of the controller to generate.                       The value may include '/' which will cause                       creation of subdirectories indicated to                       hold the controller and view files.</td>
       </tr>
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
@@ -769,7 +1217,7 @@ $scaffolding = false])</code>
   </div>
   <hr />
 	<a name="methodgenerate_model"></a>
-	<h3>method generate_model <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a229">229</a>]</span></h3>
+	<h3>method generate_model <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a399">399</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -781,6 +1229,29 @@ $name)</code>
 	
 		Implement the &quot;generate model&quot; command<br /><br /><p>Example:<br /><samp>php script/generate.php model</samp>   <em>SomeName</em><br />   will generate a file   <samp>app/models/</samp><em>some_name</em><samp>.php</samp><br />   containing the class definition<br />   <samp>class</samp> <em>SomeName</em> <samp>extends
   ActiveRecord {}</samp></p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">TraxGenerator::generate_scaffold()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$model_template_file">TraxGenerator::$model_template_file</a> - Must be set before call.
+                             Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$model_path">TraxGenerator::$model_path</a> - Must be set before call.
+                             Not changed during call.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodunderscore">Inflector::underscore()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <h4>Parameters:</h4>
@@ -789,7 +1260,7 @@ $name)</code>
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
         <td><b>$name</b>&nbsp;&nbsp;</td>
-        <td>Name of the model</td>
+        <td>Name of the model.  May be in either                 under_score or CamelCase.  If no '_' exists in                 $name it is treated as CamelCase.</td>
       </tr>
         </table>
     </div><br />
@@ -797,7 +1268,7 @@ $name)</code>
   </div>
   <hr />
 	<a name="methodgenerate_scaffold"></a>
-	<h3>method generate_scaffold <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a266">266</a>]</span></h3>
+	<h3>method generate_scaffold <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a447">447</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -810,6 +1281,44 @@ $views = ""])</code>
     </td></tr></table><br />
 	
 		Implement the &quot;generate scaffold&quot; command<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodunderscore">Inflector::underscore()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#var$layout_filename">TraxGenerator::$layout_filename</a> - Set as output from
+                                  generate_controller().
+                                  Not changed afterward.</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodfix_php_brackets">TraxGenerator::fix_php_brackets()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodsingularize">Inflector::singularize()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodpluralize">Inflector::pluralize()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">TraxGenerator::generate_model()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodclassify">Inflector::classify()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodhumanize">Inflector::humanize()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <h4>Parameters:</h4>
@@ -836,7 +1345,7 @@ $views = ""])</code>
   </div>
   <hr />
 	<a name="methodgenerator_help"></a>
-	<h3>method generator_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a600">600</a>]</span></h3>
+	<h3>method generator_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a847">847</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -846,13 +1355,22 @@ $views = ""])</code>
     </td></tr></table><br />
 	
 		Output console help message for unrecognized command<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodmodel_help"></a>
-	<h3>method model_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a555">555</a>]</span></h3>
+	<h3>method model_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a801">801</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -862,13 +1380,22 @@ $views = ""])</code>
     </td></tr></table><br />
 	
 		Output console help message for &quot;generate model&quot;<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodrun"></a>
-	<h3>method run <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a92">92</a>]</span></h3>
+	<h3>method run <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a204">204</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -877,12 +1404,30 @@ $views = ""])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Parse command line and carry out the command<br /><br /><br /><br />
+		Parse command line and carry out the command<br /><br /><p>Command line arguments, if any are in $_SERVER['argv']</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodmodel_help">TraxGenerator::model_help()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodscaffold_help">TraxGenerator::scaffold_help()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerator_help">TraxGenerator::generator_help()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_scaffold">TraxGenerator::generate_scaffold()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_controller">TraxGenerator::generate_controller()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodgenerate_model">TraxGenerator::generate_model()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodcontroller_help">TraxGenerator::controller_help()</a></td>
   </tr>
 </table>
 </div>
@@ -893,7 +1438,7 @@ $views = ""])</code>
   </div>
   <hr />
 	<a name="methodscaffold_help"></a>
-	<h3>method scaffold_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a571">571</a>]</span></h3>
+	<h3>method scaffold_help <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxtrax_generator.php.html#a817">817</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -903,6 +1448,15 @@ $views = ""])</code>
     </td></tr></table><br />
 	
 		Output console help message for &quot;generate scaffold&quot;<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/TraxGenerator.html#methodrun">TraxGenerator::run()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
         <div class="top">[ <a href="#top">Top</a> ]</div>
@@ -912,7 +1466,7 @@ $views = ""])</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Tue, 28 Mar 2006 12:55:12 -0700 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Mon, 03 Apr 2006 16:14:13 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

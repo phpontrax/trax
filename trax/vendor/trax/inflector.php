@@ -29,10 +29,11 @@
  */
 
 /**
- *  Inflector contains static methods to convert English words between
- *  singular and plural, and phrases between the camel case form and
- *  the lower case underscore form.
+ *  Implement the Trax naming convention
  *
+ *  This class provides static methods to implement the
+ *  {@tutorial PHPonTrax/naming.pkg Trax naming convention}.
+ *  Inflector is never instantiated.
  *  @tutorial PHPonTrax/Inflector.cls
  */
 class Inflector {

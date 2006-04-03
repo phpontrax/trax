@@ -26,14 +26,18 @@
  *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-/**
  *
  *  @package PHPonTrax
  */
+
+/**
+ *  @todo Document this class
+ */
 class ActiveRecordHelper extends Helpers {
     
+    /**
+     *
+     */
     public $scaffolding = 0;
 
     /**
@@ -41,13 +45,15 @@ class ActiveRecordHelper extends Helpers {
      *  (title is a VARCHAR column and holds "Hello World"):
      *   input("post", "title") =>
      *     <input id="post_title" name="post[title]" size="30" type="text" value="Hello World" />
+     *  @uses to_tag()
      */
     function input($object_name, $attribute_name, $options = array()) {
         return $this->to_tag($object_name, $attribute_name, $options);        
     }
     
     /**
-     *
+     *  @todo Document this method
+     *  @uses to_scaffold_tag()
      */
     function input_scaffolding($object_name, $attribute_name, $options = array()) {
         return $this->to_scaffold_tag($object_name, $attribute_name, $options);        
@@ -89,6 +95,8 @@ class ActiveRecordHelper extends Helpers {
      *     content_tag("b", "Department") .
      *     collection_select("department", "id", $departments, "id", "name"))
      *   )
+     *  @uses all_input_tags()
+     *  @uses content_tag()
      */
     function form($record_name, $options = array()) {
         $record = $this->object($record_name);
@@ -116,6 +124,10 @@ class ActiveRecordHelper extends Helpers {
      *
      *   <?= error_message_on "post", "title", "Title simply ", " (or it won't work)", "inputError" ?> =>
      *     <div class="inputError">Title simply can't be empty (or it won't work)</div>
+     *  @uses attribute_name
+     *  @uses controller_object
+     *  @uses content_tag()
+     *  @uses object_name
      */
     function error_message_on($object_name, $attribute_name, $prepend_text = "", $append_text = "", $css_class = "formError") {
         $this->object_name = $object_name;
@@ -157,7 +169,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function all_input_tags($record, $record_name, $options) {
         //if($record_name) $this->object_name = $record_name;
@@ -177,7 +189,8 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
+     *  @uses scaffolding
      */
     function default_input_block() {
         if($this->scaffolding) {
@@ -188,7 +201,7 @@ class ActiveRecordHelper extends Helpers {
     }
     
     /**
-     *
+     *  @todo Document this method
      */
     function to_tag($object_name, $attribute_name, $options = array()) {
         $this->object_name = $object_name;
@@ -230,7 +243,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function to_scaffold_tag($object_name, $attribute_name, $options = array()) {
         $this->object_name = $object_name;
@@ -262,6 +275,8 @@ class ActiveRecordHelper extends Helpers {
             case 'bool':
                 $results = "boolean_select(\"$object_name\", \"$attribute_name\")";
                 break;
+	default:
+	  echo "default case from ".$this->column_type()."\n";
         }
         if(count($this->object()->errors)) {
             $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
@@ -270,7 +285,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function tag_without_error_wrapping() {
         $args = func_get_args();
@@ -278,7 +293,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function tag($name, $options = array()) {
         if(count($this->object()->errors)) {
@@ -289,7 +304,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function content_tag_without_error_wrapping() {
         $args = func_get_args();
@@ -297,7 +312,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function content_tag($name, $value, $options = array()) {
         if (count($this->object()->errors)) {
@@ -308,7 +323,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function to_date_select_tag_without_error_wrapping() {
         $form = new DateHelper($this->object_name, $this->attribute_name);
@@ -317,7 +332,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function to_date_select_tag($options = array()) {
         if (count($this->object()->errors)) {
@@ -328,7 +343,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function to_datetime_select_tag_without_error_wrapping() {
         $form = new DateHelper($this->object_name, $this->attribute_name);
@@ -337,7 +352,7 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function to_datetime_select_tag($options = array()) {
         if (count($this->object()->errors)) {
@@ -348,21 +363,21 @@ class ActiveRecordHelper extends Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function error_wrapping($html_tag, $has_error) {
         return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function error_message() {
         return $this->object()->errors[$this->attribute_name];
     }
 
     /**
-     *
+     *  @todo Document this method
      */
     function column_type() {
         $column = $this->object()->column_for_attribute($this->attribute_name);
@@ -420,4 +435,11 @@ function input_scaffolding() {
     return call_user_func_array(array($ar_helper, 'input_scaffolding'), $args);
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

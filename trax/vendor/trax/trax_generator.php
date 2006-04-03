@@ -26,89 +26,217 @@
  *  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  @package PHPonTrax
  */
 
 /**
- *  Implement the commands of {@link generate.php script/generate.php}
+ *  Generate application files in the Trax work area
  *
+ *  Implements the commands of {@link generate.php script/generate.php}
  *  <p>Legal commands:</p>
  *  <ul>
  *    <li>{@link generate_controller() controller}</li>
  *    <li>{@link generate_model() model}</li>
  *    <li>{@link generate_scaffold() scaffold}</li>
  *  </ul>
- *
- *  @package PHPonTrax
  */
 class TraxGenerator {
 
-    private
-        $view_path,
-        $controller_path,
-        $helper_path,
-        $model_path,
-        $mkdir_cmd,
-        $controller_template_file,
-        $helper_template_file,
-        $view_template_file,
-        $model_template_file,
-        $scaffold_template_path,
-        $layout_path,
-        $layout_filename;
-    public
-        $view_file_extention = TRAX_VIEWS_EXTENTION;
+    /**
+     *  Filesystem path to the app/views directory in the Trax work area
+     *  @var string
+     */
+    private $view_path;
+
+    /**
+     *  Filesystem path to the app/controllers directory in the Trax work area
+     *  @var string
+     */
+    private $controller_path;
+
+    /**
+     *  Filesystem path to the app/helpers directory in the Trax work area
+     *  @var string
+     */
+    private $helper_path;
+
+    /**
+     *  Filesystem path to the app/model directory in the Trax work area
+     *  @var string
+     */
+    private $model_path;
+
+    /**
+     *  Generated subdirectories in the Trax work area
+     *
+     *  When a controller is generated with a name that includes '/',
+     *  $extra_path is set to the implied subdirectories.
+     *  @var string
+     */
+    private $extra_path;
+
+    /**
+     *  Platform-dependent command to make a directory
+     *  @var string
+     */
+    private $mkdir_cmd;
+
+    /**
+     *  Filesystem path to the templates/controller.php file
+     *  @var string
+     */
+    private $controller_template_file;
+
+    /**
+     *  Filesystem path to the templates/helper.php file
+     *  @var string
+     */
+    private $helper_template_file;
+
+    /**
+     *  Filesystem path to the templates/view.phtml file
+     *  @var string
+     */
+    private $view_template_file;
+
+    /**
+     *  Filesystem path to the templates/model.php file
+     *  @var string
+     */
+    private $model_template_file;
+
+    /**
+     *  Filesystem path to templates/scaffolds/generator_templates directory
+     *  @var string
+     */
+    private $scaffold_template_path;
+
+    /**
+     *  Filesystem path to the app/views/layouts/ directory in the
+     *  Trax work area
+     *  @var string
+     */
+    private $layouts_path;
+
+    /**
+     *  @todo Document this variable
+     *
+     *  Value is set by {@link generate_controller()} and used by
+     *  {@link generate_scaffold()}
+     *  @var string
+     */
+    private $layout_filename;
+
+    /**
+     *  CamelCase name of the controller class
+     *  @var string
+     */
+    private $controller_class;
+
+    /**
+     *  Value of the view files extension (usually '.phtml')
+     *  @var string
+     */
+    public $view_file_extention = TRAX_VIEWS_EXTENTION;
 
     /**
      *  Constructor for the TraxGenerator object
      *
+     *  Compute and store filesystem paths to the various
+     *  subdirectories of the Trax work area and the template files
+     *  used to generate application files
      *  @uses $GLOBALS['TRAX_INCLUDES']
      *  @global string[] $GLOBALS['TRAX_INCLUDES'] Array of paths to
      *                                             various Trax directories
+     *  @uses controller_path
+     *  @uses controller_template_file
+     *  @uses helper_path
+     *  @uses helper_template_file
+     *  @uses layouts_path
+     *  @uses model_path
+     *  @uses model_template_file
+     *  @uses scaffold_template_path
+     *  @uses view_path
+     *  @uses view_template_file
      */
     function __construct() {
-        $this->view_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
-        $this->controller_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
-        $this->helper_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
-        $this->model_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['models'];
-        $this->layouts_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
-        $this->controller_template_file = TRAX_LIB_ROOT . "/templates/controller.php";
-        $this->helper_template_file = TRAX_LIB_ROOT . "/templates/helper.php";
-        $this->view_template_file = TRAX_LIB_ROOT . "/templates/view.".$this->view_file_extention;
-        $this->model_template_file = TRAX_LIB_ROOT . "/templates/model.php";
-        $this->scaffold_template_path = TRAX_LIB_ROOT . "/templates/scaffolds/generator_templates";
+        $this->view_path =
+               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
+        $this->controller_path =
+               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
+        $this->helper_path =
+               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
+        $this->model_path =
+               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['models'];
+        $this->layouts_path =
+               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
+        $this->controller_template_file =
+               TRAX_LIB_ROOT . "/templates/controller.php";
+        $this->helper_template_file =
+               TRAX_LIB_ROOT . "/templates/helper.php";
+        $this->view_template_file =
+               TRAX_LIB_ROOT . "/templates/view.".$this->view_file_extention;
+        $this->model_template_file =
+               TRAX_LIB_ROOT . "/templates/model.php";
+        $this->scaffold_template_path =
+               TRAX_LIB_ROOT . "/templates/scaffolds/generator_templates";
 
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->mkdir_cmd = "mkdir";
         } else {
             $this->mkdir_cmd = "mkdir -p";
         }
-
     }
 
     /**
      *  Parse command line and carry out the command
-     *  @todo Document this method
+     *
+     *  Command line arguments, if any are in $_SERVER['argv']
+     *  @uses controller_help()
+     *  @uses generate_controller()
+     *  @uses generate_model()
+     *  @uses generate_scaffold()
+     *  @uses generator_help()
+     *  @uses model_help()
+     *  @uses scaffold_help()
      */
     function run() {
-        $command = strtolower($_SERVER["argv"][1]);
-        $command_name = $_SERVER["argv"][2];
 
+        //  If command line arguments exist, parse them
+        if (array_key_exists('argv', $_SERVER)) {
+            if (array_key_exists(1, $_SERVER['argv'])) {
+                $command = strtolower($_SERVER["argv"][1]);
+            }
+            if (array_key_exists(2, $_SERVER['argv'])) {
+                $command_name = $_SERVER["argv"][2];
+            }
+        }
+
+        //  Execute command or output a diagnostic
         if(empty($command)) {
             $this->generator_help();
         } else {
             switch($command) {
+
+                //  Process "controller" command
                 case "controller":
                     if(empty($command_name)) {
                         $this->controller_help();
                     } else {
-                        if($_SERVER["argv"][3] != "") {
+                        $views = array();
+                        if(array_key_exists(3, $_SERVER['argv'])
+                           && ($_SERVER["argv"][3] != "")) {
                             for($i=3;$i < count($_SERVER["argv"]);$i++) {
-                                $views[] = strtolower($_SERVER["argv"][$i]);
+                               $views[] = strtolower($_SERVER["argv"][$i]);
                             }
                         }
                         $this->generate_controller($command_name, $views);
                     }
                     break;
+
+                //  Process "model" command
+                //  $command_name is the name of the model
                 case "model":
                     if(empty($command_name)) {
                         $this->model_help();
@@ -116,22 +244,43 @@ class TraxGenerator {
                         $this->generate_model($command_name);
                     }
                     break;
+
+                //  Process "scaffold" command
+                //  $command_name has the name of the model
+                //  $_SERVER['argv'][3] has the name of the controller
                 case "scaffold":
-                    if(empty($command_name)) {
+
+                    //  Model name is required
+                    if( empty($command_name) ) {
+                        echo "Error: name of model omitted\n";
                         $this->scaffold_help();
-                    } else {
-                        $controller_name = $_SERVER["argv"][3];
-                        if($_SERVER["argv"][4] != "") {
-                            for($i=4;$i < count($_SERVER["argv"]);$i++) {
-                                $views[] = strtolower($_SERVER["argv"][$i]);
-                            }
-                        }                        
-                        $this->generate_scaffold($command_name, $controller_name, $views);
+                        break;
                     }
+
+                    //  Controller name is optional
+                    if (array_key_exists(3, $_SERVER["argv"])) {
+                        $controller_name = $_SERVER["argv"][3];
+                    } else {
+                        $controller_name = null;
+                    }
+                        
+                    //  Views are optional following controller name
+                    $views = array();
+                    if (array_key_exists(4, $_SERVER["argv"])
+                        && ($_SERVER["argv"][4] != "")) {
+                        for($i=4;$i < count($_SERVER["argv"]);$i++) {
+                            $views[] = strtolower($_SERVER["argv"][$i]);
+                        }
+                    }
+                    $this->generate_scaffold($command_name,
+                                             $controller_name, $views);
                     break;                    
-            }
+
+            default:
+                $this->generator_help();
+            }                            // switch($command)
         }
-        exit;
+        return;
     }
 
     /**
@@ -159,9 +308,23 @@ class TraxGenerator {
      *  <samp>app/views/</samp><i>some_name/view1</i><samp>.phtml</samp><br>
      *  <samp>app/views/</samp><i>some_name/view2</i><samp>.phtml</samp></p>
      *
-     *  @param string $name Name of the controller to generate in camel case
+     *  @param string $name Name in CamelCase of the controller to generate.
+     *                      The value may include '/' which will cause
+     *                      creation of subdirectories indicated to
+     *                      hold the controller and view files.
      *  @param string $views  Optional list of views to generate
      *  @param boolean $scaffolding
+     *  @uses Inflector::underscore()
+     *  @uses $controller_class   Set during call
+     *  @uses $controller_path    Must be set before call.
+     *  @uses create_controller()
+     *  @uses create_helper()
+     *  @uses create_view()
+     *  @uses $extra_path         Set during call
+     *  @uses $helper_path        Must be set before call.
+     *  @uses $layouts_path       Must be set before call.
+     *  @uses $layout_filename    Set during call
+     *  @uses $view_path          Must be set before call.
      */
     function generate_controller($name, $views="", $scaffolding = false) {
 
@@ -224,7 +387,14 @@ class TraxGenerator {
      *  containing the class definition<br>
      *  <samp>class</samp> <i>SomeName</i> <samp>extends
      *  ActiveRecord {}</samp>
-     *  @param string $name Name of the model
+     *  @param string $name Name of the model.  May be in either
+     *                under_score or CamelCase.  If no '_' exists in
+     *                $name it is treated as CamelCase.
+     *  @uses Inflector::underscore()
+     *  @uses model_path           Must be set before call.
+     *                             Not changed during call.
+     *  @uses model_template_file  Must be set before call.
+     *                             Not changed during call.
      */
     function generate_model($name) {
 
@@ -262,11 +432,22 @@ class TraxGenerator {
      *  @param string $model_name
      *  @param string $controller_name
      *  @param string $views
+     *  @uses generate_controller()
+     *  @uses generate_model()
+     *  @uses Inflector::classify()
+     *  @uses Inflector::humanize()
+     *  @uses Inflector::pluralize()
+     *  @uses Inflector::singularize()
+     *  @uses Inflector::underscore()
+     *  @uses $layout_filename          Set as output from
+     *                                  generate_controller().
+     *                                  Not changed afterward.
+     *  @uses fix_php_brackets()
      */
     function generate_scaffold($model_name, $controller_name, $views="") {
         if(!$model_exists = $this->generate_model($model_name)) {
             echo "Error - Can't create Model: $model_name.\n";    
-            exit;
+            return;
         }
 
         $GLOBALS['current_controller_object'] =& $this;
@@ -274,13 +455,17 @@ class TraxGenerator {
         $singluar_model_name = Inflector::singularize($model_name);
         $plural_model_name = Inflector::pluralize($model_name);  
         $human_model_name = Inflector::humanize($model_name);      
+
         $this->{$singluar_model_name} = new $model_class_name();            
-        if(!$controller_name) {
-            $controller_name = Inflector::pluralize($model_name);   
+        if(empty($controller_name)) {
+            $controller_name = Inflector::underscore($model_name);   
         } else {
             $controller_name = Inflector::underscore($controller_name);    
         }
-        $controller_file = "$this->controller_path/".$controller_name."_controller.php";
+        $GLOBALS['current_controller_name'] = $controller_name;
+        $controller_file =
+            "$this->controller_path/" . $controller_name."_controller.php";
+        $GLOBALS['current_controller_path'] = $controller_file;
         $non_scaffolded_actions = array();
         $illegal_views = array("index","add","edit","show");      
         if(is_array($views)) {
@@ -290,10 +475,15 @@ class TraxGenerator {
                 }           
             }
         }         
-        $this->generate_controller($controller_name, $non_scaffolded_actions, true); 
+        $this->generate_controller($controller_name,
+                                   $non_scaffolded_actions, true); 
         if(stristr($controller_name, "/")) {
-            $controller_class_name = Inflector::classify(substr($controller_name,strrpos($controller_name, "/")+1));
-            $human_controller_name = Inflector::humanize(substr($controller_name,strrpos($controller_name, "/")+1));
+            $controller_class_name =
+                Inflector::classify(substr($controller_name,
+                                           strrpos($controller_name, "/")+1));
+            $human_controller_name =
+                Inflector::humanize(substr($controller_name,
+                                           strrpos($controller_name, "/")+1));
         } else {
             $controller_class_name = Inflector::classify($controller_name);
             $human_controller_name = Inflector::humanize($controller_name);
@@ -415,33 +605,60 @@ class TraxGenerator {
     }    
 
     /**
-     *  @todo Document this method
+     *  Create a controller file with optional view methods
      *
+     *  @param string $controller Name of the controller
+     *  @param string[] $views    Name(s) of view(s), if any
+     *  @uses controller_class    Must be set before call.
+     *                            Not changed during call.
+     *  @uses controller_path     Must be set before call.
+     *                            Not changed during call.
+     *  @uses controller_template_file Must be set before call.
+     *                            Not changed during call.
+     *  @todo Should return succeed/fail indication
      */
     function create_controller($controller,$views="") {
 
-        $controller_file = "$this->controller_path/".$controller."_controller.php";
+        $controller_file = "$this->controller_path/"
+            . $controller . "_controller.php";
 
         if(!file_exists($controller_file)) {
             if(file_exists($this->controller_template_file)) {
                 $template = file_get_contents($this->controller_template_file);
-                $template = str_replace('[class_name]',$this->controller_class,$template);
-                if(is_array($views)) {
-                    foreach($views as $view) {
-                        $classMethods[] = "\tfunction $view() {\n\t}";
+                $template = str_replace('[class_name]',
+                                        $this->controller_class,$template);
+                //  Add view methods
+                if (!empty($views)) {
+
+                    //  There are some views, add a method for each
+                    if(is_array($views)) {
+
+                        //  Multiple views in an array
+                        foreach($views as $view) {
+                            $classMethods[] = "\tfunction $view() {\n\t}";
+                        }
+                        $classMethods = implode("\n\n",$classMethods);
+                    } else {
+                        $classMethods = "\tfunction $views() {\n\t}\n\n";
                     }
-                    $classMethods = implode("\n\n",$classMethods);
+                    $template = str_replace('[class_methods]',
+                                            $classMethods,$template);
+                } else {
+
+                    //  No view methods to add, so remove unneeded template
+                    $template = str_replace('[class_methods]', '',$template);
                 }
-                $template = str_replace('[class_methods]',$classMethods,$template);
 
                 if(!file_put_contents($controller_file,$template)) {
-                    echo "error creating controller class file: $controller_file\n";
+                    echo "error creating controller class file: "
+                        . $controller_file . "\n";
                 } else {
                     echo "created $controller_file\n";
                 }
 
             } else {
-                echo "error controller template file doesn't exist: $this->controller_template_file\n";
+                echo "error controller template file doesn't exist: "
+                    . $this->controller_template_file . "\n";
             }
         } else {
             echo "exists $controller_file\n";
@@ -449,17 +666,24 @@ class TraxGenerator {
     }
 
     /**
-     *  @todo Document this method
+     *  Create a helper file for a controller
      *
+     *  @param string $controller Name of the controller
+     *  @uses controller_class      Must be set before call.
+     *                              Not changed during call.
+     *  @uses helper_path           Must be set before call.
+     *                              Not changed during call.
+     *  @uses helper_template_file  Must be set before call.
+     *                              Not changed during call.
+     *  @todo Should return succeed/fail indication
      */
     function create_helper($controller) {
-
         $helper_file = "$this->helper_path/".$controller."_helper.php";
-
         if(!file_exists($helper_file)) {
             if(file_exists($this->helper_template_file)) {
                 $template = file_get_contents($this->helper_template_file);
-                $template = str_replace('[class_name]',$this->controller_class,$template);
+                $template = str_replace('[class_name]',
+                                        $this->controller_class,$template);
                 if(!file_put_contents($helper_file,$template)) {
                     echo "error creating helper file: $helper_file\n";
                 } else {
@@ -467,7 +691,8 @@ class TraxGenerator {
                 }
 
             } else {
-                echo "error helper template file doesn't exist: $this->helper_template_file\n";
+                echo "error helper template file doesn't exist: "
+                    . $this->helper_template_file . "\n";
             }
         } else {
             echo "exists $helper_file\n";
@@ -475,15 +700,32 @@ class TraxGenerator {
     }
 
     /**
-     *  @todo Document this method
+     *  Create a view file if it doesn't exist
      *
+     *  Create a view file in the Trax work area if the required file
+     *  does not yet exist.  Generate the view file contents by
+     *  customizing the view template file with information about the
+     *  controller and view names.
+     *
+     *  @param string $view           Name of the view
+     *  @param string $controller     Name of the controller
+     *  @uses controller_class        Must be set before call.
+     *                                Not changed during call.
+     *  @uses view_file_extension     Must be set before call.
+     *                                Not changed during call.
+     *  @uses view_path               Must be set before call.
+     *                                Not changed during call.
+     *  @uses view_template_file      Must be set before call.
+     *                                Not changed during call.
+     *  @todo Should return succeed/fail indication
      */
     function create_view($view, $controller) {
         $view_file = "$this->view_path/".$view.".".$this->view_file_extention;
         if(!file_exists($view_file)) {
             if(file_exists($this->view_template_file)) {
                 $template = file_get_contents($this->view_template_file);
-                $template = str_replace('[class_name]',$this->controller_class,$template);
+                $template = str_replace('[class_name]',
+                                        $this->controller_class,$template);
                 $template = str_replace('[controller]',$controller,$template);
                 $template = str_replace('[view]',$view,$template);
                 if(!file_put_contents($view_file,$template)) {
@@ -492,7 +734,8 @@ class TraxGenerator {
                     echo "created $view_file\n";
                 }
             } else {
-                echo "error controller template file doesn't exist: $this->view_template_file\n";
+                echo "error view template file doesn't exist: "
+                    . $this->view_template_file . "\n";
             }
         } else {
             echo "exists $view_file\n";
@@ -503,6 +746,7 @@ class TraxGenerator {
      *  Execute an operating system command
      *
      *  @param string $cmd  Command to be executed
+     *  @todo Replace with calls to filesystem methods
      */
     function exec($cmd) {
         if (substr(PHP_OS, 0, 3) == 'WIN') {
@@ -519,16 +763,18 @@ class TraxGenerator {
      *  @return string Edited input string
      */
     function fix_php_brackets($string) {
-        return str_replace("? >", "?>", str_replace("< ?php", "<?php", $string));            
+        return str_replace("? >", "?>",
+                           str_replace("< ?php", "<?php", $string));
     }
 
     /**
      *  Output console help message for "generate controller"
      */
     function controller_help() {
-        echo "Usage: ./generate.php controller ControllerName [view1 view2 ...]\n\n";
+        echo "Usage: php generate.php controller ControllerName [view1 view2 ...]\n\n";
         echo "Description:\n";
-        echo "\tThe controller generator creates functions for a new controller and its views.\n\n";
+        echo "\tThe controller generator creates functions for a new controller and\n";
+        echo"\tits views.\n\n";
         echo "\tThe generator takes a controller name and a list of views as arguments.\n";
         echo "\tThe controller name may be given in CamelCase or under_score and should\n";
         echo "\tnot be suffixed with 'Controller'.  To create a controller within a\n";
@@ -536,13 +782,13 @@ class TraxGenerator {
         echo "\tThe generator creates a controller class in app/controllers with view\n";
         echo "\ttemplates in app/views/controller_name.\n\n";
         echo "Example:\n";
-        echo "\t./script/generate.php controller CreditCard open debit credit close\n\n";
+        echo "\tphp script/generate.php controller CreditCard open debit credit close\n\n";
         echo "\tCredit card controller with URLs like /credit_card/debit.\n";
         echo "\t\tController: app/controllers/credit_card_controller.php\n";
         echo "\t\tViews:      app/views/credit_card/debit.phtml [...]\n";
         echo "\t\tHelper:     app/helpers/credit_card_helper.php\n\n";
         echo "Module/Folders Example:\n";
-        echo "\t./script/generate.php controller 'admin/credit_card' suspend late_fee\n\n";
+        echo "\tphp script/generate.php controller 'admin/credit_card' suspend late_fee\n\n";
         echo "\tCredit card admin controller with URLs /admin/credit_card/suspend.\n";
         echo "\t\tController: app/controllers/admin/credit_card_controller.php\n";
         echo "\t\tViews:      app/views/admin/credit_card/suspend.phtml [...]\n";
@@ -553,14 +799,14 @@ class TraxGenerator {
      *  Output console help message for "generate model"
      */
     function model_help() {
-        echo "Usage: ./generate.php model ModelName\n";
+        echo "Usage: php generate.php model ModelName\n";
         echo "Description:\n";
         echo "\tThe model generator creates functions for a new model.\n";
-        echo "\tThe generator takes a model name as its argument.  The model name may be\n";
-        echo "\tgiven in CamelCase or under_score and should not be suffixed with 'Model'.\n";
-        echo "\tThe generator creates a model class in app/models.\n";
+        echo "\tThe generator takes a model name as its argument.  The model name\n";
+        echo "\tmay be given in CamelCase or under_score and should not be suffixed\n";
+        echo "\twith 'Model'. The generator creates a model class in app/models.\n";
         echo "Example:\n";
-        echo "\t./script/generate.php model Account\n";
+        echo "\tphp script/generate.php model Account\n";
         echo "\tThis will create an Account model:\n";
         echo "\t\tModel:      app/models/account.php\n\n";
     }
@@ -569,12 +815,13 @@ class TraxGenerator {
      *  Output console help message for "generate scaffold"
      */
     function scaffold_help() {
-        echo "Usage: ./generate.php scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
+        echo "Usage: php script/generate.php scaffold ModelName [ControllerName] [view1 view2 ...]\n\n";
         echo "Description:\n";
         echo "\tThe scaffold generator creates a controller to interact with a model.\n";
-        echo "\tIf the model does not exist, it creates the model as well.  The generated\n";
-        echo "\tcode is equivalent to the ( public \$scaffold = \"model\"; ) declaration,\n";
-        echo "\tmaking it easy to migrate when you wish to customize your controller and views.\n\n";
+        echo "\tIf the model does not exist, it creates the model as well.  The\n";
+        echo "\tgenerated code is equivalent to the ( public \$scaffold = \"model\"; )\n";
+        echo "\tdeclaration, making it easy to migrate when you wish to customize\n";
+        echo "\tyour controller and views.\n\n";
         echo "\tThe generator takes a model name, an optional controller name, and a\n";
         echo "\tlist of views as arguments.  Scaffolded actions and views are created\n";
         echo "\tautomatically.\n\n";
@@ -584,14 +831,14 @@ class TraxGenerator {
         echo "\twill be used.  The model and controller names may be given in CamelCase\n";
         echo "\tor under_score and should not be suffixed with 'Model' or 'Controller'.\n\n";
         echo "Example:\n";
-        echo "\t./generate scaffold Account Bank debit credit\n\n";
-        echo "\tThis will generate an Account model and BankController with a basic user interface\n";
-        echo "\tNow create the accounts table in your database and browse to http://localhost/bank/\n";
-        echo "\tvoila, you're on Trax!\n\n";
+        echo "\tphp script/generate.php scaffold Account Bank debit credit\n\n";
+        echo "\tThis will generate an Account model and BankController with a basic\n";
+        echo "\tuser interface.  Now create the accounts table in your database and\n";
+        echo "\t browse to http://localhost/bank/.  Voila, you're on Trax!\n\n";
         echo "Module/Folders Example:\n";
-        echo "\t./generate scaffold CreditCard 'admin/credit_card' suspend late_fee\n\n";
-        echo "\tThis will generate a CreditCard model and CreditCardController controller\n";
-        echo "\tin the admin module.\n";            
+        echo "\tphp script/generate.php scaffold CreditCard 'admin/credit_card' suspend late_fee\n\n";
+        echo "\tThis will generate a CreditCard model and CreditCardController\n";
+        echo "\tcontroller in the admin module.\n";            
     }
 
     /**
@@ -600,16 +847,22 @@ class TraxGenerator {
     function generator_help() {
         echo "Usage:\n";
         echo "Generate Controller:\n";
-        echo "./generate.php controller controller_name [view1 view2 ..]\n";
-        echo "for more controller info ./generate.php controller\n\n";
+        echo "php script/generate.php controller controller_name [view1 view2 ..]\n";
+        echo "for more controller info php script/generate.php controller\n\n";
         echo "Generate Model:\n";
-        echo "./generate.php model model_name\n";
-        echo "for more model info ./generate.php model\n\n";
+        echo "php script/generate.php model ModelName\n";
+        echo "for more model info php script/generate.php model\n\n";
         echo "Generate Scaffold:\n";
-        echo "./generate.php scaffold ModelName [ControllerName] [view1 view2 ...]\n";
-        echo "for more scaffold info ./generate.php scaffold\n\n";        
+        echo "php script/generate.php scaffold ModelName [controller_name] [view1 view2 ...]\n";
+        echo "for more scaffold info php script/generate.php scaffold\n\n";        
     }
 }
 
-
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

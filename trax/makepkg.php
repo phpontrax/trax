@@ -57,7 +57,7 @@ $e = $packagexml->setOptions(
                 'summary' => 'Rapid Application Development Made Easy',
                 'description' => 'PHP port of Ruby on Rails',
                 'baseinstalldir' => 'PHPonTrax',
-                'version' => '193svn',
+                'version' => '195svn',
                 'packagedirectory' => '.',
                 'state' => 'alpha',
                 'filelistgenerator' => 'svn', // generate from svn
@@ -66,7 +66,23 @@ $e = $packagexml->setOptions(
                                      'test' => 'test',
                                      'data' => 'data'),
                 'exceptions' => array('pear-trax' => 'script',
-                                      'pear-trax.bat' => 'script'),
+                                      'pear-trax.bat' => 'script',
+ 'vendor/trax/templates/error.phtml' => 'php',
+ 'vendor/trax/templates/view.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/add.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/edit.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/index.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/layout.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/show.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/scaffold.css' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/form_scaffolding.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/layout.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/view_add.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/view_edit.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/view_index.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/view_show.phtml' => 'php',
+ 'vendor/trax/templates/scaffolds/generator_templates/style.css' => 'php',
+),
                 'installexceptions' => array('pear-trax' => '/',
                                              'dispatch.php' => 'public'),
                 'installas' => array('pear-trax' => 'trax',
@@ -105,15 +121,15 @@ if (PEAR::isError($e)) {
     die();
 
  }
-
-//  Optionally uses these PEAR modules
-$e = $packagexml->addDependency('PhpDocumentor','1.3.0RC4','ge','pkg','yes');
+$e = $packagexml->addDependency('PHPUnit2','1.0');
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     die();
 
  }
-$e = $packagexml->addDependency('PHPUnit2','1.0','ge','pkg','yes');
+
+//  Optionally uses these PEAR modules
+$e = $packagexml->addDependency('PhpDocumentor','1.3.0RC4','ge','pkg','yes');
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     die();

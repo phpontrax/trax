@@ -1898,7 +1898,8 @@ class ActiveRecord {
             }            
             # Set optional Pear parameters
             if(isset($connection_settings['persistent'])) {
-                $connection_options['persistent'] = $connection_settings['persistent'];
+                $connection_options['persistent'] =
+                    $connection_settings['persistent'];
             }
             $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $connection_options);
         }

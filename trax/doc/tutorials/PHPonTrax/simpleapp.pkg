@@ -111,33 +111,6 @@ $ <important>rm /var/www/html/index.html</important>
   <para>This completes the basic installation of Trax.</para>
 
  </refsect2>
- <refsect2 id="{@id simpleapp_database}">
-  <title>Create A Database and User</title>
-  <para>
-
-</para>
-  <para></para>
-  <para></para>
-  <para></para>
- </refsect2>
- <refsect2 id="{@id simpleapp_table}">
-  <title>Define A Table</title>
-  <para>
-
-</para>
-  <para></para>
-  <para></para>
-  <para></para>
- </refsect2>
- <refsect2 id="{@id simpleapp_dowhat}">
-  <title>Do what? ...</title>
-  <para>
-
-</para>
-  <para></para>
-  <para></para>
-  <para></para>
- </refsect2>
 
 <!--
 Local variables:

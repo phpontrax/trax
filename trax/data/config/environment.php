@@ -170,9 +170,13 @@ if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE
     include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['environments']."/".TRAX_MODE.".php");
 }
 
-##############################################
-# Auto include model / controller / other app specific libs files
-##############################################
+/**
+ *  Automatically load a file containing a specified class
+ *
+ *  Given a class name, derive the name of the file containing that
+ *  class then load it.
+ *  @param string class_name  Name of the class required
+ */
 function __autoload($class_name) {
     $file = Inflector::underscore($class_name).".php";
     $file_org = $class_name.".php";

@@ -1,0 +1,126 @@
+{@toc}
+<refsect1 id="{@id naming}">
+ <title>The Trax Naming Convention</title>
+  <para>Trax uses naming conventions instead of explicit configuration
+   to link the various parts of a Trax application.  From the name of
+   a component, Trax can compute the names of related components.
+   This lets you build an application faster because you need to do
+   less.</para>
+  <para>Conversion of names between singular and plural or between
+   CamelCase and lower_case_underscore forms is done by methods of the
+   {@link Inflector} class.</para>
+
+ <refsect2 id="{@id naming_model}">
+  <title>Names In the Model</title>
+  <para><important>Database tables</important> have names which are
+   English plural words in lowercase.  Where the name is two or more
+   words, the words are connected by underscores ('_').
+   Examples:</para> 
+   <itemizedlist>      
+    <listitem><literal>orders</literal></listitem>
+    <listitem><literal>people</literal></listitem>
+    <listitem><literal>approved_medications</literal></listitem>
+   </itemizedlist>      
+  <para>The primary key column of each table is called
+   <literal>id</literal>.</para>
+  <para>There is also a naming convention for foreign keys.  A foreign
+   key which selects a row in a table by (only) the
+   <literal>id</literal> column is the singular lower_case_underscore
+   name of that table with suffix <literal>_id</literal>.  For
+   example, a foreign key to the <literal>people</literal> 
+   table's <literal>id</literal> column would be stored
+   in a column named <literal>person_id</literal>.</para>
+
+  <para>Column names containing the string <literal>password</literal>
+   are treated specially by {@link ActiveRecordHelper}.</para>
+
+  <para><important>{@link ActiveRecord} subclasses</important> have names
+   which are English singular words in CamelCase.  Where the name is
+   two or more words, the first letter of each word is capitalized.
+   Each table in the database has a one-to-one relationship with a
+   subclass of ActiveRecord whose name is the CamelCase singular of
+   the table name.  Examples corresponding to the table names listed
+   above:</para>
+   <itemizedlist>      
+    <listitem><literal>Order</literal></listitem>
+    <listitem><literal>Person</literal></listitem>
+    <listitem><literal>ApprovedMedication</literal></listitem>
+   </itemizedlist>      
+  <para>The subclass is contained in a file in the
+   <literal>app/models</literal> area of the Trax work area.  The file
+   name is the lower_case_underscore form of the subclass name.
+   Examples corresponding to the subclasses listed above:</para>
+   <itemizedlist>      
+    <listitem><literal>order.php</literal></listitem>
+    <listitem><literal>person.php</literal></listitem>
+    <listitem><literal>approved_medication.php</literal></listitem>
+   </itemizedlist>      
+ </refsect2>
+
+ <refsect2 id="{@id naming_controller}">
+  <title>Names In the Controller</title>
+
+  <para>The Controller is implemented as
+   <important>{@link ApplicationController} subclasses</important> that
+   have descriptive names in CamelCase.  The last
+   word of a controller name is <literal>Controller</literal>.  The
+   word(s) of the controller name before <literal>Controller</literal>
+   describe the thing controlled.  For example:</para>
+   <itemizedlist>      
+    <listitem><literal>StoreController</literal></listitem>
+    <listitem><literal>CreditAuthorizationController</literal></listitem>
+   </itemizedlist>      
+  <para>Each ApplicationController subclass is contained in a file
+   whose name is the lower_case_underscore form of the subclass name.
+   This file stored in the <literal>app/controllers</literal> area of
+   the Trax work area.  For example, the files containing the
+   subclasses listed above are:</para> 
+   <itemizedlist>      
+    <listitem><literal>store_controller.php</literal></listitem>
+    <listitem><literal>credit_authorization_controller.php</literal></listitem>
+   </itemizedlist>
+  <para>Each ApplicationController subclass also has a helper file in
+   the <literal>app/helpers</literal> area of the Trax work area with
+   a file name which is the same as the name of the controller file with 
+   <literal>helper</literal> substituted for
+   <literal>controller</literal>.  For example, the helper files for
+    the controllers listed above are:</para>
+   <itemizedlist>      
+    <listitem><literal>store_helper.php</literal></listitem>
+    <listitem><literal>credit_authorization_helper.php</literal></listitem>
+   </itemizedlist>
+ </refsect2>
+
+ <refsect2 id="{@id naming_view}">
+  <title>Names In the View</title>
+  <para>There is a view associated with each controller.  The
+   templates for that view are stored in the
+   <literal>app/views</literal> area of the Trax work area in a
+   directory whose name is the desciptive part of the controller
+   name.  For example, the view template files for the controllers
+   listed above are stored in:</para> 
+   <itemizedlist>      
+    <listitem><literal>app/views/store/</literal></listitem>
+    <listitem><literal>app/views/credit_authorization/</literal></listitem>
+   </itemizedlist>
+
+  <para>The layout for each view is stored in the
+   <literal>app/views/layouts</literal> area of the Trax work area in
+   a file whose name is the desciptive part of the controller
+   name with a <literal>.phtml</literal> extension.  For example, the
+   layouts for the controllers listed above are stored in:</para> 
+   <itemizedlist>      
+    <listitem><literal>app/views/layouts/store.phtml</literal></listitem>
+    <listitem><literal>app/views/layouts/credit_authorization.phtml</literal></listitem>
+   </itemizedlist>
+ </refsect2>
+
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
+
+</refsect1>

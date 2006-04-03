@@ -1,0 +1,34 @@
+ <refsect2 id="{@id simpleapp_database}">
+  <title>Create A Database and User</title>
+  <para>First use of MySQL? Put a password on root user</para>
+  <para>Create a user for your development, plus one for Apache</para>
+  <para>Think of name, create databases name_development, name_test,
+   name_production </para>
+  <para>edit config/database.ini with database names, user and
+   password if any </para>
+ </refsect2>
+ <refsect2 id="{@id simpleapp_sql}">
+  <title>Write SQL For The Model</title>
+  <para></para>
+  <para></para>
+  <para></para>
+  <para></para>
+ </refsect2>
+ <refsect2 id="{@id simpleapp_scaffold}">
+  <title>Generate A Scaffold</title>
+  <para>
+
+</para>
+  <para></para>
+  <para></para>
+  <para></para>
+
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
+
+ </refsect2>
