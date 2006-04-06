@@ -119,6 +119,26 @@
      </cmdsynopsis>
     </listitem>
 
+    <listitem><command>$GLOBALS['DEFAULT_DATE_OPTIONS']</command>
+     <cmdsynopsis>Referenced in {@link FormHelper}
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['DEFAULT_FIELD_OPTIONS']</command>
+     <cmdsynopsis>Referenced in {@link FormHelper}
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['DEFAULT_RADIO_OPTIONS']</command>
+     <cmdsynopsis>Referenced in {@link FormHelper}
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['DEFAULT_TEXT_AREA_OPTIONS']</command>
+     <cmdsynopsis>Referenced in {@link FormHelper}
+     </cmdsynopsis>
+    </listitem>
+
     <listitem><command>$GLOBALS['TRAX_DB_SETTINGS']</command>
      <cmdsynopsis>
      Array with keys 'test', 'development' and 'production' specifying

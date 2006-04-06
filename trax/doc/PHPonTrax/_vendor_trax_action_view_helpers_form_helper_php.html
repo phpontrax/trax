@@ -181,8 +181,6 @@
 		</a><br>
 			<a href="../PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
-			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
-		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
@@ -280,7 +278,7 @@ File containing the FormHelper class<br /><br /><p>(PHP 5)</p><br /><br /><br />
 <br />
   <hr />
 	<a name="functionboolean_select"></a>
-	<h3>boolean_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a299">299</a>]</span></h3>
+	<h3>boolean_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a419">419</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -289,13 +287,22 @@ mixed $object, mixed $field, [mixed $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		    <br /><br />
+		Make a new FormHelper object and call its to_boolean_select_tag method<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_boolean_select_tag">FormHelper::to_boolean_select_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functioncheck_box"></a>
-	<h3>check_box <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a274">274</a>]</span></h3>
+	<h3>check_box <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a392">392</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -304,13 +311,22 @@ mixed $object, mixed $field, [mixed $options = array()], [mixed $checked_value =
     </td></tr></table>
     </td></tr></table><br />
 
-		Returns a checkbox tag tailored for accessing a specified attribute (identified by $field) on an object<br /><br /><p>assigned to the template (identified by $object). It's intended that $field returns an integer and if that  integer is above zero, then the checkbox is checked. Additional $options on the input tag can be passed as an  array with $options. The $checked_value defaults to 1 while the default $unchecked_value  is set to 0 which is convenient for boolean values. Usually unchecked checkboxes don't post anything.  We work around this problem by adding a hidden value with the same name as the checkbox.  Example: Imagine that $post-&gt;validated is 1:    check_box(&quot;post&quot;, &quot;validated&quot;);  Result:    &lt;input type=&quot;checkbox&quot; id=&quot;post_validate&quot; name=&quot;post[validated] value=&quot;1&quot; checked=&quot;checked&quot; /&gt;    &lt;input name=&quot;post[validated]&quot; type=&quot;hidden&quot; value=&quot;0&quot; /&gt;  Example: Imagine that $puppy-&gt;gooddog is no:    check_box(&quot;puppy&quot;, &quot;gooddog&quot;, array(), &quot;yes&quot;, &quot;no&quot;);  Result:      &lt;input type=&quot;checkbox&quot; id=&quot;puppy_gooddog&quot; name=&quot;puppy[gooddog] value=&quot;yes&quot; /&gt;      &lt;input name=&quot;puppy[gooddog]&quot; type=&quot;hidden&quot; value=&quot;no&quot; /&gt;</p><br />    <br /><br />
+		Returns a checkbox tag tailored for accessing a specified attribute (identified by $field) on an object<br /><br /><p>assigned to the template (identified by $object). It's intended that $field returns an integer and if that  integer is above zero, then the checkbox is checked. Additional $options on the input tag can be passed as an  array with $options. The $checked_value defaults to 1 while the default $unchecked_value  is set to 0 which is convenient for boolean values. Usually unchecked checkboxes don't post anything.  We work around this problem by adding a hidden value with the same name as the checkbox.  Example: Imagine that $post-&gt;validated is 1:    check_box(&quot;post&quot;, &quot;validated&quot;);  Result:    &lt;input type=&quot;checkbox&quot; id=&quot;post_validate&quot; name=&quot;post[validated] value=&quot;1&quot; checked=&quot;checked&quot; /&gt;    &lt;input name=&quot;post[validated]&quot; type=&quot;hidden&quot; value=&quot;0&quot; /&gt;  Example: Imagine that $puppy-&gt;gooddog is no:    check_box(&quot;puppy&quot;, &quot;gooddog&quot;, array(), &quot;yes&quot;, &quot;no&quot;);  Result:      &lt;input type=&quot;checkbox&quot; id=&quot;puppy_gooddog&quot; name=&quot;puppy[gooddog] value=&quot;yes&quot; /&gt;      &lt;input name=&quot;puppy[gooddog]&quot; type=&quot;hidden&quot; value=&quot;no&quot; /&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_check_box_tag">FormHelper::to_check_box_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functionfile_field"></a>
-	<h3>file_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a240">240</a>]</span></h3>
+	<h3>file_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a356">356</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -319,13 +335,22 @@ mixed $object, mixed $field, [mixed $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Works just like text_field, but returns a input tag of the &quot;file&quot; type instead, which won't have any default value.<br /><br />    <br /><br />
+		Works just like text_field, but returns a input tag of the &quot;file&quot; type instead, which won't have any default value.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functionhidden_field"></a>
-	<h3>hidden_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a232">232</a>]</span></h3>
+	<h3>hidden_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a347">347</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -334,13 +359,22 @@ mixed $object, mixed $field, [mixed $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Works just like text_field, but returns a input tag of the &quot;hidden&quot; type instead.<br /><br /><p>Example: hidden_field(&quot;post&quot;, &quot;title&quot;);   Result: &lt;input type=&quot;hidden&quot; id=&quot;post_title&quot; name=&quot;post[title]&quot; value=&quot;$post-&gt;title&quot; /&gt;</p><br />    <br /><br />
+		Works just like text_field, but returns a input tag of the &quot;hidden&quot; type instead.<br /><br /><p>Example: hidden_field(&quot;post&quot;, &quot;title&quot;);   Result: &lt;input type=&quot;hidden&quot; id=&quot;post_title&quot; name=&quot;post[title]&quot; value=&quot;$post-&gt;title&quot; /&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functionpassword_field"></a>
-	<h3>password_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a222">222</a>]</span></h3>
+	<h3>password_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a336">336</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -349,13 +383,22 @@ mixed $object, mixed $field, [mixed $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Works just like text_field, but returns a input tag of the &quot;password&quot; type instead.<br /><br /><p>Example: password_field(&quot;user&quot;, &quot;password&quot;);   Result: &lt;input type=&quot;password&quot; id=&quot;user_password&quot; name=&quot;user[password]&quot; value=&quot;$user-&gt;password&quot; /&gt;</p><br />    <br /><br />
+		Works just like text_field, but returns a input tag of the &quot;password&quot; type instead.<br /><br /><p>Example: password_field(&quot;user&quot;, &quot;password&quot;);   Result: &lt;input type=&quot;password&quot; id=&quot;user_password&quot; name=&quot;user[password]&quot; value=&quot;$user-&gt;password&quot; /&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functionradio_button"></a>
-	<h3>radio_button <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a291">291</a>]</span></h3>
+	<h3>radio_button <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a410">410</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -364,13 +407,22 @@ mixed $object, mixed $field, mixed $tag_value, [mixed $options = array()])</code
     </td></tr></table>
     </td></tr></table><br />
 
-		Returns a radio button tag for accessing a specified attribute (identified by $field) on an object  assigned to the template (identified by $object). If the current value of $field is $tag_value the  radio button will be checked. Additional $options on the input tag can be passed as a  hash with $options.<br /><br /><p>Example: Imagine that $post-&gt;category is &quot;trax&quot;:    radio_button(&quot;post&quot;, &quot;category&quot;, &quot;trax&quot;);    radio_button(&quot;post&quot;, &quot;category&quot;, &quot;java&quot;);  Result:      &lt;input type=&quot;radio&quot; id=&quot;post_category&quot; name=&quot;post[category] value=&quot;trax&quot; checked=&quot;checked&quot; /&gt;      &lt;input type=&quot;radio&quot; id=&quot;post_category&quot; name=&quot;post[category] value=&quot;java&quot; /&gt;</p><br />    <br /><br />
+		Returns a radio button tag for accessing a specified attribute (identified by $field) on an object  assigned to the template (identified by $object). If the current value of $field is $tag_value the  radio button will be checked. Additional $options on the input tag can be passed as a  hash with $options.<br /><br /><p>Example: Imagine that $post-&gt;category is &quot;trax&quot;:    radio_button(&quot;post&quot;, &quot;category&quot;, &quot;trax&quot;);    radio_button(&quot;post&quot;, &quot;category&quot;, &quot;java&quot;);  Result:      &lt;input type=&quot;radio&quot; id=&quot;post_category&quot; name=&quot;post[category] value=&quot;trax&quot; checked=&quot;checked&quot; /&gt;      &lt;input type=&quot;radio&quot; id=&quot;post_category&quot; name=&quot;post[category] value=&quot;java&quot; /&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_radio_button_tag">FormHelper::to_radio_button_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functiontext_area"></a>
-	<h3>text_area <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a249">249</a>]</span></h3>
+	<h3>text_area <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a366">366</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -379,29 +431,66 @@ mixed $object, mixed $field, [mixed $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Example: text_area(&quot;post&quot;, &quot;body&quot;, array(&quot;cols&quot; =&gt; 20, &quot;rows&quot; =&gt; 40));<br /><br /><p>Result: &lt;textarea cols=&quot;20&quot; rows=&quot;40&quot; id=&quot;post_body&quot; name=&quot;post[body]&quot;&gt;$post-&gt;body&lt;/textarea&gt;</p><br />    <br /><br />
+		Example: text_area(&quot;post&quot;, &quot;body&quot;, array(&quot;cols&quot; =&gt; 20, &quot;rows&quot; =&gt; 40));<br /><br /><p>Result: &lt;textarea cols=&quot;20&quot; rows=&quot;40&quot; id=&quot;post_body&quot; name=&quot;post[body]&quot;&gt;$post-&gt;body&lt;/textarea&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_text_area_tag">FormHelper::to_text_area_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
   <hr />
 	<a name="functiontext_field"></a>
-	<h3>text_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a212">212</a>]</span></h3>
+	<h3>text_field <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersform_helper.php.html#a325">325</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void text_field(
-mixed $object, mixed $field, [mixed $options = array()])</code>
+string $object, string $field, [string[] $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 
-		Avialble functions for use in views<br /><br /><p>Example: text_field(&quot;post&quot;, &quot;title&quot;);   Result: &lt;input type=&quot;text&quot; id=&quot;post_title&quot; name=&quot;post[title]&quot; value=&quot;$post-&gt;title&quot; /&gt;</p><br />    <br /><br />
+		Generate HTML/XML for &lt;input type=&quot;text&quot; /&gt; in a view file<br /><br /><p>Example: In the view file, code            <div class="listing"><pre><ol><li>&lt;?= <a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functiontext_field">text_field</a><span class="src-sym">(</span><span class="src-str">&quot;Person&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;fname&quot;</span><span class="src-sym">)</span><span class="src-sym">; </span><span class="src-php">?&gt;</span></li>
+</ol></pre></div>   Result: &lt;input id=&quot;Person_fname&quot; name=&quot;Person[fname]&quot; size=&quot;30&quot; type=&quot;text&quot; value=&quot;$Person-&gt;fname&quot; /&gt;</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a></td>
+  </tr>
+</table>
+</div>
+    <br /><br />
 	
+    		<h4>Parameters</h4>
+    <table border="0" cellspacing="0" cellpadding="0">
+		      <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$object</b>&nbsp;&nbsp;</td>
+        <td>Class name of the object being processed</td>
+      </tr>
+		      <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$field</b>&nbsp;&nbsp;</td>
+        <td>Name of attribute in the object being processed</td>
+      </tr>
+		      <tr>
+        <td class="type">string[]&nbsp;&nbsp;</td>
+        <td><b>$options</b>&nbsp;&nbsp;</td>
+        <td>Attributes to apply to the generated input tag as:<br />     <samp>array('attr1' =&gt; 'value1'[, 'attr2' =&gt; 'value2']...)</samp></td>
+      </tr>
+				</table>
     	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
 	</div>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 03 Apr 2006 16:13:49 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 06 Apr 2006 11:23:37 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

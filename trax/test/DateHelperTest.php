@@ -26,6 +26,8 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
 require_once "trax_exceptions.php";
+require_once "action_view/helpers.php";
+require_once "action_view/helpers/date_helper.php";
 
 /**
  * Test class for DateHelper.
@@ -208,9 +210,70 @@ class DateHelperTest extends PHPUnit2_Framework_TestCase {
 	}
 
 	/**
-	 *  @todo Implement testSelect_month_method()
+	 *  Test select_month() method
+     *
+     *  NB: the override of selected month by $_REQUEST only occurs if
+     *  the private function check_request_for_value() was previously
+     *  called to parse $_REQUEST so we can't test that here.
+     *
+     *  NB: doesn't test corrects of selection of current month
 	 */
     public function testSelect_month_method() {
+        $dh = new DateHelper();
+
+        //  Test generation with November selected, default output format
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">January</option>' . "\n"
+                            . '<option value="02">February</option>' . "\n"
+                            . '<option value="03">March</option>' . "\n"
+                            . '<option value="04">April</option>' . "\n"
+                            . '<option value="05">May</option>' . "\n"
+                            . '<option value="06">June</option>' . "\n"
+                            . '<option value="07">July</option>' . "\n"
+                            . '<option value="08">August</option>' . "\n"
+                            . '<option value="09">September</option>' . "\n"
+                            . '<option value="10">October</option>' . "\n"
+                            . '<option value="11" selected="selected">November</option>' . "\n"
+                            . '<option value="12">December</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_month('11'));
+
+        //  Test generation of month numbers as visible content
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">1</option>' . "\n"
+                            . '<option value="02">2</option>' . "\n"
+                            . '<option value="03" selected="selected">3</option>' . "\n"
+                            . '<option value="04">4</option>' . "\n"
+                            . '<option value="05">5</option>' . "\n"
+                            . '<option value="06">6</option>' . "\n"
+                            . '<option value="07">7</option>' . "\n"
+                            . '<option value="08">8</option>' . "\n"
+                            . '<option value="09">9</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_month("03",
+                                              array('use_month_numbers'=>1)));
+
+        //  Test addition of month numbers to visible content
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">1 - January</option>' . "\n"
+                            . '<option value="02">2 - February</option>' . "\n"
+                            . '<option value="03">3 - March</option>' . "\n"
+                            . '<option value="04">4 - April</option>' . "\n"
+                            . '<option value="05" selected="selected">5 - May</option>' . "\n"
+                            . '<option value="06">6 - June</option>' . "\n"
+                            . '<option value="07">7 - July</option>' . "\n"
+                            . '<option value="08">8 - August</option>' . "\n"
+                            . '<option value="09">9 - September</option>' . "\n"
+                            . '<option value="10">10 - October</option>' . "\n"
+                            . '<option value="11">11 - November</option>' . "\n"
+                            . '<option value="12">12 - December</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_month("05",
+                                              array('add_month_numbers'=>1)));
+
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
 	}

@@ -181,8 +181,6 @@
 		</a><br>
 			<a href="../PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
-			<a href="../PHPonTrax/_script_generate_php.html">		generate.php
-		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
 			<a href="../PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
@@ -273,6 +271,12 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
 <td valign="top">
 <h3><a href="#class_vars">Variables</a></h3>
 <ul>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_days">$request_days</a></li>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_hours">$request_hours</a></li>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_minutes">$request_minutes</a></li>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_months">$request_months</a></li>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_seconds">$request_seconds</a></li>
+    <li><a href="../PHPonTrax/DateHelper.html#var$request_years">$request_years</a></li>
     <li><a href="../PHPonTrax/DateHelper.html#var$selected_years">$selected_years</a></li>
   </ul>
 </td>
@@ -313,6 +317,50 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
 
 
 
+<td valign="top">
+<h3>Inherited Variables</h3>
+<div class="tags">
+<h4>Class: <a href="../PHPonTrax/Helpers.html">Helpers</a></h4>
+<dl>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$attribute_name">Helpers::$attribute_name</a>
+  </dt>
+<dd>
+   
+</dd>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$auto_index">Helpers::$auto_index</a>
+  </dt>
+<dd>
+   
+</dd>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$controller_name">Helpers::$controller_name</a>
+  </dt>
+<dd>
+   
+</dd>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$controller_object">Helpers::$controller_object</a>
+  </dt>
+<dd>
+   
+</dd>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$controller_path">Helpers::$controller_path</a>
+  </dt>
+<dd>
+   
+</dd>
+<dt>
+  <a href="../PHPonTrax/Helpers.html#var$object_name">Helpers::$object_name</a>
+  </dt>
+<dd>
+   
+</dd>
+</dl>
+</div>
+</td>
 
 <td valign="top">
 <h3>Inherited Methods</h3>
@@ -323,7 +371,7 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
     <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__construct()</a>
   </dt>
   <dd>
-    
+    Construct a Helpers object
   </dd>
     <dt>
     <a href="../PHPonTrax/Helpers.html#methodboolean_attribute">Helpers::boolean_attribute()</a>
@@ -341,7 +389,7 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
     <a href="../PHPonTrax/Helpers.html#methodcontent_tag">Helpers::content_tag()</a>
   </dt>
   <dd>
-    Generate an open/close pair of tags with content between
+    Generate an open/close pair of tags with optional attributes and content between
   </dd>
     <dt>
     <a href="../PHPonTrax/Helpers.html#methodconvert_options">Helpers::convert_options()</a>
@@ -359,7 +407,7 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
     <a href="../PHPonTrax/Helpers.html#methodtag">Helpers::tag()</a>
   </dt>
   <dd>
-    Generate an HTML or XML tag with optional attributes
+    Generate an HTML or XML tag with optional attributes and self-ending
   </dd>
     <dt>
     <a href="../PHPonTrax/Helpers.html#methodtag_options">Helpers::tag_options()</a>
@@ -377,7 +425,7 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
     <a href="../PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a>
   </dt>
   <dd>
-    
+    Get value of current attribute in the current ActiveRecord object
   </dd>
   </dl>
 </div>
@@ -406,16 +454,205 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
 <a name="class_vars"></a>
 <h3>Class Variables</h3>
 <div class="tags">
+	<a name="var$request_days"></a>
+	<p></p>
+	<h4>$request_days = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a50">50</a>]</p>
+  <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_month">DateHelper::select_month()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_day">DateHelper::select_day()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$request_hours"></a>
+	<p></p>
+	<h4>$request_hours = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a55">55</a>]</p>
+  <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$request_minutes"></a>
+	<p></p>
+	<h4>$request_minutes = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a60">60</a>]</p>
+  <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$request_months"></a>
+	<p></p>
+	<h4>$request_months = <span class="value">array()</span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a45">45</a>]</p>
+  Month value parsed from $_REQUEST<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_month">DateHelper::select_month()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$request_seconds"></a>
+	<p></p>
+	<h4>$request_seconds = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a65">65</a>]</p>
+  <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$request_years"></a>
+	<p></p>
+	<h4>$request_years = <span class="value"></span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a40">40</a>]</p>
+  <br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">DateHelper::check_request_for_value()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
 	<a name="var$selected_years"></a>
 	<p></p>
 	<h4>$selected_years = <span class="value">array()</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a36">36</a>]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a70">70</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this variable</td>
   </tr>
 </table>
 </div>
@@ -438,7 +675,7 @@ Source Location: /vendor/trax/action_view/helpers/date_helper.php<br /><br />
 <div class="tags">
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a40">40</a>]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a75">75</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -460,12 +697,12 @@ $attribute_name = null])</code>
 </div>
 <br /><br />
 
-Overrides <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__construct()</a> (parent method not documented)<br /><br />
+Overrides <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__construct()</a> (Construct a Helpers object)<br /><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodcheck_request_for_value"></a>
-	<h3>method check_request_for_value <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a47">47</a>]</span></h3>
+	<h3>method check_request_for_value <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a90">90</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -479,7 +716,31 @@ Overrides <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__const
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_hours">DateHelper::$request_hours</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_minutes">DateHelper::$request_minutes</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_seconds">DateHelper::$request_seconds</a></td>
+  </tr>
+  <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_days">DateHelper::$request_days</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_months">DateHelper::$request_months</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Helpers.html#var$attribute_name">Helpers::$attribute_name</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Helpers.html#var$object_name">Helpers::$object_name</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_years">DateHelper::$request_years</a></td>
   </tr>
   <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
@@ -493,7 +754,7 @@ Overrides <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__const
   </div>
   <hr />
 	<a name="methoddatetime_select"></a>
-	<h3>method datetime_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a124">124</a>]</span></h3>
+	<h3>method datetime_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a175">175</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -519,7 +780,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methoddate_select"></a>
-	<h3>method date_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a133">133</a>]</span></h3>
+	<h3>method date_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a184">184</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -545,7 +806,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodexpiration_date_select"></a>
-	<h3>method expiration_date_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a115">115</a>]</span></h3>
+	<h3>method expiration_date_select <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a166">166</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -571,36 +832,49 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodleading_zero_on_single_digits"></a>
-	<h3>method leading_zero_on_single_digits <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a94">94</a>]</span></h3>
+	<h3>method leading_zero_on_single_digits <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a145">145</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void leading_zero_on_single_digits(
-mixed
+		<code>string leading_zero_on_single_digits(
+string
 $number)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
+		Prefix a leading zero to single digit numbers<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Number with zero prefix if value &lt;= 9</td>
   </tr>
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_day">DateHelper::select_day()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
   </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$number</b>&nbsp;&nbsp;</td>
+        <td>A number</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodselect_date"></a>
-	<h3>method select_date <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a164">164</a>]</span></h3>
+	<h3>method select_date <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a216">216</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -627,7 +901,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_datetime"></a>
-	<h3>method select_datetime <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a175">175</a>]</span></h3>
+	<h3>method select_datetime <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a227">227</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -654,7 +928,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_day"></a>
-	<h3>method select_day <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a284">284</a>]</span></h3>
+	<h3>method select_day <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a342">342</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -670,6 +944,15 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_days">DateHelper::$request_days</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodleading_zero_on_single_digits">DateHelper::leading_zero_on_single_digits()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -681,7 +964,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_expiration_date"></a>
-	<h3>method select_expiration_date <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a140">140</a>]</span></h3>
+	<h3>method select_expiration_date <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a192">192</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -697,6 +980,9 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -708,7 +994,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_hour"></a>
-	<h3>method select_hour <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a256">256</a>]</span></h3>
+	<h3>method select_hour <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a311">311</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -724,6 +1010,9 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -735,16 +1024,16 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_html"></a>
-	<h3>method select_html <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a76">76</a>]</span></h3>
+	<h3>method select_html <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a124">124</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void select_html(
-mixed
-$type, mixed
-$options, [mixed
-$prefix = null], [mixed
-$include_blank = false], [mixed
+string
+$type, string[]
+$options, [string
+$prefix = null], [boolean
+$include_blank = false], [boolean
 $discard_type = false])</code>
     </td></tr></table>
     </td></tr></table><br />
@@ -754,7 +1043,28 @@ $discard_type = false])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_day">DateHelper::select_day()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_month">DateHelper::select_month()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_year">DateHelper::select_year()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_hour">DateHelper::select_hour()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_minute">DateHelper::select_minute()</a></td>
+  </tr>
+  <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_expiration_date">DateHelper::select_expiration_date()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_second">DateHelper::select_second()</a></td>
   </tr>
   <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
@@ -764,11 +1074,41 @@ $discard_type = false])</code>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$type</b>&nbsp;&nbsp;</td>
+        <td>Type of select</td>
+      </tr>
+          <tr>
+        <td class="type">string[]&nbsp;&nbsp;</td>
+        <td><b>$options</b>&nbsp;&nbsp;</td>
+        <td>Options to appear in the select</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$prefix</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$include_blank</b>&nbsp;&nbsp;</td>
+        <td>Whether to include a blank in the list of                   select options</td>
+      </tr>
+          <tr>
+        <td class="type">boolean&nbsp;&nbsp;</td>
+        <td><b>$discard_type</b>&nbsp;&nbsp;</td>
+        <td>Whether to ignore type</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodselect_minute"></a>
-	<h3>method select_minute <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a229">229</a>]</span></h3>
+	<h3>method select_minute <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a283">283</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -784,32 +1124,8 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
   </tr>
-</table>
-</div>
-<br /><br />
-
-
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodselect_month"></a>
-	<h3>method select_month <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a319">319</a>]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void select_month(
-mixed
-$date, [mixed
-$options = array()])</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Returns a select tag with options for each of the months January through December with the current month selected.<br /><br /><p>The month names are presented as keys (what's shown to the user) and the month numbers (1-12) are used as values   (what's submitted to the server). It's also possible to use month numbers for the presentation instead of names --   set the &lt;tt&gt;:use_month_numbers&lt;/tt&gt; key in +options+ to true for this to happen. If you want both numbers and names,   set the &lt;tt&gt;:add_month_numbers&lt;/tt&gt; key in +options+ to true. Examples:</p><p>select_month(Date.today)                             # Will use keys like &quot;January&quot;, &quot;March&quot;    select_month(Date.today, :use_month_numbers =&gt; true) # Will use keys like &quot;1&quot;, &quot;3&quot;    select_month(Date.today, :add_month_numbers =&gt; true) # Will use keys like &quot;1 - January&quot;, &quot;3 - March&quot;</p><p>Override the field name using the &lt;tt&gt;:field_name&lt;/tt&gt; option, 'month' by default.</p><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
@@ -821,8 +1137,62 @@ $options = array()])</code>
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
+	<a name="methodselect_month"></a>
+	<h3>method select_month <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a422">422</a>]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string select_month(
+[string
+$date = null], [string[]
+$options = array()])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Generate HTML/XML for month selector pull-down menu<br /><br /><p>Returns <samp>&lt;select&gt;...&lt;/select&gt;</samp> HTML with an option   for each of the twelve months.  The first argument, if   present, specifies the initially selected month.  The second   argument controls the format of the generated HTML.</p><p><strong>First argument: initially selected month</strong> If a value for   this field is specified in   <samp>$_REQUEST[</samp><em>classname</em><samp>][</samp><em>attributename</em><samp>]</samp>   and <samp>$_REQUEST</samp> has been parsed by a previous call   to <a href="../PHPonTrax/DateHelper.html#methodcheck_request_for_value">check_request_for_value()</a>, then that month   is initially selected regardless of the argument value.   Otherwise, if the first argument is present and is a character   string of two decimal digits with a value in the range   '01'..'12' then that month is initially selected.  If this   argument is absent or invalid, the current calendar month is   initially selected.</p><p><strong>Second argument: output format</strong> If omitted, visible   months are shown as 'January' through 'December'.  If   <samp>use_month_number</samp> is specified (as   <samp>array('use_month_number' =&gt; 1)</samp>) then the name of   the month is replaced by the month number.  If   <samp>add_month_number</samp> is specified the month number is   shown before the month name.  In all cases the value sent to   the server is the two digit month number in the range   '01'..'12'.</p><p>Other options:<br />   <strong>field_name</strong> if present  (as   <samp>array('field_name' =&gt; 'somestring')</samp> generate<br />   <samp>&lt;select name=&quot;somestring&quot;&gt;...</samp> otherwise generate<br />   <samp>&lt;select name=&quot;month&quot;&gt;...</samp>.<br />   <strong>Also:</strong> <a href="../PHPonTrax/DateHelper.html#methodselect_html">select_html()</a> options.</p><p>Examples:   <ul><li><samp>select_month();</samp> Generates menu January,
+    February etc.</li><li><samp>select_month(null,array('use_month_number' =&gt; 1));</samp>
+    Generates menu 1, 2 etc.</li><li><samp>select_month(null,array('add_month_number' =&gt; 1));</samp>
+    Generates menu 1 - January, 2 - February etc.</li></ul></p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Generated HTML</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_months">DateHelper::$request_months</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#var$request_days">DateHelper::$request_days</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$date</b>&nbsp;&nbsp;</td>
+        <td>Selected month as two-digit number</td>
+      </tr>
+          <tr>
+        <td class="type">string[]&nbsp;&nbsp;</td>
+        <td><b>$options</b>&nbsp;&nbsp;</td>
+        <td>Output format options</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
 	<a name="methodselect_second"></a>
-	<h3>method select_second <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a201">201</a>]</span></h3>
+	<h3>method select_second <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a254">254</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -838,6 +1208,9 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -849,7 +1222,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_time"></a>
-	<h3>method select_time <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a188">188</a>]</span></h3>
+	<h3>method select_time <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a240">240</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -876,7 +1249,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodselect_year"></a>
-	<h3>method select_year <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a358">358</a>]</span></h3>
+	<h3>method select_year <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a492">492</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -892,6 +1265,9 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/DateHelper.html#methodselect_html">DateHelper::select_html()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -903,7 +1279,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodto_datetime_select_tag"></a>
-	<h3>method to_datetime_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a434">434</a>]</span></h3>
+	<h3>method to_datetime_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a569">569</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -918,6 +1294,9 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActiveRecordHelper.html#methodto_datetime_select_tag_without_error_wrapping">ActiveRecordHelper::to_datetime_select_tag_without_error_wrapping()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -929,7 +1308,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodto_date_select_tag"></a>
-	<h3>method to_date_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a386">386</a>]</span></h3>
+	<h3>method to_date_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a520">520</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -944,6 +1323,12 @@ $options = array()])</code>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActiveRecordHelper.html#methodto_date_select_tag_without_error_wrapping">ActiveRecordHelper::to_date_select_tag_without_error_wrapping()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActiveRecordHelper.html#methodto_tag">ActiveRecordHelper::to_tag()</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -955,7 +1340,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodto_expiration_date_select_tag"></a>
-	<h3>method to_expiration_date_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a466">466</a>]</span></h3>
+	<h3>method to_expiration_date_select_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a601">601</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -981,7 +1366,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodvalue"></a>
-	<h3>method value <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a102">102</a>]</span></h3>
+	<h3>method value <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersdate_helper.php.html#a153">153</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1004,7 +1389,7 @@ $options = array()])</code>
 </div>
 <br /><br />
 
-Overrides <a href="../PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a> (parent method not documented)<br /><br />
+Overrides <a href="../PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a> (Get value of current attribute in the current ActiveRecord object)<br /><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
 </div><br />
@@ -1012,7 +1397,7 @@ Overrides <a href="../PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a> (
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 03 Apr 2006 16:13:42 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 06 Apr 2006 11:23:30 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

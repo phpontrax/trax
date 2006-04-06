@@ -181,8 +181,6 @@
 		</a><br>
 			<a href="PHPonTrax/_data_script_generate_php.html">		generate.php
 		</a><br>
-			<a href="PHPonTrax/_script_generate_php.html">		generate.php
-		</a><br>
 			<a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html">		helpers.php
 		</a><br>
 			<a href="PHPonTrax/_vendor_trax_inflector_php.html">		inflector.php
@@ -289,7 +287,7 @@
 							<dt><b>__construct</b></dt>
 				<dd>in file input_filter.php, method <a href="PHPonTrax/InputFilter.html#method__construct">InputFilter::__construct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Constructor for InputFilter class.</dd>
 							<dt><b>__construct</b></dt>
-				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#method__construct">Helpers::__construct()</a></dd>
+				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#method__construct">Helpers::__construct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Construct a Helpers object</dd>
 							<dt><b>__construct</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#method__construct">ScaffoldController::__construct()</a></dd>
 							<dt><b>__construct</b></dt>
@@ -344,10 +342,14 @@
 				<dd>in file input_filter.php, variable <a href="PHPonTrax/InputFilter.html#var$attrArray">InputFilter::$attrArray</a><br>&nbsp;&nbsp;&nbsp;&nbsp;User-provided list of attributes to either accept or reject</dd>
 							<dt><b>$attrBlacklist</b></dt>
 				<dd>in file input_filter.php, variable <a href="PHPonTrax/InputFilter.html#var$attrBlacklist">InputFilter::$attrBlacklist</a><br>&nbsp;&nbsp;&nbsp;&nbsp;List of attributes to be removed</dd>
+							<dt><b>$attribute_name</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$attribute_name">Helpers::$attribute_name</a></dd>
 							<dt><b>$attrMethod</b></dt>
 				<dd>in file input_filter.php, variable <a href="PHPonTrax/InputFilter.html#var$attrMethod">InputFilter::$attrMethod</a><br>&nbsp;&nbsp;&nbsp;&nbsp;How to apply user-provided attribute list</dd>
 							<dt><b>$auto_create_timestamps</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$auto_create_timestamps">ActiveRecord::$auto_create_timestamps</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Names of automatic create timestamp columns</dd>
+							<dt><b>$auto_index</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$auto_index">Helpers::$auto_index</a></dd>
 							<dt><b>$auto_save_associations</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$auto_save_associations">ActiveRecord::$auto_save_associations</a></dd>
 							<dt><b>$auto_save_habtm</b></dt>
@@ -425,9 +427,9 @@
 							<dt><b>AssetTagHelper</b></dt>
 				<dd>in file asset_tag_helper.php, class <a href="PHPonTrax/AssetTagHelper.html">AssetTagHelper</a></dd>
 							<dt><b>auto_discovery_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodauto_discovery_link_tag">AssetTagHelper::auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a link tag that browsers and news readers can use to auto-detect a RSS or ATOM feed for this page. The $type can  either be &lt;tt&gt;:rss&lt;/tt&gt; (default) or &lt;tt&gt;:atom&lt;/tt&gt; and the $options follow the url_for() style of declaring a link target.</dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionauto_discovery_link_tag">auto_discovery_link_tag()</a></dd>
 							<dt><b>auto_discovery_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionauto_discovery_link_tag">auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodauto_discovery_link_tag">AssetTagHelper::auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a link tag that browsers and news readers can use to auto-detect a RSS or ATOM feed for this page. The $type can  either be &lt;tt&gt;:rss&lt;/tt&gt; (default) or &lt;tt&gt;:atom&lt;/tt&gt; and the $options follow the url_for() style of declaring a link target.</dd>
 							<dt><b>application_mailer.php</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_data_app_application_mailer_php.html">application_mailer.php</a></dd>
 							<dt><b>application.php</b></dt>
@@ -483,7 +485,7 @@
 							<dt><b>boolean_attribute</b></dt>
 				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodboolean_attribute">Helpers::boolean_attribute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Convert an attribute to proper XML boolean form</dd>
 							<dt><b>boolean_select</b></dt>
-				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functionboolean_select">boolean_select()</a></dd>
+				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functionboolean_select">boolean_select()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new FormHelper object and call its to_boolean_select_tag method</dd>
 							<dt><b>build_callbacks</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodbuild_callbacks">JavaScriptHelper::build_callbacks()</a></dd>
 							<dt><b>build_observer</b></dt>
@@ -511,13 +513,19 @@
 							<dt><b>$controllers_path</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controllers_path">ActionController::$controllers_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to ../app/controllers/ directory</dd>
 							<dt><b>$controller_class</b></dt>
-				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Class name of the controller</dd>
-							<dt><b>$controller_class</b></dt>
 				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_class">TraxGenerator::$controller_class</a><br>&nbsp;&nbsp;&nbsp;&nbsp;CamelCase name of the controller class</dd>
+							<dt><b>$controller_class</b></dt>
+				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Class name of the controller</dd>
 							<dt><b>$controller_file</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the PHP program file for this controller</dd>
+							<dt><b>$controller_name</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$controller_name">Helpers::$controller_name</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Current controller name</dd>
+							<dt><b>$controller_object</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$controller_object">Helpers::$controller_object</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Current controller object</dd>
 							<dt><b>$controller_object</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$controller_object">ActionController::$controller_object</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Instance of the controller class</dd>
+							<dt><b>$controller_path</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$controller_path">Helpers::$controller_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Current controller path</dd>
 							<dt><b>$controller_path</b></dt>
 				<dd>in file trax_generator.php, variable <a href="PHPonTrax/TraxGenerator.html#var$controller_path">TraxGenerator::$controller_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Filesystem path to the app/controllers directory in the Trax work area</dd>
 							<dt><b>$controller_template_file</b></dt>
@@ -535,9 +543,9 @@
 							<dt><b>check_box</b></dt>
 				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functioncheck_box">check_box()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a checkbox tag tailored for accessing a specified attribute (identified by $field) on an object</dd>
 							<dt><b>check_box_tag</b></dt>
-				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodcheck_box_tag">FormTagHelper::check_box_tag()</a></dd>
-							<dt><b>check_box_tag</b></dt>
 				<dd>in file form_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html#functioncheck_box_tag">check_box_tag()</a></dd>
+							<dt><b>check_box_tag</b></dt>
+				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodcheck_box_tag">FormTagHelper::check_box_tag()</a></dd>
 							<dt><b>check_datetime</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcheck_datetime">ActiveRecord::check_datetime()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Apply automatic timestamp updates</dd>
 							<dt><b>check_request_for_value</b></dt>
@@ -559,11 +567,11 @@
 							<dt><b>connect</b></dt>
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodconnect">Router::connect()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Accessor method to add a route to the route table</dd>
 							<dt><b>content_tag</b></dt>
-				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcontent_tag">ActiveRecordHelper::content_tag()</a></dd>
-							<dt><b>content_tag</b></dt>
-				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodcontent_tag">Helpers::content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an open/close pair of tags with content between</dd>
+				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodcontent_tag">Helpers::content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an open/close pair of tags with optional attributes and content between</dd>
 							<dt><b>content_tag</b></dt>
 				<dd>in file helpers.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html#functioncontent_tag">content_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a Helpers object and call its content_tag() method</dd>
+							<dt><b>content_tag</b></dt>
+				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcontent_tag">ActiveRecordHelper::content_tag()</a></dd>
 							<dt><b>content_tag_without_error_wrapping</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcontent_tag_without_error_wrapping">ActiveRecordHelper::content_tag_without_error_wrapping()</a></dd>
 							<dt><b>controller_help</b></dt>
@@ -606,8 +614,16 @@
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$date_format">ActiveRecord::$date_format</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Date format for use with auto timestamping</dd>
 							<dt><b>$db</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$db">ActiveRecord::$db</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Reference to the object returned by PEAR DB::Connect()</dd>
+							<dt><b>$default_date_options</b></dt>
+				<dd>in file form_helper.php, variable <a href="PHPonTrax/FormHelper.html#var$default_date_options">FormHelper::$default_date_options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default attributes for dates</dd>
+							<dt><b>$default_field_options</b></dt>
+				<dd>in file form_helper.php, variable <a href="PHPonTrax/FormHelper.html#var$default_field_options">FormHelper::$default_field_options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default attributes for input fields</dd>
+							<dt><b>$default_radio_options</b></dt>
+				<dd>in file form_helper.php, variable <a href="PHPonTrax/FormHelper.html#var$default_radio_options">FormHelper::$default_radio_options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default attributes for radio buttons</dd>
 							<dt><b>$default_route_path</b></dt>
 				<dd>in file router.php, variable <a href="PHPonTrax/Router.html#var$default_route_path">Router::$default_route_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default route path</dd>
+							<dt><b>$default_text_area_options</b></dt>
+				<dd>in file form_helper.php, variable <a href="PHPonTrax/FormHelper.html#var$default_text_area_options">FormHelper::$default_text_area_options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default attributes for text areas</dd>
 							<dt><b>$display</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$display">ActiveRecord::$display</a></dd>
 							<dt><b>development.php</b></dt>
@@ -633,9 +649,9 @@
 							<dt><b>define_javascript_functions</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methoddefine_javascript_functions">JavaScriptHelper::define_javascript_functions()</a></dd>
 							<dt><b>delete</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methoddelete">ActiveRecord::delete()</a></dd>
-							<dt><b>delete</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#methoddelete">ScaffoldController::delete()</a></dd>
+							<dt><b>delete</b></dt>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methoddelete">ActiveRecord::delete()</a></dd>
 							<dt><b>delete_all</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methoddelete_all">ActiveRecord::delete_all()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Delete from table all rows that match argument</dd>
 							<dt><b>delete_habtm_records</b></dt>
@@ -691,7 +707,7 @@
 							<dt><b>error_message_on</b></dt>
 				<dd>in file active_record_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_active_record_helper_php.html#functionerror_message_on">error_message_on()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
 							<dt><b>error_wrapping</b></dt>
-				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methoderror_wrapping">FormHelper::error_wrapping()</a></dd>
+				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methoderror_wrapping">FormHelper::error_wrapping()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;If this tag has an error, wrap it with a visual indicator</dd>
 							<dt><b>error_wrapping</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methoderror_wrapping">ActiveRecordHelper::error_wrapping()</a></dd>
 							<dt><b>escapeString</b></dt>
@@ -834,8 +850,6 @@
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodget_selected_route">Router::get_selected_route()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Accessor method to return contents of $selected_route</dd>
 							<dt><b>get_updates_sql</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_updates_sql">ActiveRecord::get_updates_sql()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return column values of object formatted for SQL update statement</dd>
-							<dt><b>generate.php</b></dt>
-				<dd>procedural page <a href="PHPonTrax/_script_generate_php.html">generate.php</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
@@ -901,7 +915,7 @@
 							<dt><b>image_tag</b></dt>
 				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodimage_tag">AssetTagHelper::image_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns an image tag converting the $options instead html options on the tag, but with these special cases:</dd>
 							<dt><b>image_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionimage_tag">image_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;image_tag($source, $options = array())</dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionimage_tag">image_tag()</a></dd>
 							<dt><b>index</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#methodindex">ScaffoldController::index()</a></dd>
 							<dt><b>Inflector</b></dt>
@@ -949,7 +963,7 @@
 							<dt><b>javascript_include_tag</b></dt>
 				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_include_tag">AssetTagHelper::javascript_include_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a script include tag per source given as argument. Examples:</dd>
 							<dt><b>javascript_include_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionjavascript_include_tag">javascript_include_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;javascript_include_tag($sources)</dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionjavascript_include_tag">javascript_include_tag()</a></dd>
 							<dt><b>javascript_path</b></dt>
 				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_path">AssetTagHelper::javascript_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns path to a javascript asset. Example:</dd>
 							<dt><b>javascript_tag</b></dt>
@@ -987,7 +1001,7 @@
 							<dt><b>$loaded</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$loaded">ActionController::$loaded</a><br>&nbsp;&nbsp;&nbsp;&nbsp;URL recognized, paths resoved, controller file found</dd>
 							<dt><b>leading_zero_on_single_digits</b></dt>
-				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodleading_zero_on_single_digits">DateHelper::leading_zero_on_single_digits()</a></dd>
+				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodleading_zero_on_single_digits">DateHelper::leading_zero_on_single_digits()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prefix a leading zero to single digit numbers</dd>
 							<dt><b>limit_select</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodlimit_select">ActiveRecord::limit_select()</a></dd>
 							<dt><b>link_image_to</b></dt>
@@ -1052,6 +1066,8 @@
 	<div>
 		<h2>o</h2>
 		<dl>
+							<dt><b>$object_name</b></dt>
+				<dd>in file helpers.php, variable <a href="PHPonTrax/Helpers.html#var$object_name">Helpers::$object_name</a></dd>
 							<dt><b>object</b></dt>
 				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodobject">Helpers::object()</a></dd>
 							<dt><b>observe_field</b></dt>
@@ -1140,6 +1156,18 @@
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$render_performed">ActionController::$render_performed</a></dd>
 							<dt><b>$replyto_addresses</b></dt>
 				<dd>in file action_mailer.php, variable <a href="PHPonTrax/ActionMailer.html#var$replyto_addresses">ActionMailer::$replyto_addresses</a></dd>
+							<dt><b>$request_days</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_days">DateHelper::$request_days</a></dd>
+							<dt><b>$request_hours</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_hours">DateHelper::$request_hours</a></dd>
+							<dt><b>$request_minutes</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_minutes">DateHelper::$request_minutes</a></dd>
+							<dt><b>$request_months</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_months">DateHelper::$request_months</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Month value parsed from $_REQUEST</dd>
+							<dt><b>$request_seconds</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_seconds">DateHelper::$request_seconds</a></dd>
+							<dt><b>$request_years</b></dt>
+				<dd>in file date_helper.php, variable <a href="PHPonTrax/DateHelper.html#var$request_years">DateHelper::$request_years</a></dd>
 							<dt><b>$router_loaded</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$router_loaded">ActionController::$router_loaded</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Whether a Router object was loaded</dd>
 							<dt><b>$routes</b></dt>
@@ -1167,9 +1195,9 @@
 							<dt><b>reload</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodreload">ActiveRecord::reload()</a></dd>
 							<dt><b>remote_function</b></dt>
-				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodremote_function">JavaScriptHelper::remote_function()</a></dd>
-							<dt><b>remote_function</b></dt>
 				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionremote_function">remote_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;remote_function($options)</dd>
+							<dt><b>remote_function</b></dt>
+				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodremote_function">JavaScriptHelper::remote_function()</a></dd>
 							<dt><b>remove</b></dt>
 				<dd>in file input_filter.php, method <a href="PHPonTrax/InputFilter.html#methodremove">InputFilter::remove()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Remove forbidden tags and attributes from a string iteratively</dd>
 							<dt><b>remove_ajax_options</b></dt>
@@ -1265,7 +1293,7 @@
 							<dt><b>select_minute</b></dt>
 				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodselect_minute">DateHelper::select_minute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a select tag with options for each of the minutes 0 through 59 with the current minute selected.</dd>
 							<dt><b>select_month</b></dt>
-				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodselect_month">DateHelper::select_month()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a select tag with options for each of the months January through December with the current month selected.</dd>
+				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodselect_month">DateHelper::select_month()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate HTML/XML for month selector pull-down menu</dd>
 							<dt><b>select_month</b></dt>
 				<dd>in file date_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_date_helper_php.html#functionselect_month">select_month()</a></dd>
 							<dt><b>select_second</b></dt>
@@ -1325,7 +1353,7 @@
 							<dt><b>start_form_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodstart_form_tag">FormTagHelper::start_form_tag()</a></dd>
 							<dt><b>stylesheet_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionstylesheet_link_tag">stylesheet_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;stylesheet_link_tag($sources)</dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionstylesheet_link_tag">stylesheet_link_tag()</a></dd>
 							<dt><b>stylesheet_link_tag</b></dt>
 				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodstylesheet_link_tag">AssetTagHelper::stylesheet_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a css link tag per source given as argument.</dd>
 							<dt><b>stylesheet_path</b></dt>
@@ -1369,7 +1397,7 @@
 							<dt><b>tag</b></dt>
 				<dd>in file helpers.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_php.html#functiontag">tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a Helpers object and call its tag() method</dd>
 							<dt><b>tag</b></dt>
-				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodtag">Helpers::tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an HTML or XML tag with optional attributes</dd>
+				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodtag">Helpers::tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an HTML or XML tag with optional attributes and self-ending</dd>
 							<dt><b>tag</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodtag">ActiveRecordHelper::tag()</a></dd>
 							<dt><b>tag_id</b></dt>
@@ -1391,7 +1419,7 @@
 							<dt><b>text_area_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodtext_area_tag">FormTagHelper::text_area_tag()</a></dd>
 							<dt><b>text_field</b></dt>
-				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functiontext_field">text_field()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
+				<dd>in file form_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_helper_php.html#functiontext_field">text_field()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate HTML/XML for &lt;input type=&quot;text&quot; /&gt; in a view file</dd>
 							<dt><b>text_field_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodtext_field_tag">FormTagHelper::text_field_tag()</a></dd>
 							<dt><b>text_field_tag</b></dt>
@@ -1421,7 +1449,7 @@
 							<dt><b>to_expiration_date_select_tag</b></dt>
 				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodto_expiration_date_select_tag">DateHelper::to_expiration_date_select_tag()</a></dd>
 							<dt><b>to_input_field_tag</b></dt>
-				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a></dd>
+				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methodto_input_field_tag">FormHelper::to_input_field_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate an HTML or XML input tag with optional attributes</dd>
 							<dt><b>to_radio_button_tag</b></dt>
 				<dd>in file form_helper.php, method <a href="PHPonTrax/FormHelper.html#methodto_radio_button_tag">FormHelper::to_radio_button_tag()</a></dd>
 							<dt><b>to_scaffold_tag</b></dt>
@@ -1535,7 +1563,7 @@
 							<dt><b>value</b></dt>
 				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodvalue">DateHelper::value()</a></dd>
 							<dt><b>value</b></dt>
-				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a></dd>
+				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get value of current attribute in the current ActiveRecord object</dd>
 							<dt><b>visual_effect</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodvisual_effect">JavaScriptHelper::visual_effect()</a></dd>
 							<dt><b>visual_effect</b></dt>
@@ -1555,7 +1583,7 @@
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 03 Apr 2006 16:12:51 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 06 Apr 2006 11:22:57 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

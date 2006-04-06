@@ -469,3 +469,53 @@ Stack trace:
 [03-Apr-2006 15:59:30] PHP Notice:  Undefined variable: results in /home/haas/trax/trunk/trax/vendor/trax/action_view/helpers/active_record_helper.php on line 284
 [03-Apr-2006 15:59:30] PHP Notice:  Undefined variable: results in /home/haas/trax/trunk/trax/vendor/trax/action_view/helpers/active_record_helper.php on line 284
 [03-Apr-2006 15:59:30] PHP Notice:  Undefined variable: results in /home/haas/trax/trunk/trax/vendor/trax/action_view/helpers/active_record_helper.php on line 284
+[05-Apr-2006 16:15:13] PHP Fatal error:  Uncaught exception 'ActiveRecordError' with message 'Model Class: Person<br>Error Message: DB Error: connect failed' in /home/haas/trax/trunk/trax/vendor/trax/active_record.php:1937
+Stack trace:
+#0 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1937): ActiveRecord::raise()
+#1 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1909): Person->raise('DB Error: conne...')
+#2 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(335): Person->establish_connection()
+#3 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(459): Person->__construct()
+#4 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(276): TraxGenerator->generate_scaffold('Person', 'admin', Array)
+#5 /home/haas/trax/trunk/trax/script/generate.php(56): TraxGenerator->run()
+#6 {main}
+  thrown in /home/haas/trax/trunk/trax/vendor/trax/active_record.php on line 1937
+[05-Apr-2006 16:15:51] PHP Fatal error:  Uncaught exception 'ActiveRecordError' with message 'Model Class: Person<br>Error Message: DB Error: connect failed' in /home/haas/trax/trunk/trax/vendor/trax/active_record.php:1937
+Stack trace:
+#0 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1937): ActiveRecord::raise()
+#1 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1909): Person->raise('DB Error: conne...')
+#2 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(335): Person->establish_connection()
+#3 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(459): Person->__construct()
+#4 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(276): TraxGenerator->generate_scaffold('Person', 'admin', Array)
+#5 /home/haas/trax/trunk/trax/script/generate.php(56): TraxGenerator->run()
+#6 {main}
+  thrown in /home/haas/trax/trunk/trax/vendor/trax/active_record.php on line 1937
+[05-Apr-2006 16:17:48] PHP Fatal error:  Uncaught exception 'ActiveRecordError' with message 'Model Class: Person<br>Error Message: DB Error: connect failed' in /home/haas/trax/trunk/trax/vendor/trax/active_record.php:1937
+Stack trace:
+#0 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1937): ActiveRecord::raise()
+#1 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1909): Person->raise('DB Error: conne...')
+#2 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(335): Person->establish_connection()
+#3 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(459): Person->__construct()
+#4 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(276): TraxGenerator->generate_scaffold('Person', 'admin', Array)
+#5 /home/haas/trax/trunk/trax/script/generate.php(56): TraxGenerator->run()
+#6 {main}
+  thrown in /home/haas/trax/trunk/trax/vendor/trax/active_record.php on line 1937
+[05-Apr-2006 16:21:09] PHP Fatal error:  Uncaught exception 'ActiveRecordError' with message 'Model Class: Person<br>Error Message: DB Error: connect failed' in /home/haas/trax/trunk/trax/vendor/trax/active_record.php:1937
+Stack trace:
+#0 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1937): ActiveRecord::raise()
+#1 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1909): Person->raise('DB Error: conne...')
+#2 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(335): Person->establish_connection()
+#3 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(459): Person->__construct()
+#4 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(276): TraxGenerator->generate_scaffold('Person', 'admin', Array)
+#5 /home/haas/trax/trunk/trax/script/generate.php(56): TraxGenerator->run()
+#6 {main}
+  thrown in /home/haas/trax/trunk/trax/vendor/trax/active_record.php on line 1937
+[05-Apr-2006 16:22:13] PHP Fatal error:  Uncaught exception 'ActiveRecordError' with message 'Model Class: Person<br>Error Message: DB Error: connect failed' in /home/haas/trax/trunk/trax/vendor/trax/active_record.php:1937
+Stack trace:
+#0 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1937): ActiveRecord::raise()
+#1 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(1909): Person->raise('DB Error: conne...')
+#2 /home/haas/trax/trunk/trax/vendor/trax/active_record.php(335): Person->establish_connection()
+#3 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(459): Person->__construct()
+#4 /home/haas/trax/trunk/trax/vendor/trax/trax_generator.php(276): TraxGenerator->generate_scaffold('Person', 'admin', Array)
+#5 /home/haas/trax/trunk/trax/script/generate.php(56): TraxGenerator->run()
+#6 {main}
+  thrown in /home/haas/trax/trunk/trax/vendor/trax/active_record.php on line 1937

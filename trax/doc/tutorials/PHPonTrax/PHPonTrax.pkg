@@ -81,7 +81,7 @@ PHP 5.0.4 (cli) (built: Nov  8 2005 08:27:12)
   <refsect2 id="{@id welcome-how}">
    <title>How Do I Install Trax?</title>
     <para>Download the Trax
-    {@link http://thewebsitedoctor.net/trax/PHPonTrax-193svn.tgz PEAR-installable package}
+    {@link http://thewebsitedoctor.net/trax/PHPonTrax-196svn.tgz PEAR-installable package}
     into a convenient working directory, then install it with the
     command:
      <example>

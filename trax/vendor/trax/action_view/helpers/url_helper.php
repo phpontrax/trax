@@ -75,10 +75,13 @@ class UrlHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *  @param string[] Options
+     *  @return string
      */
     function convert_confirm_option_to_javascript($html_options) {
-        if($html_options['confirm']) {
-            $html_options['onclick'] = "return confirm('".addslashes($html_options['confirm'])."');";
+        if(array_key_exists('confirm', $html_options)) {
+            $html_options['onclick'] =
+                "return confirm('".addslashes($html_options['confirm'])."');";
             unset($html_options['confirm']);
         }
         return $html_options;
@@ -251,4 +254,11 @@ function url_for($options = array()) {
     return $url_helper->url_for($options);
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

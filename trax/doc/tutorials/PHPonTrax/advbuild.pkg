@@ -14,16 +14,18 @@
  {@tutorial simpleapp.pkg#simpleapp simple application build procedure}:
  <orderedlist>
   <listitem>Move the files in <literal>/var/www/trax/public/</literal> to
-  <literal>/var/www/html/my/app/</literal> (instead of
-  <literal>/var/www/html/</literal>).</listitem>  
+   <literal>/var/www/html/my/app/</literal> (instead of
+   <literal>/var/www/html/</literal>).</listitem>  
   <listitem>Edit file
-  <literal>/var/www/html/my/app/.htaccess</literal> to change
-  <literal>dispatch.php</literal> to
-  <literal>/my/app/dispatch.php</literal>.</listitem> 
+   <literal>/var/www/html/my/app/.htaccess</literal> to change
+   <literal>dispatch.php</literal> to
+   <literal>/my/app/dispatch.php</literal>.</listitem> 
   <listitem>Edit file
-  <literal>/var/www/trax/config/environment.php</literal> to change
-  the line <literal>define("TRAX_URL_PREFIX", null);</literal> to
-  <literal>define("TRAX_URL_PREFIX", "my/app");</literal></listitem>
+   <literal>/var/www/trax/config/environment.php</literal> to change
+   the line <literal>define("TRAX_URL_PREFIX", null);</literal> to
+   <literal>define("TRAX_URL_PREFIX", "my/app");</literal></listitem>
+  <listitem>When you use generate.php, add the subdirectory in front
+   of the controller.</listitem>
  </orderedlist>
  </para>
  </refsect2>

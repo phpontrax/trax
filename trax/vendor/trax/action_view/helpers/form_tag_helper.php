@@ -144,9 +144,13 @@ class FormTagHelper extends Helpers {
     /**
      *
      *  @todo Document this method
+     *  @uses tag()
      */
     function image_submit_tag($source, $options = array()) {
-        return $this->tag("input", array_merge(array("type" => "image", "src" => image_path($source)), $this->convert_options($options)));
+        return $this->tag("input",
+			  array_merge(array("type" => "image",
+					    "src" => image_path($source)),
+				      $this->convert_options($options)));
     }
 
 }

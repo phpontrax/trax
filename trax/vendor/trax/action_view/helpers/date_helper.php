@@ -33,7 +33,42 @@
  *  @todo Document this class
  */
 class DateHelper extends Helpers {
+
+    /**
+     *  @todo Document this variable
+     */
+    public $request_years;
+
+    /**
+     *  Month value parsed from $_REQUEST
+     */
+    public $request_months = array();
+
+    /**
+     *  @todo Document this variable
+     */
+    public $request_days;
+
+    /**
+     *  @todo Document this variable
+     */
+    public $request_hours;
+
+    /**
+     *  @todo Document this variable
+     */
+    public $request_minutes;
+
+    /**
+     *  @todo Document this variable
+     */
+    public $request_seconds;
+
+    /**
+     *  @todo Document this variable
+     */
     public $selected_years = array();
+
     /**
      *  @todo Document this method
      */
@@ -43,6 +78,14 @@ class DateHelper extends Helpers {
     
     /**
      *  @todo Document this method
+     *  @uses attribute_name
+     *  @uses object_name
+     *  @uses request_years
+     *  @uses request_months
+     *  @uses request_days
+     *  @uses request_hours
+     *  @uses request_minutes
+     *  @uses request_seconds
      */
     private function check_request_for_value() {
         if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
@@ -70,10 +113,17 @@ class DateHelper extends Helpers {
     }
 
     /**
-     *
      *  @todo Document this method
+     *  @param string   Type of select
+     *  @param string[] Options to appear in the select
+     *  @param string   
+     *  @param boolean  Whether to include a blank in the list of
+     *                  select options  
+     *  @param boolean  Whether to ignore type
      */
-    private function select_html($type, $options, $prefix = null, $include_blank = false, $discard_type = false) {
+    private function select_html($type, $options, $prefix = null,
+                                 $include_blank = false,
+                                 $discard_type = false) {
         $select_html  = "<select name=\"$prefix";       
         if(!$discard_type) {
             if($prefix) $select_html .= "["; 
@@ -88,8 +138,9 @@ class DateHelper extends Helpers {
     }
 
     /**
-     *
-     *  @todo Document this method
+     *  Prefix a leading zero to single digit numbers
+     *  @param string   A number
+     *  @return string  Number with zero prefix if value <= 9
      */
     private function leading_zero_on_single_digits($number) {
         return $number > 9 ? $number : "0$number";
@@ -136,6 +187,7 @@ class DateHelper extends Helpers {
     
     /**
      *  @todo Document this method
+     *  @uses select_html
      */
     function select_expiration_date($date = null, $options = array()) {
         $options['month_before_year'] = true;      
@@ -197,6 +249,7 @@ class DateHelper extends Helpers {
      *  The <tt>second</tt> can also be substituted for a second number.
      *  Override the field name using the <tt>:field_name</tt> option, 'second' by default.
      *  @todo Document this method
+     *  @uses select_html
      */
     function select_second($datetime, $options = array()) {
         $second_options = "";
@@ -225,6 +278,7 @@ class DateHelper extends Helpers {
      *  The <tt>minute</tt> can also be substituted for a minute number.
      *  Override the field name using the <tt>:field_name</tt> option, 'minute' by default.
      *  @todo Document this method
+     *  @uses select_html
      */
     function select_minute($datetime, $options = array()) {
         $minute_options = "";
@@ -252,6 +306,7 @@ class DateHelper extends Helpers {
      *  The <tt>hour</tt> can also be substituted for a hour number.
      *  Override the field name using the <tt>:field_name</tt> option, 'hour' by default.
      *  @todo Document this method
+     *  @uses select_html
      */
     function select_hour($datetime, $options = array()) {
         $hour_options = "";
@@ -280,6 +335,9 @@ class DateHelper extends Helpers {
      *  The <tt>date</tt> can also be substituted for a hour number.
      *  Override the field name using the <tt>:field_name</tt> option, 'day' by default.
      *  @todo Document this method
+     *  @uses leading_zero_on_single_digits
+     *  @uses request_days
+     *  @uses select_html
      */
     function select_day($datetime, $options = array()) {
         $day_options = "";
@@ -298,49 +356,124 @@ class DateHelper extends Helpers {
             "<option value=\"".$this->leading_zero_on_single_digits($day)."\"  selected=\"selected\">".$this->leading_zero_on_single_digits($day)."</option>\n" :
             "<option value=\"".$this->leading_zero_on_single_digits($day)."\">".$this->leading_zero_on_single_digits($day)."</option>\n";
         }
-        $field_name = ($options['field_name']) ? $options['field_name'] : 'day';
-        return $this->select_html($field_name, $day_options, $options['prefix'], $options['include_blank'], $options['discard_type']);
+        $field_name = array_key_exists('field_name', $options)
+            ? $options['field_name'] : 'day';
+        return $this->select_html($field_name, $day_options,
+                                  $options['prefix'],
+                                  array_key_exists('include_blank', $options)
+                                  ? $options['include_blank'] : false,
+                                  $options['discard_type']);
     }
 
     /**
-     *  Returns a select tag with options for each of the months January through December with the current month selected.
-     *  The month names are presented as keys (what's shown to the user) and the month numbers (1-12) are used as values
-     *  (what's submitted to the server). It's also possible to use month numbers for the presentation instead of names --
-     *  set the <tt>:use_month_numbers</tt> key in +options+ to true for this to happen. If you want both numbers and names,
-     *  set the <tt>:add_month_numbers</tt> key in +options+ to true. Examples:
+     *  Generate HTML/XML for month selector pull-down menu
      *
-     *   select_month(Date.today)                             # Will use keys like "January", "March"
-     *   select_month(Date.today, :use_month_numbers => true) # Will use keys like "1", "3"
-     *   select_month(Date.today, :add_month_numbers => true) # Will use keys like "1 - January", "3 - March"
+     *  Returns <samp><select>...</select></samp> HTML with an option
+     *  for each of the twelve months.  The first argument, if
+     *  present, specifies the initially selected month.  The second
+     *  argument controls the format of the generated HTML.
      *
-     *  Override the field name using the <tt>:field_name</tt> option, 'month' by default.
-     *  @todo Document this method
-   */
-    function select_month($date, $options = array()) {
-        $month_options = "";
+     *  <b>First argument: initially selected month</b> If a value for
+     *  this field is specified in
+     *  <samp>$_REQUEST[</samp><i>classname</i><samp>][</samp><i>attributename</i><samp>]</samp>
+     *  and <samp>$_REQUEST</samp> has been parsed by a previous call
+     *  to {@link check_request_for_value()}, then that month
+     *  is initially selected regardless of the argument value.
+     *  Otherwise, if the first argument is present and is a character
+     *  string of two decimal digits with a value in the range
+     *  '01'..'12' then that month is initially selected.  If this
+     *  argument is absent or invalid, the current calendar month is
+     *  initially selected.
+     *
+     *  <b>Second argument: output format</b> If omitted, visible
+     *  months are shown as 'January' through 'December'.  If 
+     *  <samp>use_month_number</samp> is specified (as
+     *  <samp>array('use_month_number' => 1)</samp>) then the name of
+     *  the month is replaced by the month number.  If
+     *  <samp>add_month_number</samp> is specified the month number is
+     *  shown before the month name.  In all cases the value sent to
+     *  the server is the two digit month number in the range
+     *  '01'..'12'.
+     *
+     *  Other options:<br />
+     *  <b>field_name</b> if present  (as
+     *  <samp>array('field_name' => 'somestring')</samp> generate<br />
+     *  <samp><select name="somestring">...</samp> otherwise generate<br />
+     *  <samp><select name="month">...</samp>.<br />
+     *  <b>Also:</b> {@link select_html()} options.
+     *
+     *  Examples:
+     *  <ul>
+     *   <li><samp>select_month();</samp> Generates menu January,
+     *    February etc.</li>
+     *   <li><samp>select_month(null,array('use_month_number' => 1));</samp>
+     *    Generates menu 1, 2 etc.</li>
+     *   <li><samp>select_month(null,array('add_month_number' => 1));</samp>
+     *    Generates menu 1 - January, 2 - February etc.</li>
+     *  </ul>
+     *
+     *  @param string  Selected month as two-digit number
+     *  @param string[] Output format options
+     *  @return string  Generated HTML
+     *  @uses request_days
+     *  @uses request_months
+     *  @uses select_html
+     */
+    function select_month($date = null, $options = array()) {
+       
+        $month_options = "";    // will accumulate <option>s
         
-        if($this->request_months[$this->attribute_name]) {
+        //  If a value for this attribute was parsed from $_REQUEST,
+        //  use it as initially selected and ignore first argument
+        if(array_key_exists($this->attribute_name,$this->request_months)) {
             $date_month = $this->request_months[$this->attribute_name];    
-        } elseif(strlen($date) != 2 && !is_numeric($date)) {
-            $date = $date ? $date : date("Y-m-d"); 
+        }
+
+        //  No value in $_REQUEST so look at the first argument.
+        //  If it is valid use it as initially selected
+        elseif(strlen($date) == 2 && is_numeric($date)
+               && $date >=1 && $date <= 12 ) {
+            $date_month = $date;
+        }
+
+        //  First argument is missing or invalid,
+        //  initially select current month
+        else {
             $date_month = date("m",strtotime($date));    
         }
    
+        //  Generate <option>...</option> HTML for each month
         for($month_number = 1; $month_number <= 12; $month_number++) {
-            if($options['use_month_numbers']) {
+            if(array_key_exists('use_month_numbers',$options)) {
                 $month_name = $month_number;
-            } elseif($options['add_month_numbers']) {
-                $month_number .= ' - ' + date("F",strtotime("01-".$month_number."-2005"));
+            } elseif(array_key_exists('add_month_numbers',$options)) {
+                $month_name = $month_number. ' - '
+                    . date("F",strtotime("2005-" . $month_number
+                                       . "-01"));
             } else {
-                $month_name = date("F",strtotime("2005-".$this->leading_zero_on_single_digits($month_number)."-01"));
+                $month_name = date("F",strtotime("2005-" . $month_number
+                                                 ."-01"));
             }
 
-            $month_options .= ($date && ($date_month == $month_number)) ?
-            "<option value=\"".$this->leading_zero_on_single_digits($month_number)."\" selected=\"selected\">$month_name</option>\n" :
-            "<option value=\"".$this->leading_zero_on_single_digits($month_number)."\">$month_name</option>\n";
+            $month_options .= ($date_month == $month_number ?
+                               "<option value=\""
+                          .$this->leading_zero_on_single_digits($month_number)
+                       ."\" selected=\"selected\">$month_name</option>\n" :
+                               "<option value=\""
+                          .$this->leading_zero_on_single_digits($month_number)
+                               ."\">$month_name</option>\n");
         }
-        $field_name = ($options['field_name']) ? $options['field_name'] : 'month';
-        return $this->select_html($field_name, $month_options, $options['prefix'], $options['include_blank'], $options['discard_type']);
+
+        //  Return finished HTML
+        $field_name = array_key_exists('field_name', $options)
+                       ? $options['field_name'] : 'month';
+        return $this->select_html($field_name, $month_options,
+                                  array_key_exists('prefix', $options)
+                                  ? $options['prefix'] : null,
+                                  array_key_exists('include_blank', $options)
+                                  ? $options['include_blank'] : false,
+                                  array_key_exists('discard_type', $options)
+                                  ? $options['discard_type'] : false);
     }
 
     /**
@@ -354,7 +487,8 @@ class DateHelper extends Helpers {
      *
      * Override the field name using the <tt>:field_name</tt> option, 'year' by default.
      *  @todo Document this method
-    */
+     *  @uses select_html
+     */
     function select_year($date, $options = array()) {
         $year_options = "";
 
@@ -420,7 +554,8 @@ class DateHelper extends Helpers {
         }
         
         if(count($date_select)) {
-            $seperator = $options['field_seperator'] ? $options['field_seperator'] : " ";
+            $seperator = array_key_exists('field_seperator',$options)
+                ? $options['field_seperator'] : " ";
             $date_select = implode($seperator, $date_select);            
         }
 

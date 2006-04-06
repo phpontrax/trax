@@ -36,7 +36,7 @@
 class ActiveRecordHelper extends Helpers {
     
     /**
-     *
+     *  @todo Document this variable
      */
     public $scaffolding = 0;
 
@@ -97,6 +97,7 @@ class ActiveRecordHelper extends Helpers {
      *   )
      *  @uses all_input_tags()
      *  @uses content_tag()
+     *  @uses Helpers::object()
      */
     function form($record_name, $options = array()) {
         $record = $this->object($record_name);
@@ -145,6 +146,12 @@ class ActiveRecordHelper extends Helpers {
      * <tt>header_tag</tt> - Used for the header of the error div (default: h2)
      * <tt>id</tt> - The id of the error div (default: errorExplanation)
      * <tt>class</tt> - The class of the error div (default: errorExplanation)
+     *  @param mixed object_name  The name of a PHP class, or
+     *                            an object instance of that class
+     *  @param string[] options Set of options: 'header_tag', 'id', 'class'
+     *  @uses content_tag()
+     *  @uses object_name
+     *  @uses Inflector::humanize()
      */
     function error_messages_for($object_name, $options = array()) {
         if(is_object($object_name)) {
@@ -170,6 +177,7 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *  @uses default_input_block()
      */
     function all_input_tags($record, $record_name, $options) {
         //if($record_name) $this->object_name = $record_name;
@@ -202,6 +210,20 @@ class ActiveRecordHelper extends Helpers {
     
     /**
      *  @todo Document this method
+     *
+     *  @param string object_name    Name of an ActiveRecord subclass
+     *  @param string attribute_name Name of an attribute of $object_name
+     *  @param string[] options
+     *  @uses attribute_name
+     *  @uses column_type()
+     *  @uses error_wrapping()
+     *  @uses object_name
+     *  @uses DateHelper::to_date_select_tag()
+     *  @uses FormHelper::to_boolean_select_tag()
+     *  @uses FormHelper::to_input_field_tag()
+     *  @uses FormHelper::to_text_area_tag()
+     *  @uses to_datetime_select_tag()
+     *  @uses object()
      */
     function to_tag($object_name, $attribute_name, $options = array()) {
         $this->object_name = $object_name;
@@ -244,6 +266,11 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses attribute_name
+     *  @uses column_type()
+     *  @uses object()
+     *  @uses object_name
      */
     function to_scaffold_tag($object_name, $attribute_name, $options = array()) {
         $this->object_name = $object_name;
@@ -276,7 +303,6 @@ class ActiveRecordHelper extends Helpers {
                 $results = "boolean_select(\"$object_name\", \"$attribute_name\")";
                 break;
 	default:
-	  echo "default case from ".$this->column_type()."\n";
         }
         if(count($this->object()->errors)) {
             $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
@@ -286,6 +312,8 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses tag()
      */
     function tag_without_error_wrapping() {
         $args = func_get_args();
@@ -294,6 +322,10 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses error_wrapping()
+     *  @uses object()
+     *  @uses tag_without_error_wrapping()
      */
     function tag($name, $options = array()) {
         if(count($this->object()->errors)) {
@@ -305,6 +337,8 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses content_tag()
      */
     function content_tag_without_error_wrapping() {
         $args = func_get_args();
@@ -313,6 +347,10 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses object()
+     *  @uses error_wrapping()
+     *  @uses content_tag_without_error_wrapping()
      */
     function content_tag($name, $value, $options = array()) {
         if (count($this->object()->errors)) {
@@ -324,6 +362,10 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses object_name
+     *  @uses attribute_name
+     *  @uses DateHelper::to_date_select_tag()
      */
     function to_date_select_tag_without_error_wrapping() {
         $form = new DateHelper($this->object_name, $this->attribute_name);
@@ -344,15 +386,25 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses attribute_name
+     *  @uses object_name
+     *  @uses DateHelper::to_datetime_select_tag()
      */
     function to_datetime_select_tag_without_error_wrapping() {
         $form = new DateHelper($this->object_name, $this->attribute_name);
         $args = func_get_args();
-        return call_user_func_array(array($form, 'to_datetime_select_tag'), $args);
+        return call_user_func_array(array($form, 'to_datetime_select_tag'),
+                                    $args);
     }
 
     /**
      *  @todo Document this method
+     *
+     *  @uses attribute_name
+     *  @uses error_wrapping()
+     *  @uses object()
+     *  @uses to_datetime_select_tag_without_error_wrapping
      */
     function to_datetime_select_tag($options = array()) {
         if (count($this->object()->errors)) {
@@ -364,6 +416,9 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @param string  $html_tag
+     *  @param boolean $has_error
      */
     function error_wrapping($html_tag, $has_error) {
         return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
@@ -371,6 +426,9 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses attribute_name
+     *  @uses object()
      */
     function error_message() {
         return $this->object()->errors[$this->attribute_name];
@@ -378,6 +436,10 @@ class ActiveRecordHelper extends Helpers {
 
     /**
      *  @todo Document this method
+     *
+     *  @uses attribute_name
+     *  @uses object()
+     *  @uses ActiveRecord::column_for_attribute()
      */
     function column_type() {
         $column = $this->object()->column_for_attribute($this->attribute_name);
@@ -389,6 +451,7 @@ class ActiveRecordHelper extends Helpers {
 /**
  *  Avialble functions for use in views
  * error_message_on($object, $attribute_name, $prepend_text = "", $append_text = "", $css_class = "formError")
+ *  @uses ActiveRecordHelper::error_message_on()
  */
 function error_message_on() {
     $ar_helper = new ActiveRecordHelper();
@@ -397,7 +460,8 @@ function error_message_on() {
 }
 
 /**
- * error_messages_for($object_name, $options = array())
+ *  error_messages_for($object_name, $options = array())
+ *  @uses ActiveRecordHelper::error_messages_for()
  */
 function error_messages_for() {
     $ar_helper = new ActiveRecordHelper();
@@ -407,6 +471,7 @@ function error_messages_for() {
 
 /**
  *  form($record_name, $options = array())
+ *  @uses ActiveRecordHelper::form()
  */
 function form() {
     $ar_helper = new ActiveRecordHelper();
@@ -419,6 +484,7 @@ function form() {
  *  (title is a VARCHAR column and holds "Hello World"):
  *   input("post", "title") =>
  *    <input id="post_title" name="post[title]" size="30" type="text" value="Hello World" />
+ *  @uses ActiveRecordHelper::input()
  */
 function input() {
     $ar_helper = new ActiveRecordHelper();
@@ -428,6 +494,7 @@ function input() {
 
 /**
  *
+ *  @uses ActiveRecordHelper::input_scaffolding()
  */
 function input_scaffolding() {
     $ar_helper = new ActiveRecordHelper();

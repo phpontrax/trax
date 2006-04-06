@@ -242,17 +242,17 @@ class HelpersTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     * @todo Implement testTo_content_tag().
+     * @todo Implement testValue().
      */
-    public function testTo_content_tag() {
+    public function testValue() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }
 
     /**
-     * @todo Implement testValue().
+     * @todo Implement testTo_content_tag().
      */
-    public function testValue() {
+    public function testTo_content_tag() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }

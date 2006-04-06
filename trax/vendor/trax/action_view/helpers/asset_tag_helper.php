@@ -30,12 +30,11 @@
 
 /**
  *  @todo Document this class
- *  @package PHPonTrax
  */
 class AssetTagHelper extends Helpers {
 
     /**
-     * 
+     *  @todo Document this method
      *
      */
     function __construct() {
@@ -44,7 +43,7 @@ class AssetTagHelper extends Helpers {
     }
     
     /**
-     * 
+     *   @todo Document this method
      *
      */
     private function compute_public_path($source, $dir, $ext) {
@@ -118,6 +117,7 @@ class AssetTagHelper extends Helpers {
      * Returns path to a stylesheet asset. Example:
      *
      *  stylesheet_path("style") # => /stylesheets/style.css
+     *  @uses compute_public_path()
      */
     function stylesheet_path($source) {
         return $this->compute_public_path($source, 'stylesheets', 'css'); #should be stylesheets
@@ -137,6 +137,8 @@ class AssetTagHelper extends Helpers {
      *  stylesheet_link_tag("random.styles", "/css/stylish") # =>
      *   <link href="/stylesheets/random.styles" media="screen" rel="Stylesheet" type="text/css" />
      *   <link href="/css/stylish.css" media="screen" rel="Stylesheet" type="text/css" />
+     *  @uses stylesheet_path()
+     *  @uses tag()
      */
     function stylesheet_link_tag() {
         if(func_num_args() > 0) {
@@ -158,6 +160,7 @@ class AssetTagHelper extends Helpers {
      * * full path, like "/my_images/image.gif"
      * * file name, like "rss.gif", that gets expanded to "/images/rss.gif"
      * * file name without extension, like "logo", that gets expanded to "/images/logo.png"
+     *  @uses compute_public_path
      */
     function image_path($source) {
         return $this->compute_public_path($source, 'images', 'png'); #should be images
@@ -173,6 +176,9 @@ class AssetTagHelper extends Helpers {
      * * full path, like "/my_images/image.gif"
      * * file name, like "rss.gif", that gets expanded to "/images/rss.gif"
      * * file name without extension, like "logo", that gets expanded to "/images/logo.png"
+     *  @uses Inflector::capitalize()
+     *  @uses image_path()
+     *  @uses tag()
      */
     function image_tag($source, $options = array()) {
         $options['src'] = $this->image_path($source);
@@ -201,6 +207,7 @@ class AssetTagHelper extends Helpers {
      *   <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.curenthost.com/controller/feed" />
      *  auto_discovery_link_tag(:rss, {:action => "feed"}, {:title => "My RSS"}) # =>
      *   <link rel="alternate" type="application/rss+xml" title="My RSS" href="http://www.curenthost.com/controller/feed" />
+	    *  @uses tag()
      */
     function auto_discovery_link_tag($type = 'rss', $options = array(), $tag_options = array()) {
         return $this->tag(
@@ -215,9 +222,11 @@ class AssetTagHelper extends Helpers {
 
 
 /**
-  *  Avialble functions for use in views
-  *  auto_discovery_link_tag($type = 'rss', $options = array(), $tag_options = array())
-  */
+ *  @todo Document this method  
+ *  Avialble functions for use in views
+ *  auto_discovery_link_tag($type = 'rss', $options = array(), $tag_options = array())
+ *  @uses AssetTagHelper::auto_discovery_link_tag()
+ */
 function auto_discovery_link_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
@@ -225,8 +234,10 @@ function auto_discovery_link_tag() {
 }
 
 /**
-  *  image_tag($source, $options = array())
-  */
+ *  @todo Document this method  
+ *  image_tag($source, $options = array())
+ *  @uses AssetTagHelper::image_tag()
+ */
 function image_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
@@ -234,8 +245,10 @@ function image_tag() {
 }
 
 /**
-  *  stylesheet_link_tag($sources)
-  */
+ *  @todo Document this method  
+ *  stylesheet_link_tag($sources)
+ *  @uses AssetTagHelper::stylesheet_link_tag()
+ */
 function stylesheet_link_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
@@ -243,12 +256,21 @@ function stylesheet_link_tag() {
 }
 
 /**
-  *  javascript_include_tag($sources)
-  */
+ *  @todo Document this method
+ *  javascript_include_tag($sources)
+ *  @uses AssetTagHelper::javascript_include_tag()
+ */
 function javascript_include_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
     return call_user_func_array(array($asset_helper, 'javascript_include_tag'), $args);
 }
 
+// -- set Emacs parameters --
+// Local variables:
+// tab-width: 4
+// c-basic-offset: 4
+// c-hanging-comment-ender-p: nil
+// indent-tabs-mode: nil
+// End:
 ?>

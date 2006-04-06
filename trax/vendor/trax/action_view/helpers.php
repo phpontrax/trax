@@ -30,11 +30,65 @@
 
 /**
  *  Basic helper functions
+ *
+ *  A collection of methods used to generate basic HTML/XML.
  */
 class Helpers {
 
     /**
+     *  @todo Document this variable
+     *  @var boolean
+     */
+    public $auto_index;
+
+    /**
+     *  @todo Document this variable
+     *  Name of a PHP class(?)
+     *  @var string
+     */
+    public $object_name;
+
+    /**
+     *  @todo Document this variable
+     */
+    public $attribute_name;
+
+    /**
+     *  Current controller object
      *
+     *  Local copy of $GLOBALS['current_controller_object']
+     *  @var ActionController
+     */
+    public $controller_object;
+
+    /**
+     *  Current controller name
+     *
+     *  Local copy of $GLOBALS['current_controller_name']
+     *  @var string
+     */
+    public $controller_name;
+
+    /**
+     *  Current controller path
+     *
+     *  Local copy of $GLOBALS['current_controller_path']
+     *  @var string
+     */
+    public $controller_path;
+
+
+    /**
+     *  Construct a Helpers object
+     *
+     *  @param string Name of ActiveRecord subclass
+     *  @param string Attribute of ActiveRecord subclass
+     *  @uses auto_index
+     *  @uses object_name
+     *  @uses attribute_name
+     *  @uses controller_name
+     *  @uses controller_path
+     *  @uses controller_object
      */
     function __construct($object_name = null, $attribute_name = null) {
     	if(substr($object_name, -2) == "[]") {
@@ -45,9 +99,17 @@ class Helpers {
     	$this->auto_index = false;
         $this->object_name = str_replace("[]", "", $object_name);     
         $this->attribute_name = $attribute_name;        
-        $this->controller_name = $GLOBALS['current_controller_name'];
-        $this->controller_path = $GLOBALS['current_controller_path'];
-        $this->controller_object = $GLOBALS['current_controller_object'];
+
+        //  Copy controller information from $GLOBALS
+        $this->controller_name =
+            array_key_exists('current_controller_name',$GLOBALS)
+            ? $GLOBALS['current_controller_name'] : null;
+        $this->controller_path =
+            array_key_exists('current_controller_path', $GLOBALS)
+            ? $GLOBALS['current_controller_path'] : null;
+        $this->controller_object =
+            array_key_exists('current_controller_object', $GLOBALS)
+            ? $GLOBALS['current_controller_object'] : null;
     	if($auto_index) {
         	$object = $this->object();
             if(is_object($object)) {
@@ -58,10 +120,19 @@ class Helpers {
     }
 
     /**
+     *  Get value of current attribute in the current ActiveRecord object
      *
+     *  If there is a value in $_REQUEST[][], return it.
+     *  Otherwise fetch the value from the database.
+     *  @uses attribute_name
+     *  @uses object()
+     *  @uses object_name
+     *  @uses ActiveRecord::send()
      */
     protected function value() {
-        if(!$value = $_REQUEST[$this->object_name][$this->attribute_name]) {
+        if (!array_key_exists($this->object_name, $_REQUEST)
+            || !array_key_exists($this->attribute_name,
+                                 $_REQUEST[$this->object_name])) {
             $object = $this->object();
             if(is_object($object) && $this->attribute_name) {
                 $value = $object->send($this->attribute_name);
@@ -71,7 +142,9 @@ class Helpers {
     }
 
     /**
-     *
+     *  @todo Document this method
+     *  @param string object_name
+     *  @uses controller_object
      */
     protected function object($object_name = null) {
         $object_name = $object_name ? $object_name : $this->object_name;
@@ -124,7 +197,8 @@ class Helpers {
      *  @return void Contents of $options have been converted
      */
     protected function boolean_attribute(&$options, $attribute) {
-        if($options[$attribute]) {
+        if(array_key_exists($attribute,$options)
+           && $options[$attribute]) {
             $options[$attribute] = $attribute;
         } else {
             unset($options[$attribute]);
@@ -134,11 +208,11 @@ class Helpers {
     /**
      *  Wrap CDATA begin and end tags around argument
      *
-     *  Returns a CDATA section for the given +content+.  CDATA sections
+     *  Returns a CDATA section for the given content.  CDATA sections
      *  are used to escape blocks of text containing characters which would
      *  otherwise be recognized as markup. CDATA sections begin with the string
-     *  <tt>&lt;![CDATA[</tt> and end with (and may not contain) the string 
-     *  <tt>]]></tt>. 
+     *  <samp><![CDATA[</samp> and end with (and may not contain) the string 
+     *  <samp>]]></samp>. 
      *  @param string $content  Content to wrap
      *  @return string          Wrapped argument
      */
@@ -147,21 +221,24 @@ class Helpers {
     }    
 
     /**
-     *  Generate an HTML or XML tag with optional attributes
+     *  Generate an HTML or XML tag with optional attributes and self-ending
      *
-     *  Example: tag("br");
-     *   Results: <br />
-     *  Example: tag("input", array("type" => "text"));
-     * <input type="text" />
-     *  @uses tag_options()
-     *  @param string $name    Tag name
-     *  @param string[] $options Tag attributes to apply
+     *  <ul>
+     *   <li>Example: <samp>tag("br");</samp><br>
+     *       Returns: <samp><br  />\n</samp></li>
+     *   <li> Example: <samp>tag("div", array("class" => "warning"), true);</samp><br>
+     *       Returns: <samp><div class="warning">\n</samp></li>
+     *  </ul>
+     *  @param string $name      Tag name
+     *  @param string[] $options Tag attributes to apply, specified as
+     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...) 
      *  @param boolean $open
      *  <ul>
      *    <li>true =>  make opening tag (end with '>')</li>
      *    <li>false => make self-terminating tag (end with ' \>')</li>
      *  </ul>
-     *  @return string The tag, followed by "\n"
+     *  @return string The generated tag, followed by "\n"
+     *  @uses tag_options()
      */
     function tag($name, $options = array(), $open = false) {
         $html = "<$name ";
@@ -171,17 +248,23 @@ class Helpers {
     }
 
     /**
-     *  Generate an open/close pair of tags with content between
+     *  Generate an open/close pair of tags with optional attributes and content between
      *
-     *  Example: content_tag("p", "Hello world!");
-     *  Result: <p>Hello world!</p>
-     *  Example: content_tag("div", content_tag("p", "Hello world!"),
-     *           array("class" => "strong")) =>
-     *  Result:<div class="strong"><p>Hello world!</p></div>
+     *  <ul>
+     *   <li>Example: <samp>content_tag("p", "Hello world!");</samp><br />
+     *       Returns: <samp><p>Hello world!</p>\n</samp><li>
+     *   <li>Example:
+     *     <samp>content_tag("div",
+     *                       content_tag("p", "Hello world!"),
+     *                       array("class" => "strong"));</samp><br />
+     *     Returns:
+     *     <samp><div class="strong"><p>Hello world!</p></div>\n</samp></li>
+     *  </ul>
      *  @uses tag_options()
      *  @param string $name    Tag to wrap around $content
      *  @param string $content Text to put between tags
-     *  @param string[] $options Tag attributes to apply
+     *  @param string[] $options Tag attributes to apply, specified as
+     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...) 
      *  @return string Text wrapped with tag and attributes,
      *                 followed by "\n"
      */
@@ -194,6 +277,8 @@ class Helpers {
     
     /**
      *
+     *  @uses content_tag()
+     *  @uses value()
      */    
     function to_content_tag($tag_name, $options = array()) {
         return $this->content_tag($tag_name, $this->value(), $options);
