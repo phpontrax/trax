@@ -528,7 +528,7 @@ class ActionController {
      *  @return boolean true
      */
     function process_route() {
-    
+   
         # First try to load the routes and setup the paths to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
@@ -549,14 +549,14 @@ class ActionController {
         # If controller is loaded then start processing           
         if($this->loaded) {
             
-            include_once($this->controller_file);
+            include_once($this->controller_file);            
             if(class_exists($this->controller_class, false)) {
                 
                 $class = $this->controller_class;
                 $this->controller_object = new $class();
                 
                 if(is_object($this->controller_object)) {
-                    
+                   
                     $this->controller_object->controller = $this->controller;
                     $this->controller_object->action = $this->action;
                     $this->controller_object->controller_path = "$this->added_path/$this->controller";
@@ -591,7 +591,7 @@ class ActionController {
                             }
                         }
                     }
-                }
+                }                
             }
 
             # Include main application helper file
@@ -603,7 +603,7 @@ class ActionController {
             if(file_exists($this->helper_file)) {
                 include_once($this->helper_file);
             }
-
+			
             if(is_object($this->controller_object)) {
 
                 # Include any extra helper files defined in this controller

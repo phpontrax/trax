@@ -166,6 +166,7 @@ class ActiveRecord {
      *  @todo Document this property
      */
     protected $save_associations = array();
+    
     /**
      *  @todo Document this property
      *  @var boolean
@@ -302,6 +303,11 @@ class ActiveRecord {
      *  @todo Document this API
      */
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
+
+    /**
+     *  @todo Document this API
+     */    
+    public $auto_delete_habtm = true; # auto delete $has_and_belongs_to_many associations
 
     /**
      *  Transactions (only use if your db supports it)
@@ -526,7 +532,7 @@ class ActiveRecord {
         $this_foreign_key = Inflector::singularize($this->table_name)."_id";
         $other_foreign_key = Inflector::singularize($other_table_name)."_id";
         # Set up the SQL segments
-        $conditions = "{$join_table}.{$this_foreign_key}={$this->id}";
+        $conditions = "{$join_table}.{$this_foreign_key}=".intval($this->id);
         $orderings = null;
         $limit = null;
         $joins = "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
@@ -1424,7 +1430,7 @@ class ActiveRecord {
                 case "has_one":
                     $foreign_key = Inflector::singularize($this->table_name)."_id";
                     $object->$foreign_key = $this->id; 
-                    //echo "fk:$foreign_key = $this->id<br>";
+                    echo "fk:$foreign_key = $this->id<br>";
                     break;
             }
             $object->save();        
@@ -1451,6 +1457,18 @@ class ActiveRecord {
 
         $this->before_delete();
         $result = $this->delete_all("id IN ($id)");
+        if($this->auto_delete_habtm) {
+            if(is_string($this->has_and_belongs_to_many)) {
+                $habtms = explode(",", $this->has_and_belongs_to_many);
+                foreach($habtms as $other_table_name) {
+                    $this->delete_all_habtm_records(trim($other_table_name), $id);                             
+                }
+            } elseif(is_array($this->has_and_belongs_to_many)) {
+                foreach($this->has_and_belongs_to_many as $other_table_name => $values) {
+                    $this->delete_all_habtm_records($other_table_name, $id);                             
+                }
+            } 
+        }
         $this->after_delete();
 
         return $result;
@@ -1569,17 +1587,23 @@ class ActiveRecord {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
-                $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
-                $this_foreign_key = Inflector::singularize($this->table_name)."_id";
-                $sql = "DELETE FROM $table_name WHERE $this_foreign_key = $this_foreign_value";
-                //echo "delete_habtm_records: SQL: $sql<br>";
-                $result = $this->query($sql);
-                if($this->is_error($result)) {
-                    $this->raise($result->getMessage());
-                }
+                $this->delete_all_habtm_records($other_table_name, $this_foreign_value);
             }
         }
         return true;
+    }
+    
+    private function delete_all_habtm_records($other_table_name, $this_foreign_value) {
+        if($other_table_name && $this_foreign_value > 0) {
+            $habtm_table_name = $this->get_join_table_name($this->table_name,$other_table_name);
+            $this_foreign_key = Inflector::singularize($this->table_name)."_id";
+            $sql = "DELETE FROM $habtm_table_name WHERE $this_foreign_key = $this_foreign_value";
+            //echo "delete_all_habtm_records: SQL: $sql<br>";
+            $result = $this->query($sql);
+            if($this->is_error($result)) {
+                $this->raise($result->getMessage());
+            }            
+        }
     }
 
     /**
