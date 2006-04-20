@@ -84,6 +84,12 @@
      </cmdsynopsis>
     </listitem>
 
+    <listitem><command>$GLOBALS['COUNTRIES']</command>
+     <cmdsynopsis>
+      List of countries.  Set in {@link form_options_helper.php}.
+     </cmdsynopsis>
+    </listitem>
+
     <listitem><command>$GLOBALS['current_action_name']</command>
      <cmdsynopsis>
      Name of action parsed from the URL.
@@ -163,4 +169,12 @@
 
    </itemizedlist>
   </refsect2>
+
+<!--
+Local variables:
+mode: xml
+c-basic-offset: 1
+indent-tabs-mode: nil
+End:
+-->
  </refsect1>

@@ -25,9 +25,25 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
+//  Create an ActiveRecord and an ActionController to test with
+@ini_set('include_path',
+         './mockActiveRecord:./mockActionController:'.ini_get('include_path'));
+require_once "active_record.php";
+require_once "action_controller.php";
 require_once "trax_exceptions.php";
 require_once "action_view/helpers.php";
 require_once "action_view/helpers/date_helper.php";
+
+/**
+ *  Extend the DateHelper class so we can access protected stuff
+ */
+class ExDateHelper extends DateHelper
+{
+    function value() {
+        return parent::value();
+    }
+}
+
 
 /**
  * Test class for DateHelper.
@@ -63,163 +79,2527 @@ class DateHelperTest extends PHPUnit2_Framework_TestCase {
      * @access protected
      */
     protected function tearDown() {
+        unset($_REQUEST);
     }
 
 	/**
-	 *  @todo Implement testConstruct()
+	 *  Test __construct()
+     *
+     *  Test the {@link DateHelper::__construct() constructor}
 	 */
     public function testConstruct() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('Foo', 'bar');
+        $this->assertEquals('Foo', $dh->object_name);
+        $this->assertEquals('bar', $dh->attribute_name);
 	}
 
 	/**
-	 *  @todo Implement testExpiration_date_select()
+	 *  Test the expiration_date_select() method
+     *
+     *  Test the {@link DateHelper::expiration_date_select()} method
 	 */
     public function testExpiration_date_select() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('License', 'expiration_date');
+        $_REQUEST['License']['expiration_date(1i)'] = date('Y');
+        $_REQUEST['License']['expiration_date(2i)'] = '08';
+
+        //  Test expiration date of August this year
+        $this->assertContains('<option value="'.date('Y').
+                              '"  selected="selected"',
+                              $dh->expiration_date_select());
+        $this->assertContains('<option value="'.(date('Y')+7).'"',
+                              $dh->expiration_date_select());
+        $this->assertContains('<option value="08" selected="selected">'
+                              . '8</option>',
+                              $dh->expiration_date_select());
 	}
 
 	/**
-	 *  @todo Implement testDatetime_select_method()
+	 *  Test datetime_select() method
+     *
+     *  Test the {@link DateHelper::datetime_select()} method
 	 */
     public function testDatetime_select_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('Person','birth');
+        $dh->controller_object = new ActionController;
+        $ar = new ActiveRecord;
+        $dh->controller_object->Person = $ar;
+
+        //  With no value in $_REQUEST, data should be
+        //  retrieved from the the ActiveRecord
+        $ar->expect_query("birth","2001-07-05 11:30:45");
+        $this->assertEquals('<select name="Person[birth(1i)]">' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001"  selected="selected">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '<option value="2006">2006</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07" selected="selected">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05"  selected="selected">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . ' &mdash; <select name="Person[birth(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11"  selected="selected">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30"  selected="selected">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->datetime_select());
 	}
 
 	/**
-	 *  @todo Implement testDatetime_select_function()
+	 *  Test datetime_select() function
+     *
+     *  Test the {@link datetime_select()} function in procedural file
+     *  {@link date_helper.php}
 	 */
     public function testDatetime_select_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+
+        //  Values from $_REQUEST, default format
+        $_REQUEST['Person']['birth(1i)'] = '2001';
+        $_REQUEST['Person']['birth(2i)'] = '07';
+        $_REQUEST['Person']['birth(3i)'] = '05';
+        $_REQUEST['Person']['birth(4i)'] = '11';
+        $_REQUEST['Person']['birth(5i)'] = '30';
+        $this->assertEquals('<select name="Person[birth(1i)]">' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001"  selected="selected">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '<option value="2006">2006</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07" selected="selected">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05"  selected="selected">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . ' &mdash; <select name="Person[birth(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11"  selected="selected">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30"  selected="selected">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           datetime_select('Person', 'birth'));
 	}
 
 	/**
-	 *  @todo Implement testDate_select_method()
+	 *  Test date_select_method()
+     *
+     *  Test the {@link DateHelper::date_select()} method
 	 */
     public function testDate_select_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('Person', 'birthdate');
+        $_REQUEST['Person']['birthdate(1i)'] = '1955';
+        $_REQUEST['Person']['birthdate(2i)'] = '08';
+        $_REQUEST['Person']['birthdate(3i)'] = '13';
+
+        //  Test with default format
+        $this->assertEquals('<select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1950">1950</option>' . "\n"
+           . '<option value="1951">1951</option>' . "\n"
+           . '<option value="1952">1952</option>' . "\n"
+           . '<option value="1953">1953</option>' . "\n"
+           . '<option value="1954">1954</option>' . "\n"
+           . '<option value="1955"  selected="selected">1955</option>' . "\n"
+           . '<option value="1956">1956</option>' . "\n"
+           . '<option value="1957">1957</option>' . "\n"
+           . '<option value="1958">1958</option>' . "\n"
+           . '<option value="1959">1959</option>' . "\n"
+           . '<option value="1960">1960</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13"  selected="selected">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            $dh->date_select());
 	}
 
 	/**
-	 *  @todo Implement testDate_select_function()
+	 *  Test date_select() function
+     *
+     *  Test the {@link date_select()} function in the
+     *  {@link date_helper.php} procedural file
 	 */
     public function testDate_select_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-	}
+        $_REQUEST['Person']['birthdate(1i)'] = '1955';
+        $_REQUEST['Person']['birthdate(2i)'] = '08';
+        $_REQUEST['Person']['birthdate(3i)'] = '13';
+
+        //  Test with default format
+        $this->assertEquals('<select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1950">1950</option>' . "\n"
+           . '<option value="1951">1951</option>' . "\n"
+           . '<option value="1952">1952</option>' . "\n"
+           . '<option value="1953">1953</option>' . "\n"
+           . '<option value="1954">1954</option>' . "\n"
+           . '<option value="1955"  selected="selected">1955</option>' . "\n"
+           . '<option value="1956">1956</option>' . "\n"
+           . '<option value="1957">1957</option>' . "\n"
+           . '<option value="1958">1958</option>' . "\n"
+           . '<option value="1959">1959</option>' . "\n"
+           . '<option value="1960">1960</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13"  selected="selected">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+             date_select('Person', 'birthdate'));
+ 	}
 
 	/**
-	 *  @todo Implement testSelect_expiration_date_method()
+	 *  Test select_expiration_date() method
+     *
+     *  Test the {@link DateHelper::select_expiration_date()} method
 	 */
     public function testSelect_expiration_date_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+
+        //  Test expiration date of August this year
+        $_REQUEST['expiration_year'] = date('Y');
+        $_REQUEST['expiration_month'] = '08';
+        $this->assertContains('<option value="'.date('Y').
+                              '"  selected="selected"',
+                   $dh->select_expiration_date());
+        $this->assertContains('<option value="'.(date('Y')+7).'"',
+                   $dh->select_expiration_date());
+        $this->assertContains('<option value="08" selected="selected">'
+                              . '8</option>',
+                   $dh->select_expiration_date());
 	}
 
 	/**
-	 *  @todo Implement testSelect_expiration_date_function()
+	 *  Test select_expiration_date() function
+     *
+     *  Test the {@link select_expiration_date()} function in the
+     *  {@link date_helper.php} procedural file
 	 */
     public function testSelect_expiration_date_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+
+        //  Test expiration date of August this year
+        $_REQUEST['expiration_year'] = date('Y');
+        $_REQUEST['expiration_month'] = '08';
+        $this->assertContains('<option value="'.date('Y').
+                              '"  selected="selected"',
+                              select_expiration_date());
+        $this->assertContains('<option value="'.(date('Y')+7).'"',
+                              select_expiration_date());
+        $this->assertContains('<option value="08" selected="selected">'
+                              . '8</option>',
+                              select_expiration_date());
 	}
 
 	/**
-	 *  @todo Implement testSelect_date_method()
+	 *  Test select_date() method
+     *
+     *  Test the {@link DateHelper::select_date()} method
 	 */
     public function testSelect_date_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+        $this->assertEquals('<select name="year">' . "\n"
+           . '<option value="1993">1993</option>' . "\n"
+           . '<option value="1994">1994</option>' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998"  selected="selected">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="month">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="day">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04"  selected="selected">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            $dh->select_date('August 4, 1998'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_date_function()
+	 *  Test select_date() function
+     *
+     *  Test the {@link select_date()} function in procedural file
+     *  {@link date_helper.php}
 	 */
     public function testSelect_date_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $this->assertEquals('<select name="year">' . "\n"
+           . '<option value="1993">1993</option>' . "\n"
+           . '<option value="1994">1994</option>' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998"  selected="selected">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="month">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="day">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04"  selected="selected">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            select_date('August 4, 1998'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_datetime_method()
+	 *  Test select_datetime() method
+     *
+     *  Test {@link DateHelper::select_datetime() method
 	 */
     public function testSelect_datetime_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        //  Default format
+        $dh = new DateHelper;
+        $this->assertEquals('<select name="year">' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000"  selected="selected">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="month">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09" selected="selected">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="day">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17"  selected="selected">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="hour">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09"  selected="selected">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="minute">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42"  selected="selected">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->select_datetime('2000-09-17 09:42:53'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_datetime_function()
+	 *  Test select_datetime() function
+     *
+     *  Test the {@link select_datetime()} function in procedural file
+     *  {@link date_helper.php}
 	 */
     public function testSelect_datetime_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $this->assertEquals('<select name="year">' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000"  selected="selected">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="month">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09" selected="selected">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="day">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17"  selected="selected">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="hour">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09"  selected="selected">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="minute">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42"  selected="selected">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           select_datetime('2000-09-17 09:42:53'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_time()
+	 *  Test select_time()
+     *
+     *  Test the {@link DateHelper::select_time()} method
 	 */
     public function testSelect_time() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+
+        //  Test 8:12 AM on April 8, 1998
+        $this->assertEquals('<select name="hour">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08"  selected="selected">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="minute">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12"  selected="selected">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->select_time('1998-04-08 8:12'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_second()
+	 *  Test time_select() method
+     *
+     *  Test the {@link DateHelper::time_select()} method
+	 */
+    public function testTime_select_method() {
+        $dh = new DateHelper('Person','lunch');
+        $dh->controller_object = new ActionController;
+        $ar = new ActiveRecord;
+        $dh->controller_object->Person = $ar;
+
+        //  With no value in $_REQUEST, data should be
+        //  retrieved from the the ActiveRecord
+        $ar->expect_query("lunch","11:30:45");
+        $this->assertEquals('<select name="Person[lunch(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11"  selected="selected">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[lunch(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30"  selected="selected">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->time_select());
+
+        //  Value in $_REQUEST should override the model
+        $_REQUEST['Person']['lunch(4i)'] = '08';
+        $_REQUEST['Person']['lunch(5i)'] = '12';
+        $this->assertEquals('<select name="Person[lunch(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08"  selected="selected">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[lunch(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12"  selected="selected">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->time_select());
+
+        //  Test output format option 'discard_second' => false
+        $_REQUEST['Person']['lunch(4i)'] = '12';
+        $_REQUEST['Person']['lunch(5i)'] = '14';
+        $_REQUEST['Person']['lunch(6i)'] = '27';
+        $this->assertEquals('<select name="Person[lunch(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12"  selected="selected">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[lunch(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14"  selected="selected">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[lunch(6i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27"  selected="selected">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->time_select(array('discard_second' => false)));
+	}
+
+	/**
+	 *  Test time_select() function
+     *
+     *  Test {@link time_select()} function in procedural file
+     *  {@link date_helper.php}
+	 */
+    public function testTime_select_function() {
+        $_REQUEST['Person']['lunch(4i)'] = '08';
+        $_REQUEST['Person']['lunch(5i)'] = '12';
+        $this->assertEquals('<select name="Person[lunch(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08"  selected="selected">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[lunch(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12"  selected="selected">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           time_select('Person','lunch'));
+	}
+
+	/**
+	 *  Test select_second()
+     *
+     *  Test {@link DateHelper::select_second()} method
 	 */
     public function testSelect_second() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('s'),
+                            $dh->select_second());
+
+        //  Test generation with 43 selected, default format
+        $this->assertEquals('<select name="second">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43"  selected="selected">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_second('43'));
+
+        //  Test generation with 17 selected, name change
+        $this->assertEquals('<select name="last-second">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17"  selected="selected">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_second('17',
+                                  array('field_name' => 'last-second')));
+
+        //  Test generation with 52 selected, include blank
+        $this->assertEquals('<select name="second">' . "\n"
+                            . '<option value=""></option>' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52"  selected="selected">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_second('52',
+                                         array('include_blank' => true)));
+
+        //  Test override of seconds argument
+        //  Simulate 22 parsed from $_REQUEST
+        $dh->attribute_name = 'right_this_second';
+        $dh->request_seconds['right_this_second'] = 22;
+        //  Test generation with 43 selected, default format
+        $this->assertEquals('<select name="second">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22"  selected="selected">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_second('43'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_minute()
+	 *  Test select_minute()
+     *
+     *  Test {@link DateHelper::select_minute()} method
 	 */
     public function testSelect_minute() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('i'),
+                            $dh->select_minute());
+
+        //  Test generation with 43 selected, default format
+        $this->assertEquals('<select name="minute">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43"  selected="selected">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_minute('43'));
+
+        //  Test generation with 17 selected, name change
+        $this->assertEquals('<select name="last-minute">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17"  selected="selected">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_minute('17',
+                                  array('field_name' => 'last-minute')));
+
+        //  Test generation with 52 selected, include blank
+        $this->assertEquals('<select name="minute">' . "\n"
+                            . '<option value=""></option>' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52"  selected="selected">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_minute('52',
+                                         array('include_blank' => true)));
+
+        //  Test override of minutes argument
+        //  Simulate 22 parsed from $_REQUEST
+        $dh->attribute_name = 'right_this_minute';
+        $dh->request_minutes['right_this_minute'] = 22;
+        //  Test generation with 43 selected, default format
+        $this->assertEquals('<select name="minute">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22"  selected="selected">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '<option value="32">32</option>' . "\n"
+                            . '<option value="33">33</option>' . "\n"
+                            . '<option value="34">34</option>' . "\n"
+                            . '<option value="35">35</option>' . "\n"
+                            . '<option value="36">36</option>' . "\n"
+                            . '<option value="37">37</option>' . "\n"
+                            . '<option value="38">38</option>' . "\n"
+                            . '<option value="39">39</option>' . "\n"
+                            . '<option value="40">40</option>' . "\n"
+                            . '<option value="41">41</option>' . "\n"
+                            . '<option value="42">42</option>' . "\n"
+                            . '<option value="43">43</option>' . "\n"
+                            . '<option value="44">44</option>' . "\n"
+                            . '<option value="45">45</option>' . "\n"
+                            . '<option value="46">46</option>' . "\n"
+                            . '<option value="47">47</option>' . "\n"
+                            . '<option value="48">48</option>' . "\n"
+                            . '<option value="49">49</option>' . "\n"
+                            . '<option value="50">50</option>' . "\n"
+                            . '<option value="51">51</option>' . "\n"
+                            . '<option value="52">52</option>' . "\n"
+                            . '<option value="53">53</option>' . "\n"
+                            . '<option value="54">54</option>' . "\n"
+                            . '<option value="55">55</option>' . "\n"
+                            . '<option value="56">56</option>' . "\n"
+                            . '<option value="57">57</option>' . "\n"
+                            . '<option value="58">58</option>' . "\n"
+                            . '<option value="59">59</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_minute('43'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_hour()
+	 *  Test select_hour()
+     *
+     *  Test {@link DateHelper::select_hour()} method
 	 */
     public function testSelect_hour() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper;
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('H'),
+                            $dh->select_hour());
+
+        //  Test generation with 17 selected, default format
+        $this->assertEquals('<select name="hour">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17"  selected="selected">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_hour('17'));
+
+        //  Test generation with 12 selected, name change
+        $this->assertEquals('<select name="this-hour">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12"  selected="selected">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_hour('12',
+                                        array('field_name' => 'this-hour')));
+
+        //  Test generation with 09 selected, include blank
+        $this->assertEquals('<select name="hour">' . "\n"
+                            . '<option value=""></option>' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09"  selected="selected">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_hour('09',
+                                        array('include_blank' => true)));
+
+
+        //  Test override of hours argument
+        //  Simulate 22 parsed from $_REQUEST
+        $dh->attribute_name = 'right_this_hour';
+        $dh->request_hours['right_this_hour'] = 22;
+        //  Test generation with 17 selected, default format
+        $this->assertEquals('<select name="hour">' . "\n"
+                            . '<option value="00">00</option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22"  selected="selected">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_hour('17'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_day_method()
+	 *  Test select_day() method
+     *
+     *  Test {@link DateHelper::select_day()}
 	 */
     public function testSelect_day_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper();
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('d'),
+                            $dh->select_day());
+
+        //  Test generation with twelfth selected, default format
+        $this->assertEquals('<select name="day">' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12"  selected="selected">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_day('12'));
+
+        //  Test generation with English selection, default format
+        $this->assertEquals('<select name="day">' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25"  selected="selected">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_day('25 December 2002'));
+
+        //  Test generation with twentieth selected, name change
+        $this->assertEquals('<select name="new-day">' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20"  selected="selected">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_day('20',
+                                            array('field_name'=>'new-day')));
+
+        //  Test generation with thirtieth selected, include blank
+        $this->assertEquals('<select name="day">' . "\n"
+                            . '<option value=""></option>' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30"  selected="selected">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_day('30',
+                                            array('include_blank'=>true)));
+
+        //  Test override of day argument
+        //  Simulate fifth parsed from $_REQUEST
+        $dh->attribute_name = 'someday';
+        $dh->request_days = array('someday' => '05');
+        //  Test generation with twelfth selected, default format
+        $this->assertEquals('<select name="day">' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05"  selected="selected">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_day('12'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_day_function()
+	 *  Test select_day() function
+     *
+     *  Test {@link select_day()} in procedural file {@link date_helper.php}
 	 */
     public function testSelect_day_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+
+        //  Test generation with twelfth selected, default format
+        $this->assertEquals('<select name="day">' . "\n"
+                            . '<option value="01">01</option>' . "\n"
+                            . '<option value="02">02</option>' . "\n"
+                            . '<option value="03">03</option>' . "\n"
+                            . '<option value="04">04</option>' . "\n"
+                            . '<option value="05">05</option>' . "\n"
+                            . '<option value="06">06</option>' . "\n"
+                            . '<option value="07">07</option>' . "\n"
+                            . '<option value="08">08</option>' . "\n"
+                            . '<option value="09">09</option>' . "\n"
+                            . '<option value="10">10</option>' . "\n"
+                            . '<option value="11">11</option>' . "\n"
+                            . '<option value="12"  selected="selected">12</option>' . "\n"
+                            . '<option value="13">13</option>' . "\n"
+                            . '<option value="14">14</option>' . "\n"
+                            . '<option value="15">15</option>' . "\n"
+                            . '<option value="16">16</option>' . "\n"
+                            . '<option value="17">17</option>' . "\n"
+                            . '<option value="18">18</option>' . "\n"
+                            . '<option value="19">19</option>' . "\n"
+                            . '<option value="20">20</option>' . "\n"
+                            . '<option value="21">21</option>' . "\n"
+                            . '<option value="22">22</option>' . "\n"
+                            . '<option value="23">23</option>' . "\n"
+                            . '<option value="24">24</option>' . "\n"
+                            . '<option value="25">25</option>' . "\n"
+                            . '<option value="26">26</option>' . "\n"
+                            . '<option value="27">27</option>' . "\n"
+                            . '<option value="28">28</option>' . "\n"
+                            . '<option value="29">29</option>' . "\n"
+                            . '<option value="30">30</option>' . "\n"
+                            . '<option value="31">31</option>' . "\n"
+                            . '</select>' . "\n",
+                            select_day('12'));
 	}
 
 	/**
 	 *  Test select_month() method
      *
-     *  NB: the override of selected month by $_REQUEST only occurs if
-     *  the private function check_request_for_value() was previously
-     *  called to parse $_REQUEST so we can't test that here.
-     *
-     *  NB: doesn't test corrects of selection of current month
+     *  Test the {@link DateHelper::select_month()} method.<br />
+     *  <b>NB:</b> doesn't test correctness of selection of current month
 	 */
     public function testSelect_month_method() {
         $dh = new DateHelper();
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('F'),
+                            $dh->select_month());
 
         //  Test generation with November selected, default output format
         $this->assertEquals('<select name="month">' . "\n"
@@ -237,6 +2617,23 @@ class DateHelperTest extends PHPUnit2_Framework_TestCase {
                             . '<option value="12">December</option>' . "\n"
                             . '</select>' . "\n",
                             $dh->select_month('11'));
+
+        //  Test generation with English selection, default output format
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">January</option>' . "\n"
+                            . '<option value="02">February</option>' . "\n"
+                            . '<option value="03">March</option>' . "\n"
+                            . '<option value="04">April</option>' . "\n"
+                            . '<option value="05">May</option>' . "\n"
+                            . '<option value="06">June</option>' . "\n"
+                            . '<option value="07" selected="selected">July</option>' . "\n"
+                            . '<option value="08">August</option>' . "\n"
+                            . '<option value="09">September</option>' . "\n"
+                            . '<option value="10">October</option>' . "\n"
+                            . '<option value="11">November</option>' . "\n"
+                            . '<option value="12">December</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_month('28 July 2004'));
 
         //  Test generation of month numbers as visible content
         $this->assertEquals('<select name="month">' . "\n"
@@ -274,64 +2671,1146 @@ class DateHelperTest extends PHPUnit2_Framework_TestCase {
                             $dh->select_month("05",
                                               array('add_month_numbers'=>1)));
 
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        //  Test override of month argument
+        //  Simulate month of May parsed from $_REQUEST
+        $dh->attribute_name = 'sometime';
+        $dh->request_months = array('sometime' => '05');
+        //  Test generation with November overridden, default output format
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">January</option>' . "\n"
+                            . '<option value="02">February</option>' . "\n"
+                            . '<option value="03">March</option>' . "\n"
+                            . '<option value="04">April</option>' . "\n"
+                            . '<option value="05" selected="selected">May</option>' . "\n"
+                            . '<option value="06">June</option>' . "\n"
+                            . '<option value="07">July</option>' . "\n"
+                            . '<option value="08">August</option>' . "\n"
+                            . '<option value="09">September</option>' . "\n"
+                            . '<option value="10">October</option>' . "\n"
+                            . '<option value="11">November</option>' . "\n"
+                            . '<option value="12">December</option>' . "\n"
+                            . '</select>' . "\n",
+                            $dh->select_month('11'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_month_function()
+	 *  Test select_month() function
+     *
+     *  Test the {@link select_month()} function in procedural file
+     *  {@link date_helper.php}
 	 */
     public function testSelect_month_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+
+        //  Test generation with November selected, default output format
+        $this->assertEquals('<select name="month">' . "\n"
+                            . '<option value="01">January</option>' . "\n"
+                            . '<option value="02">February</option>' . "\n"
+                            . '<option value="03">March</option>' . "\n"
+                            . '<option value="04">April</option>' . "\n"
+                            . '<option value="05">May</option>' . "\n"
+                            . '<option value="06">June</option>' . "\n"
+                            . '<option value="07">July</option>' . "\n"
+                            . '<option value="08">August</option>' . "\n"
+                            . '<option value="09">September</option>' . "\n"
+                            . '<option value="10">October</option>' . "\n"
+                            . '<option value="11" selected="selected">November</option>' . "\n"
+                            . '<option value="12">December</option>' . "\n"
+                            . '</select>' . "\n",
+                            select_month('11'));
 	}
 
+    /**
+     *  Test year_option()
+     */
+    public function testYear_option() {
+        $dh = new DateHelper;
+        $this->assertEquals('<option value="2001">2001</option>' . "\n",
+                            $dh->year_option('2001','2002'));
+        $this->assertEquals('<option value="2004"  selected="selected">'
+                            . '2004</option>' . "\n",
+                            $dh->year_option('2004','2004'));
+    }
+
 	/**
-	 *  @todo Implement testSelect_year_method()
+	 *  Test select_year() method
+     *
+     *  Test {@link DateHelper::select_year()}
 	 */
-    public function testSelect_year_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+    public function testSelect_year() {
+        $dh = new DateHelper;
+
+        //  Test generation with all arguments omitted
+        $this->assertContains('selected="selected">'.date('Y'),
+                            $dh->select_year());
+
+        //  Specify year in digits, default all options
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '<option value="2010">2010</option>' . "\n"
+         . '<option value="2011">2011</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006'));
+
+        //  Specify year in English, default all options
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="1992">1992</option>' . "\n"
+         . '<option value="1993">1993</option>' . "\n"
+         . '<option value="1994">1994</option>' . "\n"
+         . '<option value="1995">1995</option>' . "\n"
+         . '<option value="1996">1996</option>' . "\n"
+         . '<option value="1997"  selected="selected">1997</option>' . "\n"
+         . '<option value="1998">1998</option>' . "\n"
+         . '<option value="1999">1999</option>' . "\n"
+         . '<option value="2000">2000</option>' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('September 12, 1997'));
+
+        //  Specify year in digits, option 'start_year' => '2003'
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '<option value="2010">2010</option>' . "\n"
+         . '<option value="2011">2011</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006',
+                                             array('start_year' => 2003)));
+
+        //  Specify year in digits, option 'end_year' => '2009'
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006',
+                                             array('end_year'=>'2009')));
+
+        //  Specify year in digits, option 'field_name' => 'tax_year'
+        $this->assertEquals('<select name="tax_year">' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '<option value="2010">2010</option>' . "\n"
+         . '<option value="2011">2011</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006',
+                                             array('field_name'=>'tax_year')));
+
+        //  Specify year in English, default all options
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '<option value="2010">2010</option>' . "\n"
+         . '<option value="2011">2011</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('November 9, 2006'));
+
+        //  Specify year in digits, reverse start and end years
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2006"  selected="selected">2006</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006',
+                                             array('start_year'=>'2009',
+                                                   'end_year'=>'2003')));
+
+        //  Specify year in digits and override with $request_years
+        $dh->attribute_name = 'sometime';
+        $dh->request_years = array('sometime' => '2002');
+        $this->assertEquals('<select name="year">' . "\n"
+         . '<option value="1997">1997</option>' . "\n"
+         . '<option value="1998">1998</option>' . "\n"
+         . '<option value="1999">1999</option>' . "\n"
+         . '<option value="2000">2000</option>' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002"  selected="selected">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '</select>' . "\n",
+                            $dh->select_year('2006'));
 	}
 
 	/**
-	 *  @todo Implement testSelect_year_function()
+	 *  Test year_select() method
+     *
+     *  Test {@link DateHelper::year_select()} method
 	 */
-    public function testSelect_year_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+    public function testYear_select_method() {
+        $dh = new DateHelper('foo','bar');
+        $dh->controller_object = new ActionController;
+        $ar = new ActiveRecord;
+        $dh->controller_object->foo = $ar;
+
+        //  With no value in $_REQUEST, data should be
+        //  retrieved from the the ActiveRecord
+        $ar->expect_query("bar","1999");
+        $this->assertEquals('<select name="foo[bar(1i)]">' . "\n"
+         . '<option value="1994">1994</option>' . "\n"
+         . '<option value="1995">1995</option>' . "\n"
+         . '<option value="1996">1996</option>' . "\n"
+         . '<option value="1997">1997</option>' . "\n"
+         . '<option value="1998">1998</option>' . "\n"
+         . '<option value="1999"  selected="selected">1999</option>' . "\n"
+         . '<option value="2000">2000</option>' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004">2004</option>' . "\n"
+         . '</select>' . "\n",
+         $dh->year_select());
+
+        //  Get year from $_REQUEST, default all options
+        $_REQUEST['foo']['bar(1i)'] = '2004';
+        $this->assertEquals('<select name="foo[bar(1i)]">' . "\n"
+         . '<option value="1999">1999</option>' . "\n"
+         . '<option value="2000">2000</option>' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004"  selected="selected">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '</select>' . "\n",
+         $dh->year_select());
 	}
 
 	/**
-	 *  @todo Implement testTo_date_select_tag()
+	 *  Test year_select() function
+     *
+     *  Test {@link year_select()} function in procedural file
+     *  {@link date_helper.php}
+	 */
+    public function testYear_select_function() {
+        $_REQUEST['foo']['bar(1i)'] = '2004';
+
+        //  Specify year in digits, default all options
+        $this->assertEquals('<select name="foo[bar(1i)]">' . "\n"
+         . '<option value="1999">1999</option>' . "\n"
+         . '<option value="2000">2000</option>' . "\n"
+         . '<option value="2001">2001</option>' . "\n"
+         . '<option value="2002">2002</option>' . "\n"
+         . '<option value="2003">2003</option>' . "\n"
+         . '<option value="2004"  selected="selected">2004</option>' . "\n"
+         . '<option value="2005">2005</option>' . "\n"
+         . '<option value="2006">2006</option>' . "\n"
+         . '<option value="2007">2007</option>' . "\n"
+         . '<option value="2008">2008</option>' . "\n"
+         . '<option value="2009">2009</option>' . "\n"
+         . '</select>' . "\n",
+                            year_select('foo','bar'));
+	}
+
+	/**
+	 *  Test to_date_select_tag() method
+     *
+     *  Test {@link DateHelper::to_date_select_tag()} method
 	 */
     public function testTo_date_select_tag() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('Person', 'birthdate');
+        $dh->controller_object = new ActionController;
+        $ar = new ActiveRecord;
+        $dh->controller_object->Person = $ar;
+
+        //  With no value in $_REQUEST, data should be
+        //  retrieved from the the ActiveRecord
+        $ar->expect_query("birthdate","1999-02-17");
+
+        //  Test with default format
+        $this->assertEquals('<select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1994">1994</option>' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999"  selected="selected">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02" selected="selected">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17"  selected="selected">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            $dh->to_date_select_tag());
+
+
+        $_REQUEST['Person']['birthdate(1i)'] = '1955';
+        $_REQUEST['Person']['birthdate(2i)'] = '08';
+        $_REQUEST['Person']['birthdate(3i)'] = '13';
+
+        //  Test with default format
+        $this->assertEquals('<select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1950">1950</option>' . "\n"
+           . '<option value="1951">1951</option>' . "\n"
+           . '<option value="1952">1952</option>' . "\n"
+           . '<option value="1953">1953</option>' . "\n"
+           . '<option value="1954">1954</option>' . "\n"
+           . '<option value="1955"  selected="selected">1955</option>' . "\n"
+           . '<option value="1956">1956</option>' . "\n"
+           . '<option value="1957">1957</option>' . "\n"
+           . '<option value="1958">1958</option>' . "\n"
+           . '<option value="1959">1959</option>' . "\n"
+           . '<option value="1960">1960</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13"  selected="selected">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            $dh->to_date_select_tag());
+
+        //  Test 'month_before_year' option
+        $this->assertEquals('<select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1950">1950</option>' . "\n"
+           . '<option value="1951">1951</option>' . "\n"
+           . '<option value="1952">1952</option>' . "\n"
+           . '<option value="1953">1953</option>' . "\n"
+           . '<option value="1954">1954</option>' . "\n"
+           . '<option value="1955"  selected="selected">1955</option>' . "\n"
+           . '<option value="1956">1956</option>' . "\n"
+           . '<option value="1957">1957</option>' . "\n"
+           . '<option value="1958">1958</option>' . "\n"
+           . '<option value="1959">1959</option>' . "\n"
+           . '<option value="1960">1960</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13"  selected="selected">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+                            $dh->to_date_select_tag(
+                                  array('month_before_year' => true)));
+
+        //  Test with 'discard_year' option
+        $this->assertEquals('<select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13"  selected="selected">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->to_date_select_tag(array('discard_year' => true)));
+
+        //  Test 'month_before_year' and 'discard_day' options
+        $this->assertEquals('<select name="Person[birthdate(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08" selected="selected">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . ' <select name="Person[birthdate(1i)]">' . "\n"
+           . '<option value="1950">1950</option>' . "\n"
+           . '<option value="1951">1951</option>' . "\n"
+           . '<option value="1952">1952</option>' . "\n"
+           . '<option value="1953">1953</option>' . "\n"
+           . '<option value="1954">1954</option>' . "\n"
+           . '<option value="1955"  selected="selected">1955</option>' . "\n"
+           . '<option value="1956">1956</option>' . "\n"
+           . '<option value="1957">1957</option>' . "\n"
+           . '<option value="1958">1958</option>' . "\n"
+           . '<option value="1959">1959</option>' . "\n"
+           . '<option value="1960">1960</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->to_date_select_tag(array('month_before_year' => true,
+                                          'discard_day' => true)));
 	}
 
 	/**
-	 *  @todo Implement testTo_datetime_select_tag()
+	 *  Test to_datetime_select_tag() method
+     *
+     *  Test {@link DateHelper::to_datetime_select_tag()} method
 	 */
     public function testTo_datetime_select_tag() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('Person','birth');
+        $dh->controller_object = new ActionController;
+        $ar = new ActiveRecord;
+        $dh->controller_object->Person = $ar;
+
+        //  Data from the the ActiveRecord, default format
+        $ar->expect_query("birth","2001-07-05 11:30:45");
+        $this->assertEquals('<select name="Person[birth(1i)]">' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000">2000</option>' . "\n"
+           . '<option value="2001"  selected="selected">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '<option value="2006">2006</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07" selected="selected">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05"  selected="selected">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . ' &mdash; <select name="Person[birth(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11"  selected="selected">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30"  selected="selected">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->to_datetime_select_tag());
+
+        //  Data from $_REQUEST should override ActiveRecord
+        //  Use default format
+        $_REQUEST['Person']['birth(1i)'] = '2000';
+        $_REQUEST['Person']['birth(2i)'] = '09';
+        $_REQUEST['Person']['birth(3i)'] = '17';
+        $_REQUEST['Person']['birth(4i)'] = '09';
+        $_REQUEST['Person']['birth(5i)'] = '42';
+        $_REQUEST['Person']['birth(6i)'] = '53';
+        $this->assertEquals('<select name="Person[birth(1i)]">' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000"  selected="selected">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09" selected="selected">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17"  selected="selected">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . ' &mdash; <select name="Person[birth(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09"  selected="selected">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42"  selected="selected">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->to_datetime_select_tag());
+
+        //  As above but enable seconds
+        $this->assertEquals('<select name="Person[birth(1i)]">' . "\n"
+           . '<option value="1995">1995</option>' . "\n"
+           . '<option value="1996">1996</option>' . "\n"
+           . '<option value="1997">1997</option>' . "\n"
+           . '<option value="1998">1998</option>' . "\n"
+           . '<option value="1999">1999</option>' . "\n"
+           . '<option value="2000"  selected="selected">2000</option>' . "\n"
+           . '<option value="2001">2001</option>' . "\n"
+           . '<option value="2002">2002</option>' . "\n"
+           . '<option value="2003">2003</option>' . "\n"
+           . '<option value="2004">2004</option>' . "\n"
+           . '<option value="2005">2005</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(2i)]">' . "\n"
+           . '<option value="01">January</option>' . "\n"
+           . '<option value="02">February</option>' . "\n"
+           . '<option value="03">March</option>' . "\n"
+           . '<option value="04">April</option>' . "\n"
+           . '<option value="05">May</option>' . "\n"
+           . '<option value="06">June</option>' . "\n"
+           . '<option value="07">July</option>' . "\n"
+           . '<option value="08">August</option>' . "\n"
+           . '<option value="09" selected="selected">September</option>' . "\n"
+           . '<option value="10">October</option>' . "\n"
+           . '<option value="11">November</option>' . "\n"
+           . '<option value="12">December</option>' . "\n"
+           . '</select>' . "\n"
+           . '<select name="Person[birth(3i)]">' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17"  selected="selected">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '</select>' . "\n"
+           . ' &mdash; <select name="Person[birth(4i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09"  selected="selected">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(5i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42"  selected="selected">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n"
+           . ' : <select name="Person[birth(6i)]">' . "\n"
+           . '<option value="00">00</option>' . "\n"
+           . '<option value="01">01</option>' . "\n"
+           . '<option value="02">02</option>' . "\n"
+           . '<option value="03">03</option>' . "\n"
+           . '<option value="04">04</option>' . "\n"
+           . '<option value="05">05</option>' . "\n"
+           . '<option value="06">06</option>' . "\n"
+           . '<option value="07">07</option>' . "\n"
+           . '<option value="08">08</option>' . "\n"
+           . '<option value="09">09</option>' . "\n"
+           . '<option value="10">10</option>' . "\n"
+           . '<option value="11">11</option>' . "\n"
+           . '<option value="12">12</option>' . "\n"
+           . '<option value="13">13</option>' . "\n"
+           . '<option value="14">14</option>' . "\n"
+           . '<option value="15">15</option>' . "\n"
+           . '<option value="16">16</option>' . "\n"
+           . '<option value="17">17</option>' . "\n"
+           . '<option value="18">18</option>' . "\n"
+           . '<option value="19">19</option>' . "\n"
+           . '<option value="20">20</option>' . "\n"
+           . '<option value="21">21</option>' . "\n"
+           . '<option value="22">22</option>' . "\n"
+           . '<option value="23">23</option>' . "\n"
+           . '<option value="24">24</option>' . "\n"
+           . '<option value="25">25</option>' . "\n"
+           . '<option value="26">26</option>' . "\n"
+           . '<option value="27">27</option>' . "\n"
+           . '<option value="28">28</option>' . "\n"
+           . '<option value="29">29</option>' . "\n"
+           . '<option value="30">30</option>' . "\n"
+           . '<option value="31">31</option>' . "\n"
+           . '<option value="32">32</option>' . "\n"
+           . '<option value="33">33</option>' . "\n"
+           . '<option value="34">34</option>' . "\n"
+           . '<option value="35">35</option>' . "\n"
+           . '<option value="36">36</option>' . "\n"
+           . '<option value="37">37</option>' . "\n"
+           . '<option value="38">38</option>' . "\n"
+           . '<option value="39">39</option>' . "\n"
+           . '<option value="40">40</option>' . "\n"
+           . '<option value="41">41</option>' . "\n"
+           . '<option value="42">42</option>' . "\n"
+           . '<option value="43">43</option>' . "\n"
+           . '<option value="44">44</option>' . "\n"
+           . '<option value="45">45</option>' . "\n"
+           . '<option value="46">46</option>' . "\n"
+           . '<option value="47">47</option>' . "\n"
+           . '<option value="48">48</option>' . "\n"
+           . '<option value="49">49</option>' . "\n"
+           . '<option value="50">50</option>' . "\n"
+           . '<option value="51">51</option>' . "\n"
+           . '<option value="52">52</option>' . "\n"
+           . '<option value="53"  selected="selected">53</option>' . "\n"
+           . '<option value="54">54</option>' . "\n"
+           . '<option value="55">55</option>' . "\n"
+           . '<option value="56">56</option>' . "\n"
+           . '<option value="57">57</option>' . "\n"
+           . '<option value="58">58</option>' . "\n"
+           . '<option value="59">59</option>' . "\n"
+           . '</select>' . "\n",
+           $dh->to_datetime_select_tag(array('discard_second' => false)));
 	}
 
 	/**
-	 *  @todo Implement testTo_expiration_date_select_tag_method()
+	 *  Test to_expiration_date_select_tag() method
+     *
+     *  Test the {@link DateHelper::to_expiration_date_select_tag()} method
 	 */
     public function testTo_expiration_date_select_tag_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $dh = new DateHelper('License', 'expiration_date');
+        $_REQUEST['License']['expiration_date(1i)'] = date('Y');
+        $_REQUEST['License']['expiration_date(2i)'] = '08';
+
+        //  Test expiration date of August this year
+        $this->assertContains('<option value="'.date('Y').
+                              '"  selected="selected"',
+                              $dh->to_expiration_date_select_tag());
+        $this->assertContains('<option value="'.(date('Y')+7).'"',
+                              $dh->to_expiration_date_select_tag());
+        $this->assertContains('<option value="08" selected="selected">'
+                              . '8</option>',
+                              $dh->to_expiration_date_select_tag());
 	}
 
 	/**
-	 *  @todo Implement testTo_expiration_date_select_tag_function()
+	 *  Test expiration_date_select() function
+     *
+     *  Test the {@link expiration_date_select()} function in procedural
+     *  file {@link date_helper.php}
 	 */
-    public function testTo_expiration_date_select_tag_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+    public function testExpiration_date_select_function() {
+
+        //  Test expiration date of August this year
+        $_REQUEST['License']['expiration_date(1i)'] = date('Y');
+        $_REQUEST['License']['expiration_date(2i)'] = '08';
+        $this->assertContains('<option value="'.date('Y').
+                              '"  selected="selected"',
+                       expiration_date_select('License','expiration_date'));
+        $this->assertContains('<option value="'.(date('Y')+7).'"',
+                       expiration_date_select('License','expiration_date'));
+        $this->assertContains('<option value="08" selected="selected">'
+                              . '8</option>',
+                       expiration_date_select('License','expiration_date'));
 	}
 
 }

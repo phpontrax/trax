@@ -114,6 +114,58 @@
     <listitem><literal>app/views/layouts/credit_authorization.phtml</literal></listitem>
    </itemizedlist>
  </refsect2>
+ <refsect2 id="{@id naming_forms}">
+  <title>Fields On Forms</title>
+   <para>Input fields on forms that relate directly to elements of the
+    model are named according to the ActiveRecord subclass and
+    attribute represented by the field.  Simple elements are given
+<literal>id="</literal><arg choice="tute-comment">SubClassName_attribute_name</arg><literal>"</literal> and
+<literal>name="</literal><arg choice="tute-comment">SubClassName</arg><literal>[</literal><arg choice="tute-comment">attribute_name</arg><literal>]"</literal>.
+    For example, a field to input the first name of a person which is
+    attribute <literal>fname</literal> of subclass
+    <literal>Person</literal> would appear as:
+    <example>
+&lt;input id="Person_fname name="Person[fname]" type="text" ... /&gt;
+    </example>
+    When the form is POSTed to the server, the value entered into this
+    field will be in <literal>$_REQUEST['Person']['fname']</literal></para>
+
+    <para>Certain attributes, such as dates and times, are composites of
+    individual fields representing year, month, day, hour, minute and
+    second. Each field is named with the attribute name followed by a
+    suffix describing which component is represented.  The suffixes
+    for dates and times are:
+    <itemizedlist>
+      <listitem><literal>(1i)</literal> Year</listitem>
+      <listitem><literal>(2i)</literal> Month</listitem>
+      <listitem><literal>(3i)</literal> Day of the month</listitem>
+      <listitem><literal>(4i)</literal> Hour</listitem>
+      <listitem><literal>(5i)</literal> Minute</listitem>
+      <listitem><literal>(6i)</literal> Second</listitem>
+    </itemizedlist>
+    For example, a group of three pulldown menus which specified 
+    attribute <literal>birthdate</literal> of subclass
+    <literal>Person</literal> would be named:
+    <example>
+Month:
+&lt;select name="Person[birthdate(2i)]"&gt; ... &lt;/select&gt;
+
+Day:
+&lt;select name="Person[birthdate(3i)]"&gt; ... &lt;/select&gt;
+
+Year:
+&lt;select name="Person[birthdate(1i)]"&gt; ... &lt;/select&gt;
+    </example>
+    When the form is POSTed to the server, the selected values will
+    appear in <literal>$_REQUEST['Person']['birthdate(2i)']</literal>,
+    <literal>$_REQUEST['Person']['birthdate(3i)']</literal> and
+    <literal>$_REQUEST['Person']['birthdate(1i)']</literal>
+    respectively.  The value would be stored in the database in a
+    column of type <literal>date</literal> and would be
+    represented according to the SQL standard as
+    <literal>YYYY-MM-DD</literal> .
+</para>
+ </refsect2>
 
 <!--
 Local variables:

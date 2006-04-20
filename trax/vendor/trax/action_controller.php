@@ -49,7 +49,10 @@ class ActionController {
     /**
      *  Name of the controller (without the _controller.php)
      *
-     *  Set by {@link recognize_route()}
+     *  Set by {@link recognize_route()} by parsing the URL and the
+     *  routes in {@link routes.php}.  The value of this string is set
+     *  before any attempt is made to find the file containing the
+     *  controller.
      *  @var string
      */
     private $controller;
@@ -455,21 +458,41 @@ class ActionController {
             //  find_route() returns an array if it finds a path that
             //  matches the URL, null if no match found
             if(is_array($route)) {
+
+                //  Matching route found.  Try to get
+                //  controller and action from route and URL
                 $this->set_paths();
                 $route_path = explode("/",$route['path']);
                 $route_params = $route['params'];
 
-                if(@array_key_exists(":controller",$route_params)) {
+                //  Find the controller from the route and URL
+                if(is_array($route_params)
+                   && array_key_exists(":controller",$route_params)) {
+
+                    //  ':controller' in route params overrides URL
                     $this->controller = $route_params[":controller"];
-                } elseif(@in_array(":controller",$route_path)) {
-                    $this->controller = strtolower($this->url_path[@array_search(":controller", $route_path)]);
+                } elseif(is_array($route_path)
+                         && in_array(":controller",$route_path)
+                         && (count($this->url_path)>0)) {
+
+                    //  Set controller from URL if that field exists
+                    $this->controller = strtolower($this->url_path[array_search(":controller", $route_path)]);
                 }
                 //error_log('controller='.$this->controller);
-                if(@array_key_exists(":action",$route_params)) {
+
+                //  Find the actionfrom the route and URL
+                if(is_array($route_params)
+                   && array_key_exists(":action",$route_params)) {
+
+                    //  ':action' in route params overrides URL
                     $this->action = $route_params[':action'];
-                } elseif(@in_array(":action",$route_path)
-                   && array_key_exists(@array_search(":action", $route_path),
-                                       $this->url_path)) {
+                } elseif(is_array($route_path)
+                         && in_array(":action",$route_path)
+                         && array_key_exists(@array_search(":action",
+                                                           $route_path),
+                                             $this->url_path)) {
+
+                    //  Get action from URL if that field exists
                     $this->action = strtolower($this->url_path[@array_search(":action", $route_path)]);
                 }
                 //error_log('action='.$this->action);
@@ -626,23 +649,24 @@ class ActionController {
 
                 # Suppress output
                 ob_start();
+                //error_log('started capturing HTML');
                 
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
                    
                     if(method_exists($this->controller_object, $this->action)) {
-                        error_log('controller has method "'.$this->action.'"');
+                        //error_log('method '.$this->action.' exists, calling it');
                         $action = $this->action;
                         $this->controller_object->$action();
                     } elseif(file_exists($this->views_path . "/" . $this->action . "." . $this->views_file_extention)) {
-                        error_log('views file "'.$this->action.'"');
+                        //error_log('views file "'.$this->action.'"');
                         $action = $this->action;
                     } elseif(method_exists($this->controller_object, "index")) {
-                        error_log('calling index()');
+                        //error_log('calling index()');
                         $action = "index";
                         $this->controller_object->index();
                     } else {
-                        error_log('no action');
+                        //error_log('no action');
                         $this->raise("No action responded to ".$this->action, "Unknown action", "404");
                     }
                     $this->controller_object->execute_after_filters();
@@ -670,14 +694,14 @@ class ActionController {
                     }  
                     
                     # Render the action / view                      
-                    if(!$this->controller_object->render_action($action, $render_options)) {
+                    if(!$this->controller_object->render_action($action,
+                          isset($render_options) ? $render_options : null )) {
                         $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404");
                     }
-
                     # Grab all the html from the view to put into the layout
                     $content_for_layout = ob_get_contents();
                     ob_end_clean();
-        
+                    //error_log("captured ".strlen($content_for_layout)." bytes\n");
                     if(isset($this->controller_object->render_layout)
                        && ($this->controller_object->render_layout !== false)
                        && $layout_file) {
@@ -767,7 +791,7 @@ class ActionController {
             foreach($this->before_filters as $filter_function) {
                 if(method_exists($this, $filter_function)) {
                     if(false === $this->$filter_function()) {
-                        error_log("execute_before_filters(): returning false");
+                        //error_log("execute_before_filters(): returning false");
                         $return = false;    
                     }
                 }
@@ -785,7 +809,7 @@ class ActionController {
      *  @uses $before_filters
      */
     function add_before_filter($filter_function_name) {
-        error_log("adding before filter: $filter_function_name");
+        //error_log("adding before filter: $filter_function_name");
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
             if(!in_array($filter_function_name, $this->before_filters)) {
                 $this->before_filters[] = $filter_function_name;
@@ -1115,8 +1139,10 @@ class ActionController {
      *  @todo <b>FIXME:</b> Should this method be private?
      */
     function determine_layout($full_path = true) {
-        # I guess you don't want any layout
-        if($this->layout == "null") {
+
+        //  If the controller defines $layout and sets it
+        //  to NULL, that indicates it doesn't want a layout
+        if(isset($this->layout) && is_null($this->layout)) {
             //error_log('controller->layout absent');
             return null;
         }
@@ -1143,7 +1169,7 @@ class ActionController {
                 $file = substr(strrchr($layout, "/"), 1);
                 $path = substr($layout, 0, strripos($layout, "/"));
                 $layout = $layouts_base_path."/".$path."/".$file.".".$this->views_file_extention;
-            } elseif($this->layout != '') {
+            } elseif( isset($this->layout) && ($this->layout != '') ) {
                 # Is there a layout for the current controller
                 $layout = $layouts_base_path."/".$this->layout.".".$this->views_file_extention;                    
             } else {

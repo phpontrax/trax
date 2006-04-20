@@ -44,11 +44,15 @@
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActionMailerTest_php.html">		ActionMailerTest.php
 		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActionController_action_controller_php.html">		action_controller.php
+		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordErrorTest_php.html">		ActiveRecordErrorTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordHelperTest_php.html">		ActiveRecordHelperTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordTest_php.html">		ActiveRecordTest.php
+		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActiveRecord_active_record_php.html">		active_record.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_controllers_application_php.html">		application.php
 		</a><br>
@@ -104,9 +108,11 @@
       
             <b>Classes:</b><br />
         <div class="package">
-		    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
+		    		<a href="../PHPonTraxTest/ActionController.html">ActionController</a><br />
+	    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionControllerTest.html">ActionControllerTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a><br />
+	    		<a href="../PHPonTraxTest/ActiveRecord.html">ActiveRecord</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordErrorTest.html">ActiveRecordErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordHelperTest.html">ActiveRecordHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br />
@@ -114,6 +120,7 @@
 	    		<a href="../PHPonTraxTest/ApplicationMailerTest.html">ApplicationMailerTest</a><br />
 	    		<a href="../PHPonTraxTest/AssetTagHelperTest.html">AssetTagHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/CatalogController.html">CatalogController</a><br />
+	    		<a href="../PHPonTraxTest/DataType.html">DataType</a><br />
 	    		<a href="../PHPonTraxTest/DateHelperTest.html">DateHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/DB.html">DB</a><br />
 	    		<a href="../PHPonTraxTest/DB_common.html">DB_common</a><br />
@@ -124,6 +131,7 @@
 	    		<a href="../PHPonTraxTest/DB_row.html">DB_row</a><br />
 	    		<a href="../PHPonTraxTest/DispatcherTest.html">DispatcherTest</a><br />
 	    		<a href="../PHPonTraxTest/DummyController.html">DummyController</a><br />
+	    		<a href="../PHPonTraxTest/ExDateHelper.html">ExDateHelper</a><br />
 	    		<a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a><br />
 	    		<a href="../PHPonTraxTest/FormHelperTest.html">FormHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a><br />
@@ -261,7 +269,7 @@ Source Location: /test/mockDB/DB.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a650">650</a>]<br />
+[line 650]<br />
 Mock DB_common for testing<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -281,13 +289,16 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<a name="var$database"></a>
 	<p></p>
 	<h4>$database = <span class="value">array('person_names'&nbsp;=&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;Description<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array('info'&nbsp;=&gt;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(array('table'&nbsp;=&gt;&nbsp;'person_names',<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'name'&nbsp;&nbsp;=&gt;&nbsp;'id',<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'type'&nbsp;&nbsp;=&gt;&nbsp;'int',<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'len'&nbsp;&nbsp;&nbsp;=&gt;&nbsp;'11',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'flags'&nbsp;=&gt;&nbsp;'primary_key&nbsp;not_null'),array('table'=&gt;'person_names','name'=&gt;'prefix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'first_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'mi','type'=&gt;'string','len'=&gt;'1','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'last_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'suffix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),),'data'=&gt;array()))</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a655">655</a>]</p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'flags'&nbsp;=&gt;&nbsp;'primary_key&nbsp;not_null'),array('table'=&gt;'person_names','name'=&gt;'prefix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'first_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'mi','type'=&gt;'string','len'=&gt;'1','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'last_name','type'=&gt;'string','len'=&gt;'40','flags'=&gt;''),array('table'=&gt;'person_names','name'=&gt;'suffix','type'=&gt;'string','len'=&gt;'20','flags'=&gt;''),),'data'=&gt;array()),//&nbsp;&nbsp;Data&nbsp;types&nbsp;table<br>
+'data_types'=&gt;//&nbsp;&nbsp;Description<br>
+array('info'=&gt;array(array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;id&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;not_null&nbsp;primary_key&nbsp;auto_increment&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;bit_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'1',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;tinyint_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'4',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;bool_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'1',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;boolean_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'1',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;smallint_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'6',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;mediumint_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'9',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;int_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;integer_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;bigint_type&quot;,&quot;type&quot;=&gt;&quot;int&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;float_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'12',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;double_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'22',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;double_precision_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'22',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;decimal_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;dec_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;numeric_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;fixed_type&quot;,&quot;type&quot;=&gt;&quot;real&quot;,&quot;len&quot;=&gt;'11',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;date_type&quot;,&quot;type&quot;=&gt;&quot;date&quot;,&quot;len&quot;=&gt;'10',&quot;flags&quot;=&gt;&quot;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;datetime_type&quot;,&quot;type&quot;=&gt;&quot;datetime&quot;,&quot;len&quot;=&gt;'19',&quot;flags&quot;=&gt;&quot;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;timestamp_type&quot;,&quot;type&quot;=&gt;&quot;timestamp&quot;,&quot;len&quot;=&gt;'19',&quot;flags&quot;=&gt;&quot;unsigned&nbsp;zerofill&nbsp;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;time_type&quot;,&quot;type&quot;=&gt;&quot;time&quot;,&quot;len&quot;=&gt;'8',&quot;flags&quot;=&gt;&quot;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;year_type&quot;,&quot;type&quot;=&gt;&quot;year&quot;,&quot;len&quot;=&gt;'4',&quot;flags&quot;=&gt;&quot;unsigned&nbsp;zerofill&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;char_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;varchar_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;nchar_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;binary_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;varbinary_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'20',&quot;flags&quot;=&gt;&quot;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;tinyblob_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'255',&quot;flags&quot;=&gt;&quot;blob&nbsp;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;tinytext_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'255',&quot;flags&quot;=&gt;&quot;blob&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;blob_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'65535',&quot;flags&quot;=&gt;&quot;blob&nbsp;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;text_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'65535',&quot;flags&quot;=&gt;&quot;blob&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;mediumblob_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'16777215',&quot;flags&quot;=&gt;&quot;blob&nbsp;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;mediumtext_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'16777215',&quot;flags&quot;=&gt;&quot;blob&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;longblob_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'-1',&quot;flags&quot;=&gt;&quot;blob&nbsp;binary&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;longtext_type&quot;,&quot;type&quot;=&gt;&quot;blob&quot;,&quot;len&quot;=&gt;'-1',&quot;flags&quot;=&gt;&quot;blob&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;enum_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'3',&quot;flags&quot;=&gt;&quot;enum&quot;),array(&quot;table&quot;=&gt;&quot;data_types&quot;,&quot;name&quot;=&gt;&quot;set_type&quot;,&quot;type&quot;=&gt;&quot;string&quot;,&quot;len&quot;=&gt;'7',&quot;flags&quot;=&gt;&quot;set&quot;),),'data'=&gt;array()),)</span></h4>
+	<p>[line 655]</p>
   Mock Database<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -314,7 +325,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<a name="var$expected_list"></a>
 	<p></p>
 	<h4>$expected_list = <span class="value">&nbsp;null</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a714">714</a>]</p>
+	<p>[line 911]</p>
   List of expected queries and returns<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -338,7 +349,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<a name="var$expected_list_cursor"></a>
 	<p></p>
 	<h4>$expected_list_cursor = <span class="value">&nbsp;null</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a719">719</a>]</p>
+	<p>[line 916]</p>
   Cursor in list of expected queries and returns<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -362,7 +373,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<a name="var$expected_query"></a>
 	<p></p>
 	<h4>$expected_query = <span class="value">&nbsp;null</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a725">725</a>]</p>
+	<p>[line 922]</p>
   Expected query<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -386,7 +397,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 	<a name="var$expected_result"></a>
 	<p></p>
 	<h4>$expected_result = <span class="value">&nbsp;null</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a731">731</a>]</p>
+	<p>[line 928]</p>
   Result to be returned from expected query<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -419,7 +430,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'portability'&nbsp;=&gt;&nbsp;DB_PORTABILITY_NONE,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'optimize'&nbsp;=&gt;&nbsp;'performance',&nbsp;&nbsp;//&nbsp;Deprecated.&nbsp;&nbsp;Use&nbsp;'portability'.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;)</span></h4>
-	<p>[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a700">700</a>]</p>
+	<p>[line 897]</p>
   Run-time configuration options<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -448,7 +459,7 @@ Mock DB_common for testing<br /><br /><br /><br />
 <div class="tags">
   <hr />
 	<a name="methodDB_common"></a>
-	<h3>constructor DB_common <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a738">738</a>]</span></h3>
+	<h3>constructor DB_common <span class="smalllinenumber">[line 935]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -464,7 +475,7 @@ Mock DB_common for testing<br /><br /><br /><br />
   </div>
   <hr />
 	<a name="methodaffectedRows"></a>
-	<h3>method affectedRows <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1811">1811</a>]</span></h3>
+	<h3>method affectedRows <span class="smalllinenumber">[line 2008]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -501,7 +512,7 @@ Mock DB_common for testing<br /><br /><br /><br />
   </div>
   <hr />
 	<a name="methodautoCommit"></a>
-	<h3>method autoCommit <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1764">1764</a>]</span></h3>
+	<h3>method autoCommit <span class="smalllinenumber">[line 1961]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -549,7 +560,7 @@ $onoff = false])</code>
   </div>
   <hr />
 	<a name="methodautoExecute"></a>
-	<h3>method autoExecute <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1023">1023</a>]</span></h3>
+	<h3>method autoExecute <span class="smalllinenumber">[line 1220]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -576,7 +587,7 @@ $where = false])</code>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Implement mock DB_common::autoExecute</td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTraxTest/DB_common.html#methodautoPrepare">DB_common::autoPrepare()</a>,  - DB_common::execute()</td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTraxTest/DB_common.html#methodautoPrepare">DB_common::autoPrepare()</a>, <a href="../PHPonTrax/.html"></a> - DB_common::execute()</td>
   </tr>
 </table>
 </div>
@@ -612,7 +623,7 @@ $where = false])</code>
   </div>
   <hr />
 	<a name="methodautoPrepare"></a>
-	<h3>method autoPrepare <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a993">993</a>]</span></h3>
+	<h3>method autoPrepare <span class="smalllinenumber">[line 1190]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -639,7 +650,7 @@ $where = false])</code>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Implement mock DB_common::autoPrepare</td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTraxTest/DB_common.html#methodprepare">DB_common::prepare()</a>,  - DB_common::buildManipSQL()</td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTraxTest/DB_common.html#methodprepare">DB_common::prepare()</a>, <a href="../PHPonTrax/.html"></a> - DB_common::buildManipSQL()</td>
   </tr>
 </table>
 </div>
@@ -675,7 +686,7 @@ $where = false])</code>
   </div>
   <hr />
 	<a name="methodbuildManipSQL"></a>
-	<h3>method buildManipSQL <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1052">1052</a>]</span></h3>
+	<h3>method buildManipSQL <span class="smalllinenumber">[line 1249]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -735,7 +746,7 @@ $where = false])</code>
   </div>
   <hr />
 	<a name="methodcommit"></a>
-	<h3>method commit <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1775">1775</a>]</span></h3>
+	<h3>method commit <span class="smalllinenumber">[line 1972]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -772,7 +783,7 @@ $where = false])</code>
   </div>
   <hr />
 	<a name="methodcreateSequence"></a>
-	<h3>method createSequence <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1859">1859</a>]</span></h3>
+	<h3>method createSequence <span class="smalllinenumber">[line 2056]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -823,7 +834,7 @@ $seq_name)</code>
   </div>
   <hr />
 	<a name="methoddropSequence"></a>
-	<h3>method dropSequence <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1873">1873</a>]</span></h3>
+	<h3>method dropSequence <span class="smalllinenumber">[line 2070]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -874,7 +885,7 @@ $seq_name)</code>
   </div>
   <hr />
 	<a name="methoderrorCode"></a>
-	<h3>method errorCode <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1956">1956</a>]</span></h3>
+	<h3>method errorCode <span class="smalllinenumber">[line 2153]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -916,7 +927,7 @@ $nativecode)</code>
   </div>
   <hr />
 	<a name="methoderrorMessage"></a>
-	<h3>method errorMessage <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1974">1974</a>]</span></h3>
+	<h3>method errorMessage <span class="smalllinenumber">[line 2171]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -961,7 +972,7 @@ $dbcode)</code>
   </div>
   <hr />
 	<a name="methoderrorNative"></a>
-	<h3>method errorNative <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1939">1939</a>]</span></h3>
+	<h3>method errorNative <span class="smalllinenumber">[line 2136]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -998,7 +1009,7 @@ $dbcode)</code>
   </div>
   <hr />
 	<a name="methodescapeSimple"></a>
-	<h3>method escapeSimple <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a850">850</a>]</span></h3>
+	<h3>method escapeSimple <span class="smalllinenumber">[line 1047]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1049,7 +1060,7 @@ $str)</code>
   </div>
   <hr />
 	<a name="methodexecute"></a>
-	<h3>method execute <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1110">1110</a>]</span></h3>
+	<h3>method execute <span class="smalllinenumber">[line 1307]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1100,7 +1111,7 @@ $data = array()])</code>
   </div>
   <hr />
 	<a name="methodexecuteEmulateQuery"></a>
-	<h3>method executeEmulateQuery <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1144">1144</a>]</span></h3>
+	<h3>method executeEmulateQuery <span class="smalllinenumber">[line 1341]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1151,7 +1162,7 @@ $data = array()])</code>
   </div>
   <hr />
 	<a name="methodexecuteMultiple"></a>
-	<h3>method executeMultiple <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1190">1190</a>]</span></h3>
+	<h3>method executeMultiple <span class="smalllinenumber">[line 1387]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1199,7 +1210,7 @@ $data)</code>
   </div>
   <hr />
 	<a name="methodexpect_queries"></a>
-	<h3>method expect_queries <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1281">1281</a>]</span></h3>
+	<h3>method expect_queries <span class="smalllinenumber">[line 1478]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1235,7 +1246,7 @@ $list)</code>
   </div>
   <hr />
 	<a name="methodexpect_query"></a>
-	<h3>method expect_query <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1270">1270</a>]</span></h3>
+	<h3>method expect_query <span class="smalllinenumber">[line 1467]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1277,7 +1288,7 @@ $result)</code>
   </div>
   <hr />
 	<a name="methodfreePrepared"></a>
-	<h3>method freePrepared <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1214">1214</a>]</span></h3>
+	<h3>method freePrepared <span class="smalllinenumber">[line 1411]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1325,7 +1336,7 @@ $free_resource = true])</code>
   </div>
   <hr />
 	<a name="methodgetAll"></a>
-	<h3>method getAll <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1699">1699</a>]</span></h3>
+	<h3>method getAll <span class="smalllinenumber">[line 1896]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1379,7 +1390,7 @@ $fetchmode = DB_FETCHMODE_DEFAULT])</code>
   </div>
   <hr />
 	<a name="methodgetAssoc"></a>
-	<h3>method getAssoc <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1590">1590</a>]</span></h3>
+	<h3>method getAssoc <span class="smalllinenumber">[line 1787]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1445,7 +1456,7 @@ $group = false])</code>
   </div>
   <hr />
 	<a name="methodgetCol"></a>
-	<h3>method getCol <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1519">1519</a>]</span></h3>
+	<h3>method getCol <span class="smalllinenumber">[line 1716]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1502,7 +1513,7 @@ $params = array()])</code>
   </div>
   <hr />
 	<a name="methodgetListOf"></a>
-	<h3>method getListOf <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a2022">2022</a>]</span></h3>
+	<h3>method getListOf <span class="smalllinenumber">[line 2219]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1544,7 +1555,7 @@ $type)</code>
   </div>
   <hr />
 	<a name="methodgetOne"></a>
-	<h3>method getOne <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1412">1412</a>]</span></h3>
+	<h3>method getOne <span class="smalllinenumber">[line 1609]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1589,7 +1600,7 @@ $params = array()])</code>
   </div>
   <hr />
 	<a name="methodgetOption"></a>
-	<h3>method getOption <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a923">923</a>]</span></h3>
+	<h3>method getOption <span class="smalllinenumber">[line 1120]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1631,7 +1642,7 @@ $option)</code>
   </div>
   <hr />
 	<a name="methodgetRow"></a>
-	<h3>method getRow <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1455">1455</a>]</span></h3>
+	<h3>method getRow <span class="smalllinenumber">[line 1652]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1685,7 +1696,7 @@ $fetchmode = DB_FETCHMODE_DEFAULT])</code>
   </div>
   <hr />
 	<a name="methodgetSequenceName"></a>
-	<h3>method getSequenceName <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1825">1825</a>]</span></h3>
+	<h3>method getSequenceName <span class="smalllinenumber">[line 2022]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1730,7 +1741,7 @@ $sqn)</code>
   </div>
   <hr />
 	<a name="methodgetSpecialQuery"></a>
-	<h3>method getSpecialQuery <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a2048">2048</a>]</span></h3>
+	<h3>method getSpecialQuery <span class="smalllinenumber">[line 2245]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1781,7 +1792,7 @@ $type)</code>
   </div>
   <hr />
 	<a name="methodlimitQuery"></a>
-	<h3>method limitQuery <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1384">1384</a>]</span></h3>
+	<h3>method limitQuery <span class="smalllinenumber">[line 1581]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1841,7 +1852,7 @@ $params = array()])</code>
   </div>
   <hr />
 	<a name="methodmodifyLimitQuery"></a>
-	<h3>method modifyLimitQuery <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1257">1257</a>]</span></h3>
+	<h3>method modifyLimitQuery <span class="smalllinenumber">[line 1454]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1907,7 +1918,7 @@ $params = array()])</code>
   </div>
   <hr />
 	<a name="methodmodifyQuery"></a>
-	<h3>method modifyQuery <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1237">1237</a>]</span></h3>
+	<h3>method modifyQuery <span class="smalllinenumber">[line 1434]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1958,7 +1969,7 @@ $query)</code>
   </div>
   <hr />
 	<a name="methodnextId"></a>
-	<h3>method nextId <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1845">1845</a>]</span></h3>
+	<h3>method nextId <span class="smalllinenumber">[line 2042]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2015,7 +2026,7 @@ $ondemand = true])</code>
   </div>
   <hr />
 	<a name="methodnumRows"></a>
-	<h3>method numRows <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1798">1798</a>]</span></h3>
+	<h3>method numRows <span class="smalllinenumber">[line 1995]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2063,7 +2074,7 @@ $result)</code>
   </div>
   <hr />
 	<a name="methodprepare"></a>
-	<h3>method prepare <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a940">940</a>]</span></h3>
+	<h3>method prepare <span class="smalllinenumber">[line 1137]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2108,7 +2119,7 @@ $query)</code>
   </div>
   <hr />
 	<a name="methodprovides"></a>
-	<h3>method provides <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a862">862</a>]</span></h3>
+	<h3>method provides <span class="smalllinenumber">[line 1059]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2150,7 +2161,7 @@ $feature)</code>
   </div>
   <hr />
 	<a name="methodquery"></a>
-	<h3>method query <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1317">1317</a>]</span></h3>
+	<h3>method query <span class="smalllinenumber">[line 1514]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2201,7 +2212,7 @@ $params = array()])</code>
   </div>
   <hr />
 	<a name="methodquoteIdentifier"></a>
-	<h3>method quoteIdentifier <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a818">818</a>]</span></h3>
+	<h3>method quoteIdentifier <span class="smalllinenumber">[line 1015]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2246,7 +2257,7 @@ $str)</code>
   </div>
   <hr />
 	<a name="methodquoteSmart"></a>
-	<h3>method quoteSmart <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a829">829</a>]</span></h3>
+	<h3>method quoteSmart <span class="smalllinenumber">[line 1026]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2278,7 +2289,7 @@ $in)</code>
   </div>
   <hr />
 	<a name="methodraiseError"></a>
-	<h3>method raiseError <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1902">1902</a>]</span></h3>
+	<h3>method raiseError <span class="smalllinenumber">[line 2099]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2347,7 +2358,7 @@ $nativecode = null])</code>
   </div>
   <hr />
 	<a name="methodrollback"></a>
-	<h3>method rollback <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1786">1786</a>]</span></h3>
+	<h3>method rollback <span class="smalllinenumber">[line 1983]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2384,7 +2395,7 @@ $nativecode = null])</code>
   </div>
   <hr />
 	<a name="methodsetFetchMode"></a>
-	<h3>method setFetchMode <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a883">883</a>]</span></h3>
+	<h3>method setFetchMode <span class="smalllinenumber">[line 1080]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2432,7 +2443,7 @@ $object_class = 'stdClass'])</code>
   </div>
   <hr />
 	<a name="methodsetOption"></a>
-	<h3>method setOption <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a906">906</a>]</span></h3>
+	<h3>method setOption <span class="smalllinenumber">[line 1103]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2483,7 +2494,7 @@ $value)</code>
   </div>
   <hr />
 	<a name="methodtableInfo"></a>
-	<h3>method tableInfo <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a2000">2000</a>]</span></h3>
+	<h3>method tableInfo <span class="smalllinenumber">[line 2197]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2540,7 +2551,7 @@ $mode = null])</code>
   </div>
   <hr />
 	<a name="methodtally_queries"></a>
-	<h3>method tally_queries <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a1293">1293</a>]</span></h3>
+	<h3>method tally_queries <span class="smalllinenumber">[line 1490]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2565,7 +2576,7 @@ $mode = null])</code>
   </div>
   <hr />
 	<a name="method_convertNullArrayValuesToEmpty"></a>
-	<h3>method _convertNullArrayValuesToEmpty <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a2074">2074</a>]</span></h3>
+	<h3>method _convertNullArrayValuesToEmpty <span class="smalllinenumber">[line 2271]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2601,7 +2612,7 @@ array
   </div>
   <hr />
 	<a name="method_rtrimArrayValues"></a>
-	<h3>method _rtrimArrayValues <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a2059">2059</a>]</span></h3>
+	<h3>method _rtrimArrayValues <span class="smalllinenumber">[line 2256]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2637,7 +2648,7 @@ array
   </div>
   <hr />
 	<a name="method__sleep"></a>
-	<h3>method __sleep <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a750">750</a>]</span></h3>
+	<h3>method __sleep <span class="smalllinenumber">[line 947]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2665,7 +2676,7 @@ array
   </div>
   <hr />
 	<a name="method__toString"></a>
-	<h3>method __toString <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a800">800</a>]</span></h3>
+	<h3>method __toString <span class="smalllinenumber">[line 997]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2696,7 +2707,7 @@ array
   </div>
   <hr />
 	<a name="method__wakeup"></a>
-	<h3>method __wakeup <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testmockDBDB.php.html#a787">787</a>]</span></h3>
+	<h3>method __wakeup <span class="smalllinenumber">[line 984]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2724,7 +2735,7 @@ array
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:33 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 20 Apr 2006 10:12:12 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

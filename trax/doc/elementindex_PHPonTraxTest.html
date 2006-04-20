@@ -27,8 +27,8 @@
 			<p><a href="todolist.html">Todo List</a></p>
 	</div>
       <b>Packages:</b><br />
-              <a href="li_PHPonTraxTest.html">PHPonTraxTest</a><br />
               <a href="li_PHPonTrax.html">PHPonTrax</a><br />
+              <a href="li_PHPonTraxTest.html">PHPonTraxTest</a><br />
             <br /><br />
 		<b>Tutorials/Manuals:</b><br />
 					<strong>Package-level:</strong>
@@ -44,11 +44,15 @@
 		</a><br>
 			<a href="PHPonTraxTest/_test_ActionMailerTest_php.html">		ActionMailerTest.php
 		</a><br>
+			<a href="PHPonTraxTest/_test_mockActionController_action_controller_php.html">		action_controller.php
+		</a><br>
 			<a href="PHPonTraxTest/_test_ActiveRecordErrorTest_php.html">		ActiveRecordErrorTest.php
 		</a><br>
 			<a href="PHPonTraxTest/_test_ActiveRecordHelperTest_php.html">		ActiveRecordHelperTest.php
 		</a><br>
 			<a href="PHPonTraxTest/_test_ActiveRecordTest_php.html">		ActiveRecordTest.php
+		</a><br>
+			<a href="PHPonTraxTest/_test_mockActiveRecord_active_record_php.html">		active_record.php
 		</a><br>
 			<a href="PHPonTraxTest/_test_controllers_application_php.html">		application.php
 		</a><br>
@@ -104,9 +108,11 @@
       
             <b>Classes:</b><br />
         <div class="package">
-		    		<a href="PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
+		    		<a href="PHPonTraxTest/ActionController.html">ActionController</a><br />
+	    		<a href="PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
 	    		<a href="PHPonTraxTest/ActionControllerTest.html">ActionControllerTest</a><br />
 	    		<a href="PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a><br />
+	    		<a href="PHPonTraxTest/ActiveRecord.html">ActiveRecord</a><br />
 	    		<a href="PHPonTraxTest/ActiveRecordErrorTest.html">ActiveRecordErrorTest</a><br />
 	    		<a href="PHPonTraxTest/ActiveRecordHelperTest.html">ActiveRecordHelperTest</a><br />
 	    		<a href="PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br />
@@ -114,6 +120,7 @@
 	    		<a href="PHPonTraxTest/ApplicationMailerTest.html">ApplicationMailerTest</a><br />
 	    		<a href="PHPonTraxTest/AssetTagHelperTest.html">AssetTagHelperTest</a><br />
 	    		<a href="PHPonTraxTest/CatalogController.html">CatalogController</a><br />
+	    		<a href="PHPonTraxTest/DataType.html">DataType</a><br />
 	    		<a href="PHPonTraxTest/DateHelperTest.html">DateHelperTest</a><br />
 	    		<a href="PHPonTraxTest/DB.html">DB</a><br />
 	    		<a href="PHPonTraxTest/DB_common.html">DB_common</a><br />
@@ -124,6 +131,7 @@
 	    		<a href="PHPonTraxTest/DB_row.html">DB_row</a><br />
 	    		<a href="PHPonTraxTest/DispatcherTest.html">DispatcherTest</a><br />
 	    		<a href="PHPonTraxTest/DummyController.html">DummyController</a><br />
+	    		<a href="PHPonTraxTest/ExDateHelper.html">ExDateHelper</a><br />
 	    		<a href="PHPonTraxTest/ExtHelpers.html">ExtHelpers</a><br />
 	    		<a href="PHPonTraxTest/FormHelperTest.html">FormHelperTest</a><br />
 	    		<a href="PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a><br />
@@ -198,22 +206,26 @@
 	<div>
 		<h2>a</h2>
 		<dl>
+							<dt><b>ActionController</b></dt>
+				<dd>in file action_controller.php, class <a href="PHPonTraxTest/ActionController.html">ActionController</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock ActionController class for testing</dd>
 							<dt><b>ActionControllerErrorTest</b></dt>
 				<dd>in file ActionControllerErrorTest.php, class <a href="PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ActionControllerError.</dd>
 							<dt><b>ActionControllerTest</b></dt>
 				<dd>in file ActionControllerTest.php, class <a href="PHPonTraxTest/ActionControllerTest.html">ActionControllerTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ActionController.</dd>
 							<dt><b>ActionMailerTest</b></dt>
 				<dd>in file ActionMailerTest.php, class <a href="PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ActionMailer.</dd>
+							<dt><b>ActiveRecord</b></dt>
+				<dd>in file active_record.php, class <a href="PHPonTraxTest/ActiveRecord.html">ActiveRecord</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock ActiveRecord class for testing</dd>
 							<dt><b>ActiveRecordErrorTest</b></dt>
 				<dd>in file ActiveRecordErrorTest.php, class <a href="PHPonTraxTest/ActiveRecordErrorTest.html">ActiveRecordErrorTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ActiveRecordError.</dd>
 							<dt><b>ActiveRecordHelperTest</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, class <a href="PHPonTraxTest/ActiveRecordHelperTest.html">ActiveRecordHelperTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ActiveRecordHelper.</dd>
 							<dt><b>ActiveRecordTest</b></dt>
-				<dd>in file ActiveRecordTest.php, class <a href="PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for <a href="PHPonTrax/ActiveRecord.html">ActiveRecord</a></dd>
-							<dt><b>affectedRows</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodaffectedRows">DB_mysql::affectedRows()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Determines the number of rows affected by a data maniuplation query</dd>
+				<dd>in file ActiveRecordTest.php, class <a href="PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for <a href="PHPonTraxTest/ActiveRecord.html">ActiveRecord</a></dd>
 							<dt><b>affectedRows</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodaffectedRows">DB_common::affectedRows()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Determines the number of rows affected by a data maniuplation query</dd>
+							<dt><b>affectedRows</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodaffectedRows">DB_mysql::affectedRows()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Determines the number of rows affected by a data maniuplation query</dd>
 							<dt><b>apiVersion</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB.html#methodapiVersion">DB::apiVersion()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return the DB API version</dd>
 							<dt><b>ApplicationControllerTest</b></dt>
@@ -223,9 +235,9 @@
 							<dt><b>AssetTagHelperTest</b></dt>
 				<dd>in file AssetTagHelperTest.php, class <a href="PHPonTraxTest/AssetTagHelperTest.html">AssetTagHelperTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for AssetTagHelper.</dd>
 							<dt><b>autoCommit</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodautoCommit">DB_mysql::autoCommit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Enables or disables automatic commits</dd>
-							<dt><b>autoCommit</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodautoCommit">DB_common::autoCommit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Enables or disables automatic commits</dd>
+							<dt><b>autoCommit</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodautoCommit">DB_mysql::autoCommit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Enables or disables automatic commits</dd>
 							<dt><b>autoExecute</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodautoExecute">DB_common::autoExecute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Automaticaly generates an insert or update query and call prepare()  and execute() with it</dd>
 							<dt><b>autoPrepare</b></dt>
@@ -250,6 +262,10 @@
 				<dd>procedural page <a href="PHPonTraxTest/_test_AssetTagHelperTest_php.html">AssetTagHelperTest.php</a></dd>
 							<dt><b>application.php</b></dt>
 				<dd>procedural page <a href="PHPonTraxTest/_test_controllers_application_php.html">application.php</a></dd>
+							<dt><b>action_controller.php</b></dt>
+				<dd>procedural page <a href="PHPonTraxTest/_test_mockActionController_action_controller_php.html">action_controller.php</a></dd>
+							<dt><b>active_record.php</b></dt>
+				<dd>procedural page <a href="PHPonTraxTest/_test_mockActiveRecord_active_record_php.html">active_record.php</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTraxTest.html#top">top</a><br>
@@ -300,6 +316,8 @@
 				<dd>in file ActiveRecordTest.php, variable <a href="PHPonTraxTest/DB_find_all_result.html#var$data">DB_find_all_result::$data</a></dd>
 							<dt><b>$database</b></dt>
 				<dd>in file DB.php, variable <a href="PHPonTraxTest/DB_common.html#var$database">DB_common::$database</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock Database</dd>
+							<dt><b>DataType</b></dt>
+				<dd>in file ActiveRecordHelperTest.php, class <a href="PHPonTraxTest/DataType.html">DataType</a></dd>
 							<dt><b>DateHelperTest</b></dt>
 				<dd>in file DateHelperTest.php, class <a href="PHPonTraxTest/DateHelperTest.html">DateHelperTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for DateHelper.</dd>
 							<dt><b>DB</b></dt>
@@ -315,9 +333,9 @@
 							<dt><b>DB_BINMODE_RETURN</b></dt>
 				<dd>in file DB.php, constant <a href="PHPonTraxTest/_test_mockDB_DB_php.html#defineDB_BINMODE_RETURN">DB_BINMODE_RETURN</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Lets you return data as usual</dd>
 							<dt><b>DB_common</b></dt>
-				<dd>in file DB.php, class <a href="PHPonTraxTest/DB_common.html">DB_common</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock DB_common for testing</dd>
-							<dt><b>DB_common</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodDB_common">DB_common::DB_common()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This constructor calls <kbd>$this-&gt;PEAR('DB_Error')</kbd></dd>
+							<dt><b>DB_common</b></dt>
+				<dd>in file DB.php, class <a href="PHPonTraxTest/DB_common.html">DB_common</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock DB_common for testing</dd>
 							<dt><b>DB_ERROR</b></dt>
 				<dd>in file DB.php, constant <a href="PHPonTraxTest/_test_mockDB_DB_php.html#defineDB_ERROR">DB_ERROR</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Unkown error</dd>
 							<dt><b>DB_Error</b></dt>
@@ -427,9 +445,9 @@
 							<dt><b>DB_result</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_result.html#methodDB_result">DB_result::DB_result()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This constructor sets the object's properties</dd>
 							<dt><b>DB_row</b></dt>
-				<dd>in file DB.php, class <a href="PHPonTraxTest/DB_row.html">DB_row</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock DB_row</dd>
-							<dt><b>DB_row</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_row.html#methodDB_row">DB_row::DB_row()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The constructor places a row's data into properties of this object</dd>
+							<dt><b>DB_row</b></dt>
+				<dd>in file DB.php, class <a href="PHPonTraxTest/DB_row.html">DB_row</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Mock DB_row</dd>
 							<dt><b>DB_TABLEINFO_FULL</b></dt>
 				<dd>in file DB.php, constant <a href="PHPonTraxTest/_test_mockDB_DB_php.html#defineDB_TABLEINFO_FULL">DB_TABLEINFO_FULL</a></dd>
 							<dt><b>DB_TABLEINFO_ORDER</b></dt>
@@ -441,9 +459,9 @@
 							<dt><b>DispatcherTest</b></dt>
 				<dd>in file DispatcherTest.php, class <a href="PHPonTraxTest/DispatcherTest.html">DispatcherTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for Dispatcher.</dd>
 							<dt><b>dropSequence</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoddropSequence">DB_common::dropSequence()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Deletes a sequence</dd>
-							<dt><b>dropSequence</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methoddropSequence">DB_mysql::dropSequence()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Deletes a sequence</dd>
+							<dt><b>dropSequence</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoddropSequence">DB_common::dropSequence()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Deletes a sequence</dd>
 							<dt><b>DummyController</b></dt>
 				<dd>in file HelpersTest.php, class <a href="PHPonTraxTest/DummyController.html">DummyController</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Dummy controller object</dd>
 							<dt><b>DateHelperTest.php</b></dt>
@@ -466,22 +484,28 @@
 				<dd>in file DB.php, variable <a href="PHPonTraxTest/DB_common.html#var$expected_list_cursor">DB_common::$expected_list_cursor</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Cursor in list of expected queries and returns</dd>
 							<dt><b>$expected_query</b></dt>
 				<dd>in file DB.php, variable <a href="PHPonTraxTest/DB_common.html#var$expected_query">DB_common::$expected_query</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Expected query</dd>
+							<dt><b>$expected_query</b></dt>
+				<dd>in file active_record.php, variable <a href="PHPonTraxTest/ActiveRecord.html#var$expected_query">ActiveRecord::$expected_query</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Expected query</dd>
+							<dt><b>$expected_result</b></dt>
+				<dd>in file active_record.php, variable <a href="PHPonTraxTest/ActiveRecord.html#var$expected_result">ActiveRecord::$expected_result</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Expected result</dd>
 							<dt><b>$expected_result</b></dt>
 				<dd>in file DB.php, variable <a href="PHPonTraxTest/DB_common.html#var$expected_result">DB_common::$expected_result</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Result to be returned from expected query</dd>
 							<dt><b>errorCode</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoderrorCode">DB_common::errorCode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Maps native error codes to DB's portable ones</dd>
 							<dt><b>errorMessage</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB.html#methoderrorMessage">DB::errorMessage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return a textual error message for a DB error code</dd>
-							<dt><b>errorMessage</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoderrorMessage">DB_common::errorMessage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Maps a DB error code to a textual message</dd>
-							<dt><b>errorNative</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoderrorNative">DB_common::errorNative()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the DBMS' native error code produced by the last query</dd>
+							<dt><b>errorMessage</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB.html#methoderrorMessage">DB::errorMessage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return a textual error message for a DB error code</dd>
 							<dt><b>errorNative</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methoderrorNative">DB_mysql::errorNative()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the DBMS' native error code produced by the last query</dd>
+							<dt><b>errorNative</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methoderrorNative">DB_common::errorNative()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the DBMS' native error code produced by the last query</dd>
 							<dt><b>escapeSimple</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodescapeSimple">DB_mysql::escapeSimple()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Escapes a string according to the current DBMS's standards</dd>
 							<dt><b>escapeSimple</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodescapeSimple">DB_common::escapeSimple()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Escapes a string according to the current DBMS's standards</dd>
+							<dt><b>ExDateHelper</b></dt>
+				<dd>in file DateHelperTest.php, class <a href="PHPonTraxTest/ExDateHelper.html">ExDateHelper</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Extend the DateHelper class so we can access protected stuff</dd>
 							<dt><b>execute</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodexecute">DB_common::execute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Executes a DB statement prepared with prepare()</dd>
 							<dt><b>executeEmulateQuery</b></dt>
@@ -492,6 +516,8 @@
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodexpect_queries">DB_common::expect_queries()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set list of expected queries and returns</dd>
 							<dt><b>expect_query</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodexpect_query">DB_common::expect_query()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set expected query and return</dd>
+							<dt><b>expect_query</b></dt>
+				<dd>in file active_record.php, method <a href="PHPonTraxTest/ActiveRecord.html#methodexpect_query">ActiveRecord::expect_query()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set expected query and return</dd>
 							<dt><b>ExtHelpers</b></dt>
 				<dd>in file HelpersTest.php, class <a href="PHPonTraxTest/ExtHelpers.html">ExtHelpers</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Extend Helpers class to test protected methods</dd>
 					</dl>
@@ -722,6 +748,8 @@
 	<div>
 		<h2>o</h2>
 		<dl>
+							<dt><b>$object_name</b></dt>
+				<dd>in file action_controller.php, variable <a href="PHPonTraxTest/ActionController.html#var$object_name">ActionController::$object_name</a></dd>
 							<dt><b>$options</b></dt>
 				<dd>in file DB.php, variable <a href="PHPonTraxTest/DB_common.html#var$options">DB_common::$options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Run-time configuration options</dd>
 							<dt><b>object</b></dt>
@@ -800,20 +828,22 @@
 				<dd>in file HelpersTest.php, variable <a href="PHPonTraxTest/DummyController.html#var$some_attr">DummyController::$some_attr</a></dd>
 							<dt><b>ScaffoldControllerTest</b></dt>
 				<dd>in file ScaffoldControllerTest.php, class <a href="PHPonTraxTest/ScaffoldControllerTest.html">ScaffoldControllerTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for ScaffoldController.</dd>
+							<dt><b>send</b></dt>
+				<dd>in file active_record.php, method <a href="PHPonTraxTest/ActiveRecord.html#methodsend">ActiveRecord::send()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get contents of one column of record selected by id and table</dd>
 							<dt><b>SessionTest</b></dt>
 				<dd>in file SessionTest.php, class <a href="PHPonTraxTest/SessionTest.html">SessionTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for Session.</dd>
 							<dt><b>setFetchMode</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodsetFetchMode">DB_common::setFetchMode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets the fetch mode that should be used by default for query results</dd>
 							<dt><b>setOption</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodsetOption">DB_common::setOption()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets run-time configuration options for PEAR DB</dd>
-							<dt><b>setOption</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_result.html#methodsetOption">DB_result::setOption()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set options for the DB_result object</dd>
+							<dt><b>setOption</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodsetOption">DB_common::setOption()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets run-time configuration options for PEAR DB</dd>
 							<dt><b>setUp</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodsetUp">HelpersTest::setUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets up the fixture, for example, open a network connection.</dd>
 							<dt><b>setUp</b></dt>
-				<dd>in file InflectorTest.php, method <a href="PHPonTraxTest/InflectorTest.html#methodsetUp">InflectorTest::setUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets up the fixture, for example, open a network connection.</dd>
-							<dt><b>setUp</b></dt>
 				<dd>in file InputFilterTest.php, method <a href="PHPonTraxTest/InputFilterTest.html#methodsetUp">InputFilterTest::setUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets up the fixture, for example, open a network connection.</dd>
+							<dt><b>setUp</b></dt>
+				<dd>in file InflectorTest.php, method <a href="PHPonTraxTest/InflectorTest.html#methodsetUp">InflectorTest::setUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets up the fixture, for example, open a network connection.</dd>
 							<dt><b>setUp</b></dt>
 				<dd>in file RouterTest.php, method <a href="PHPonTraxTest/RouterTest.html#methodsetUp">RouterTest::setUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets up the fixture, for example, open a network connection.</dd>
 							<dt><b>setUp</b></dt>
@@ -871,59 +901,59 @@
 		<h2>t</h2>
 		<dl>
 							<dt><b>tableInfo</b></dt>
-				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodtableInfo">DB_common::tableInfo()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns information about a table or a result set</dd>
-							<dt><b>tableInfo</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_mysql.html#methodtableInfo">DB_mysql::tableInfo()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns information about a table or a result set</dd>
+							<dt><b>tableInfo</b></dt>
+				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodtableInfo">DB_common::tableInfo()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns information about a table or a result set</dd>
 							<dt><b>tally_queries</b></dt>
 				<dd>in file DB.php, method <a href="PHPonTraxTest/DB_common.html#methodtally_queries">DB_common::tally_queries()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Verify that all expected queries have been received</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file InputFilterTest.php, method <a href="PHPonTraxTest/InputFilterTest.html#methodtearDown">InputFilterTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
 				<dd>in file DispatcherTest.php, method <a href="PHPonTraxTest/DispatcherTest.html#methodtearDown">DispatcherTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file UrlHelperTest.php, method <a href="PHPonTraxTest/UrlHelperTest.html#methodtearDown">UrlHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file FormHelperTest.php, method <a href="PHPonTraxTest/FormHelperTest.html#methodtearDown">FormHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file ActionMailerTest.php, method <a href="PHPonTraxTest/ActionMailerTest.html#methodtearDown">ActionMailerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtearDown">DateHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file AssetTagHelperTest.php, method <a href="PHPonTraxTest/AssetTagHelperTest.html#methodtearDown">AssetTagHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtearDown">ActiveRecordHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file ApplicationMailerTest.php, method <a href="PHPonTraxTest/ApplicationMailerTest.html#methodtearDown">ApplicationMailerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtearDown">ActiveRecordTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is called after a test is executed.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file ApplicationControllerTest.php, method <a href="PHPonTraxTest/ApplicationControllerTest.html#methodtearDown">ApplicationControllerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtearDown">ActionControllerErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtearDown">FormOptionsHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file FormTagHelperTest.php, method <a href="PHPonTraxTest/FormTagHelperTest.html#methodtearDown">FormTagHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file SessionTest.php, method <a href="PHPonTraxTest/SessionTest.html#methodtearDown">SessionTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file TraxErrorTest.php, method <a href="PHPonTraxTest/TraxErrorTest.html#methodtearDown">TraxErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file TraxGeneratorTest.php, method <a href="PHPonTraxTest/TraxGeneratorTest.html#methodtearDown">TraxGeneratorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Remove the dummy Trax work area</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file UrlHelperTest.php, method <a href="PHPonTraxTest/UrlHelperTest.html#methodtearDown">UrlHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file ScaffoldControllerTest.php, method <a href="PHPonTraxTest/ScaffoldControllerTest.html#methodtearDown">ScaffoldControllerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file RouterTest.php, method <a href="PHPonTraxTest/RouterTest.html#methodtearDown">RouterTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtearDown">ActiveRecordTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is called after a test is executed.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file SessionTest.php, method <a href="PHPonTraxTest/SessionTest.html#methodtearDown">SessionTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtearDown">HelpersTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file InflectorTest.php, method <a href="PHPonTraxTest/InflectorTest.html#methodtearDown">InflectorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file AssetTagHelperTest.php, method <a href="PHPonTraxTest/AssetTagHelperTest.html#methodtearDown">AssetTagHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file TraxErrorTest.php, method <a href="PHPonTraxTest/TraxErrorTest.html#methodtearDown">TraxErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtearDown">DateHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file TraxGeneratorTest.php, method <a href="PHPonTraxTest/TraxGeneratorTest.html#methodtearDown">TraxGeneratorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Remove the dummy Trax work area</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file ActiveRecordErrorTest.php, method <a href="PHPonTraxTest/ActiveRecordErrorTest.html#methodtearDown">ActiveRecordErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtearDown">HelpersTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtearDown">ActionControllerErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtearDown">ActionControllerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file ApplicationControllerTest.php, method <a href="PHPonTraxTest/ApplicationControllerTest.html#methodtearDown">ApplicationControllerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
-							<dt><b>tearDown</b></dt>
-				<dd>in file FormTagHelperTest.php, method <a href="PHPonTraxTest/FormTagHelperTest.html#methodtearDown">FormTagHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+				<dd>in file InputFilterTest.php, method <a href="PHPonTraxTest/InputFilterTest.html#methodtearDown">InputFilterTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
 				<dd>in file JavaScriptHelperTest.php, method <a href="PHPonTraxTest/JavaScriptHelperTest.html#methodtearDown">JavaScriptHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>tearDown</b></dt>
-				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtearDown">FormOptionsHelperTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+				<dd>in file ActiveRecordErrorTest.php, method <a href="PHPonTraxTest/ActiveRecordErrorTest.html#methodtearDown">ActiveRecordErrorTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file ApplicationMailerTest.php, method <a href="PHPonTraxTest/ApplicationMailerTest.html#methodtearDown">ApplicationMailerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file ActionMailerTest.php, method <a href="PHPonTraxTest/ActionMailerTest.html#methodtearDown">ActionMailerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
+							<dt><b>tearDown</b></dt>
+				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtearDown">ActionControllerTest::tearDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tears down the fixture, for example, close a network connection.</dd>
 							<dt><b>testAdd_after_filter</b></dt>
 				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtestAdd_after_filter">ActionControllerTest::testAdd_after_filter()</a></dd>
 							<dt><b>testAdd_attachment</b></dt>
@@ -938,6 +968,8 @@
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestAdd_error">ActiveRecordTest::testAdd_error()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the add_error() method</dd>
 							<dt><b>testAdd_helper</b></dt>
 				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtestAdd_helper">ActionControllerTest::testAdd_helper()</a></dd>
+							<dt><b>testAdd_options</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestAdd_options">FormOptionsHelperTest::testAdd_options()</a></dd>
 							<dt><b>testAdd_replyto_address</b></dt>
 				<dd>in file ActionMailerTest.php, method <a href="PHPonTraxTest/ActionMailerTest.html#methodtestAdd_replyto_address">ActionMailerTest::testAdd_replyto_address()</a></dd>
 							<dt><b>testAdd_to_address</b></dt>
@@ -990,6 +1022,8 @@
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtestCdata_section">HelpersTest::testCdata_section()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test cdata_section().</dd>
 							<dt><b>testClassify</b></dt>
 				<dd>in file InflectorTest.php, method <a href="PHPonTraxTest/InflectorTest.html#methodtestClassify">InflectorTest::testClassify()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test <a href="PHPonTrax/Inflector.html#methodclassify">Inflector::classify()</a></dd>
+							<dt><b>testCollection_select</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestCollection_select">FormOptionsHelperTest::testCollection_select()</a></dd>
 							<dt><b>testColumn_for_attribute</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestColumn_for_attribute">ActiveRecordTest::testColumn_for_attribute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the column_for_attribute() method</dd>
 							<dt><b>testColumn_type</b></dt>
@@ -997,9 +1031,9 @@
 							<dt><b>testCommit</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestCommit">ActiveRecordTest::testCommit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the commit() method</dd>
 							<dt><b>testConstruct</b></dt>
-				<dd>in file AssetTagHelperTest.php, method <a href="PHPonTraxTest/AssetTagHelperTest.html#methodtestConstruct">AssetTagHelperTest::testConstruct()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestConstruct">DateHelperTest::testConstruct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test __construct()</dd>
 							<dt><b>testConstruct</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestConstruct">DateHelperTest::testConstruct()</a></dd>
+				<dd>in file AssetTagHelperTest.php, method <a href="PHPonTraxTest/AssetTagHelperTest.html#methodtestConstruct">AssetTagHelperTest::testConstruct()</a></dd>
 							<dt><b>testContent_tag</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestContent_tag">ActiveRecordHelperTest::testContent_tag()</a></dd>
 							<dt><b>testContent_tag</b></dt>
@@ -1010,24 +1044,28 @@
 				<dd>in file TraxGeneratorTest.php, method <a href="PHPonTraxTest/TraxGeneratorTest.html#methodtestController_help">TraxGeneratorTest::testController_help()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Verify that controller_help() outputs a &quot;Usage&quot; message</dd>
 							<dt><b>testConvert_options</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtestConvert_options">HelpersTest::testConvert_options()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test convert_options().</dd>
+							<dt><b>testCountry_options_for_select</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_options_for_select">FormOptionsHelperTest::testCountry_options_for_select()</a></dd>
+							<dt><b>testCountry_select</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_select">FormOptionsHelperTest::testCountry_select()</a></dd>
 							<dt><b>testCount_all</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestCount_all">ActiveRecordTest::testCount_all()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the count_all() method</dd>
 							<dt><b>testCreate</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestCreate">ActiveRecordTest::testCreate()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the create() method</dd>
 							<dt><b>testDatetime_select_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDatetime_select_function">DateHelperTest::testDatetime_select_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDatetime_select_function">DateHelperTest::testDatetime_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test datetime_select() function</dd>
 							<dt><b>testDatetime_select_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDatetime_select_method">DateHelperTest::testDatetime_select_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDatetime_select_method">DateHelperTest::testDatetime_select_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test datetime_select() method</dd>
 							<dt><b>testDate_select_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDate_select_function">DateHelperTest::testDate_select_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDate_select_function">DateHelperTest::testDate_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test date_select() function</dd>
 							<dt><b>testDate_select_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDate_select_method">DateHelperTest::testDate_select_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestDate_select_method">DateHelperTest::testDate_select_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test date_select_method()</dd>
+							<dt><b>testDefault_code</b></dt>
+				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtestDefault_code">ActionControllerErrorTest::testDefault_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with default value of code</dd>
 							<dt><b>testDefault_code</b></dt>
 				<dd>in file ActiveRecordErrorTest.php, method <a href="PHPonTraxTest/ActiveRecordErrorTest.html#methodtestDefault_code">ActiveRecordErrorTest::testDefault_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with default value of code</dd>
 							<dt><b>testDefault_code</b></dt>
 				<dd>in file TraxErrorTest.php, method <a href="PHPonTraxTest/TraxErrorTest.html#methodtestDefault_code">TraxErrorTest::testDefault_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with default value of code</dd>
-							<dt><b>testDefault_code</b></dt>
-				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtestDefault_code">ActionControllerErrorTest::testDefault_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with default value of code</dd>
 							<dt><b>testDefault_input_block</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestDefault_input_block">ActiveRecordHelperTest::testDefault_input_block()</a></dd>
 							<dt><b>testDefault_route</b></dt>
@@ -1043,21 +1081,19 @@
 							<dt><b>testDispatch</b></dt>
 				<dd>in file DispatcherTest.php, method <a href="PHPonTraxTest/DispatcherTest.html#methodtestDispatch">DispatcherTest::testDispatch()</a></dd>
 							<dt><b>testEmpty</b></dt>
-				<dd>in file ApplicationMailerTest.php, method <a href="PHPonTraxTest/ApplicationMailerTest.html#methodtestEmpty">ApplicationMailerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
-							<dt><b>testEmpty</b></dt>
-				<dd>in file ScaffoldControllerTest.php, method <a href="PHPonTraxTest/ScaffoldControllerTest.html#methodtestEmpty">ScaffoldControllerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
-							<dt><b>testEmpty</b></dt>
 				<dd>in file UrlHelperTest.php, method <a href="PHPonTraxTest/UrlHelperTest.html#methodtestEmpty">UrlHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
 							<dt><b>testEmpty</b></dt>
-				<dd>in file JavaScriptHelperTest.php, method <a href="PHPonTraxTest/JavaScriptHelperTest.html#methodtestEmpty">JavaScriptHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
-							<dt><b>testEmpty</b></dt>
-				<dd>in file FormTagHelperTest.php, method <a href="PHPonTraxTest/FormTagHelperTest.html#methodtestEmpty">FormTagHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
-							<dt><b>testEmpty</b></dt>
-				<dd>in file ApplicationControllerTest.php, method <a href="PHPonTraxTest/ApplicationControllerTest.html#methodtestEmpty">ApplicationControllerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
+				<dd>in file ApplicationMailerTest.php, method <a href="PHPonTraxTest/ApplicationMailerTest.html#methodtestEmpty">ApplicationMailerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
 							<dt><b>testEmpty</b></dt>
 				<dd>in file FormHelperTest.php, method <a href="PHPonTraxTest/FormHelperTest.html#methodtestEmpty">FormHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
 							<dt><b>testEmpty</b></dt>
-				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestEmpty">FormOptionsHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
+				<dd>in file JavaScriptHelperTest.php, method <a href="PHPonTraxTest/JavaScriptHelperTest.html#methodtestEmpty">JavaScriptHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
+							<dt><b>testEmpty</b></dt>
+				<dd>in file ApplicationControllerTest.php, method <a href="PHPonTraxTest/ApplicationControllerTest.html#methodtestEmpty">ApplicationControllerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
+							<dt><b>testEmpty</b></dt>
+				<dd>in file FormTagHelperTest.php, method <a href="PHPonTraxTest/FormTagHelperTest.html#methodtestEmpty">FormTagHelperTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
+							<dt><b>testEmpty</b></dt>
+				<dd>in file ScaffoldControllerTest.php, method <a href="PHPonTraxTest/ScaffoldControllerTest.html#methodtestEmpty">ScaffoldControllerTest::testEmpty()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Empty test to prevent failure</dd>
 							<dt><b>testEmpty_route</b></dt>
 				<dd>in file RouterTest.php, method <a href="PHPonTraxTest/RouterTest.html#methodtestEmpty_route">RouterTest::testEmpty_route()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test route table with route with empty path</dd>
 							<dt><b>testError_message</b></dt>
@@ -1079,7 +1115,9 @@
 							<dt><b>testExecute_before_filters</b></dt>
 				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtestExecute_before_filters">ActionControllerTest::testExecute_before_filters()</a></dd>
 							<dt><b>testExpiration_date_select</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestExpiration_date_select">DateHelperTest::testExpiration_date_select()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestExpiration_date_select">DateHelperTest::testExpiration_date_select()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the expiration_date_select() method</dd>
+							<dt><b>testExpiration_date_select_function</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestExpiration_date_select_function">DateHelperTest::testExpiration_date_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test expiration_date_select() function</dd>
 							<dt><b>testFind</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestFind">ActiveRecordTest::testFind()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the find() method</dd>
 							<dt><b>testFind_all</b></dt>
@@ -1176,6 +1214,12 @@
 				<dd>in file TraxGeneratorTest.php, method <a href="PHPonTraxTest/TraxGeneratorTest.html#methodtestModel_help">TraxGeneratorTest::testModel_help()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Verify that model_help() outputs a &quot;Usage&quot; message</dd>
 							<dt><b>testObject</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtestObject">HelpersTest::testObject()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test object()</dd>
+							<dt><b>testOptions_for_select_function</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_function">FormOptionsHelperTest::testOptions_for_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test options_for_select() function</dd>
+							<dt><b>testOptions_for_select_method</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_method">FormOptionsHelperTest::testOptions_for_select_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the options_for_select() method</dd>
+							<dt><b>testOptions_from_collection_for_select</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_from_collection_for_select">FormOptionsHelperTest::testOptions_from_collection_for_select()</a></dd>
 							<dt><b>testPage_list</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestPage_list">ActiveRecordTest::testPage_list()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the page_list() method</dd>
 							<dt><b>testPluralize</b></dt>
@@ -1222,42 +1266,42 @@
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestSave_without_validation">ActiveRecordTest::testSave_without_validation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the save_without_validation() method</dd>
 							<dt><b>testScaffold_help</b></dt>
 				<dd>in file TraxGeneratorTest.php, method <a href="PHPonTraxTest/TraxGeneratorTest.html#methodtestScaffold_help">TraxGeneratorTest::testScaffold_help()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Verify that scaffold_help() outputs a &quot;Usage&quot; message</dd>
+							<dt><b>testSelect</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestSelect">FormOptionsHelperTest::testSelect()</a></dd>
 							<dt><b>testSelect_datetime_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_datetime_function">DateHelperTest::testSelect_datetime_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_datetime_function">DateHelperTest::testSelect_datetime_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_datetime() function</dd>
 							<dt><b>testSelect_datetime_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_datetime_method">DateHelperTest::testSelect_datetime_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_datetime_method">DateHelperTest::testSelect_datetime_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_datetime() method</dd>
 							<dt><b>testSelect_date_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_date_function">DateHelperTest::testSelect_date_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_date_function">DateHelperTest::testSelect_date_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_date() function</dd>
 							<dt><b>testSelect_date_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_date_method">DateHelperTest::testSelect_date_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_date_method">DateHelperTest::testSelect_date_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_date() method</dd>
 							<dt><b>testSelect_day_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_day_function">DateHelperTest::testSelect_day_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_day_function">DateHelperTest::testSelect_day_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_day() function</dd>
 							<dt><b>testSelect_day_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_day_method">DateHelperTest::testSelect_day_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_day_method">DateHelperTest::testSelect_day_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_day() method</dd>
 							<dt><b>testSelect_expiration_date_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_expiration_date_function">DateHelperTest::testSelect_expiration_date_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_expiration_date_function">DateHelperTest::testSelect_expiration_date_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_expiration_date() function</dd>
 							<dt><b>testSelect_expiration_date_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_expiration_date_method">DateHelperTest::testSelect_expiration_date_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_expiration_date_method">DateHelperTest::testSelect_expiration_date_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_expiration_date() method</dd>
 							<dt><b>testSelect_hour</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_hour">DateHelperTest::testSelect_hour()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_hour">DateHelperTest::testSelect_hour()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_hour()</dd>
 							<dt><b>testSelect_minute</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_minute">DateHelperTest::testSelect_minute()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_minute">DateHelperTest::testSelect_minute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_minute()</dd>
 							<dt><b>testSelect_month_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_month_function">DateHelperTest::testSelect_month_function()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_month_function">DateHelperTest::testSelect_month_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_month() function</dd>
 							<dt><b>testSelect_month_method</b></dt>
 				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_month_method">DateHelperTest::testSelect_month_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_month() method</dd>
 							<dt><b>testSelect_second</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_second">DateHelperTest::testSelect_second()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_second">DateHelperTest::testSelect_second()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_second()</dd>
 							<dt><b>testSelect_time</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_time">DateHelperTest::testSelect_time()</a></dd>
-							<dt><b>testSelect_year_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_year_function">DateHelperTest::testSelect_year_function()</a></dd>
-							<dt><b>testSelect_year_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_year_method">DateHelperTest::testSelect_year_method()</a></dd>
-							<dt><b>testSend</b></dt>
-				<dd>in file ActionMailerTest.php, method <a href="PHPonTraxTest/ActionMailerTest.html#methodtestSend">ActionMailerTest::testSend()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_time">DateHelperTest::testSelect_time()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_time()</dd>
+							<dt><b>testSelect_year</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestSelect_year">DateHelperTest::testSelect_year()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test select_year() method</dd>
 							<dt><b>testSend</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestSend">ActiveRecordTest::testSend()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the send() method</dd>
+							<dt><b>testSend</b></dt>
+				<dd>in file ActionMailerTest.php, method <a href="PHPonTraxTest/ActionMailerTest.html#methodtestSend">ActionMailerTest::testSend()</a></dd>
 							<dt><b>testSet</b></dt>
 				<dd>in file SessionTest.php, method <a href="PHPonTraxTest/SessionTest.html#methodtestSet">SessionTest::testSet()</a></dd>
 							<dt><b>testSet_content_columns</b></dt>
@@ -1283,13 +1327,13 @@
 							<dt><b>testSingularize</b></dt>
 				<dd>in file InflectorTest.php, method <a href="PHPonTraxTest/InflectorTest.html#methodtestSingularize">InflectorTest::testSingularize()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test <a href="PHPonTrax/Inflector.html#methodsingularize">Inflector::singularize()</a></dd>
 							<dt><b>testSpecified_code</b></dt>
-				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtestSpecified_code">ActionControllerErrorTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with specified of code</dd>
-							<dt><b>testSpecified_code</b></dt>
 				<dd>in file ActiveRecordErrorTest.php, method <a href="PHPonTraxTest/ActiveRecordErrorTest.html#methodtestSpecified_code">ActiveRecordErrorTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with specified of code</dd>
 							<dt><b>testSpecified_code</b></dt>
-				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtestSpecified_code">ActionControllerTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test raise() with specified of code</dd>
+				<dd>in file ActionControllerErrorTest.php, method <a href="PHPonTraxTest/ActionControllerErrorTest.html#methodtestSpecified_code">ActionControllerErrorTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with specified of code</dd>
 							<dt><b>testSpecified_code</b></dt>
 				<dd>in file TraxErrorTest.php, method <a href="PHPonTraxTest/TraxErrorTest.html#methodtestSpecified_code">TraxErrorTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test exception with specified of code</dd>
+							<dt><b>testSpecified_code</b></dt>
+				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtestSpecified_code">ActionControllerTest::testSpecified_code()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test raise() with specified of code</dd>
 							<dt><b>testStart</b></dt>
 				<dd>in file SessionTest.php, method <a href="PHPonTraxTest/SessionTest.html#methodtestStart">SessionTest::testStart()</a></dd>
 							<dt><b>testStylesheet_link_tag_function</b></dt>
@@ -1308,26 +1352,34 @@
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTag">ActiveRecordHelperTest::testTag()</a></dd>
 							<dt><b>testTag_without_error_wrapping</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTag_without_error_wrapping">ActiveRecordHelperTest::testTag_without_error_wrapping()</a></dd>
+							<dt><b>testTime_select_function</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTime_select_function">DateHelperTest::testTime_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test time_select() function</dd>
+							<dt><b>testTime_select_method</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTime_select_method">DateHelperTest::testTime_select_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test time_select() method</dd>
+							<dt><b>testTo_collection_select_tag</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_collection_select_tag">FormOptionsHelperTest::testTo_collection_select_tag()</a></dd>
 							<dt><b>testTo_content_tag</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtestTo_content_tag">HelpersTest::testTo_content_tag()</a></dd>
-							<dt><b>testTo_datetime_select_tag</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_datetime_select_tag">DateHelperTest::testTo_datetime_select_tag()</a></dd>
+							<dt><b>testTo_country_select_tag</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_country_select_tag">FormOptionsHelperTest::testTo_country_select_tag()</a></dd>
 							<dt><b>testTo_datetime_select_tag</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_datetime_select_tag">ActiveRecordHelperTest::testTo_datetime_select_tag()</a></dd>
+							<dt><b>testTo_datetime_select_tag</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_datetime_select_tag">DateHelperTest::testTo_datetime_select_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test to_datetime_select_tag() method</dd>
 							<dt><b>testTo_datetime_select_tag_without_error_wrapping</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_datetime_select_tag_without_error_wrapping">ActiveRecordHelperTest::testTo_datetime_select_tag_without_error_wrapping()</a></dd>
 							<dt><b>testTo_date_select_tag</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_date_select_tag">DateHelperTest::testTo_date_select_tag()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_date_select_tag">DateHelperTest::testTo_date_select_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test to_date_select_tag() method</dd>
 							<dt><b>testTo_date_select_tag</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_date_select_tag">ActiveRecordHelperTest::testTo_date_select_tag()</a></dd>
 							<dt><b>testTo_date_select_tag_without_error_wrapping</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_date_select_tag_without_error_wrapping">ActiveRecordHelperTest::testTo_date_select_tag_without_error_wrapping()</a></dd>
-							<dt><b>testTo_expiration_date_select_tag_function</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_expiration_date_select_tag_function">DateHelperTest::testTo_expiration_date_select_tag_function()</a></dd>
 							<dt><b>testTo_expiration_date_select_tag_method</b></dt>
-				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_expiration_date_select_tag_method">DateHelperTest::testTo_expiration_date_select_tag_method()</a></dd>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestTo_expiration_date_select_tag_method">DateHelperTest::testTo_expiration_date_select_tag_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test to_expiration_date_select_tag() method</dd>
 							<dt><b>testTo_scaffold_tag</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_scaffold_tag">ActiveRecordHelperTest::testTo_scaffold_tag()</a></dd>
+							<dt><b>testTo_select_tag</b></dt>
+				<dd>in file FormOptionsHelperTest.php, method <a href="PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_select_tag">FormOptionsHelperTest::testTo_select_tag()</a></dd>
 							<dt><b>testTo_tag</b></dt>
 				<dd>in file ActiveRecordHelperTest.php, method <a href="PHPonTraxTest/ActiveRecordHelperTest.html#methodtestTo_tag">ActiveRecordHelperTest::testTo_tag()</a></dd>
 							<dt><b>testUnderscore</b></dt>
@@ -1356,6 +1408,12 @@
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtestValidate_on_update">ActiveRecordTest::testValidate_on_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the validate_on_update() method</dd>
 							<dt><b>testValue</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtestValue">HelpersTest::testValue()</a></dd>
+							<dt><b>testYear_option</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestYear_option">DateHelperTest::testYear_option()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test year_option()</dd>
+							<dt><b>testYear_select_function</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestYear_select_function">DateHelperTest::testYear_select_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test year_select() function</dd>
+							<dt><b>testYear_select_method</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/DateHelperTest.html#methodtestYear_select_method">DateHelperTest::testYear_select_method()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test year_select() method</dd>
 							<dt><b>test_get</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest_get">ActiveRecordTest::test_get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the _get() method</dd>
 							<dt><b>testenv.php</b></dt>
@@ -1365,19 +1423,19 @@
 							<dt><b>TraxGeneratorTest.php</b></dt>
 				<dd>procedural page <a href="PHPonTraxTest/_test_TraxGeneratorTest_php.html">TraxGeneratorTest.php</a></dd>
 							<dt><b>test__call</b></dt>
-				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest__call">ActiveRecordTest::test__call()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the __call() method</dd>
-							<dt><b>test__call</b></dt>
 				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtest__call">ActionControllerTest::test__call()</a></dd>
-							<dt><b>test__construct</b></dt>
-				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtest__construct">ActionControllerTest::test__construct()</a></dd>
+							<dt><b>test__call</b></dt>
+				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest__call">ActiveRecordTest::test__call()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the __call() method</dd>
 							<dt><b>test__construct</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest__construct">ActiveRecordTest::test__construct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test constructor</dd>
 							<dt><b>test__construct</b></dt>
+				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtest__construct">ActionControllerTest::test__construct()</a></dd>
+							<dt><b>test__construct</b></dt>
 				<dd>in file HelpersTest.php, method <a href="PHPonTraxTest/HelpersTest.html#methodtest__construct">HelpersTest::test__construct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test constructor</dd>
 							<dt><b>test__set</b></dt>
-				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest__set">ActiveRecordTest::test__set()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the __set() method</dd>
-							<dt><b>test__set</b></dt>
 				<dd>in file ActionControllerTest.php, method <a href="PHPonTraxTest/ActionControllerTest.html#methodtest__set">ActionControllerTest::test__set()</a></dd>
+							<dt><b>test__set</b></dt>
+				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/ActiveRecordTest.html#methodtest__set">ActiveRecordTest::test__set()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test the __set() method</dd>
 							<dt><b>TraxErrorTest</b></dt>
 				<dd>in file TraxErrorTest.php, class <a href="PHPonTraxTest/TraxErrorTest.html">TraxErrorTest</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Test class for TraxError.</dd>
 							<dt><b>TraxGeneratorTest</b></dt>
@@ -1385,7 +1443,7 @@
 							<dt><b>TRAX_LIB_ROOT</b></dt>
 				<dd>in file testenv.php, constant <a href="PHPonTraxTest/_test_testenv_php.html#defineTRAX_LIB_ROOT">TRAX_LIB_ROOT</a></dd>
 							<dt><b>TRAX_MODE</b></dt>
-				<dd>in file ActiveRecordTest.php, constant <a href="PHPonTraxTest/_test_ActiveRecordTest_php.html#defineTRAX_MODE">TRAX_MODE</a></dd>
+				<dd>in file ActiveRecordHelperTest.php, constant <a href="PHPonTraxTest/_test_ActiveRecordHelperTest_php.html#defineTRAX_MODE">TRAX_MODE</a></dd>
 							<dt><b>TRAX_ROOT</b></dt>
 				<dd>in file HelpersTest.php, constant <a href="PHPonTraxTest/_test_HelpersTest_php.html#defineTRAX_ROOT">TRAX_ROOT</a></dd>
 							<dt><b>TRAX_URL_PREFIX</b></dt>
@@ -1414,12 +1472,14 @@
 		<dl>
 							<dt><b>validate_prefix</b></dt>
 				<dd>in file ActiveRecordTest.php, method <a href="PHPonTraxTest/PersonName.html#methodvalidate_prefix">PersonName::validate_prefix()</a></dd>
+							<dt><b>value</b></dt>
+				<dd>in file DateHelperTest.php, method <a href="PHPonTraxTest/ExDateHelper.html#methodvalue">ExDateHelper::value()</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTraxTest.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:22:57 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 20 Apr 2006 10:12:02 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

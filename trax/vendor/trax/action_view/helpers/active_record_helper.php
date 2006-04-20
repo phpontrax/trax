@@ -36,9 +36,13 @@
 class ActiveRecordHelper extends Helpers {
     
     /**
-     *  @todo Document this variable
+     *  Whether to generate scaffolding HTML
+     *
+     *  Set to true in {@link form_scaffolding.phtml}.  If true
+     *  generate HTML scaffold otherwise generate final HTML
+     *  @var boolean
      */
-    public $scaffolding = 0;
+    public $scaffolding = false;
 
     /**
      *  Returns a default input tag for the type of object returned by the method. Example
@@ -230,33 +234,41 @@ class ActiveRecordHelper extends Helpers {
         $this->attribute_name = $attribute_name;
         $form = new FormHelper($object_name, $attribute_name);
         switch($this->column_type()) {
-            case 'string':
-            case 'varchar':
-            case 'varchar2':
-                $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
-                $results = $form->to_input_field_tag($field_type, $options);
-                break;
-            case 'text':
-            case 'blob':
-                $results = $form->to_text_area_tag($options);
-                break;
-            case 'integer':
-            case 'int':
-            case 'number':
-            case 'float':
-                $results = $form->to_input_field_tag("text", $options);
-                break;
-            case 'date':
-                $form = new DateHelper($object_name, $attribute_name);
-                $results = $form->to_date_select_tag($options);
-                break;
-            case 'datetime':
-                $results = $this->to_datetime_select_tag($options);
-                break;
-            case 'boolean':
-            case 'bool':
-                $results = $form->to_boolean_select_tag($options);
-                break;
+        case 'string':
+        case 'varchar':
+        case 'varchar2':
+            $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
+            $results = $form->to_input_field_tag($field_type, $options);
+            break;
+
+        case 'text':
+        case 'blob':
+            $results = $form->to_text_area_tag($options);
+            break;
+
+        case 'integer':
+        case 'int':
+        case 'number':
+        case 'float':
+        case 'real':
+            $results = $form->to_input_field_tag("text", $options);
+            break;
+
+        case 'date':
+            $form = new DateHelper($object_name, $attribute_name);
+            $results = $form->to_date_select_tag($options);
+            break;
+
+        case 'datetime':
+        case 'timestamp':
+            $results = $this->to_datetime_select_tag($options);
+            break;
+
+        case 'boolean':
+        case 'bool':
+            $results = $form->to_boolean_select_tag($options);
+            break;
+
         }
         if(count($this->object()->errors)) {
             $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
@@ -269,6 +281,7 @@ class ActiveRecordHelper extends Helpers {
      *
      *  @uses attribute_name
      *  @uses column_type()
+     *  @uses error_wrapping
      *  @uses object()
      *  @uses object_name
      */
@@ -276,36 +289,54 @@ class ActiveRecordHelper extends Helpers {
         $this->object_name = $object_name;
         $this->attribute_name = $attribute_name;
         switch($this->column_type()) {
-            case 'string':
-            case 'varchar':
-            case 'varchar2':
-                $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
-                $results = $field_type."_field(\"$object_name\", \"$attribute_name\")";
-                break;
-            case 'text':
-            case 'blob':
-                $results = "text_area(\"$object_name\", \"$attribute_name\")";
-                break;
-            case 'integer':
-            case 'int':
-            case 'number':
-            case 'float':
-                $results = "text_field(\"$object_name\", \"$attribute_name\")";
-                break;
-            case 'date':
-                $results = "date_select(\"$object_name\", \"$attribute_name\")";
-                break;
-            case 'datetime':
-                $results = "datetime_select(\"$object_name\", \"$attribute_name\")";
-                break;
-            case 'boolean':
-            case 'bool':
-                $results = "boolean_select(\"$object_name\", \"$attribute_name\")";
-                break;
-	default:
+        case 'string':
+        case 'varchar':
+        case 'varchar2':
+            $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
+            $results = $field_type."_field(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'text':
+        case 'blob':
+            $results = "text_area(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'integer':
+        case 'int':
+        case 'number':
+        case 'float':
+        case 'real':
+            $results = "text_field(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'date':
+            $results = "date_select(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'year':
+            $results = "year_select(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'datetime':
+        case 'timestamp':
+            $results = "datetime_select(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'time':
+            $results = "time_select(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        case 'boolean':
+        case 'bool':
+            $results = "boolean_select(\"$object_name\", \"$attribute_name\")";
+            break;
+
+        default:
+            echo "No case statement for ".$this->column_type()."\n";
         }
         if(count($this->object()->errors)) {
-            $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
+            $results = $this->error_wrapping($results, 
+                              $this->object()->errors[$this->attribute_name]);
         }
         return $results;
     }
@@ -342,7 +373,7 @@ class ActiveRecordHelper extends Helpers {
      */
     function content_tag_without_error_wrapping() {
         $args = func_get_args();
-        return call_user_func_array(array(parent, 'content_tag'), $args);
+        return call_user_func_array('content_tag', $args);
     }
 
     /**
@@ -354,9 +385,13 @@ class ActiveRecordHelper extends Helpers {
      */
     function content_tag($name, $value, $options = array()) {
         if (count($this->object()->errors)) {
-            return $this->error_wrapping($this->content_tag_without_error_wrapping($name, $value, $options), $this->object()->errors[$this->attribute_name]);
+            return $this->error_wrapping(
+          $this->content_tag_without_error_wrapping($name, $value, $options),
+            array_key_exists($this->attribute_name,$this->object()->errors)
+            ? true : false);
         } else {
-            return $this->content_tag_without_error_wrapping($name, $value, $options);
+            return $this->content_tag_without_error_wrapping($name, $value,
+                                                             $options);
         }
     }
 

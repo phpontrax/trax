@@ -66,10 +66,125 @@ class FormOptionsHelperTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     *  Empty test to prevent failure
-     *  @todo Write test for the FormOptionsHelper class
+     *  @todo Write test for add_options()
      */
-    public function testEmpty() {
+    public function testAdd_options() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for country_options_for_select()
+     */
+    public function testCountry_options_for_select() {
+
+        //  Spot check a few countries
+        $fo = new FormOptionsHelper;
+        $countries = $fo->country_options_for_select();
+        $this->assertContains('Bangladesh', $countries);
+        $this->assertContains('Canada', $countries);
+        $this->assertContains('Ecuador', $countries);
+        $this->assertContains('France', $countries);
+
+        //  Select a country
+        $fo = new FormOptionsHelper;
+        $countries = $fo->country_options_for_select(17);
+        $this->assertContains('value="17" selected="selected"', $countries);
+
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test the options_for_select() method
+     */
+    public function testOptions_for_select_method() {
+
+        //  Test choices with none selected
+        $fo = new FormOptionsHelper;
+        $this->assertEquals('<option value="0">foo</option>' . "\n"
+                            . '<option value="1">bar</option>',
+                            $fo->options_for_select(array('foo','bar')));
+
+        //  Test choices with one selected
+        $fo = new FormOptionsHelper;
+        $this->assertEquals('<option value="0">mumble</option>' . "\n"
+                  . '<option value="1" selected="selected">grumble</option>',
+                  $fo->options_for_select(array('mumble','grumble'),1));
+    }
+
+    /**
+     *  @todo Write test for options_from_collection_for_select()
+     */
+    public function testOptions_from_collection_for_select() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for to_collection_select_tag()
+     */
+    public function testTo_collection_select_tag() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for to_country_select_tag()
+     */
+    public function testTo_country_select_tag() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for to_select_tag()
+     */
+    public function testTo_select_tag() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for collection_select()
+     */
+    public function testCollection_select() {
+        echo collection_select(null,null,null,null,null);
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  @todo Write test for country_select()
+     */
+    public function testCountry_select() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test options_for_select() function
+     */
+    public function testOptions_for_select_function() {
+
+        //  Test choices with none selected
+        $this->assertEquals('<option value="0">foo</option>' . "\n"
+                            . '<option value="1">bar</option>',
+                            options_for_select(array('foo','bar')));
+
+        //  Test choices with one selected by key
+        $this->assertEquals('<option value="M">mumble</option>' . "\n"
+                  . '<option value="G" selected="selected">grumble</option>',
+                  options_for_select(array('M' => 'mumble',
+                                           'G' => 'grumble'),'G'));
+    }
+
+    /**
+     *  @todo Write test for select()
+     */
+    public function testSelect() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
     }
 }
 

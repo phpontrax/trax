@@ -345,16 +345,25 @@ class TraxGenerator {
         $this->controller_class = Inflector::camelize($name);
 
         # Create the extra folders for View / Controller
-        if(!file_exists($this->view_path)) {
+        if(file_exists($this->view_path)) {
+            echo "exists $this->view_path\n";
+        } else{
             $this->exec("$this->mkdir_cmd $this->view_path");
+            echo "create $this->view_path\n";
         }
 
-        if(!file_exists($this->controller_path)) {
+        if(file_exists($this->controller_path)) {
+            echo "exists $this->controller_path\n";
+        } else {
             $this->exec("$this->mkdir_cmd $this->controller_path");
+            echo "create $this->controller_path\n";
         }
 
-        if(!file_exists($this->helper_path)) {
+        if(file_exists($this->helper_path)) {
+            echo "exists $this->helper_path\n";
+        } else {
             $this->exec("$this->mkdir_cmd $this->helper_path");
+            echo "create $this->helper_path\n";
         }
 
         # Create the actual controller/helper files
@@ -413,7 +422,7 @@ class TraxGenerator {
                 if(!file_put_contents($model_file,$template)) {
                     echo "error creating model file: $model_file\n";
                 } else {
-                    echo "created $model_file\n";
+                    echo "create $model_file\n";
                     return true;
                 }
             } else {
@@ -456,7 +465,22 @@ class TraxGenerator {
         $plural_model_name = Inflector::pluralize($model_name);  
         $human_model_name = Inflector::humanize($model_name);      
 
-        $this->{$singluar_model_name} = new $model_class_name();            
+        try {
+            $this->{$singluar_model_name} = new $model_class_name();
+        } catch (ActiveRecordError $e) {
+            echo "Can't create model.\n";
+            echo $e->getMessage()."\n";
+            echo "for database '"
+                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['database']
+                . "' on host '"
+                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['hostspec']
+                . "' as user '"
+                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['username']
+                . "'\nDid you configure file "
+                . TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['config']
+                . "/database.ini correctly?\n";
+            die();
+        }
         if(empty($controller_name)) {
             $controller_name = Inflector::underscore($model_name);   
         } else {
@@ -498,7 +522,7 @@ class TraxGenerator {
             if(!file_put_contents($controller_file, $controller_contents)) {
                 echo "error creating controller class file: $controller_file\n";
             } else {
-                echo "created $controller_file\n";
+                echo "create $controller_file\n";
             }        
         } else {
             echo "exists $controller_file\n";        
@@ -514,7 +538,7 @@ class TraxGenerator {
             if(!file_put_contents($view_file, $index_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "create $view_file\n";
             }
         } else {
             echo "exists $view_file\n";        
@@ -530,7 +554,7 @@ class TraxGenerator {
             if(!file_put_contents($view_file, $add_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "create $view_file\n";
             }
         } else {
             echo "exists $view_file\n";        
@@ -546,7 +570,7 @@ class TraxGenerator {
             if(!file_put_contents($view_file, $edit_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "create $view_file\n";
             }
         } else {
             echo "exists $view_file\n";        
@@ -562,7 +586,7 @@ class TraxGenerator {
             if(!file_put_contents($view_file, $show_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "create $view_file\n";
             }
         } else {
             echo "exists $view_file\n";        
@@ -571,14 +595,14 @@ class TraxGenerator {
         # Generate the partial containing the form elments from the database
         $view_file = "$this->view_path/_form.".$this->view_file_extention;
         ob_start();    
-        include("$this->scaffold_template_path/form_scaffolding.phtml");
+        require "$this->scaffold_template_path/form_scaffolding.phtml";
         $_form_contents = $this->fix_php_brackets(ob_get_contents());
         ob_end_clean();  
         if(!file_exists($view_file)) {
             if(!file_put_contents($view_file, $_form_contents)) {
                 echo "error creating view file: $view_file\n";
             } else {
-                echo "created $view_file\n";
+                echo "create $view_file\n";
             }
         } else {
             echo "exists $view_file\n";        
@@ -597,7 +621,7 @@ class TraxGenerator {
             if(!file_put_contents($layout_file, $layout_contents)) {
                 echo "error creating layout file: $layout_file\n";
             } else {
-                echo "created $layout_file\n";
+                echo "create $layout_file\n";
             }
         } else {
             echo "exists $layout_file\n";        
@@ -653,7 +677,7 @@ class TraxGenerator {
                     echo "error creating controller class file: "
                         . $controller_file . "\n";
                 } else {
-                    echo "created $controller_file\n";
+                    echo "create $controller_file\n";
                 }
 
             } else {
@@ -687,7 +711,7 @@ class TraxGenerator {
                 if(!file_put_contents($helper_file,$template)) {
                     echo "error creating helper file: $helper_file\n";
                 } else {
-                    echo "created $helper_file\n";
+                    echo "create $helper_file\n";
                 }
 
             } else {
@@ -731,7 +755,7 @@ class TraxGenerator {
                 if(!file_put_contents($view_file,$template)) {
                     echo "error creating view file: $view_file\n";
                 } else {
-                    echo "created $view_file\n";
+                    echo "create $view_file\n";
                 }
             } else {
                 echo "error view template file doesn't exist: "

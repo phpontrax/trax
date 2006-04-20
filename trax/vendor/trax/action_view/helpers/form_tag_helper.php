@@ -29,8 +29,7 @@
  */
 
 /**
- *
- *  @package PHPonTrax
+ *  @todo Document this class
  */
 class FormTagHelper extends Helpers {
 
@@ -40,7 +39,8 @@ class FormTagHelper extends Helpers {
     function form_tag($url_for_options = array(), $options = array()) {
         $html_options = array_merge(array("method" => "post"), $options);
 
-        if($html_options['multipart']) {
+        if(array_key_exists('multipart',$html_options)
+	   && $html_options['multipart']) {
             $html_options['enctype'] = "multipart/form-data";
             unset($html_options['multipart']);
         }

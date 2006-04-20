@@ -19,7 +19,7 @@ class <?php echo $controller_class_name ?>Controller extends ApplicationControll
     }
     
     function add() {
-        $this-><?php echo $singluar_model_name ?> = new <?php echo $model_class_name ?>($_REQUEST['<?php echo $singluar_model_name ?>']);
+      $this-><?php echo $singluar_model_name ?> = new <?php echo $model_class_name ?>(array_key_exists('<?php echo $singluar_model_name ?>',$_REQUEST) ? $_REQUEST['<?php echo $singluar_model_name ?>'] : null );
         if($_POST) {
             if($this-><?php echo $singluar_model_name ?>->save($_POST['<?php echo $singluar_model_name ?>'])) {
             	Session::flash('notice', "<?php echo $human_model_name ?> was successfully created.");

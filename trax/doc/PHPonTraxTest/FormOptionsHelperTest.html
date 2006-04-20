@@ -44,11 +44,15 @@
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActionMailerTest_php.html">		ActionMailerTest.php
 		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActionController_action_controller_php.html">		action_controller.php
+		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordErrorTest_php.html">		ActiveRecordErrorTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordHelperTest_php.html">		ActiveRecordHelperTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordTest_php.html">		ActiveRecordTest.php
+		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActiveRecord_active_record_php.html">		active_record.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_controllers_application_php.html">		application.php
 		</a><br>
@@ -104,9 +108,11 @@
       
             <b>Classes:</b><br />
         <div class="package">
-		    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
+		    		<a href="../PHPonTraxTest/ActionController.html">ActionController</a><br />
+	    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionControllerTest.html">ActionControllerTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a><br />
+	    		<a href="../PHPonTraxTest/ActiveRecord.html">ActiveRecord</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordErrorTest.html">ActiveRecordErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordHelperTest.html">ActiveRecordHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br />
@@ -114,6 +120,7 @@
 	    		<a href="../PHPonTraxTest/ApplicationMailerTest.html">ApplicationMailerTest</a><br />
 	    		<a href="../PHPonTraxTest/AssetTagHelperTest.html">AssetTagHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/CatalogController.html">CatalogController</a><br />
+	    		<a href="../PHPonTraxTest/DataType.html">DataType</a><br />
 	    		<a href="../PHPonTraxTest/DateHelperTest.html">DateHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/DB.html">DB</a><br />
 	    		<a href="../PHPonTraxTest/DB_common.html">DB_common</a><br />
@@ -124,6 +131,7 @@
 	    		<a href="../PHPonTraxTest/DB_row.html">DB_row</a><br />
 	    		<a href="../PHPonTraxTest/DispatcherTest.html">DispatcherTest</a><br />
 	    		<a href="../PHPonTraxTest/DummyController.html">DummyController</a><br />
+	    		<a href="../PHPonTraxTest/ExDateHelper.html">ExDateHelper</a><br />
 	    		<a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a><br />
 	    		<a href="../PHPonTraxTest/FormHelperTest.html">FormHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a><br />
@@ -173,7 +181,17 @@ Source Location: /test/FormOptionsHelperTest.php<br /><br />
     <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodmain">main</a></li>
     <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodsetUp">setUp</a></li>
     <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtearDown">tearDown</a></li>
-    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestEmpty">testEmpty</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestAdd_options">testAdd_options</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCollection_select">testCollection_select</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_options_for_select">testCountry_options_for_select</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_select">testCountry_select</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_function">testOptions_for_select_function</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_method">testOptions_for_select_method</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_from_collection_for_select">testOptions_from_collection_for_select</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestSelect">testSelect</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_collection_select_tag">testTo_collection_select_tag</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_country_select_tag">testTo_country_select_tag</a></li>
+    <li><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_select_tag">testTo_select_tag</a></li>
   </ul>
 </td>
 
@@ -193,7 +211,7 @@ Source Location: /test/FormOptionsHelperTest.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line <a href="..//__filesource/fsource_PHPonTraxTest__testFormOptionsHelperTest.php.html#a36">36</a>]<br />
+[line 36]<br />
 Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skeleton on 2006-03-01 at 13:17:32.</p><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
@@ -204,7 +222,7 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
 <div class="tags">
   <hr />
 	<a name="methodmain"></a>
-	<h3>method main <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testFormOptionsHelperTest.php.html#a43">43</a>]</span></h3>
+	<h3>method main <span class="smalllinenumber">[line 43]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -232,7 +250,7 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
   </div>
   <hr />
 	<a name="methodsetUp"></a>
-	<h3>method setUp <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testFormOptionsHelperTest.php.html#a56">56</a>]</span></h3>
+	<h3>method setUp <span class="smalllinenumber">[line 56]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -257,7 +275,7 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
   </div>
   <hr />
 	<a name="methodtearDown"></a>
-	<h3>method tearDown <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testFormOptionsHelperTest.php.html#a65">65</a>]</span></h3>
+	<h3>method tearDown <span class="smalllinenumber">[line 65]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -281,17 +299,17 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodtestEmpty"></a>
-	<h3>method testEmpty <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testFormOptionsHelperTest.php.html#a72">72</a>]</span></h3>
+	<a name="methodtestAdd_options"></a>
+	<h3>method testAdd_options <span class="smalllinenumber">[line 71]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void testEmpty(
+		<code>void testAdd_options(
 )</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Empty test to prevent failure<br /><br /><br /><br />
+		<br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -299,7 +317,281 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
     <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
   </tr>
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for the FormOptionsHelper class</td>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for add_options()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestCollection_select"></a>
+	<h3>method testCollection_select <span class="smalllinenumber">[line 151]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testCollection_select(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for collection_select()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestCountry_options_for_select"></a>
+	<h3>method testCountry_options_for_select <span class="smalllinenumber">[line 79]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testCountry_options_for_select(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for country_options_for_select()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestCountry_select"></a>
+	<h3>method testCountry_select <span class="smalllinenumber">[line 160]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testCountry_select(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for country_select()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestOptions_for_select_function"></a>
+	<h3>method testOptions_for_select_function <span class="smalllinenumber">[line 168]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testOptions_for_select_function(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Test options_for_select() function<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestOptions_for_select_method"></a>
+	<h3>method testOptions_for_select_method <span class="smalllinenumber">[line 101]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testOptions_for_select_method(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Test the options_for_select() method<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestOptions_from_collection_for_select"></a>
+	<h3>method testOptions_from_collection_for_select <span class="smalllinenumber">[line 119]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testOptions_from_collection_for_select(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for options_from_collection_for_select()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestSelect"></a>
+	<h3>method testSelect <span class="smalllinenumber">[line 185]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testSelect(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for select()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestTo_collection_select_tag"></a>
+	<h3>method testTo_collection_select_tag <span class="smalllinenumber">[line 127]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testTo_collection_select_tag(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for to_collection_select_tag()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestTo_country_select_tag"></a>
+	<h3>method testTo_country_select_tag <span class="smalllinenumber">[line 135]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testTo_country_select_tag(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for to_country_select_tag()</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodtestTo_select_tag"></a>
+	<h3>method testTo_select_tag <span class="smalllinenumber">[line 143]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void testTo_select_tag(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+  <tr>
+    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Write test for to_select_tag()</td>
   </tr>
 </table>
 </div>
@@ -313,7 +605,7 @@ Test class for FormOptionsHelper.<br /><br /><p>Generated by PHPUnit2_Util_Skele
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:37 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 20 Apr 2006 10:12:16 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

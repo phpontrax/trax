@@ -14,6 +14,12 @@
 echo "testing ActiveRecordHelper\n";
 require_once 'testenv.php';
 
+//  We need to load a mock DB class to test ActiveRecordHelper
+//  Change the include path to put the mockDB/ directory first, so
+//  that when ActiveRecord loads it will pick up the mock class.
+@ini_set('include_path','./mockDB:'.ini_get('include_path'));
+require_once "active_record.php";
+
 // Call ActiveRecordErrorTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
     define("PHPUnit2_MAIN_METHOD", "ActiveRecordHelperTest::main");
@@ -25,8 +31,27 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
+//  root Trax files in the test directory
+define("TRAX_ROOT", dirname(__FILE__) . "/");
+define("TRAX_VIEWS_EXTENTION",  "phtml");
+$GLOBALS['TRAX_INCLUDES'] =
+    array( "config"      => "config",
+           "controllers" => "controllers",
+           "helpers"     => "helpers",
+           "layouts"     => "layouts",
+           "views"       => "views");
+
 require_once "action_view/helpers.php";
 require_once "action_view/helpers/active_record_helper.php";
+require_once "router.php";
+require_once 'trax_exceptions.php';
+require_once 'inflector.php';
+require_once 'action_controller.php';
+
+// Set Trax operating mode
+define("TRAX_MODE",   "development");
+
+class DataType extends ActiveRecord {}
 
 /**
  * Test class for ActiveRecordHelper.
@@ -53,6 +78,18 @@ class ActiveRecordHelperTest extends PHPUnit2_Framework_TestCase {
      * @access protected
      */
     protected function setUp() {
+
+        //  Force constructor to get a connection
+        $GLOBALS['ACTIVE_RECORD_DB'] = null;
+
+        // Set up information that normally comes from database.ini
+        $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]
+            = array('phptype'    => 'mysql',
+                    'database'   => 'database_development',
+                    'hostspec'   => 'localhost',
+                    'username'   => 'root',
+                    'password'   => '',
+                    'persistent' => true);
     }
 
     /**
@@ -148,6 +185,17 @@ class ActiveRecordHelperTest extends PHPUnit2_Framework_TestCase {
      * @todo Implement testAll_input_tags().
      */
     public function testAll_input_tags() {
+        $ar = new ActionController;
+        $GLOBALS['current_controller_object'] = $ar;
+        $dt = new DataType;
+        $ar->DataType = $dt;
+        $arh = new ActiveRecordHelper();
+        $arh->scaffolding = true;
+        echo "calling all_input_tags()\n";
+        echo $arh->all_input_tags($dt, 'DataType', array()); 
+
+
+
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }

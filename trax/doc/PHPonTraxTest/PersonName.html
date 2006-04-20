@@ -44,11 +44,15 @@
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActionMailerTest_php.html">		ActionMailerTest.php
 		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActionController_action_controller_php.html">		action_controller.php
+		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordErrorTest_php.html">		ActiveRecordErrorTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordHelperTest_php.html">		ActiveRecordHelperTest.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_ActiveRecordTest_php.html">		ActiveRecordTest.php
+		</a><br>
+			<a href="../PHPonTraxTest/_test_mockActiveRecord_active_record_php.html">		active_record.php
 		</a><br>
 			<a href="../PHPonTraxTest/_test_controllers_application_php.html">		application.php
 		</a><br>
@@ -104,9 +108,11 @@
       
             <b>Classes:</b><br />
         <div class="package">
-		    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
+		    		<a href="../PHPonTraxTest/ActionController.html">ActionController</a><br />
+	    		<a href="../PHPonTraxTest/ActionControllerErrorTest.html">ActionControllerErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionControllerTest.html">ActionControllerTest</a><br />
 	    		<a href="../PHPonTraxTest/ActionMailerTest.html">ActionMailerTest</a><br />
+	    		<a href="../PHPonTraxTest/ActiveRecord.html">ActiveRecord</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordErrorTest.html">ActiveRecordErrorTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordHelperTest.html">ActiveRecordHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/ActiveRecordTest.html">ActiveRecordTest</a><br />
@@ -114,6 +120,7 @@
 	    		<a href="../PHPonTraxTest/ApplicationMailerTest.html">ApplicationMailerTest</a><br />
 	    		<a href="../PHPonTraxTest/AssetTagHelperTest.html">AssetTagHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/CatalogController.html">CatalogController</a><br />
+	    		<a href="../PHPonTraxTest/DataType.html">DataType</a><br />
 	    		<a href="../PHPonTraxTest/DateHelperTest.html">DateHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/DB.html">DB</a><br />
 	    		<a href="../PHPonTraxTest/DB_common.html">DB_common</a><br />
@@ -124,6 +131,7 @@
 	    		<a href="../PHPonTraxTest/DB_row.html">DB_row</a><br />
 	    		<a href="../PHPonTraxTest/DispatcherTest.html">DispatcherTest</a><br />
 	    		<a href="../PHPonTraxTest/DummyController.html">DummyController</a><br />
+	    		<a href="../PHPonTraxTest/ExDateHelper.html">ExDateHelper</a><br />
 	    		<a href="../PHPonTraxTest/ExtHelpers.html">ExtHelpers</a><br />
 	    		<a href="../PHPonTraxTest/FormHelperTest.html">FormHelperTest</a><br />
 	    		<a href="../PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a><br />
@@ -152,7 +160,7 @@ Source Location: /test/ActiveRecordTest.php<br /><br />
 <tr><td valign="top">
 
 <h3><a href="#class_details">Class Overview</a></h3>
-<pre><a href="../PHPonTrax/ActiveRecord.html">ActiveRecord</a>
+<pre>ActiveRecord
    |
    --PersonName</pre><br />
 <div class="description">Regression tester for the ActiveRecord class</div><br /><br />
@@ -183,671 +191,7 @@ Source Location: /test/ActiveRecordTest.php<br /><br />
 
 
 
-<td valign="top">
-<h3>Inherited Variables</h3>
-<div class="tags">
-<h4>Class: <a href="../PHPonTrax/ActiveRecord.html">ActiveRecord</a></h4>
-<dl>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$aggregrations">ActiveRecord::$aggregrations</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$auto_create_timestamps">ActiveRecord::$auto_create_timestamps</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$auto_save_associations">ActiveRecord::$auto_save_associations</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$auto_save_habtm">ActiveRecord::$auto_save_habtm</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$auto_timestamps">ActiveRecord::$auto_timestamps</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$auto_update_timestamps">ActiveRecord::$auto_update_timestamps</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$begin_executed">ActiveRecord::$begin_executed</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$belongs_to">ActiveRecord::$belongs_to</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$content_columns">ActiveRecord::$content_columns</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$database_name">ActiveRecord::$database_name</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$date_format">ActiveRecord::$date_format</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$db">ActiveRecord::$db</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$display">ActiveRecord::$display</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$errors">ActiveRecord::$errors</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$fetch_mode">ActiveRecord::$fetch_mode</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$force_reconnect">ActiveRecord::$force_reconnect</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$habtm_attributes">ActiveRecord::$habtm_attributes</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$has_and_belongs_to_many">ActiveRecord::$has_and_belongs_to_many</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$has_many">ActiveRecord::$has_many</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$has_one">ActiveRecord::$has_one</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$index_on">ActiveRecord::$index_on</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$new_record">ActiveRecord::$new_record</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$preserve_null_dates">ActiveRecord::$preserve_null_dates</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$primary_keys">ActiveRecord::$primary_keys</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$rows_per_page_default">ActiveRecord::$rows_per_page_default</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$save_associations">ActiveRecord::$save_associations</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$table_name">ActiveRecord::$table_name</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$time_format">ActiveRecord::$time_format</a>
-  </dt>
-<dd>
-   
-</dd>
-<dt>
-  <a href="../PHPonTrax/ActiveRecord.html#var$use_transactions">ActiveRecord::$use_transactions</a>
-  </dt>
-<dd>
-   
-</dd>
-</dl>
-</div>
-</td>
 
-<td valign="top">
-<h3>Inherited Methods</h3>
-<div class="tags">
-<h4>Class: <a href="../PHPonTrax/ActiveRecord.html">ActiveRecord</a></h4>
-<dl>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#method__construct">ActiveRecord::__construct()</a>
-  </dt>
-  <dd>
-    Construct an ActiveRecord object
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodadd_error">ActiveRecord::add_error()</a>
-  </dt>
-  <dd>
-    Add or overwrite description of an error to the list of errors
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodadd_habtm_records">ActiveRecord::add_habtm_records()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodadd_record">ActiveRecord::add_record()</a>
-  </dt>
-  <dd>
-    Insert a new row in the table associated with this object
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodadd_record_or_update_record">ActiveRecord::add_record_or_update_record()</a>
-  </dt>
-  <dd>
-    Create or update a row in the table
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_create">ActiveRecord::after_create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_delete">ActiveRecord::after_delete()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_save">ActiveRecord::after_save()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_update">ActiveRecord::after_update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_validation">ActiveRecord::after_validation()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_validation_on_create">ActiveRecord::after_validation_on_create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodafter_validation_on_update">ActiveRecord::after_validation_on_update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodaggregrate_all">ActiveRecord::aggregrate_all()</a>
-  </dt>
-  <dd>
-    Implement *_all() functions (SQL aggregate functions)
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_create">ActiveRecord::before_create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_delete">ActiveRecord::before_delete()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_save">ActiveRecord::before_save()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_update">ActiveRecord::before_update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_validation">ActiveRecord::before_validation()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_validation_on_create">ActiveRecord::before_validation_on_create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbefore_validation_on_update">ActiveRecord::before_validation_on_update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodbegin">ActiveRecord::begin()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodcheck_datetime">ActiveRecord::check_datetime()</a>
-  </dt>
-  <dd>
-    Apply automatic timestamp updates
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodcolumn_attribute_exists">ActiveRecord::column_attribute_exists()</a>
-  </dt>
-  <dd>
-    checks if a column exists or not in the table
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodcolumn_for_attribute">ActiveRecord::column_for_attribute()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodcommit">ActiveRecord::commit()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodcreate">ActiveRecord::create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methoddelete">ActiveRecord::delete()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methoddelete_all">ActiveRecord::delete_all()</a>
-  </dt>
-  <dd>
-    Delete from table all rows that match argument
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methoddelete_habtm_records">ActiveRecord::delete_habtm_records()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodestablish_connection">ActiveRecord::establish_connection()</a>
-  </dt>
-  <dd>
-    Open a database connection if one is not currently open
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind">ActiveRecord::find()</a>
-  </dt>
-  <dd>
-    Find row(s) with specified value(s)
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_all">ActiveRecord::find_all()</a>
-  </dt>
-  <dd>
-    Return rows selected by $conditions
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_all_habtm">ActiveRecord::find_all_habtm()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_all_has_many">ActiveRecord::find_all_has_many()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_by">ActiveRecord::find_by()</a>
-  </dt>
-  <dd>
-    Implement find_by_*() and find_all_by_* methods
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_by_sql">ActiveRecord::find_by_sql()</a>
-  </dt>
-  <dd>
-    Return all the rows selected by the SQL argument
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_first">ActiveRecord::find_first()</a>
-  </dt>
-  <dd>
-    Return first row selected by $conditions
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_one_belongs_to">ActiveRecord::find_one_belongs_to()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodfind_one_has_one">ActiveRecord::find_one_has_one()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_association_type">ActiveRecord::get_association_type()</a>
-  </dt>
-  <dd>
-    returns the association type if defined in child class or null
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_attributes">ActiveRecord::get_attributes()</a>
-  </dt>
-  <dd>
-    Return pairs of column-name:column-value
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_errors">ActiveRecord::get_errors()</a>
-  </dt>
-  <dd>
-    Return description of non-fatal errors
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_errors_as_string">ActiveRecord::get_errors_as_string()</a>
-  </dt>
-  <dd>
-    Return errors as a string.
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_insert_id">ActiveRecord::get_insert_id()</a>
-  </dt>
-  <dd>
-    Returns the autogenerated id from the last insert query
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_join_table_name">ActiveRecord::get_join_table_name()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_primary_key_conditions">ActiveRecord::get_primary_key_conditions()</a>
-  </dt>
-  <dd>
-    Return argument for a &quot;WHERE&quot; clause specifying this row
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodget_updates_sql">ActiveRecord::get_updates_sql()</a>
-  </dt>
-  <dd>
-    Return column values of object formatted for SQL update statement
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodis_error">ActiveRecord::is_error()</a>
-  </dt>
-  <dd>
-    Test whether argument is a PEAR Error object or a DB Error object.
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodis_new_record">ActiveRecord::is_new_record()</a>
-  </dt>
-  <dd>
-    Test whether this object represents a new record
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodlimit_select">ActiveRecord::limit_select()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodload">ActiveRecord::load()</a>
-  </dt>
-  <dd>
-    Loads into current object values from the database.
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodlog_query">ActiveRecord::log_query()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodpage_list">ActiveRecord::page_list()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodquery">ActiveRecord::query()</a>
-  </dt>
-  <dd>
-    Perform an SQL query and return the results
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodquoted_attributes">ActiveRecord::quoted_attributes()</a>
-  </dt>
-  <dd>
-    Return pairs of column-name:quoted-column-value
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodraise">ActiveRecord::raise()</a>
-  </dt>
-  <dd>
-    Throw an exception describing an error in this object
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodreload">ActiveRecord::reload()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodrollback">ActiveRecord::rollback()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodsave">ActiveRecord::save()</a>
-  </dt>
-  <dd>
-    Create or update a row in the table with specified attributes
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodsave_association">ActiveRecord::save_association()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodsave_associations">ActiveRecord::save_associations()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodsave_without_validation">ActiveRecord::save_without_validation()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodsend">ActiveRecord::send()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodset_content_columns">ActiveRecord::set_content_columns()</a>
-  </dt>
-  <dd>
-    Populate object with information about the table it represents
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodset_habtm_attributes">ActiveRecord::set_habtm_attributes()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodset_table_name_using_class_name">ActiveRecord::set_table_name_using_class_name()</a>
-  </dt>
-  <dd>
-    Set $table_name from the class name of this object
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodupdate">ActiveRecord::update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodupdate_all">ActiveRecord::update_all()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodupdate_attributes">ActiveRecord::update_attributes()</a>
-  </dt>
-  <dd>
-    Update object attributes from list in argument
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodupdate_habtm_records">ActiveRecord::update_habtm_records()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodupdate_record">ActiveRecord::update_record()</a>
-  </dt>
-  <dd>
-    Update the row in the table described by this object
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodvalid">ActiveRecord::valid()</a>
-  </dt>
-  <dd>
-    Runs validation routines for update or create
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodvalidate">ActiveRecord::validate()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodvalidate_model_attributes">ActiveRecord::validate_model_attributes()</a>
-  </dt>
-  <dd>
-    Call every method named &quot;validate_*()&quot; where * is a column name
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodvalidate_on_create">ActiveRecord::validate_on_create()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#methodvalidate_on_update">ActiveRecord::validate_on_update()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#method__call">ActiveRecord::__call()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#method__get">ActiveRecord::__get()</a>
-  </dt>
-  <dd>
-    
-  </dd>
-    <dt>
-    <a href="../PHPonTrax/ActiveRecord.html#method__set">ActiveRecord::__set()</a>
-  </dt>
-  <dd>
-    Store column value or description of the table format
-  </dd>
-  </dl>
-</div>
-</td>
 
 </tr></table>
 <hr />
@@ -855,7 +199,7 @@ Source Location: /test/ActiveRecordTest.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line <a href="..//__filesource/fsource_PHPonTraxTest__testActiveRecordTest.php.html#a49">49</a>]<br />
+[line 49]<br />
 Regression tester for the ActiveRecord class<br /><br /><p>This class is used only in regression testing of the ActiveRecord   class, but you might find some useful examples by reading it.</p><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
@@ -866,7 +210,7 @@ Regression tester for the ActiveRecord class<br /><br /><p>This class is used on
 <div class="tags">
   <hr />
 	<a name="methodnew_obj"></a>
-	<h3>method new_obj <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testActiveRecordTest.php.html#a60">60</a>]</span></h3>
+	<h3>method new_obj <span class="smalllinenumber">[line 60]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -883,7 +227,7 @@ $attributes)</code>
   </div>
   <hr />
 	<a name="methodvalidate_prefix"></a>
-	<h3>method validate_prefix <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTraxTest__testActiveRecordTest.php.html#a51">51</a>]</span></h3>
+	<h3>method validate_prefix <span class="smalllinenumber">[line 51]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -902,7 +246,7 @@ $attributes)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:07 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 20 Apr 2006 10:12:07 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

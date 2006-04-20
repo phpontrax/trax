@@ -296,7 +296,10 @@ class Session {
      */
     function isset_flash($key) {
         if(self::is_valid_host()) {
-            if($_SESSION[self::get_hash()]['flash'][$key]) {
+            if(array_key_exists(self::get_hash(), $_SESSION)
+               && array_key_exists('flash',$_SESSION[self::get_hash()])
+               && array_key_exists($key,
+                                   $_SESSION[self::get_hash()]['flash'])) {
                 return true;    
             }
         }

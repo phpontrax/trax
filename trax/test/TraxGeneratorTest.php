@@ -231,7 +231,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_controller('mumble');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
                                   . 'controllers/mumble_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
@@ -257,7 +257,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_controller('store', 'manager');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
                                   . 'controllers/store_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
@@ -278,7 +278,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_controller('account', array('customer','teller'));
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
                                   . 'controllers/account_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
@@ -304,7 +304,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_controller('forum/admin');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
                                 . 'controllers/forum/admin_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
@@ -326,7 +326,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_model('CreditCard');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT . 'models/credit_card.php'));
         $model = file_get_contents(TRAX_ROOT . 'models/credit_card.php');
         $this->assertContains('class CreditCard extends ActiveRecord',
@@ -337,7 +337,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_model('soap_opera');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT . 'models/soap_opera.php'));
         $model = file_get_contents(TRAX_ROOT . 'models/soap_opera.php');
         $this->assertContains('class SoapOpera extends ActiveRecord',
@@ -354,7 +354,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_scaffold('PersonName', 'membership');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);
         $this->assertNotContains('Notice:', $output);
 
@@ -444,7 +444,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_scaffold('PersonName',null);
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);
         $this->assertNotContains('Notice:', $output);
 
@@ -537,7 +537,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $tg->generate_scaffold('PersonName', 'membership',
                                array('join', 'renew'));
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);
         $this->assertNotContains('Notice:', $output);
 
@@ -641,7 +641,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->generate_scaffold('PersonName', 'admin/membership');
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);
         $this->assertNotContains('Notice:', $output);
 
@@ -762,7 +762,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->run();
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT . 'models/credit_card.php'));
 
         //  Generate a mumble controller with no views
@@ -772,7 +772,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->run();
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
                                   . 'controllers/mumble_controller.php'));
         $this->assertTrue(is_file(TRAX_ROOT
@@ -788,7 +788,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         ob_start();
         $tg->run();
         $output = ob_get_clean();
-        $this->assertContains('created', $output);
+        $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);
         $this->assertNotContains('Notice:', $output);
 

@@ -56,7 +56,9 @@ class Helpers {
     /**
      *  Current controller object
      *
-     *  Local copy of $GLOBALS['current_controller_object']
+     *  Local copy of $GLOBALS['current_controller_object']<br />
+     *  <b>NB:</b> {@link object()} faults if this does not contain a
+     *  valid instance of ActionController.
      *  @var ActionController
      */
     public $controller_object;
@@ -102,13 +104,16 @@ class Helpers {
 
         //  Copy controller information from $GLOBALS
         $this->controller_name =
-            array_key_exists('current_controller_name',$GLOBALS)
+            (array_key_exists('current_controller_name',$GLOBALS)
+             && $GLOBALS['current_controller_name'])
             ? $GLOBALS['current_controller_name'] : null;
         $this->controller_path =
-            array_key_exists('current_controller_path', $GLOBALS)
+            (array_key_exists('current_controller_path', $GLOBALS)
+             && $GLOBALS['current_controller_path'])
             ? $GLOBALS['current_controller_path'] : null;
         $this->controller_object =
-            array_key_exists('current_controller_object', $GLOBALS)
+            (array_key_exists('current_controller_object', $GLOBALS)
+             && $GLOBALS['current_controller_object'])
             ? $GLOBALS['current_controller_object'] : null;
     	if($auto_index) {
         	$object = $this->object();
@@ -130,9 +135,14 @@ class Helpers {
      *  @uses ActiveRecord::send()
      */
     protected function value() {
-        if (!array_key_exists($this->object_name, $_REQUEST)
-            || !array_key_exists($this->attribute_name,
+        if (array_key_exists($this->object_name, $_REQUEST)
+            && array_key_exists($this->attribute_name,
                                  $_REQUEST[$this->object_name])) {
+            $value = $_REQUEST[$this->object_name][$this->attribute_name];
+        } else {
+
+            //  Attribute value not found in $_REQUEST.  Find the
+            //  ActiveRecord subclass instance and query it.
             $object = $this->object();
             if(is_object($object) && $this->attribute_name) {
                 $value = $object->send($this->attribute_name);
@@ -142,13 +152,25 @@ class Helpers {
     }
 
     /**
-     *  @todo Document this method
-     *  @param string object_name
+     *  Given the name of an ActiveRecord subclass, find an instance
+     *
+     *  Finds the AR instance from the ActionController instance.
+     *  Assumes that if a $object_name is defined either as the
+     *  argument or an instance variable, then there must be
+     *  a controller object instance which points to a single instance
+     *  of the ActiveRecord.
+     *  <b>FIXME:</b> Handle errors better.
+     *  @param string Name of an ActiveRecord subclass or null
+     *  @return mixed Instance of the subclass, or null if
+     *                object not available.
      *  @uses controller_object
+     *  @uses object_name
      */
     protected function object($object_name = null) {
         $object_name = $object_name ? $object_name : $this->object_name;
-        if($object_name) {
+        if($object_name
+           && isset($this->controller_object)
+           && isset($this->controller_object->$object_name)) {
             return $this->controller_object->$object_name;
         }
         return null;

@@ -48,7 +48,8 @@ require_once('DB.php');
  *  plural notation.  For example, 
  *  a table named "order_details" would be associated with a subclass
  *  of ActiveRecord named "OrderDetail", and a table named "people"
- *  would be associated with subclass "Person".</p>
+ *  would be associated with subclass "Person".  See the tutorial
+ *  {@tutorial PHPonTrax/naming.pkg}</p>
  *
  *  <p>For a discussion of the ActiveRecord design pattern, see
  *  "Patterns of Enterprise 
@@ -763,7 +764,13 @@ class ActiveRecord {
     }
     
     /**
-     *  checks if a column exists or not in the table
+     *  Check whether a column exists in the associated table
+     *
+     *  When called, {@link $content_columns} lists the columns in
+     *  the table described by this object.
+     *  @param string Name of the column
+     *  @return boolean true=>the column exists; false=>it doesn't
+     *  @uses content_columns
      */
     function column_attribute_exists($attribute) {
         if(is_array($this->content_columns)) {
@@ -777,10 +784,14 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
-     *  Returns PEAR result set of one record with only the passed in column in the result set.
+     *  Get contents of one column of record selected by id and table
      *
+     *  When called, {@link $id} identifies one record in the table
+     *  identified by {@link $table}.  Fetch from the database the
+     *  contents of column $column of this record.
+     *  @param string Name of column to retrieve
      *  @uses $db
+     *  @uses column_attribute_exists()
      *  @throws {@link ActiveRecordError}
      *  @uses is_error()
      */
@@ -1206,6 +1217,8 @@ class ActiveRecord {
      *          </ul>
      */
     function save($attributes = null, $dont_validate = false) {
+        //error_log("ActiveRecord::save() \$attributes="
+        //          . var_export($attributes,true));
         if(!is_null($attributes)) {
             $this->update_attributes($attributes);
         }
@@ -1236,6 +1249,7 @@ class ActiveRecord {
      *          </ul>
      */
     private function add_record_or_update_record() { 
+        //error_log('add_record_or_update_record()');
         $this->before_save();
         if($this->new_record) {
             $this->before_create();
@@ -1318,10 +1332,11 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     private function update_record() {
+        //error_log('update_record()');
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
         $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
-        //echo "update_record: SQL: $sql<br>";
+        //error_log("update_record: SQL: $sql<br>");
         $result = $this->query($sql);
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
@@ -1654,20 +1669,48 @@ class ActiveRecord {
 
     /**
      *  Update object attributes from list in argument
+     *
+     *  The elements of $attributes are parsed and assigned to
+     *  attributes of the ActiveRecord object.  Date/time fields are
+     *  treated according to the
+     *  {@tutorial PHPonTrax/naming.pkg#naming.naming_forms}.
      *  @param string[] $attributes List of name => value pairs giving
      *    name and value of attributes to set.
      *  @uses $auto_save_associations
      *  @todo Figure out and document how datetime fields work
      */
     function update_attributes($attributes) {
+        //error_log('update_attributes()');
+
+        //  Test each attribute to be updated
+        //  and process according to its type
         foreach($attributes as $field => $value) {
             # datetime / date parts check
             if(preg_match('/^\w+\(.*i\)$/i', $field)) {
+
+                //  The name of this attribute ends in "(?i)"
+                //  indicating that it's part of a date or time
+
+                //  Accumulate all the pieces of a date and time in
+                //  array $datetime_key.  The keys in the array are
+                //  the names of date/time attributes with the final
+                //  "(?i)" stripped off.
                 $datetime_key = substr($field, 0, strpos($field, "("));
-                if($datetime_key != $old_datetime_key) {
+                if( !isset($old_datetime_key)
+                    || ($datetime_key != $old_datetime_key)) {
+
+                    //  This value of $datetime_key hasn't been seen
+                    //  before, so remember it.
                     $old_datetime_key = $datetime_key;                     
+
+                    //  $datetime_value accumulates the pieces of the
+                    //  date/time attribute $datetime_key
                     $datetime_value = "";   
                 } 
+
+                //  Concatentate pieces of the attribute's value
+                //  FIXME: this only works if the array elements
+                //  are sorted by key.  Is this guaranteed?
                 if(strstr($field, "2i") || strstr($field, "3i")) {
                     $datetime_value .= "-".$value;    
                 } elseif(strstr($field, "4i")) {
@@ -1693,12 +1736,18 @@ class ActiveRecord {
                     $this->save_associations[$association_type][] = $value;
                 }
             } else {
+
+                //  Just a simple attribute, copy it
                 $this->$field = $value;
             }
         }
+
+        //  If any date/time fields were found, assign the
+        //  accumulated values to corresponding attributes
         if(isset($datetime_fields)
            && is_array($datetime_fields)) {
             foreach($datetime_fields as $field => $value) {
+                //error_log("$field = $value");
                 $this->$field = $value;    
             }    
         }
