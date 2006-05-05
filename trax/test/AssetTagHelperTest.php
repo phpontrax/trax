@@ -25,7 +25,30 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
+//  root Trax files in the test directory
+define("TRAX_ROOT", dirname(__FILE__) . "/");
+define("TRAX_PUBLIC", dirname(__FILE__) . "/public");
+define("TRAX_URL_PREFIX", "/testprefix");
+define("TRAX_VIEWS_EXTENTION",  "phtml");
+$GLOBALS['TRAX_INCLUDES'] =
+    array( "config"      => "config",
+           "controllers" => "controllers",
+           "helpers"     => "helpers",
+           "layouts"     => "layouts",
+           "views"       => "views");
+
+require_once "action_view/helpers.php";
+require_once "inflector.php";
+require_once "action_view/helpers/url_helper.php";
+require_once "action_view/helpers/asset_tag_helper.php";
 require_once "trax_exceptions.php";
+
+//  parameters need by UrlHelper
+$_SERVER['HTTP_HOST'] = 'www.example.com';
+$_SERVER['SERVER_PORT'] = '80';
+
+//  referenced by the AssetTagHelper constructor
+$GLOBALS['JAVASCRIPT_DEFAULT_SOURCES'] = array('this', 'that');
 
 /**
  * Test class for AssetTagHelper.
@@ -64,89 +87,199 @@ class AssetTagHelperTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     * @todo Implement testConstruct().
+     *  Test __construct() method
+     *
+     *  Test the {@link AssetTagHelper::__construct()} method
      */
-    public function testConstruct() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+    public function test__construct() {
+        $ath = new AssetTagHelper;        
+        $this->assertTrue(is_object($ath));
+        $this->assertEquals('AssetTagHelper', get_class($ath));
+        $this->assertEquals(array('this','that'),
+                            $ath->javascript_default_sources);        
     }
 
     /**
-     * @todo Implement testJavascript_path().
+     *  Test javascript_path() method
+     *
+     *  Test the {@link AssetTagHelper::javascript_path()} method
      */
     public function testJavascript_path() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals('/testprefix/javascripts/foo.js',
+                           $ath->javascript_path('foo'));
+        $this->assertEquals('/testprefix/javascripts/foo.bar',
+                           $ath->javascript_path('foo.bar'));
+        $this->assertEquals('/testprefix/foo.js',
+                           $ath->javascript_path('/foo'));
+        $this->assertEquals('http://foo/bar',
+                           $ath->javascript_path('http://foo/bar'));
     }
 
     /**
-     * @todo Implement testJavascript_include_tag_method().
+     *  Test javascript_include_tag() method
+     *
+     *  Test the {@link AssetTagHelper::javascript_include_tag()} method
      */
     public function testJavascript_include_tag_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals("<script src=\"/testprefix/javascripts/foo.js\""
+                            . " type=\"text/javascript\"></script>\n",
+                           $ath->javascript_include_tag('foo'));
+        $this->assertEquals("<script src=\"/testprefix/javascripts/foo.js\""
+                            . " type=\"text/javascript\"></script>\n"
+                            . "<script src=\"/testprefix/javascripts/bar.js\""
+                            . " type=\"text/javascript\"></script>\n",
+                            $ath->javascript_include_tag('foo','bar'));
+        $this->assertEquals("<script src=\"/testprefix/javascripts/this.js\""
+                            . " type=\"text/javascript\"></script>\n"
+                            . "<script src=\"/testprefix/javascripts/that.js\""
+                            . " type=\"text/javascript\"></script>\n"
+                    . "<script src=\"/testprefix/javascripts/application.js\""
+                            . " type=\"text/javascript\"></script>\n",
+                            $ath->javascript_include_tag('defaults'));
     }
 
     /**
-     * @todo Implement testJavascript_include_tag_function().
+     *  Test the javascript_include_tag() function
+     *
+     *  Test the {@link javascript_include_tag()} function in
+     *  procedural file {@link asset_tag_helper.php}
      */
     public function testJavascript_include_tag_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $this->assertEquals("<script src=\"/testprefix/javascripts/foo.js\""
+                            . " type=\"text/javascript\"></script>\n",
+                            javascript_include_tag('foo'));
     }
 
     /**
-     * @todo Implement testStylesheet_path().
+     *  Test stylesheet_path() method
+     *
+     *  Test the {@link AssetTagHelper::stylesheet_path()} method
      */
     public function testStylesheet_path() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals('/testprefix/stylesheets/foo.css',
+                           $ath->stylesheet_path('foo'));
+        $this->assertEquals('/testprefix/stylesheets/foo.bar',
+                           $ath->stylesheet_path('foo.bar'));
+        $this->assertEquals('/testprefix/foo.css',
+                           $ath->stylesheet_path('/foo'));
+        $this->assertEquals('http://foo/bar',
+                           $ath->stylesheet_path('http://foo/bar'));
     }
 
     /**
-     * @todo Implement testStylesheet_link_tag_method().
+     *  Test stylesheet_link_tag() method
+     *
+     *  Test the {@link AssetTagHelper::stylesheet_link_tag()} method
      */
     public function testStylesheet_link_tag_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n",
+                            $ath->stylesheet_link_tag("foo"));
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n"
+                            . '<link href="/testprefix/stylesheets/bar.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n",
+                            $ath->stylesheet_link_tag("foo","bar"));
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="screen" rel="Screenstyle"'
+                            . ' type="text/css" />'."\n",
+                            $ath->stylesheet_link_tag("foo",
+                                            array("rel"=>"Screenstyle")));
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="all" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n",
+                            $ath->stylesheet_link_tag("foo",
+                                                array("media"=>"all")));
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/plain" />'."\n",
+                            $ath->stylesheet_link_tag("foo",
+                                       array("type"=>"text/plain")));
+        $this->assertEquals('<link href="/bar/mumble.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n",
+                            $ath->stylesheet_link_tag("foo",
+                                       array("href"=>"/bar/mumble.css")));
     }
 
     /**
-     * @todo Implement testStylesheet_link_tag_function().
+     *  Test stylesheet_link_tag() function
+     *
+     *  Test the {@link stylesheet_link_tag()} function in procedural
+     *  file {@link asset_tag_helper.php}
      */
     public function testStylesheet_link_tag_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $this->assertEquals('<link href="/testprefix/stylesheets/foo.css"'
+                            . ' media="screen" rel="Stylesheet"'
+                            . ' type="text/css" />'."\n",
+                            stylesheet_link_tag("foo"));
     }
 
     /**
-     * @todo Implement testImage_path().
+     *  Test image_path() method
+     *
+     *  Test the {@link AssetTagHelper::image_path()} method
      */
     public function testImage_path() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals('/testprefix/images/foo.png',
+                           $ath->image_path('foo'));
+        $this->assertEquals('/testprefix/images/foo.bar',
+                           $ath->image_path('foo.bar'));
+        $this->assertEquals('/testprefix/foo.png',
+                           $ath->image_path('/foo'));
+        $this->assertEquals('http://foo/bar',
+                           $ath->image_path('http://foo/bar'));
     }
 
     /**
-     * @todo Implement testImage_tag_method().
+     *  Test image_tag() method
+     *
+     *  Test the {@link AssetTagHelper::image_tag()} method
      */
     public function testImage_tag_method() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $ath = new AssetTagHelper;
+        $this->assertEquals('<img alt="Foo"'
+                            . ' src="/testprefix/images/foo.png" />'."\n",
+                           $ath->image_tag('foo'));
+        $this->assertEquals('<img alt="Bar"'
+                            . ' src="/testprefix/images/foo.png" />'."\n",
+                            $ath->image_tag('foo', array('alt' => 'Bar')));
+        $this->assertEquals('<img alt="Foo" height="45"'
+                            . ' src="/testprefix/images/foo.png"'
+                            . ' width="30" />'."\n",
+                            $ath->image_tag('foo', array('width' => '30',
+                                                         'height' => '45')));
+        $this->assertEquals('<img alt="Foo" height="45"'
+                            . ' src="/testprefix/images/foo.png"'
+                            . ' width="30" />'."\n",
+                            $ath->image_tag('foo', array('size' => '30x45')));
     }
 
     /**
-     * @todo Implement testImage_tag_function().
+     *  Test the image_tag() function
+     *
+     *  Test the {@link image_tag()} function in procedural file
+     *  {@link asset_helper.php}
      */
     public function testImage_tag_function() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
+        $this->assertEquals('<img alt="Foo"'
+                            . ' src="/testprefix/images/foo.png" />'."\n",
+                           image_tag('foo'));
     }
 
     /**
      * @todo Implement testAuto_discovery_link_tag_method().
      */
     public function testAuto_discovery_link_tag_method() {
+        $ath = new AssetTagHelper;
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }

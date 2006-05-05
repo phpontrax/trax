@@ -342,7 +342,7 @@ class DateHelper extends Helpers {
      *    current calendar date.<b>FIXME:</b> this doesn't work
      *  @param mixed[]  Output format options:
      *  <ul>
-     *    <li><samp>'field_seperator' => '</samp><i>somestring</i><samp>'</samp><br />
+     *    <li><samp>'field_separator' => '</samp><i>somestring</i><samp>'</samp><br />
      *      String to insert between the month and year selectors.  If
      *      none is specified, default value is <samp>' / '</samp></li>
      *    <li><samp>'month_before_year' => 'false'<br />
@@ -371,7 +371,7 @@ class DateHelper extends Helpers {
         $options['use_month_numbers'] = true;   
         $options['start_year'] = date("Y");
         $options['end_year'] = date("Y") + 7;
-        $options['field_seperator'] = " / ";        
+        $options['field_separator'] = " / ";        
 
         //  Find name and initial value of year field,
         //  then generate year selector pulldown
@@ -395,10 +395,10 @@ class DateHelper extends Helpers {
 
         //  Output month and year selectors in desired order
         if($options['month_before_year']) {
-            $select_html =  $month_select . $options['field_seperator']
+            $select_html =  $month_select . $options['field_separator']
                 .  $year_select;     
         } else {
-            $select_html =  $year_select . $options['field_seperator']
+            $select_html =  $year_select . $options['field_separator']
                 .  $month_select;
         }
         return $select_html;
@@ -1142,7 +1142,7 @@ class DateHelper extends Helpers {
      *      name.</li> 
      *    <li><samp>'discard_year' => true</samp> Don't show a year
      *      menu.  If absent or false, year menu will be output.</li>
-     *    <li><samp>'field_seperator' => '</samp><i>string</i><samp>'</samp>
+     *    <li><samp>'field_separator' => '</samp><i>string</i><samp>'</samp>
      *      String to insert between the submenus in the output.  If
      *      absent, one blank will be inserted.</li> 
      *    <li><samp>'include_blank' => true</samp> Initially show a blank
@@ -1170,6 +1170,12 @@ class DateHelper extends Helpers {
 //        error_log("to_date_select_tag() object='$this->object_name'"
 //                  . " attribute='$this->attribute_name'");
 //        error_log("options=".var_export($options,true));
+
+        //  Handle historically misspelled options
+        if (array_key_exists('field_seperator', $options)) {
+            $options['field_separator'] = $options['field_seperator'];
+            unset($options['field_seperator']);
+        }
         $defaults = array('discard_type' => true);
         $options  = array_merge($defaults, $options);
         $options_with_prefix = array();
@@ -1240,9 +1246,9 @@ class DateHelper extends Helpers {
         //  Join the pieces of HTML with an optional field separator
         //  (default blank)
         if(count($date_select)) {
-            $seperator = array_key_exists('field_seperator',$options)
-                ? $options['field_seperator'] : " ";
-            $date_select = implode($seperator, $date_select);            
+            $separator = array_key_exists('field_separator',$options)
+                ? $options['field_separator'] : " ";
+            $date_select = implode($separator, $date_select);            
         }
 
         return $date_select;
@@ -1391,7 +1397,7 @@ class DateHelper extends Helpers {
         $options['use_month_numbers'] = true;   
         $options['start_year'] = date("Y");
         $options['end_year'] = date("Y") + 7;
-        $options['field_seperator'] = " / ";
+        $options['field_separator'] = " / ";
         return $this->to_date_select_tag($options);               
     }  
 

@@ -57,7 +57,7 @@ $e = $packagexml->setOptions(
                 'summary' => 'Rapid Application Development Made Easy',
                 'description' => 'PHP port of Ruby on Rails',
                 'baseinstalldir' => 'PHPonTrax',
-                'version' => '198svn',
+                'version' => '199svn',
                 'packagedirectory' => '.',
                 'state' => 'alpha',
                 'filelistgenerator' => 'svn', // generate from svn
@@ -209,7 +209,7 @@ if (PEAR::isError($e)) {
     exit;
  }
 
-$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux|*BSD');
+$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux|*BSD|Darwin');
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     exit;

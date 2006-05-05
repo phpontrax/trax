@@ -35,6 +35,9 @@
 							<ul>
 	<li type="square"><a href="PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
 <ul>
+	<li type="square"><a href="PHPonTrax/tutorial_rails_examples.pkg.html">Examples From The Rails Book</a>
+</ul>
+<ul>
 	<li type="square"><a href="PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
@@ -320,7 +323,7 @@
 							<dt><b>__autoload</b></dt>
 				<dd>in file environment.php, function <a href="PHPonTrax/_data_config_environment_php.html#function__autoload">__autoload()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Automatically load a file containing a specified class</dd>
 							<dt><b>__call</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__call">ActiveRecord::__call()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__call">ActiveRecord::__call()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Override call() to dynamically call the database associations</dd>
 							<dt><b>__call</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#method__call">ActionController::__call()</a></dd>
 							<dt><b>__construct</b></dt>
@@ -348,7 +351,7 @@
 							<dt><b>__construct</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__construct">ActiveRecord::__construct()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Construct an ActiveRecord object</dd>
 							<dt><b>__get</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__get">ActiveRecord::__get()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#method__get">ActiveRecord::__get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Override get() if they do $model-&gt;some_association-&gt;field_name   dynamically load the requested contents from the database.</dd>
 							<dt><b>__set</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#method__set">ActionController::__set()</a></dd>
 							<dt><b>__set</b></dt>
@@ -365,6 +368,8 @@
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action">ActionController::$action</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Name of the action method in the controller class</dd>
 							<dt><b>$action_called</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action_called">ActionController::$action_called</a></dd>
+							<dt><b>$action_params</b></dt>
+				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$action_params">ActionController::$action_params</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Parameters for the action routine</dd>
 							<dt><b>$added_path</b></dt>
 				<dd>in file action_controller.php, variable <a href="PHPonTrax/ActionController.html#var$added_path">ActionController::$added_path</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Path to add to other filesystem paths</dd>
 							<dt><b>$after_filter</b></dt>
@@ -444,19 +449,19 @@
 							<dt><b>add_to_address</b></dt>
 				<dd>in file action_mailer.php, method <a href="PHPonTrax/ActionMailer.html#methodadd_to_address">ActionMailer::add_to_address()</a></dd>
 							<dt><b>after_create</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_create">ActiveRecord::after_create()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_create">ActiveRecord::after_create()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after save() on new objects that havent been saved yet (no record exists).</dd>
 							<dt><b>after_delete</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_delete">ActiveRecord::after_delete()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_delete">ActiveRecord::after_delete()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after delete().</dd>
 							<dt><b>after_save</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_save">ActiveRecord::after_save()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_save">ActiveRecord::after_save()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after save (regardless of whether its a create or update save).</dd>
 							<dt><b>after_update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_update">ActiveRecord::after_update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_update">ActiveRecord::after_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after save() on existing objects that has a record.</dd>
 							<dt><b>after_validation</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation">ActiveRecord::after_validation()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation">ActiveRecord::after_validation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after validate().</dd>
 							<dt><b>after_validation_on_create</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation_on_create">ActiveRecord::after_validation_on_create()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation_on_create">ActiveRecord::after_validation_on_create()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after validate() on new objects that haven't been saved yet (no record exists).</dd>
 							<dt><b>after_validation_on_update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation_on_update">ActiveRecord::after_validation_on_update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodafter_validation_on_update">ActiveRecord::after_validation_on_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called after validate() on existing objects that has a record.</dd>
 							<dt><b>aggregrate_all</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodaggregrate_all">ActiveRecord::aggregrate_all()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Implement *_all() functions (SQL aggregate functions)</dd>
 							<dt><b>all_input_tags</b></dt>
@@ -468,11 +473,11 @@
 							<dt><b>array_or_string_for_javascript</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodarray_or_string_for_javascript">JavaScriptHelper::array_or_string_for_javascript()</a></dd>
 							<dt><b>AssetTagHelper</b></dt>
-				<dd>in file asset_tag_helper.php, class <a href="PHPonTrax/AssetTagHelper.html">AssetTagHelper</a></dd>
+				<dd>in file asset_tag_helper.php, class <a href="PHPonTrax/AssetTagHelper.html">AssetTagHelper</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Utility to help build HTML/XML link tags for public assets</dd>
 							<dt><b>auto_discovery_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodauto_discovery_link_tag">AssetTagHelper::auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a link tag that browsers and news readers can use to auto-detect a RSS or ATOM feed for this page. The $type can  either be &lt;tt&gt;:rss&lt;/tt&gt; (default) or &lt;tt&gt;:atom&lt;/tt&gt; and the $options follow the url_for() style of declaring a link target.</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodauto_discovery_link_tag">AssetTagHelper::auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a link tag that browsers and news readers can use to</dd>
 							<dt><b>auto_discovery_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionauto_discovery_link_tag">auto_discovery_link_tag()</a></dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionauto_discovery_link_tag">auto_discovery_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new AssetTagHelper object and call its auto_discovery_link_tag() method</dd>
 							<dt><b>application_mailer.php</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_data_app_application_mailer_php.html">application_mailer.php</a></dd>
 							<dt><b>application.php</b></dt>
@@ -514,21 +519,21 @@
 							<dt><b>$belongs_to</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$belongs_to">ActiveRecord::$belongs_to</a></dd>
 							<dt><b>before_create</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_create">ActiveRecord::before_create()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_create">ActiveRecord::before_create()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before save() on new objects that havent been saved yet (no record exists).</dd>
 							<dt><b>before_delete</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_delete">ActiveRecord::before_delete()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_delete">ActiveRecord::before_delete()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before delete().</dd>
 							<dt><b>before_save</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_save">ActiveRecord::before_save()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_save">ActiveRecord::before_save()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before save() (regardless of whether its a create or update save)</dd>
 							<dt><b>before_update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_update">ActiveRecord::before_update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_update">ActiveRecord::before_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before save() on existing objects that has a record.</dd>
 							<dt><b>before_validation</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation">ActiveRecord::before_validation()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation">ActiveRecord::before_validation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before validate().</dd>
 							<dt><b>before_validation_on_create</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation_on_create">ActiveRecord::before_validation_on_create()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation_on_create">ActiveRecord::before_validation_on_create()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before validate() on new objects that haven't been saved yet (no record exists).</dd>
 							<dt><b>before_validation_on_update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation_on_update">ActiveRecord::before_validation_on_update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbefore_validation_on_update">ActiveRecord::before_validation_on_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is called before validate() on existing objects that has a record.</dd>
 							<dt><b>begin</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbegin">ActiveRecord::begin()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodbegin">ActiveRecord::begin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Only used if you want to do transactions and your db supports transactions</dd>
 							<dt><b>boolean_attribute</b></dt>
 				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodboolean_attribute">Helpers::boolean_attribute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Convert an attribute to proper XML boolean form</dd>
 							<dt><b>boolean_select</b></dt>
@@ -542,7 +547,7 @@
 							<dt><b>button_to</b></dt>
 				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodbutton_to">UrlHelper::button_to()</a></dd>
 							<dt><b>button_to</b></dt>
-				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionbutton_to">button_to()</a></dd>
+				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionbutton_to">button_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new UrlHelper object and call its button_to() method</dd>
 					</dl>
 	</div>
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
@@ -604,13 +609,13 @@
 							<dt><b>column_attribute_exists</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcolumn_attribute_exists">ActiveRecord::column_attribute_exists()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Check whether a column exists in the associated table</dd>
 							<dt><b>column_for_attribute</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcolumn_for_attribute">ActiveRecord::column_for_attribute()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcolumn_for_attribute">ActiveRecord::column_for_attribute()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;get the attributes for a specific column.</dd>
 							<dt><b>column_type</b></dt>
 				<dd>in file active_record_helper.php, method <a href="PHPonTrax/ActiveRecordHelper.html#methodcolumn_type">ActiveRecordHelper::column_type()</a></dd>
 							<dt><b>commit</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcommit">ActiveRecord::commit()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodcommit">ActiveRecord::commit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Only used if you want to do transactions and your db supports transactions</dd>
 							<dt><b>compute_public_path</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodcompute_public_path">AssetTagHelper::compute_public_path()</a></dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodcompute_public_path">AssetTagHelper::compute_public_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Compute public path to an asset</dd>
 							<dt><b>connect</b></dt>
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodconnect">Router::connect()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Accessor method to add a route to the route table</dd>
 							<dt><b>content_tag</b></dt>
@@ -666,7 +671,7 @@
 							<dt><b>$date_format</b></dt>
 				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$date_format">ActiveRecord::$date_format</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Date format for use with auto timestamping</dd>
 							<dt><b>$db</b></dt>
-				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$db">ActiveRecord::$db</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Reference to the object returned by PEAR DB::Connect()</dd>
+				<dd>in file active_record.php, variable <a href="PHPonTrax/ActiveRecord.html#var$db">ActiveRecord::$db</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Reference to the database object</dd>
 							<dt><b>$default_date_options</b></dt>
 				<dd>in file form_helper.php, variable <a href="PHPonTrax/FormHelper.html#var$default_date_options">FormHelper::$default_date_options</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default attributes for dates</dd>
 							<dt><b>$default_field_options</b></dt>
@@ -702,7 +707,7 @@
 							<dt><b>define_javascript_functions</b></dt>
 				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methoddefine_javascript_functions">JavaScriptHelper::define_javascript_functions()</a></dd>
 							<dt><b>delete</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methoddelete">ActiveRecord::delete()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methoddelete">ActiveRecord::delete()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Deletes the record with the given $id or if you have done a   $model = $model-&gt;find($id), then $model-&gt;delete() it will delete   the record it just loaded from the find() without passing anything   to delete(). If an array of ids is provided, all ids in array are deleted.</dd>
 							<dt><b>delete</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#methoddelete">ScaffoldController::delete()</a></dd>
 							<dt><b>delete_all</b></dt>
@@ -822,9 +827,9 @@
 							<dt><b>find_all</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_all">ActiveRecord::find_all()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return rows selected by $conditions</dd>
 							<dt><b>find_all_habtm</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_all_habtm">ActiveRecord::find_all_habtm()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_all_habtm">ActiveRecord::find_all_habtm()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Find all records using a &quot;has_and_belongs_to_many&quot; relationship</dd>
 							<dt><b>find_all_has_many</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_all_has_many">ActiveRecord::find_all_has_many()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_all_has_many">ActiveRecord::find_all_has_many()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Find all records using a &quot;has_many&quot; relationship (one-to-many)</dd>
 							<dt><b>find_by</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_by">ActiveRecord::find_by()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Implement find_by_*() and find_all_by_* methods</dd>
 							<dt><b>find_by_sql</b></dt>
@@ -832,9 +837,9 @@
 							<dt><b>find_first</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_first">ActiveRecord::find_first()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return first row selected by $conditions</dd>
 							<dt><b>find_one_belongs_to</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_one_belongs_to">ActiveRecord::find_one_belongs_to()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_one_belongs_to">ActiveRecord::find_one_belongs_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Find all records using a &quot;belongs_to&quot; relationship (one-to-one)   (the foreign key being in the table itself)   Parameters: $other_object_name: The singularized version of a table name.</dd>
 							<dt><b>find_one_has_one</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_one_has_one">ActiveRecord::find_one_has_one()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodfind_one_has_one">ActiveRecord::find_one_has_one()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Find all records using a &quot;has_one&quot; relationship (one-to-one)   (the foreign key being in the other table)   Parameters: $other_table_name: The name of the other table that contains                                  many rows relating to this object's id.</dd>
 							<dt><b>find_route</b></dt>
 				<dd>in file router.php, method <a href="PHPonTrax/Router.html#methodfind_route">Router::find_route()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Find first route in route table with path that matches argument</dd>
 							<dt><b>fix_php_brackets</b></dt>
@@ -904,7 +909,7 @@
 							<dt><b>get_insert_id</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_insert_id">ActiveRecord::get_insert_id()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the autogenerated id from the last insert query</dd>
 							<dt><b>get_join_table_name</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_join_table_name">ActiveRecord::get_join_table_name()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_join_table_name">ActiveRecord::get_join_table_name()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a the name of the join table that would be used for the two   tables.  The join table name is decided from the alphabetical order   of the two tables.  e.g. &quot;genres_movies&quot; because &quot;g&quot; comes before &quot;m&quot;</dd>
 							<dt><b>get_primary_key_conditions</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodget_primary_key_conditions">ActiveRecord::get_primary_key_conditions()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return argument for a &quot;WHERE&quot; clause specifying this row</dd>
 							<dt><b>get_selected_route</b></dt>
@@ -970,15 +975,15 @@
 							<dt><b>$ip</b></dt>
 				<dd>in file session.php, variable <a href="PHPonTrax/Session.html#var$ip">Session::$ip</a><br>&nbsp;&nbsp;&nbsp;&nbsp;IP Address of client</dd>
 							<dt><b>image_path</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodimage_path">AssetTagHelper::image_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns path to an image asset. Example:</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodimage_path">AssetTagHelper::image_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Compute public path to a image asset</dd>
 							<dt><b>image_submit_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodimage_submit_tag">FormTagHelper::image_submit_tag()</a></dd>
 							<dt><b>image_submit_tag</b></dt>
 				<dd>in file form_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_form_tag_helper_php.html#functionimage_submit_tag">image_submit_tag()</a></dd>
 							<dt><b>image_tag</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodimage_tag">AssetTagHelper::image_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns an image tag converting the $options instead html options on the tag, but with these special cases:</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodimage_tag">AssetTagHelper::image_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Build image tags to an image asset</dd>
 							<dt><b>image_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionimage_tag">image_tag()</a></dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionimage_tag">image_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new AssetTagHelper object and call its image_tag() method</dd>
 							<dt><b>index</b></dt>
 				<dd>in file scaffold_controller.php, method <a href="PHPonTrax/ScaffoldController.html#methodindex">ScaffoldController::index()</a></dd>
 							<dt><b>Inflector</b></dt>
@@ -1019,6 +1024,8 @@
 	<div>
 		<h2>j</h2>
 		<dl>
+							<dt><b>$javascript_default_sources</b></dt>
+				<dd>in file asset_tag_helper.php, variable <a href="PHPonTrax/AssetTagHelper.html#var$javascript_default_sources">AssetTagHelper::$javascript_default_sources</a></dd>
 							<dt><b>JavaScriptHelper</b></dt>
 				<dd>in file javascript_helper.php, class <a href="PHPonTrax/JavaScriptHelper.html">JavaScriptHelper</a></dd>
 							<dt><b>javascript_cdata_section</b></dt>
@@ -1026,15 +1033,15 @@
 							<dt><b>javascript_cdata_section</b></dt>
 				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionjavascript_cdata_section">javascript_cdata_section()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;javascript_cdata_section($content)</dd>
 							<dt><b>javascript_include_tag</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_include_tag">AssetTagHelper::javascript_include_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a script include tag per source given as argument. Examples:</dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionjavascript_include_tag">javascript_include_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new AssetTagHelper object and call its javascript_include_tag() method</dd>
 							<dt><b>javascript_include_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionjavascript_include_tag">javascript_include_tag()</a></dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_include_tag">AssetTagHelper::javascript_include_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return script include tag for one or more javascript assets</dd>
 							<dt><b>javascript_path</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_path">AssetTagHelper::javascript_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns path to a javascript asset. Example:</dd>
-							<dt><b>javascript_tag</b></dt>
-				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">JavaScriptHelper::javascript_tag()</a></dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodjavascript_path">AssetTagHelper::javascript_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Compute public path to a javascript asset</dd>
 							<dt><b>javascript_tag</b></dt>
 				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionjavascript_tag">javascript_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;javascript_tag($content)</dd>
+							<dt><b>javascript_tag</b></dt>
+				<dd>in file javascript_helper.php, method <a href="PHPonTrax/JavaScriptHelper.html#methodjavascript_tag">JavaScriptHelper::javascript_tag()</a></dd>
 							<dt><b>javascript_helper.php</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html">javascript_helper.php</a></dd>
 					</dl>
@@ -1068,15 +1075,15 @@
 							<dt><b>leading_zero_on_single_digits</b></dt>
 				<dd>in file date_helper.php, method <a href="PHPonTrax/DateHelper.html#methodleading_zero_on_single_digits">DateHelper::leading_zero_on_single_digits()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prefix a leading zero to single digit numbers</dd>
 							<dt><b>limit_select</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodlimit_select">ActiveRecord::limit_select()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodlimit_select">ActiveRecord::limit_select()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Paging html functions</dd>
 							<dt><b>link_image_to</b></dt>
-				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionlink_image_to">link_image_to()</a></dd>
+				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionlink_image_to">link_image_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new UrlHelper object and call its link_image_to() method</dd>
 							<dt><b>link_image_to</b></dt>
-				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodlink_image_to">UrlHelper::link_image_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This tag is deprecated. Combine the link_to and AssetTagHelper::image_tag yourself instead, like:</dd>
+				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodlink_image_to">UrlHelper::link_image_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This tag is deprecated. Combine the link_to and</dd>
 							<dt><b>link_to</b></dt>
-				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionlink_to">link_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Avialble functions for use in views</dd>
+				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionlink_to">link_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new UrlHelper object and call its link_to() method</dd>
 							<dt><b>link_to</b></dt>
-				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodlink_to">UrlHelper::link_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Creates a link tag of the given +name+ using an URL created by the set of +options+.</dd>
+				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodlink_to">UrlHelper::link_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Creates a link tag of the given +name+ using an URL created by  the set of +options+.</dd>
 							<dt><b>link_to_function</b></dt>
 				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionlink_to_function">link_to_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;link_to_function($name, $function, $html_options = array())</dd>
 							<dt><b>link_to_function</b></dt>
@@ -1090,7 +1097,7 @@
 							<dt><b>load_router</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#methodload_router">ActionController::load_router()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Load routes from configuration file config/routes.php</dd>
 							<dt><b>log_query</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodlog_query">ActiveRecord::log_query()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodlog_query">ActiveRecord::log_query()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Log SQL query in development mode</dd>
 							<dt><b>layout.phtml</b></dt>
 				<dd>procedural page <a href="PHPonTrax/_vendor_trax_templates_scaffolds_generator_templates_layout_phtml.html">layout.phtml</a></dd>
 							<dt><b>layout.phtml</b></dt>
@@ -1274,7 +1281,7 @@
 							<dt><b>redirect_to</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#methodredirect_to">ActionController::redirect_to()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Redirect the browser to a specified target</dd>
 							<dt><b>reload</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodreload">ActiveRecord::reload()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodreload">ActiveRecord::reload()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Reloads the attributes of this object from the database.</dd>
 							<dt><b>remote_function</b></dt>
 				<dd>in file javascript_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_javascript_helper_php.html#functionremote_function">remote_function()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;remote_function($options)</dd>
 							<dt><b>remote_function</b></dt>
@@ -1296,7 +1303,7 @@
 							<dt><b>render_to_string</b></dt>
 				<dd>in file action_controller.php, method <a href="PHPonTrax/ActionController.html#methodrender_to_string">ActionController::render_to_string()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Renders according to the same rules as render, but returns the result in a string  instead of sending it as the response body to the browser.</dd>
 							<dt><b>rollback</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodrollback">ActiveRecord::rollback()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodrollback">ActiveRecord::rollback()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Only used if you want to do transactions and your db supports transactions</dd>
 							<dt><b>Router</b></dt>
 				<dd>in file router.php, class <a href="PHPonTrax/Router.html">Router</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Convert a URL to an action</dd>
 							<dt><b>run</b></dt>
@@ -1340,11 +1347,11 @@
 							<dt><b>save</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave">ActiveRecord::save()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create or update a row in the table with specified attributes</dd>
 							<dt><b>save_association</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_association">ActiveRecord::save_association()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_association">ActiveRecord::save_association()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;save the association to the database</dd>
 							<dt><b>save_associations</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_associations">ActiveRecord::save_associations()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_associations">ActiveRecord::save_associations()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Saves any associations objects assigned to this instance</dd>
 							<dt><b>save_without_validation</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_without_validation">ActiveRecord::save_without_validation()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodsave_without_validation">ActiveRecord::save_without_validation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Save without valdiating anything.</dd>
 							<dt><b>ScaffoldController</b></dt>
 				<dd>in file scaffold_controller.php, class <a href="PHPonTrax/ScaffoldController.html">ScaffoldController</a></dd>
 							<dt><b>scaffold_help</b></dt>
@@ -1432,11 +1439,11 @@
 							<dt><b>start_form_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodstart_form_tag">FormTagHelper::start_form_tag()</a></dd>
 							<dt><b>stylesheet_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodstylesheet_link_tag">AssetTagHelper::stylesheet_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a css link tag per source given as argument.</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodstylesheet_link_tag">AssetTagHelper::stylesheet_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Build link tags to one or more stylesheet assets</dd>
 							<dt><b>stylesheet_link_tag</b></dt>
-				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionstylesheet_link_tag">stylesheet_link_tag()</a></dd>
+				<dd>in file asset_tag_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionstylesheet_link_tag">stylesheet_link_tag()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new AssetTagHelper object and call its stylesheet_link_tag() method</dd>
 							<dt><b>stylesheet_path</b></dt>
-				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodstylesheet_path">AssetTagHelper::stylesheet_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns path to a stylesheet asset. Example:</dd>
+				<dd>in file asset_tag_helper.php, method <a href="PHPonTrax/AssetTagHelper.html#methodstylesheet_path">AssetTagHelper::stylesheet_path()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Compute public path to a stylesheet asset</dd>
 							<dt><b>submit_tag</b></dt>
 				<dd>in file form_tag_helper.php, method <a href="PHPonTrax/FormTagHelper.html#methodsubmit_tag">FormTagHelper::submit_tag()</a></dd>
 							<dt><b>submit_tag</b></dt>
@@ -1590,9 +1597,9 @@
 							<dt><b>unset_var</b></dt>
 				<dd>in file session.php, method <a href="PHPonTrax/Session.html#methodunset_var">Session::unset_var()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Unset a session variable</dd>
 							<dt><b>update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodupdate">ActiveRecord::update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodupdate">ActiveRecord::update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Finds the record from the passed id, instantly saves it with the passed attributes   (if the validation permits it). Returns true on success and false on error.</dd>
 							<dt><b>update_all</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodupdate_all">ActiveRecord::update_all()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodupdate_all">ActiveRecord::update_all()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Updates all records with the SET-part of an SQL update statement in updates and   returns an integer with the number of rows updates. A subset of the records can   be selected by specifying conditions.</dd>
 							<dt><b>update_attributes</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodupdate_attributes">ActiveRecord::update_attributes()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Update object attributes from list in argument</dd>
 							<dt><b>update_element_function</b></dt>
@@ -1606,9 +1613,9 @@
 							<dt><b>UrlHelper</b></dt>
 				<dd>in file url_helper.php, class <a href="PHPonTrax/UrlHelper.html">UrlHelper</a></dd>
 							<dt><b>url_for</b></dt>
-				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionurl_for">url_for()</a></dd>
+				<dd>in file url_helper.php, function <a href="PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionurl_for">url_for()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Make a new UrlHelper object and call its url_for() method</dd>
 							<dt><b>url_for</b></dt>
-				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodurl_for">UrlHelper::url_for()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return the URL for the set of $options provided.</dd>
+				<dd>in file url_helper.php, method <a href="PHPonTrax/UrlHelper.html#methodurl_for">UrlHelper::url_for()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generate URL based on current URL and optional arguments</dd>
 							<dt><b>usage</b></dt>
 				<dd>in file trax.php, function <a href="PHPonTrax/_trax_php.html#functionusage">usage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output a Usage message and exit</dd>
 							<dt><b>url_helper.php</b></dt>
@@ -1636,15 +1643,15 @@
 							<dt><b>valid</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalid">ActiveRecord::valid()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Runs validation routines for update or create</dd>
 							<dt><b>validate</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate">ActiveRecord::validate()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate">ActiveRecord::validate()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Overwrite this method for validation checks on all saves and</dd>
 							<dt><b>validate_email</b></dt>
 				<dd>in file action_mailer.php, method <a href="PHPonTrax/ActionMailer.html#methodvalidate_email">ActionMailer::validate_email()</a></dd>
 							<dt><b>validate_model_attributes</b></dt>
 				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate_model_attributes">ActiveRecord::validate_model_attributes()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Call every method named &quot;validate_*()&quot; where * is a column name</dd>
 							<dt><b>validate_on_create</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate_on_create">ActiveRecord::validate_on_create()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate_on_create">ActiveRecord::validate_on_create()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Override this method for validation checks used only on creation.</dd>
 							<dt><b>validate_on_update</b></dt>
-				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate_on_update">ActiveRecord::validate_on_update()</a></dd>
+				<dd>in file active_record.php, method <a href="PHPonTrax/ActiveRecord.html#methodvalidate_on_update">ActiveRecord::validate_on_update()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Override this method for validation checks used only on updates.</dd>
 							<dt><b>value</b></dt>
 				<dd>in file helpers.php, method <a href="PHPonTrax/Helpers.html#methodvalue">Helpers::value()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get value of current attribute in the current ActiveRecord object</dd>
 							<dt><b>value</b></dt>
@@ -1692,7 +1699,7 @@
 	<a href="elementindex_PHPonTrax.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 20 Apr 2006 10:12:03 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:46:56 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

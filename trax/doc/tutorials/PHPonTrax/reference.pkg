@@ -37,12 +37,6 @@
       Get it from $_SERVER['TRAX_MODE'] if that exists</cmdsynopsis>
     </listitem>
 
-    <listitem><command>TRAX_PATH_SEPERATOR</command>
-     <cmdsynopsis>Character to use as the separator when defining the
-     PHP include path. ';' for Windows, otherwise ':'.
-     </cmdsynopsis>
-    </listitem>
-
     <listitem><command>TRAX_PUBLIC</command>
      <cmdsynopsis>Subdirectory of the user's home directory referenced
      by the Apache configuration variable <literal>UserDir</literal>.
@@ -83,6 +77,14 @@
     {@link ActiveRecord::establish_connection()}.
      </cmdsynopsis>
     </listitem>
+
+    <listitem><command>$GLOBALS['ACTIVE_RECORD_SQL_LOG']</command>
+     <cmdsynopsis>An array which contains a log of SQL queries sent to
+     the DBMS, one query per element.  Created only when TRAX_MODE is
+     'development'.  Written in {@link ActiveRecord::log_query()}.
+    </cmdsynopsis>
+    </listitem>
+
 
     <listitem><command>$GLOBALS['COUNTRIES']</command>
      <cmdsynopsis>
@@ -142,6 +144,11 @@
 
     <listitem><command>$GLOBALS['DEFAULT_TEXT_AREA_OPTIONS']</command>
      <cmdsynopsis>Referenced in {@link FormHelper}
+     </cmdsynopsis>
+    </listitem>
+
+    <listitem><command>$GLOBALS['JAVASCRIPT_DEFAULT_SOURCES']</command>
+     <cmdsynopsis>Referenced in {@link AssetTagHelper} constructor
      </cmdsynopsis>
     </listitem>
 

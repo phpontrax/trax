@@ -120,216 +120,317 @@
 <li><a name="a80"></a><span class="src-sym">}</span></li>
 <li><a name="a81"></a>&nbsp;</li>
 <li><a name="a82"></a><span class="src-doc">/**</span></li>
-<li><a name="a83"></a><span class="src-doc"> *</span></li>
-<li><a name="a84"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
-<li><a name="a85"></a><span class="src-doc"> */</span></li>
-<li><a name="a86"></a><span class="src-key">class </span><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a> <span class="src-key">extends </span><a href="../PHPonTrax/FormHelper.html">FormHelper</a> <span class="src-sym">{</span></li>
-<li><a name="a87"></a>    </li>
-<li><a name="a88"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a89"></a><span class="src-doc">     *  Accepts a container (hash, array, enumerable, your type) and returns a string of option tags. Given a container</span></li>
-<li><a name="a90"></a><span class="src-doc">     *  where the elements respond to first and last (such as a two-element array), the &quot;lasts&quot; serve as option values and</span></li>
-<li><a name="a91"></a><span class="src-doc">     *  the &quot;firsts&quot; as option text. Hashes are turned into this form automatically, so the keys become &quot;firsts&quot; and values</span></li>
-<li><a name="a92"></a><span class="src-doc">     *  become lasts. If +selected+ is specified, the matching &quot;last&quot; or element will get the selected option-tag.  +Selected+</span></li>
-<li><a name="a93"></a><span class="src-doc">     *  may also be an array of values to be selected when using a multiple select.</span></li>
-<li><a name="a94"></a><span class="src-doc">     * </span></li>
-<li><a name="a95"></a><span class="src-doc">     *  Examples (call, result):</span></li>
-<li><a name="a96"></a><span class="src-doc">     *    options_for_select([[&quot;Dollar&quot;, &quot;$&quot;], [&quot;Kroner&quot;, &quot;DKK&quot;]])</span></li>
-<li><a name="a97"></a><span class="src-doc">     *      &lt;option value=&quot;$&quot;&gt;Dollar&lt;/option&gt;\n&lt;option value=&quot;DKK&quot;&gt;Kroner&lt;/option&gt;</span></li>
-<li><a name="a98"></a><span class="src-doc">     * </span></li>
-<li><a name="a99"></a><span class="src-doc">     *    options_for_select([ &quot;VISA&quot;, &quot;MasterCard&quot; ], &quot;MasterCard&quot;)</span></li>
-<li><a name="a100"></a><span class="src-doc">     *      &lt;option&gt;VISA&lt;/option&gt;\n&lt;option selected=&quot;selected&quot;&gt;MasterCard&lt;/option&gt;</span></li>
+<li><a name="a83"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this class</span></li>
+<li><a name="a84"></a><span class="src-doc"> */</span></li>
+<li><a name="a85"></a><span class="src-key">class </span><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a> <span class="src-key">extends </span><a href="../PHPonTrax/FormHelper.html">FormHelper</a> <span class="src-sym">{</span></li>
+<li><a name="a86"></a>    </li>
+<li><a name="a87"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a88"></a><span class="src-doc">     *  Generate HTML option tags from a list of choices</span></li>
+<li><a name="a89"></a><span class="src-doc">     *</span></li>
+<li><a name="a90"></a><span class="src-doc">     *  Accepts an array of possible choices and returns a string of</span></li>
+<li><a name="a91"></a><span class="src-doc">     *  option tags.  The value of each array element becomes the</span></li>
+<li><a name="a92"></a><span class="src-doc">     *  visible text of an option, and the key of the element becomes</span></li>
+<li><a name="a93"></a><span class="src-doc">     *  the value returned to the server.  For example:&lt;br /&gt;</span></li>
+<li><a name="a94"></a><span class="src-doc">     *  &lt;samp&gt;options_for_select(array('foo','bar'));&lt;/samp&gt;&lt;br /&gt;</span></li>
+<li><a name="a95"></a><span class="src-doc">     *  will return:&lt;br /&gt;</span></li>
+<li><a name="a96"></a><span class="src-doc">     *  &lt;samp&gt;&lt;option value=&quot;0&quot;&gt;foo&lt;/option&gt;\n&lt;/samp&gt;&lt;br /&gt;</span></li>
+<li><a name="a97"></a><span class="src-doc">     *  &lt;samp&gt;&lt;option value=&quot;1&quot;&gt;bar&lt;/option&gt;&lt;/samp&gt;&lt;br /&gt;</span></li>
+<li><a name="a98"></a><span class="src-doc">     *</span></li>
+<li><a name="a99"></a><span class="src-doc">     *  The optional second argument specifies the array key of an</span></li>
+<li><a name="a100"></a><span class="src-doc">     *  option to be initially selected.</span></li>
 <li><a name="a101"></a><span class="src-doc">     * </span></li>
-<li><a name="a102"></a><span class="src-doc">     *    options_for_select({ &quot;Basic&quot; =&gt; &quot;$20&quot;, &quot;Plus&quot; =&gt; &quot;$40&quot; }, &quot;$40&quot;)</span></li>
-<li><a name="a103"></a><span class="src-doc">     *      &lt;option value=&quot;$20&quot;&gt;Basic&lt;/option&gt;\n&lt;option value=&quot;$40&quot; selected=&quot;selected&quot;&gt;Plus&lt;/option&gt;</span></li>
-<li><a name="a104"></a><span class="src-doc">     * </span></li>
-<li><a name="a105"></a><span class="src-doc">     *    options_for_select([ &quot;VISA&quot;, &quot;MasterCard&quot;, &quot;Discover&quot; ], [&quot;VISA&quot;, &quot;Discover&quot;])</span></li>
-<li><a name="a106"></a><span class="src-doc">     *      &lt;option selected=&quot;selected&quot;&gt;VISA&lt;/option&gt;\n&lt;option&gt;MasterCard&lt;/option&gt;\n&lt;option selected=&quot;selected&quot;&gt;Discover&lt;/option&gt;</span></li>
-<li><a name="a107"></a><span class="src-doc">     * </span></li>
-<li><a name="a108"></a><span class="src-doc">     *  NOTE: Only the option tags are returned, you have to wrap this call in a regular HTML select tag.</span></li>
-<li><a name="a109"></a><span class="src-doc">     */</span></li>
-<li><a name="a110"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a111"></a>        <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a112"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a113"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$choices </span><span class="src-key">as </span><span class="src-var">$choice_value </span>=&gt; <span class="src-var">$choice_text</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a114"></a>                <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a115"></a>                    <span class="src-var">$is_selected </span>= <span class="src-sym">(</span><span class="src-var">$choice_value </span>== <span class="src-var">$selected</span><span class="src-sym">) </span>? <span class="src-id">true </span>: <span class="src-id">false</span><span class="src-sym">;   </span></li>
-<li><a name="a116"></a>                <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
-<li><a name="a117"></a>                    <span class="src-var">$is_selected </span>= <span class="src-sym">(</span><span class="src-var">$choice_text </span>== <span class="src-var">$selected</span><span class="src-sym">) </span>? <span class="src-id">true </span>: <span class="src-id">false</span><span class="src-sym">;        </span></li>
+<li><a name="a102"></a><span class="src-doc">     *  NOTE: Only the option tags are returned, you have to wrap this</span></li>
+<li><a name="a103"></a><span class="src-doc">     *  call in a regular HTML select tag.</span></li>
+<li><a name="a104"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string[] </span><span class="src-doc"> Choices</span></li>
+<li><a name="a105"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc">  Selected choice</span></li>
+<li><a name="a106"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">string </span></li>
+<li><a name="a107"></a><span class="src-doc">     */</span></li>
+<li><a name="a108"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a109"></a>        <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a110"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a111"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$choices </span><span class="src-key">as </span><span class="src-var">$choice_value </span>=&gt; <span class="src-var">$choice_text</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a112"></a>                <span class="src-key">if</span><span class="src-sym">(</span><span class="src-sym">!</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a113"></a>                    <span class="src-var">$is_selected </span>= <span class="src-sym">(</span><span class="src-var">$choice_value </span>== <span class="src-var">$selected</span><span class="src-sym">)</span></li>
+<li><a name="a114"></a>                        ? <span class="src-id">true </span>: <span class="src-id">false</span><span class="src-sym">;   </span></li>
+<li><a name="a115"></a>                <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a116"></a>                    <span class="src-var">$is_selected </span>= <span class="src-sym">(</span><span class="src-var">$choice_text </span>== <span class="src-var">$selected</span><span class="src-sym">)</span></li>
+<li><a name="a117"></a>                        ? <span class="src-id">true </span>: <span class="src-id">false</span><span class="src-sym">;        </span></li>
 <li><a name="a118"></a>                <span class="src-sym">}</span></li>
 <li><a name="a119"></a>                <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$is_selected</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a120"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;&lt;option value=\&quot;&quot;</span>.<a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)</span>.<span class="src-str">&quot;\&quot; selected=\&quot;selected\&quot;&gt;&quot;</span>.<a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_text</span><span class="src-sym">)</span>.<span class="src-str">&quot;&lt;/option&gt;&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a121"></a>                <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
-<li><a name="a122"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;&lt;option value=\&quot;&quot;</span>.<a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)</span>.<span class="src-str">&quot;\&quot;&gt;&quot;</span>.<a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_text</span><span class="src-sym">)</span>.<span class="src-str">&quot;&lt;/option&gt;&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a123"></a>                <span class="src-sym">}                        </span></li>
-<li><a name="a124"></a>            <span class="src-sym">}    </span></li>
-<li><a name="a125"></a>        <span class="src-sym">}</span></li>
-<li><a name="a126"></a>        <span class="src-key">return </span><a href="http://www.php.net/implode">implode</a><span class="src-sym">(</span><span class="src-str">&quot;\n&quot;</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a127"></a>    <span class="src-sym">}</span></li>
-<li><a name="a128"></a>    </li>
-<li><a name="a129"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a130"></a><span class="src-doc">     * Returns a string of option tags that have been compiled by iterating over the +collection+ and assigning the</span></li>
-<li><a name="a131"></a><span class="src-doc">     * the result of a call to the +value_method+ as the option value and the +text_method+ as the option text.</span></li>
-<li><a name="a132"></a><span class="src-doc">     * If +selected_value+ is specified, the element returning a match on +value_method+ will get the selected option tag.</span></li>
-<li><a name="a133"></a><span class="src-doc">     *</span></li>
-<li><a name="a134"></a><span class="src-doc">     * Example (call, result). Imagine a loop iterating over each +person+ in &lt;tt&gt;@project.people&lt;/tt&gt; to generate an input tag:</span></li>
-<li><a name="a135"></a><span class="src-doc">     *   options_from_collection_for_select(@project.people, &quot;id&quot;, &quot;name&quot;)</span></li>
-<li><a name="a136"></a><span class="src-doc">     *     &lt;option value=&quot;#{person.id}&quot;&gt;#{person.name}&lt;/option&gt;</span></li>
-<li><a name="a137"></a><span class="src-doc">     *</span></li>
-<li><a name="a138"></a><span class="src-doc">     * NOTE: Only the option tags are returned, you have to wrap this call in a regular HTML select tag.</span></li>
-<li><a name="a139"></a><span class="src-doc">     */</span></li>
-<li><a name="a140"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_from_collection_for_select">options_from_collection_for_select</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$selected_value </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a141"></a>        <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a142"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a143"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$collection </span><span class="src-key">as </span><span class="src-var">$object</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a144"></a>                <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_object">is_object</a><span class="src-sym">(</span><span class="src-var">$object</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a145"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-var">$object</span><span class="src-sym">-&gt;</span><span class="src-id">send</span><span class="src-sym">(</span><span class="src-var">$attribute_value</span><span class="src-sym">)</span><span class="src-sym">] </span>= <span class="src-var">$object</span><span class="src-sym">-&gt;</span><span class="src-id">send</span><span class="src-sym">(</span><span class="src-var">$attribute_text</span><span class="src-sym">)</span><span class="src-sym">;            </span></li>
-<li><a name="a146"></a>                <span class="src-sym">}</span></li>
-<li><a name="a147"></a>            <span class="src-sym">}    </span></li>
-<li><a name="a148"></a>        <span class="src-sym">}       </span></li>
-<li><a name="a149"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$selected_value</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a150"></a>    <span class="src-sym">}</span></li>
-<li><a name="a151"></a>    </li>
-<li><a name="a152"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a153"></a><span class="src-doc">     *  Returns a string of option tags for pretty much any country in the world. Supply a country name as +selected+ to</span></li>
-<li><a name="a154"></a><span class="src-doc">     *  have it marked as the selected option tag. You can also supply an array of countries as +priority_countries+, so</span></li>
-<li><a name="a155"></a><span class="src-doc">     *  that they will be listed above the rest of the (long) list.</span></li>
-<li><a name="a156"></a><span class="src-doc">     *</span></li>
-<li><a name="a157"></a><span class="src-doc">     *  NOTE: Only the option tags are returned, you have to wrap this call in a regular HTML select tag.</span></li>
-<li><a name="a158"></a><span class="src-doc">     */</span></li>
-<li><a name="a159"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodcountry_options_for_select">country_options_for_select</a><span class="src-sym">(</span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">, </span><span class="src-var">$priority_countries </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a160"></a>        <span class="src-var">$country_options </span>= <span class="src-str">&quot;&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a161"></a>        </li>
-<li><a name="a162"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/count">count</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a163"></a>            <span class="src-var">$country_options </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">, </span><span class="src-var">$selected</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a164"></a>            <span class="src-var">$country_options </span>.= <span class="src-str">&quot;&lt;option value=\&quot;\&quot;&gt;-------------&lt;/option&gt;\n&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a165"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$priority_countries </span><span class="src-key">as </span><span class="src-var">$country</span><span class="src-sym">) </span><span class="src-sym">{ </span></li>
-<li><a name="a166"></a>                unset<span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">[</span><a href="http://www.php.net/array_search">array_search</a><span class="src-sym">(</span><span class="src-var">$country</span><span class="src-sym">, </span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a167"></a>            <span class="src-sym">}</span></li>
-<li><a name="a168"></a>        <span class="src-sym">}</span></li>
-<li><a name="a169"></a>        </li>
-<li><a name="a170"></a>        <span class="src-var">$country_options </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">, </span><span class="src-var">$selected</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a171"></a> </li>
-<li><a name="a172"></a>        <span class="src-key">return </span><span class="src-var">$country_options</span><span class="src-sym">;</span></li>
-<li><a name="a173"></a>    <span class="src-sym">}</span></li>
-<li><a name="a174"></a>    </li>
-<li><a name="a175"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a176"></a><span class="src-doc">     *</span></li>
-<li><a name="a177"></a><span class="src-doc">     */</span></li>
-<li><a name="a178"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_select_tag">to_select_tag</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a179"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a180"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">&quot;select&quot;</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a181"></a>    <span class="src-sym">}</span></li>
-<li><a name="a182"></a>    </li>
-<li><a name="a183"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a184"></a><span class="src-doc">     *</span></li>
-<li><a name="a185"></a><span class="src-doc">     */</span></li>
-<li><a name="a186"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_collection_select_tag">to_collection_select_tag</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a187"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a188"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">&quot;select&quot;</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_from_collection_for_select">options_from_collection_for_select</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a189"></a>    <span class="src-sym">}</span></li>
-<li><a name="a190"></a>    </li>
-<li><a name="a191"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a192"></a><span class="src-doc">     *</span></li>
-<li><a name="a193"></a><span class="src-doc">     */</span></li>
-<li><a name="a194"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_country_select_tag">to_country_select_tag</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a195"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a196"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span><span class="src-str">&quot;select&quot;</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodcountry_options_for_select">country_options_for_select</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$priority_countries</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">value</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a197"></a>    <span class="src-sym">}</span></li>
-<li><a name="a198"></a>&nbsp;</li>
-<li><a name="a199"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a200"></a><span class="src-doc">     *</span></li>
+<li><a name="a120"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;&lt;option value=\&quot;&quot;</span></li>
+<li><a name="a121"></a>              . <a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)</span></li>
+<li><a name="a122"></a>              . <span class="src-str">&quot;\&quot; selected=\&quot;selected\&quot;&gt;&quot;</span></li>
+<li><a name="a123"></a>              . <a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_text</span><span class="src-sym">)</span>.<span class="src-str">&quot;&lt;/option&gt;&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a124"></a>                <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a125"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-str">&quot;&lt;option value=\&quot;&quot;</span></li>
+<li><a name="a126"></a>              . <a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_value</span><span class="src-sym">)</span></li>
+<li><a name="a127"></a>              . <span class="src-str">&quot;\&quot;&gt;&quot;</span></li>
+<li><a name="a128"></a>              . <a href="http://www.php.net/htmlspecialchars">htmlspecialchars</a><span class="src-sym">(</span><span class="src-var">$choice_text</span><span class="src-sym">)</span>.<span class="src-str">&quot;&lt;/option&gt;&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a129"></a>                <span class="src-sym">}                        </span></li>
+<li><a name="a130"></a>            <span class="src-sym">}    </span></li>
+<li><a name="a131"></a>        <span class="src-sym">}</span></li>
+<li><a name="a132"></a>        <span class="src-key">return </span><a href="http://www.php.net/implode">implode</a><span class="src-sym">(</span><span class="src-str">&quot;\n&quot;</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a133"></a>    <span class="src-sym">}</span></li>
+<li><a name="a134"></a>    </li>
+<li><a name="a135"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a136"></a><span class="src-doc">     *  Returns a string of option tags that have been compiled by</span></li>
+<li><a name="a137"></a><span class="src-doc">     *  iterating over the +collection+ and assigning the result of a</span></li>
+<li><a name="a138"></a><span class="src-doc">     *  call to the +value_method+ as the option value and the</span></li>
+<li><a name="a139"></a><span class="src-doc">     *  +text_method+ as the option text. If +selected_value+ is</span></li>
+<li><a name="a140"></a><span class="src-doc">     *  specified, the element returning a match on +value_method+ will</span></li>
+<li><a name="a141"></a><span class="src-doc">     *  get the selected option tag.</span></li>
+<li><a name="a142"></a><span class="src-doc">     *</span></li>
+<li><a name="a143"></a><span class="src-doc">     *  Example (call, result). Imagine a loop iterating over each</span></li>
+<li><a name="a144"></a><span class="src-doc">     *  +person+ in &lt;tt&gt;@project.people&lt;/tt&gt; to generate an input tag:</span></li>
+<li><a name="a145"></a><span class="src-doc">     *   options_from_collection_for_select(@project.people, &quot;id&quot;, &quot;name&quot;)</span></li>
+<li><a name="a146"></a><span class="src-doc">     *     &lt;option value=&quot;#{person.id}&quot;&gt;#{person.name}&lt;/option&gt;</span></li>
+<li><a name="a147"></a><span class="src-doc">     *</span></li>
+<li><a name="a148"></a><span class="src-doc">     *  NOTE: Only the option tags are returned, you have to wrap this call</span></li>
+<li><a name="a149"></a><span class="src-doc">     *  in a regular HTML select tag.</span></li>
+<li><a name="a150"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a151"></a><span class="src-doc">     */</span></li>
+<li><a name="a152"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_from_collection_for_select">options_from_collection_for_select</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">,</span></li>
+<li><a name="a153"></a>                                                <span class="src-var">$attribute_text</span><span class="src-sym">,</span></li>
+<li><a name="a154"></a>                                                <span class="src-var">$selected_value </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a155"></a>        <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a156"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_array">is_array</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a157"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$collection </span><span class="src-key">as </span><span class="src-var">$object</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a158"></a>                <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/is_object">is_object</a><span class="src-sym">(</span><span class="src-var">$object</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a159"></a>                    <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-var">$object</span><span class="src-sym">-&gt;</span><span class="src-id">send</span><span class="src-sym">(</span><span class="src-var">$attribute_value</span><span class="src-sym">)</span><span class="src-sym">] </span>=</li>
+<li><a name="a160"></a>                        <span class="src-var">$object</span><span class="src-sym">-&gt;</span><span class="src-id">send</span><span class="src-sym">(</span><span class="src-var">$attribute_text</span><span class="src-sym">)</span><span class="src-sym">;            </span></li>
+<li><a name="a161"></a>                <span class="src-sym">}</span></li>
+<li><a name="a162"></a>            <span class="src-sym">}    </span></li>
+<li><a name="a163"></a>        <span class="src-sym">}       </span></li>
+<li><a name="a164"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$selected_value</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a165"></a>    <span class="src-sym">}</span></li>
+<li><a name="a166"></a>    </li>
+<li><a name="a167"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a168"></a><span class="src-doc">     *  Generate HTML options for world countries</span></li>
+<li><a name="a169"></a><span class="src-doc">     *</span></li>
+<li><a name="a170"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc"> Array key of country initially selected</span></li>
+<li><a name="a171"></a><span class="src-doc">     *   NOTE: Only the option tags are returned, you have to wrap this</span></li>
+<li><a name="a172"></a><span class="src-doc">     *   call in a regular HTML select tag.</span></li>
+<li><a name="a173"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> &lt;b&gt;FIXME:&lt;/b&gt; Second argument doesn't work</span></li>
+<li><a name="a174"></a><span class="src-doc">     */</span></li>
+<li><a name="a175"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodcountry_options_for_select">country_options_for_select</a><span class="src-sym">(</span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">,</span></li>
+<li><a name="a176"></a>                    <span class="src-var">$priority_countries </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a177"></a>        <span class="src-var">$country_options </span>= <span class="src-str">&quot;&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a178"></a>        </li>
+<li><a name="a179"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/count">count</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a180"></a>            <span class="src-var">$country_options </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">,</span></li>
+<li><a name="a181"></a>                              <span class="src-var">$selected</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a182"></a>            <span class="src-var">$country_options </span>.= <span class="src-str">&quot;&lt;option value=\&quot;\&quot;&gt;-------------&lt;/option&gt;\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a183"></a>            <span class="src-key">foreach</span><span class="src-sym">(</span><span class="src-var">$priority_countries </span><span class="src-key">as </span><span class="src-var">$country</span><span class="src-sym">) </span><span class="src-sym">{ </span></li>
+<li><a name="a184"></a>                unset<span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">[</span><a href="http://www.php.net/array_search">array_search</a><span class="src-sym">(</span><span class="src-var">$country</span><span class="src-sym">,</span></li>
+<li><a name="a185"></a>                             <span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a186"></a>            <span class="src-sym">}</span></li>
+<li><a name="a187"></a>        <span class="src-sym">}</span></li>
+<li><a name="a188"></a>        </li>
+<li><a name="a189"></a>        <span class="src-var">$country_options </span>.= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'COUNTRIES'</span><span class="src-sym">]</span><span class="src-sym">,</span></li>
+<li><a name="a190"></a>                              <span class="src-var">$selected</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a191"></a> </li>
+<li><a name="a192"></a>        <span class="src-key">return </span><span class="src-var">$country_options</span><span class="src-sym">;</span></li>
+<li><a name="a193"></a>    <span class="src-sym">}</span></li>
+<li><a name="a194"></a>    </li>
+<li><a name="a195"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a196"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a197"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_default_name_and_id()</span></li>
+<li><a name="a198"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_options()</span></li>
+<li><a name="a199"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> content_tag()</span></li>
+<li><a name="a200"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> value()</span></li>
 <li><a name="a201"></a><span class="src-doc">     */</span></li>
-<li><a name="a202"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span><span class="src-var">$option_tags</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$value </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a203"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">&quot;include_blank&quot;</span><span class="src-sym">] </span>== <span class="src-id">true</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a204"></a>            <span class="src-var">$option_tags </span>= <span class="src-str">&quot;&lt;option value=\&quot;\&quot;&gt;&lt;/option&gt;\n&quot; </span>. <span class="src-var">$option_tags</span><span class="src-sym">;</span></li>
-<li><a name="a205"></a>        <span class="src-sym">} </span></li>
-<li><a name="a206"></a>        <span class="src-var">$value </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a207"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$value</span><span class="src-sym">) </span>&amp;&amp; <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'prompt'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a208"></a>            <span class="src-var">$text </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'prompt'</span><span class="src-sym">] </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'prompt'</span><span class="src-sym">] </span>: <span class="src-str">&quot;Please select&quot;</span><span class="src-sym">;</span></li>
-<li><a name="a209"></a>            <span class="src-key">return </span><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str">&lt;<span class="src-id">option</span> <span class="src-id">value</span>=\&quot;\&quot;&gt;<span class="src-var">$text</span>&lt;/<span class="src-id">option</span>&gt;\n</span><span class="src-str">&quot; </span>. <span class="src-var">$option_tags</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a210"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
-<li><a name="a211"></a>            <span class="src-key">return </span><span class="src-var">$option_tags</span><span class="src-sym">;</span></li>
-<li><a name="a212"></a>        <span class="src-sym">}        </span></li>
-<li><a name="a213"></a>    <span class="src-sym">}</span></li>
-<li><a name="a214"></a><span class="src-sym">}</span></li>
-<li><a name="a215"></a>&nbsp;</li>
-<li><a name="a216"></a><span class="src-doc">/**</span></li>
-<li><a name="a217"></a><span class="src-doc"> * Avialble functions for use in views</span></li>
-<li><a name="a218"></a><span class="src-doc"> * Create a select tag and a series of contained option tags for the provided object and method.</span></li>
-<li><a name="a219"></a><span class="src-doc"> * The option currently held by the object will be selected, provided that the object is available.</span></li>
-<li><a name="a220"></a><span class="src-doc"> * See options_for_select for the required format of the choices parameter.</span></li>
-<li><a name="a221"></a><span class="src-doc"> *</span></li>
-<li><a name="a222"></a><span class="src-doc"> * Example with $post-&gt;person_id =&gt; 1:</span></li>
-<li><a name="a223"></a><span class="src-doc"> *   $person = new Person;</span></li>
-<li><a name="a224"></a><span class="src-doc"> *   $people = $person-&gt;find_all();</span></li>
-<li><a name="a225"></a><span class="src-doc"> *   foreach($people as $person) {</span></li>
-<li><a name="a226"></a><span class="src-doc"> *      $choices[$person-&gt;id] = $person-&gt;first_name;</span></li>
-<li><a name="a227"></a><span class="src-doc"> *   }</span></li>
-<li><a name="a228"></a><span class="src-doc"> *   select(&quot;post&quot;, &quot;person_id&quot;, $choices, array(&quot;include_blank&quot; =&gt; true))</span></li>
-<li><a name="a229"></a><span class="src-doc"> *</span></li>
-<li><a name="a230"></a><span class="src-doc"> * could become:</span></li>
-<li><a name="a231"></a><span class="src-doc"> *</span></li>
-<li><a name="a232"></a><span class="src-doc"> *   &lt;select name=&quot;post[person_id]&quot;&gt;</span></li>
-<li><a name="a233"></a><span class="src-doc"> *     &lt;option&gt;&lt;/option&gt;</span></li>
-<li><a name="a234"></a><span class="src-doc"> *     &lt;option value=&quot;1&quot; selected=&quot;selected&quot;&gt;David&lt;/option&gt;</span></li>
-<li><a name="a235"></a><span class="src-doc"> *     &lt;option value=&quot;2&quot;&gt;Sam&lt;/option&gt;</span></li>
-<li><a name="a236"></a><span class="src-doc"> *     &lt;option value=&quot;3&quot;&gt;Tobias&lt;/option&gt;</span></li>
-<li><a name="a237"></a><span class="src-doc"> *   &lt;/select&gt;</span></li>
-<li><a name="a238"></a><span class="src-doc"> *</span></li>
-<li><a name="a239"></a><span class="src-doc"> * This can be used to provide a functionault set of options in the standard way: before r}ering the create form, a</span></li>
-<li><a name="a240"></a><span class="src-doc"> * new model instance is assigned the functionault options and bound to @model_name. Usually this model is not saved</span></li>
-<li><a name="a241"></a><span class="src-doc"> * to the database. Instead, a second model object is created when the create request is received.</span></li>
-<li><a name="a242"></a><span class="src-doc"> * This allows the user to submit a form page more than once with the expected results of creating multiple records.</span></li>
-<li><a name="a243"></a><span class="src-doc"> * In addition, this allows a single partial to be used to generate form inputs for both edit and create forms.</span></li>
-<li><a name="a244"></a><span class="src-doc"> */</span></li>
-<li><a name="a245"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functionselect">select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a246"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a247"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_select_tag">to_select_tag</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a248"></a><span class="src-sym">}</span></li>
-<li><a name="a249"></a>&nbsp;</li>
-<li><a name="a250"></a><span class="src-doc">/**</span></li>
-<li><a name="a251"></a><span class="src-doc"> * Return select and option tags for the given object and method using</span></li>
-<li><a name="a252"></a><span class="src-doc"> * options_from_collection_for_select to generate the list of option tags.</span></li>
-<li><a name="a253"></a><span class="src-doc"> *</span></li>
-<li><a name="a254"></a><span class="src-doc"> * Example with $post-&gt;person_id =&gt; 1:</span></li>
-<li><a name="a255"></a><span class="src-doc"> *   $person = new Person;</span></li>
-<li><a name="a256"></a><span class="src-doc"> *   $people = $person-&gt;find_all();</span></li>
-<li><a name="a257"></a><span class="src-doc"> *   collection_select(&quot;post&quot;, &quot;person_id&quot;, $people, &quot;id&quot;, &quot;first_name&quot;, array(&quot;include_blank&quot; =&gt; true))</span></li>
-<li><a name="a258"></a><span class="src-doc"> *</span></li>
-<li><a name="a259"></a><span class="src-doc"> * could become:</span></li>
-<li><a name="a260"></a><span class="src-doc"> *</span></li>
-<li><a name="a261"></a><span class="src-doc"> *   &lt;select name=&quot;post[person_id]&quot;&gt;</span></li>
-<li><a name="a262"></a><span class="src-doc"> *     &lt;option&gt;&lt;/option&gt;</span></li>
-<li><a name="a263"></a><span class="src-doc"> *     &lt;option value=&quot;1&quot; selected=&quot;selected&quot;&gt;David&lt;/option&gt;</span></li>
-<li><a name="a264"></a><span class="src-doc"> *     &lt;option value=&quot;2&quot;&gt;Sam&lt;/option&gt;</span></li>
-<li><a name="a265"></a><span class="src-doc"> *     &lt;option value=&quot;3&quot;&gt;Tobias&lt;/option&gt;</span></li>
-<li><a name="a266"></a><span class="src-doc"> *   &lt;/select&gt;</span></li>
-<li><a name="a267"></a><span class="src-doc"> *</span></li>
-<li><a name="a268"></a><span class="src-doc"> */</span></li>
-<li><a name="a269"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functioncollection_select">collection_select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a270"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a271"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_collection_select_tag">to_collection_select_tag</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a272"></a><span class="src-sym">}</span></li>
-<li><a name="a273"></a>&nbsp;</li>
-<li><a name="a274"></a><span class="src-doc">/**</span></li>
-<li><a name="a275"></a><span class="src-doc"> * Return select and option tags for the given object and method, using country_options_for_select to generate the list of option tags.</span></li>
-<li><a name="a276"></a><span class="src-doc"> */</span></li>
-<li><a name="a277"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functioncountry_select">country_select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$priority_countries </span>= <span class="src-id">null</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a278"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a279"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_country_select_tag">to_country_select_tag</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a280"></a><span class="src-sym">}</span></li>
-<li><a name="a281"></a>&nbsp;</li>
-<li><a name="a282"></a><span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a283"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a284"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">)</span><span class="src-sym">;    </span></li>
-<li><a name="a285"></a><span class="src-sym">}</span></li>
-<li><a name="a286"></a>&nbsp;</li>
-<li><a name="a287"></a><span class="src-php">?&gt;</span></li>
+<li><a name="a202"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_select_tag">to_select_tag</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a203"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a204"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span></li>
+<li><a name="a205"></a>             <span class="src-str">&quot;select&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a206"></a>             <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span></li>
+<li><a name="a207"></a>                       <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">,</span></li>
+<li><a name="a208"></a>                       <span class="src-var">$options</span><span class="src-sym">,</span></li>
+<li><a name="a209"></a>                       <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">,</span></li>
+<li><a name="a210"></a>             <span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a211"></a>    <span class="src-sym">}</span></li>
+<li><a name="a212"></a>    </li>
+<li><a name="a213"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a214"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a215"></a><span class="src-doc">     *</span></li>
+<li><a name="a216"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_default_name_and_id()</span></li>
+<li><a name="a217"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_options()</span></li>
+<li><a name="a218"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> content_tag()</span></li>
+<li><a name="a219"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> options_from_collection_for_select()</span></li>
+<li><a name="a220"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> value()</span></li>
+<li><a name="a221"></a><span class="src-doc">     */</span></li>
+<li><a name="a222"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_collection_select_tag">to_collection_select_tag</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">,</span></li>
+<li><a name="a223"></a>                                      <span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">,</span></li>
+<li><a name="a224"></a>                                      <span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a225"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a226"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span></li>
+<li><a name="a227"></a>          <span class="src-str">&quot;select&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a228"></a>          <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span></li>
+<li><a name="a229"></a>            <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_from_collection_for_select">options_from_collection_for_select</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">,</span></li>
+<li><a name="a230"></a>                                                      <span class="src-var">$attribute_value</span><span class="src-sym">,</span></li>
+<li><a name="a231"></a>                                                      <span class="src-var">$attribute_text</span><span class="src-sym">,</span></li>
+<li><a name="a232"></a>                                                      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">,</span></li>
+<li><a name="a233"></a>            <span class="src-var">$options</span><span class="src-sym">,</span></li>
+<li><a name="a234"></a>            <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">,</span></li>
+<li><a name="a235"></a>         <span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a236"></a>    <span class="src-sym">}</span></li>
+<li><a name="a237"></a>    </li>
+<li><a name="a238"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a239"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a240"></a><span class="src-doc">     *</span></li>
+<li><a name="a241"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_default_name_and_id()</span></li>
+<li><a name="a242"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> add_options()</span></li>
+<li><a name="a243"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> content_tag()</span></li>
+<li><a name="a244"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> value</span></li>
+<li><a name="a245"></a><span class="src-doc">     */</span></li>
+<li><a name="a246"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_country_select_tag">to_country_select_tag</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">,</span></li>
+<li><a name="a247"></a>                                   <span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a248"></a>        <span class="src-var">$html_options </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormHelper.html#methodadd_default_name_and_id">add_default_name_and_id</a><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a249"></a>        <span class="src-key">return </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodcontent_tag">content_tag</a><span class="src-sym">(</span></li>
+<li><a name="a250"></a>                <span class="src-str">&quot;select&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a251"></a>                <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span></li>
+<li><a name="a252"></a>                        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodcountry_options_for_select">country_options_for_select</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a253"></a>                                                          <span class="src-var">$priority_countries</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a254"></a>                        <span class="src-var">$options</span><span class="src-sym">,</span></li>
+<li><a name="a255"></a>                        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">value</span><span class="src-sym">)</span><span class="src-sym">,</span></li>
+<li><a name="a256"></a>                <span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a257"></a>    <span class="src-sym">}</span></li>
+<li><a name="a258"></a>&nbsp;</li>
+<li><a name="a259"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a260"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a261"></a><span class="src-doc">     *</span></li>
+<li><a name="a262"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span></li>
+<li><a name="a263"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string[] </span></li>
+<li><a name="a264"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span></li>
+<li><a name="a265"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> &lt;b&gt;FIXME:&lt;/b&gt; Why the third argument?  It's overwritten!</span></li>
+<li><a name="a266"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> value()</span></li>
+<li><a name="a267"></a><span class="src-doc">     */</span></li>
+<li><a name="a268"></a>    <span class="src-key">private </span><span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodadd_options">add_options</a><span class="src-sym">(</span><span class="src-var">$option_tags</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$value </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a269"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">&quot;include_blank&quot;</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span></li>
+<li><a name="a270"></a>           &amp;&amp; <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">&quot;include_blank&quot;</span><span class="src-sym">] </span>== <span class="src-id">true</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a271"></a>            <span class="src-var">$option_tags </span>= <span class="src-str">&quot;&lt;option value=\&quot;\&quot;&gt;&lt;/option&gt;\n&quot; </span>. <span class="src-var">$option_tags</span><span class="src-sym">;</span></li>
+<li><a name="a272"></a>        <span class="src-sym">} </span></li>
+<li><a name="a273"></a>        <span class="src-var">$value </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/Helpers.html#methodvalue">value</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a274"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$value</span><span class="src-sym">) </span>&amp;&amp; <a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">'prompt'</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a275"></a>            <span class="src-var">$text </span>= <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'prompt'</span><span class="src-sym">] </span>? <span class="src-var">$options</span><span class="src-sym">[</span><span class="src-str">'prompt'</span><span class="src-sym">] </span>: <span class="src-str">&quot;Please select&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a276"></a>            <span class="src-key">return </span><span class="src-sym">(</span><span class="src-str">&quot;</span><span class="src-str">&lt;<span class="src-id">option</span> <span class="src-id">value</span>=\&quot;\&quot;&gt;<span class="src-var">$text</span>&lt;/<span class="src-id">option</span>&gt;\n</span><span class="src-str">&quot; </span>. <span class="src-var">$option_tags</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a277"></a>        <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a278"></a>            <span class="src-key">return </span><span class="src-var">$option_tags</span><span class="src-sym">;</span></li>
+<li><a name="a279"></a>        <span class="src-sym">}        </span></li>
+<li><a name="a280"></a>    <span class="src-sym">}</span></li>
+<li><a name="a281"></a><span class="src-sym">}</span></li>
+<li><a name="a282"></a>&nbsp;</li>
+<li><a name="a283"></a><span class="src-doc">/**</span></li>
+<li><a name="a284"></a><span class="src-doc"> *  Create a new FormOptionsHelper object and call its to_select_tag() method</span></li>
+<li><a name="a285"></a><span class="src-doc"> *</span></li>
+<li><a name="a286"></a><span class="src-doc"> *  Create a select tag and a series of contained option tags for the</span></li>
+<li><a name="a287"></a><span class="src-doc"> *  provided object and method.  The option currently held by the</span></li>
+<li><a name="a288"></a><span class="src-doc"> *  object will be selected, provided that the object is available.</span></li>
+<li><a name="a289"></a><span class="src-doc"> *  See options_for_select for the required format of the choices parameter.</span></li>
+<li><a name="a290"></a><span class="src-doc"> *</span></li>
+<li><a name="a291"></a><span class="src-doc"> * Example with $post-&gt;person_id =&gt; 1:</span></li>
+<li><a name="a292"></a><span class="src-doc"> *   $person = new Person;</span></li>
+<li><a name="a293"></a><span class="src-doc"> *   $people = $person-&gt;find_all();</span></li>
+<li><a name="a294"></a><span class="src-doc"> *   foreach($people as $person) {</span></li>
+<li><a name="a295"></a><span class="src-doc"> *      $choices[$person-&gt;id] = $person-&gt;first_name;</span></li>
+<li><a name="a296"></a><span class="src-doc"> *   }</span></li>
+<li><a name="a297"></a><span class="src-doc"> *   select(&quot;post&quot;, &quot;person_id&quot;, $choices, array(&quot;include_blank&quot; =&gt; true))</span></li>
+<li><a name="a298"></a><span class="src-doc"> *</span></li>
+<li><a name="a299"></a><span class="src-doc"> * could become:</span></li>
+<li><a name="a300"></a><span class="src-doc"> *</span></li>
+<li><a name="a301"></a><span class="src-doc"> *   &lt;select name=&quot;post[person_id]&quot;&gt;</span></li>
+<li><a name="a302"></a><span class="src-doc"> *     &lt;option&gt;&lt;/option&gt;</span></li>
+<li><a name="a303"></a><span class="src-doc"> *     &lt;option value=&quot;1&quot; selected=&quot;selected&quot;&gt;David&lt;/option&gt;</span></li>
+<li><a name="a304"></a><span class="src-doc"> *     &lt;option value=&quot;2&quot;&gt;Sam&lt;/option&gt;</span></li>
+<li><a name="a305"></a><span class="src-doc"> *     &lt;option value=&quot;3&quot;&gt;Tobias&lt;/option&gt;</span></li>
+<li><a name="a306"></a><span class="src-doc"> *   &lt;/select&gt;</span></li>
+<li><a name="a307"></a><span class="src-doc"> *</span></li>
+<li><a name="a308"></a><span class="src-doc"> *  This can be used to provide a functionault set of options in the</span></li>
+<li><a name="a309"></a><span class="src-doc"> *  standard way: before r}ering the create form, a new model instance</span></li>
+<li><a name="a310"></a><span class="src-doc"> *  is assigned the functional options and bound to</span></li>
+<li><a name="a311"></a><span class="src-doc"> *  </span><span class="src-doc-tag">@model_name.</span><span class="src-doc"> Usually this model is not saved to the</span></li>
+<li><a name="a312"></a><span class="src-doc"> *   database. Instead, a second model object is created when the</span></li>
+<li><a name="a313"></a><span class="src-doc"> *   create request is received.  This allows the user to submit a form</span></li>
+<li><a name="a314"></a><span class="src-doc"> *   page more than once with the expected results of creating multiple</span></li>
+<li><a name="a315"></a><span class="src-doc"> *   records.  In addition, this allows a single partial to be used to</span></li>
+<li><a name="a316"></a><span class="src-doc"> *   generate form inputs for both edit and create forms.</span></li>
+<li><a name="a317"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this function</span></li>
+<li><a name="a318"></a><span class="src-doc"> */</span></li>
+<li><a name="a319"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functionselect">select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$choices</span><span class="src-sym">,</span></li>
+<li><a name="a320"></a>        <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a321"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a322"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_select_tag">to_select_tag</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a323"></a><span class="src-sym">}</span></li>
+<li><a name="a324"></a>&nbsp;</li>
+<li><a name="a325"></a><span class="src-doc">/**</span></li>
+<li><a name="a326"></a><span class="src-doc"> *  Create a new FormOptionsHelper object and call its to_collection_select_tag() method</span></li>
+<li><a name="a327"></a><span class="src-doc"> *</span></li>
+<li><a name="a328"></a><span class="src-doc"> * Return select and option tags for the given object and method using</span></li>
+<li><a name="a329"></a><span class="src-doc"> * options_from_collection_for_select to generate the list of option tags.</span></li>
+<li><a name="a330"></a><span class="src-doc"> *</span></li>
+<li><a name="a331"></a><span class="src-doc"> * Example with $post-&gt;person_id =&gt; 1:</span></li>
+<li><a name="a332"></a><span class="src-doc"> *   $person = new Person;</span></li>
+<li><a name="a333"></a><span class="src-doc"> *   $people = $person-&gt;find_all();</span></li>
+<li><a name="a334"></a><span class="src-doc"> *   collection_select(&quot;post&quot;, &quot;person_id&quot;, $people, &quot;id&quot;, &quot;first_name&quot;, array(&quot;include_blank&quot; =&gt; true))</span></li>
+<li><a name="a335"></a><span class="src-doc"> *</span></li>
+<li><a name="a336"></a><span class="src-doc"> * could become:</span></li>
+<li><a name="a337"></a><span class="src-doc"> *</span></li>
+<li><a name="a338"></a><span class="src-doc"> *   &lt;select name=&quot;post[person_id]&quot;&gt;</span></li>
+<li><a name="a339"></a><span class="src-doc"> *     &lt;option&gt;&lt;/option&gt;</span></li>
+<li><a name="a340"></a><span class="src-doc"> *     &lt;option value=&quot;1&quot; selected=&quot;selected&quot;&gt;David&lt;/option&gt;</span></li>
+<li><a name="a341"></a><span class="src-doc"> *     &lt;option value=&quot;2&quot;&gt;Sam&lt;/option&gt;</span></li>
+<li><a name="a342"></a><span class="src-doc"> *     &lt;option value=&quot;3&quot;&gt;Tobias&lt;/option&gt;</span></li>
+<li><a name="a343"></a><span class="src-doc"> *   &lt;/select&gt;</span></li>
+<li><a name="a344"></a><span class="src-doc"> *</span></li>
+<li><a name="a345"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this function</span></li>
+<li><a name="a346"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> FormOptionsHelper::to_collection_select_tag()</span></li>
+<li><a name="a347"></a><span class="src-doc"> */</span></li>
+<li><a name="a348"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functioncollection_select">collection_select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$collection</span><span class="src-sym">,</span></li>
+<li><a name="a349"></a>                           <span class="src-var">$attribute_value</span><span class="src-sym">, </span><span class="src-var">$attribute_text</span><span class="src-sym">,</span></li>
+<li><a name="a350"></a>                           <span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a351"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a352"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_collection_select_tag">to_collection_select_tag</a><span class="src-sym">(</span><span class="src-var">$collection</span><span class="src-sym">, </span><span class="src-var">$attribute_value</span><span class="src-sym">,</span></li>
+<li><a name="a353"></a>                                           <span class="src-var">$attribute_text</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">,</span></li>
+<li><a name="a354"></a>                                           <span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a355"></a><span class="src-sym">}</span></li>
+<li><a name="a356"></a>&nbsp;</li>
+<li><a name="a357"></a><span class="src-doc">/**</span></li>
+<li><a name="a358"></a><span class="src-doc"> *  Create a new FormOptionsHelper object and call its to_country_select_tag() method</span></li>
+<li><a name="a359"></a><span class="src-doc"> *</span></li>
+<li><a name="a360"></a><span class="src-doc"> * Return select and option tags for the given object and method, using country_options_for_select to generate the list of option tags.</span></li>
+<li><a name="a361"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this function</span></li>
+<li><a name="a362"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> FormOptionsHelper::country_select()</span></li>
+<li><a name="a363"></a><span class="src-doc"> */</span></li>
+<li><a name="a364"></a><span class="src-key">function </span><a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functioncountry_select">country_select</a><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">, </span><span class="src-var">$priority_countries </span>= <span class="src-id">null</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$html_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a365"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-var">$object_name</span><span class="src-sym">, </span><span class="src-var">$attribute_name</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a366"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodto_country_select_tag">to_country_select_tag</a><span class="src-sym">(</span><span class="src-var">$priority_countries</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">, </span><span class="src-var">$html_options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a367"></a><span class="src-sym">}</span></li>
+<li><a name="a368"></a>&nbsp;</li>
+<li><a name="a369"></a><span class="src-doc">/**</span></li>
+<li><a name="a370"></a><span class="src-doc"> *  Create a new FormOptionsHelper object and call its options_for_select() method</span></li>
+<li><a name="a371"></a><span class="src-doc"> *</span></li>
+<li><a name="a372"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string[] </span><span class="src-doc"> List of choices</span></li>
+<li><a name="a373"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc">  Index of the selected choice</span></li>
+<li><a name="a374"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@uses</span><span class="src-doc"> FormOptionsHelper::options_for_select()</span></li>
+<li><a name="a375"></a><span class="src-doc"> */</span></li>
+<li><a name="a376"></a><span class="src-key">function </span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected </span>= <span class="src-id">null</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a377"></a>    <span class="src-var">$form </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a378"></a>    <span class="src-key">return </span><span class="src-var">$form</span><span class="src-sym">-&gt;</span><a href="../PHPonTrax/FormOptionsHelper.html#methodoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-var">$choices</span><span class="src-sym">, </span><span class="src-var">$selected</span><span class="src-sym">)</span><span class="src-sym">;    </span></li>
+<li><a name="a379"></a><span class="src-sym">}</span></li>
+<li><a name="a380"></a>&nbsp;</li>
+<li><a name="a381"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a382"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a383"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a384"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a385"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a386"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a387"></a><span class="src-comm">// End:</span></li>
+<li><a name="a388"></a><span class="src-php">?&gt;</span></li>
 </ol></pre></div>
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:41 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:47:42 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

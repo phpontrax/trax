@@ -341,7 +341,6 @@ class TraxGenerator {
             $this->view_path .= "/$name";
         }
         $this->layout_filename = $name;
-
         $this->controller_class = Inflector::camelize($name);
 
         # Create the extra folders for View / Controller
@@ -454,6 +453,8 @@ class TraxGenerator {
      *  @uses fix_php_brackets()
      */
     function generate_scaffold($model_name, $controller_name, $views="") {
+        //echo 'generate_scaffold("'.$model_name.'", "'
+        //          .$controller_name.'", "'.$views.'")'."\n";
         if(!$model_exists = $this->generate_model($model_name)) {
             echo "Error - Can't create Model: $model_name.\n";    
             return;
@@ -461,12 +462,12 @@ class TraxGenerator {
 
         $GLOBALS['current_controller_object'] =& $this;
         $model_class_name = Inflector::classify($model_name);
-        $singluar_model_name = Inflector::singularize($model_name);
+        $singular_model_name = Inflector::singularize($model_name);
         $plural_model_name = Inflector::pluralize($model_name);  
         $human_model_name = Inflector::humanize($model_name);      
 
         try {
-            $this->{$singluar_model_name} = new $model_class_name();
+            $this->{$singular_model_name} = new $model_class_name();
         } catch (ActiveRecordError $e) {
             echo "Can't create model.\n";
             echo $e->getMessage()."\n";
@@ -609,7 +610,9 @@ class TraxGenerator {
         } 
         
         # Generate the layout for the scaffolding
-        $layout_file = $this->layouts_path."/".$this->layout_filename.".".$this->view_file_extention;
+        $layout_file = $this->layouts_path."/"
+            . $this->layout_filename."."
+            . $this->view_file_extention;
         if(!file_exists($this->layouts_path)) {
             mkdir($this->layouts_path);        
         }

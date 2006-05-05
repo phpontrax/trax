@@ -65,11 +65,213 @@ class FormHelperTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     *  Empty test to prevent failure
-     *  @todo Write tests for FormHelper class
+     *  Test __construct() method
      */
-    public function testEmpty() {
+    public function test__construct() {
+        $uh = new FormHelper;
+        $this->assertTrue(is_object($uh));
+        $this->assertEquals('FormHelper', get_class($uh));
     }
+
+    /**
+     *  Test add_default_name_and_id() method
+     *  @todo Implement this test
+     */
+    public function testAdd_default_name_and_id_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test add_default_name_and_id() function
+     *  @todo Implement this test
+     */
+    public function testAdd_default_name_and_id_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test error_wrapping() method
+     *  @todo Implement this test
+     */
+    public function testError_wrapping_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test error_wrapping() function
+     *  @todo Implement this test
+     */
+    public function testError_wrapping_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_id() method
+     *  @todo Implement this test
+     */
+    public function testTag_id_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_id() function
+     *  @todo Implement this test
+     */
+    public function testTag_id_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_id_with_index() method
+     *  @todo Implement this test
+     */
+    public function testTag_id_with_index_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_id_with_index() function
+     *  @todo Implement this test
+     */
+    public function testTag_id_with_index_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_name() method
+     *  @todo Implement this test
+     */
+    public function testTag_name_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_name() function
+     *  @todo Implement this test
+     */
+    public function testTag_name_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_name_with_index() method
+     *  @todo Implement this test
+     */
+    public function testTag_name_with_index_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test tag_name_with_index() function
+     *  @todo Implement this test
+     */
+    public function testTag_name_with_index_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_boolean_select_tag() method
+     *  @todo Implement this test
+     */
+    public function testTo_boolean_select_tag_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_boolean_select_tag() function
+     *  @todo Implement this test
+     */
+    public function testTo_boolean_select_tag_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_check_box_tag() method
+     *  @todo Implement this test
+     */
+    public function testTo_check_box_tag_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_check_box_tag() function
+     *  @todo Implement this test
+     */
+    public function testTo_check_box_tag_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_input_field_tag() method
+     *  @todo Implement this test
+     */
+    public function testTo_input_field_tag_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_input_field_tag() function
+     *  @todo Implement this test
+     */
+    public function testTo_input_field_tag_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_radio_button_tag() method
+     *  @todo Implement this test
+     */
+    public function testTo_radio_button_tag_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_radio_button_tag() function
+     *  @todo Implement this test
+     */
+    public function testTo_radio_button_tag_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_text_area_tag() method
+     *  @todo Implement this test
+     */
+    public function testTo_text_area_tag_method() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test to_text_area_tag() function
+     *  @todo Implement this test
+     */
+    public function testTo_text_area_tag_function() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+
 }
 
 // Call FormHelperTest::main() if this source file is executed directly.

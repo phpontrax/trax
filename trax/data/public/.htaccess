@@ -1,5 +1,6 @@
 #
 #    PHP include_path to Trax config directory
+#    $Id$
 #
 php_value include_path .:@TRAX-CONFIG@
 

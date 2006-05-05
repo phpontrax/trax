@@ -35,6 +35,9 @@
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
 <ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_rails_examples.pkg.html">Examples From The Rails Book</a>
+</ul>
+<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
@@ -307,6 +310,7 @@ Source Location: /vendor/trax/action_controller.php<br /><br />
 <ul>
     <li><a href="../PHPonTrax/ActionController.html#var$action">$action</a></li>
     <li><a href="../PHPonTrax/ActionController.html#var$action_called">$action_called</a></li>
+    <li><a href="../PHPonTrax/ActionController.html#var$action_params">$action_params</a></li>
     <li><a href="../PHPonTrax/ActionController.html#var$added_path">$added_path</a></li>
     <li><a href="../PHPonTrax/ActionController.html#var$after_filter">$after_filter</a></li>
     <li><a href="../PHPonTrax/ActionController.html#var$after_filters">$after_filters</a></li>
@@ -393,7 +397,7 @@ Source Location: /vendor/trax/action_controller.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 47]<br />
+[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a47">47</a>]<br />
 Action controller<br /><br /><p>The ActionController base class operates as follows:</p><p><ol><li>Accept a URL as input</li><li>Translate the URL into a controller and action</li><li>Create the indicated controller object (which is a subclass
       of ActionController) and call its action method</li><li>Render the output of the action method</li><li>Redirect to the next URL</li></ol>
   For details see the  <a href="../PHPonTrax/tutorial_ActionController.cls.html">class tutorial</a></p><br /></div><br /><br />
@@ -406,7 +410,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$action"></a>
 	<p></p>
 	<h4>$action = <span class="value"></span></h4>
-	<p>[line 66]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a66">66</a>]</p>
   Name of the action method in the controller class<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -436,7 +440,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$action_called"></a>
 	<p></p>
 	<h4>$action_called = <span class="value">&nbsp;false</span></h4>
-	<p>[line 212]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a221">221</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -460,10 +464,40 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
       </table>
 	</div><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$action_params"></a>
+	<p></p>
+	<h4>$action_params = <span class="value">array()</span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a91">91</a>]</p>
+  Parameters for the action routine<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a>, passed as arguments to the   controller's action routine.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#methodprocess_route">ActionController::process_route()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#methodrecognize_route">ActionController::recognize_route()</a></td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
+  </tr>
+</table>
+</div>
+
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string[]</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
 	<a name="var$added_path"></a>
 	<p></p>
 	<h4>$added_path = <span class="value">&nbsp;''</span></h4>
-	<p>[line 82]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a82">82</a>]</p>
   Path to add to other filesystem paths<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -490,7 +524,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$after_filter"></a>
 	<p></p>
 	<h4>$after_filter = <span class="value">&nbsp;null</span></h4>
-	<p>[line 222]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a231">231</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -517,7 +551,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$after_filters"></a>
 	<p></p>
 	<h4>$after_filters = <span class="value">array()</span></h4>
-	<p>[line 202]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a211">211</a>]</p>
   List of filters to execute after calling action method<br /><br /><p>Set by add_after_filters()</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -547,7 +581,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$application_controller_file"></a>
 	<p></p>
 	<h4>$application_controller_file = <span class="value"></span></h4>
-	<p>[line 149]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a158">158</a>]</p>
   Filesystem path to application.php file<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -580,7 +614,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$application_helper_file"></a>
 	<p></p>
 	<h4>$application_helper_file = <span class="value"></span></h4>
-	<p>[line 157]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a166">166</a>]</p>
   Filesystem path to application_helper.php file<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -607,7 +641,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$asset_host"></a>
 	<p></p>
 	<h4>$asset_host = <span class="value">&nbsp;null</span></h4>
-	<p>[line 271]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a281">281</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -629,7 +663,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><b>Type:</b>&nbsp;&nbsp;</td>
-      <td>mixed</td>
+      <td>string</td>
     </tr>
       </table>
 	</div><br /><br />
@@ -637,7 +671,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$before_filter"></a>
 	<p></p>
 	<h4>$before_filter = <span class="value">&nbsp;null</span></h4>
-	<p>[line 217]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a226">226</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -664,7 +698,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$before_filters"></a>
 	<p></p>
 	<h4>$before_filters = <span class="value">array()</span></h4>
-	<p>[line 194]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a203">203</a>]</p>
   List of filters to execute before calling action method<br /><br /><p>Set by add_before_filters()</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -694,7 +728,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$controller"></a>
 	<p></p>
 	<h4>$controller = <span class="value"></span></h4>
-	<p>[line 58]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a58">58</a>]</p>
   Name of the controller (without the _controller.php)<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a> by parsing the URL and the   routes in <a href="../PHPonTrax/_data_config_routes_php.html">routes.php</a>.  The value of this string is set   before any attempt is made to find the file containing the   controller.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -724,7 +758,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$controllers_path"></a>
 	<p></p>
 	<h4>$controllers_path = <span class="value"></span></h4>
-	<p>[line 90]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a99">99</a>]</p>
   Filesystem path to ../app/controllers/ directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -754,7 +788,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$controller_class"></a>
 	<p></p>
 	<h4>$controller_class = <span class="value"></span></h4>
-	<p>[line 256]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a265">265</a>]</p>
   Class name of the controller<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a>.   Derived from contents of <a href="../PHPonTrax/ActionController.html#var$controller">$controller</a>.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -784,7 +818,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$controller_file"></a>
 	<p></p>
 	<h4>$controller_file = <span class="value"></span></h4>
-	<p>[line 231]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a240">240</a>]</p>
   Filesystem path to the PHP program file for this controller<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -817,7 +851,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$controller_object"></a>
 	<p></p>
 	<h4>$controller_object = <span class="value"></span></h4>
-	<p>[line 264]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a273">273</a>]</p>
   Instance of the controller class<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodprocess_route">process_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -850,7 +884,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$helpers"></a>
 	<p></p>
 	<h4>$helpers = <span class="value">array()</span></h4>
-	<p>[line 186]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a195">195</a>]</p>
   List of additional helper files for this controller object<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodadd_helper">add_helper()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -880,7 +914,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$helpers_base_path"></a>
 	<p></p>
 	<h4>$helpers_base_path = <span class="value"></span></h4>
-	<p>[line 106]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a115">115</a>]</p>
   Filesystem path to ../app/helpers/ directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -907,7 +941,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$helpers_path"></a>
 	<p></p>
 	<h4>$helpers_path = <span class="value"></span></h4>
-	<p>[line 98]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a107">107</a>]</p>
   Filesystem path to ../app/helpers/<em>extras</em> directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a>, <a href="../PHPonTrax/ActionController.html#methodset_paths">set_paths()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -937,7 +971,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$helper_file"></a>
 	<p></p>
 	<h4>$helper_file = <span class="value"></span></h4>
-	<p>[line 140]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a149">149</a>]</p>
   Filesystem path to the controllername_helper.php file<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -967,7 +1001,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$id"></a>
 	<p></p>
 	<h4>$id = <span class="value"></span></h4>
-	<p>[line 74]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a74">74</a>]</p>
   Value of :id parsed from URL then forced to lower case<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -994,7 +1028,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$keep_flash"></a>
 	<p></p>
 	<h4>$keep_flash = <span class="value">&nbsp;false</span></h4>
-	<p>[line 293]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a303">303</a>]</p>
   Whether to keep flash message after displaying it<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1021,7 +1055,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$layouts_base_path"></a>
 	<p></p>
 	<h4>$layouts_base_path = <span class="value"></span></h4>
-	<p>[line 122]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a131">131</a>]</p>
   Filesystem path to ../app/views/layouts/ directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1048,7 +1082,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$layouts_path"></a>
 	<p></p>
 	<h4>$layouts_path = <span class="value"></span></h4>
-	<p>[line 114]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a123">123</a>]</p>
   Filesystem path to ../app/views/layouts/<em>extras</em> directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a>, <a href="../PHPonTrax/ActionController.html#methodset_paths">set_paths()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1081,7 +1115,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$loaded"></a>
 	<p></p>
 	<h4>$loaded = <span class="value">&nbsp;false</span></h4>
-	<p>[line 165]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a174">174</a>]</p>
   URL recognized, paths resoved, controller file found<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1111,7 +1145,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$render_layout"></a>
 	<p></p>
 	<h4>$render_layout = <span class="value">&nbsp;true</span></h4>
-	<p>[line 287]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a297">297</a>]</p>
   Render controllers layout<br /><br /><p>Can be overridden in the child controller to false</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1135,7 +1169,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$render_performed"></a>
 	<p></p>
 	<h4>$render_performed = <span class="value">&nbsp;false</span></h4>
-	<p>[line 207]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a216">216</a>]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1162,7 +1196,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$router_loaded"></a>
 	<p></p>
 	<h4>$router_loaded = <span class="value">&nbsp;false</span></h4>
-	<p>[line 178]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a187">187</a>]</p>
   Whether a Router object was loaded<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1198,7 +1232,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$url_path"></a>
 	<p></p>
 	<h4>$url_path = <span class="value"></span></h4>
-	<p>[line 132]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a141">141</a>]</p>
   User's URL in components<br /><br /><p>Contains user's URL stripped of TRAX_URL_PREFIX and leading   and trailing slashes, then exploded into an array on slash   boundaries.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1228,7 +1262,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$views_file_extention"></a>
 	<p></p>
 	<h4>$views_file_extention = <span class="value">&nbsp;TRAX_VIEWS_EXTENTION</span></h4>
-	<p>[line 279]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a289">289</a>]</p>
   File extension appended to view files<br /><br /><p>Set from a define in <a href="../PHPonTrax/_data_config_environment_php.html">environment.php</a>.  Usually phtml</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1258,7 +1292,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$views_path"></a>
 	<p></p>
 	<h4>$views_path = <span class="value"></span></h4>
-	<p>[line 247]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a256">256</a>]</p>
   Filesystem path to the ../app/views/ directory<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodrecognize_route">recognize_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1291,7 +1325,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 	<a name="var$view_file"></a>
 	<p></p>
 	<h4>$view_file = <span class="value"></span></h4>
-	<p>[line 239]</p>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a248">248</a>]</p>
   Filesystem path to the view file selected for this action<br /><br /><p>Set by <a href="../PHPonTrax/ActionController.html#methodprocess_route">process_route()</a></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -1323,7 +1357,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
 <div class="tags">
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line 299]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a309">309</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1351,7 +1385,7 @@ Action controller<br /><br /><p>The ActionController base class operates as foll
   </div>
   <hr />
 	<a name="methodadd_after_filter"></a>
-	<h3>method add_after_filter <span class="smalllinenumber">[line 849]</span></h3>
+	<h3>method add_after_filter <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a860">860</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1390,7 +1424,7 @@ $filter_function_name)</code>
   </div>
   <hr />
 	<a name="methodadd_before_filter"></a>
-	<h3>method add_before_filter <span class="smalllinenumber">[line 811]</span></h3>
+	<h3>method add_before_filter <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a822">822</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1429,7 +1463,7 @@ $filter_function_name)</code>
   </div>
   <hr />
 	<a name="methodadd_helper"></a>
-	<h3>method add_helper <span class="smalllinenumber">[line 871]</span></h3>
+	<h3>method add_helper <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a882">882</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1471,7 +1505,7 @@ $helper_name)</code>
   </div>
   <hr />
 	<a name="methoddetermine_layout"></a>
-	<h3>method determine_layout <span class="smalllinenumber">[line 1141]</span></h3>
+	<h3>method determine_layout <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1152">1152</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1512,7 +1546,7 @@ $full_path = true])</code>
   </div>
   <hr />
 	<a name="methodexecute_after_filters"></a>
-	<h3>method execute_after_filters <span class="smalllinenumber">[line 830]</span></h3>
+	<h3>method execute_after_filters <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a841">841</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1540,7 +1574,7 @@ $full_path = true])</code>
   </div>
   <hr />
 	<a name="methodexecute_before_filters"></a>
-	<h3>method execute_before_filters <span class="smalllinenumber">[line 788]</span></h3>
+	<h3>method execute_before_filters <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a799">799</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1565,7 +1599,7 @@ $full_path = true])</code>
   </div>
   <hr />
 	<a name="methodload_router"></a>
-	<h3>method load_router <span class="smalllinenumber">[line 362]</span></h3>
+	<h3>method load_router <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a372">372</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1602,7 +1636,7 @@ $full_path = true])</code>
   </div>
   <hr />
 	<a name="methodprocess_route"></a>
-	<h3>method process_route <span class="smalllinenumber">[line 553]</span></h3>
+	<h3>method process_route <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a566">566</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1655,9 +1689,6 @@ $full_path = true])</code>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$helper_file">ActionController::$helper_file</a></td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a></td>
-  </tr>
-  <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller">ActionController::$controller</a></td>
   </tr>
   <tr>
@@ -1667,10 +1698,13 @@ $full_path = true])</code>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$application_controller_file">ActionController::$application_controller_file</a></td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a></td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$action_params">ActionController::$action_params</a></td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_object">ActionController::$controller_object</a></td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$helpers">ActionController::$helpers</a></td>
@@ -1680,6 +1714,9 @@ $full_path = true])</code>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#methoddetermine_layout">ActionController::determine_layout()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_object">ActionController::$controller_object</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$action">ActionController::$action</a></td>
@@ -1693,7 +1730,7 @@ $full_path = true])</code>
   </div>
   <hr />
 	<a name="methodprocess_with_exception"></a>
-	<h3>method process_with_exception <span class="smalllinenumber">[line 1247]</span></h3>
+	<h3>method process_with_exception <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1258">1258</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1719,7 +1756,7 @@ mixed
   </div>
   <hr />
 	<a name="methodraise"></a>
-	<h3>method raise <span class="smalllinenumber">[line 1240]</span></h3>
+	<h3>method raise <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1251">1251</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1770,7 +1807,7 @@ $error_code = "404"])</code>
   </div>
   <hr />
 	<a name="methodrecognize_route"></a>
-	<h3>method recognize_route <span class="smalllinenumber">[line 409]</span></h3>
+	<h3>method recognize_route <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a420">420</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1796,6 +1833,9 @@ $error_code = "404"])</code>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$loaded">ActionController::$loaded</a></td>
   </tr>
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$layouts_path">ActionController::$layouts_path</a></td>
+  </tr>
+  <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#methodset_paths">ActionController::set_paths()</a></td>
   </tr>
   <tr>
@@ -1811,34 +1851,34 @@ $error_code = "404"])</code>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$views_file_extention">ActionController::$views_file_extention</a></td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$layouts_path">ActionController::$layouts_path</a></td>
-  </tr>
-  <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$id">ActionController::$id</a></td>
   </tr>
   <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller">ActionController::$controller</a></td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$helpers_path">ActionController::$helpers_path</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$application_controller_file">ActionController::$application_controller_file</a></td>
   </tr>
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$action_params">ActionController::$action_params</a></td>
+  </tr>
+  <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$action">ActionController::$action</a></td>
   </tr>
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller">ActionController::$controller</a></td>
+  </tr>
+  <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_class">ActionController::$controller_class</a></td>
-  </tr>
-  <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a></td>
-  </tr>
-  <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$helpers_path">ActionController::$helpers_path</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$helper_file">ActionController::$helper_file</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controllers_path">ActionController::$controllers_path</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#var$controller_file">ActionController::$controller_file</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/ActionController.html#methodload_router">ActionController::load_router()</a></td>
@@ -1852,7 +1892,7 @@ $error_code = "404"])</code>
   </div>
   <hr />
 	<a name="methodredirect_to"></a>
-	<h3>method redirect_to <span class="smalllinenumber">[line 1221]</span></h3>
+	<h3>method redirect_to <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1232">1232</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1893,7 +1933,7 @@ $options = null])</code>
   </div>
   <hr />
 	<a name="methodrender"></a>
-	<h3>method render <span class="smalllinenumber">[line 882]</span></h3>
+	<h3>method render <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a893">893</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1912,7 +1952,7 @@ $return_as_string = false])</code>
   </div>
   <hr />
 	<a name="methodrender_action"></a>
-	<h3>method render_action <span class="smalllinenumber">[line 972]</span></h3>
+	<h3>method render_action <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a983">983</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1930,7 +1970,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodrender_file"></a>
-	<h3>method render_file <span class="smalllinenumber">[line 1014]</span></h3>
+	<h3>method render_file <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1025">1025</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1949,7 +1989,7 @@ $locals = array()])</code>
   </div>
   <hr />
 	<a name="methodrender_partial"></a>
-	<h3>method render_partial <span class="smalllinenumber">[line 1084]</span></h3>
+	<h3>method render_partial <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1095">1095</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1994,7 +2034,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodrender_text"></a>
-	<h3>method render_text <span class="smalllinenumber">[line 943]</span></h3>
+	<h3>method render_text <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a954">954</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2012,7 +2052,7 @@ $options = array()])</code>
   </div>
   <hr />
 	<a name="methodrender_to_string"></a>
-	<h3>method render_to_string <span class="smalllinenumber">[line 994]</span></h3>
+	<h3>method render_to_string <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a1005">1005</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2030,7 +2070,7 @@ $locals = array()])</code>
   </div>
   <hr />
 	<a name="methodset_paths"></a>
-	<h3>method set_paths <span class="smalllinenumber">[line 760]</span></h3>
+	<h3>method set_paths <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a771">771</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2076,7 +2116,7 @@ $locals = array()])</code>
   </div>
   <hr />
 	<a name="method__call"></a>
-	<h3>method __call <span class="smalllinenumber">[line 332]</span></h3>
+	<h3>method __call <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a342">342</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2103,7 +2143,7 @@ $parameters)</code>
   </div>
   <hr />
 	<a name="method__set"></a>
-	<h3>method __set <span class="smalllinenumber">[line 311]</span></h3>
+	<h3>method __set <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_controller.php.html#a321">321</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -2142,7 +2182,7 @@ $value)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 20 Apr 2006 10:12:05 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:47:01 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

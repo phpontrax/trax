@@ -82,6 +82,15 @@ class ActionController {
     private $added_path = '';
      
     /**
+     *  Parameters for the action routine
+     *
+     *  Set by {@link recognize_route()}, passed as arguments to the
+     *  controller's action routine.
+     *  @var string[]
+     */
+    private $action_params = array();
+
+    /**
      *  Filesystem path to ../app/controllers/ directory
      *
      *  Set by {@link recognize_route()}
@@ -267,6 +276,7 @@ class ActionController {
      *  @todo Document this attribute
      *  @todo <b>FIXME:</b> Not referenced in this class - is it used
      *        by subclasses?  If so, for what?
+     *  @var string
      */
     public $asset_host = null;
 
@@ -384,6 +394,7 @@ class ActionController {
      *
      *  @uses load_router()
      *  @uses $action
+     *  @uses $action_params
      *  @uses $application_controller_file
      *  @uses $controller
      *  @uses $controller_class
@@ -421,23 +432,18 @@ class ActionController {
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
         if(!is_null(TRAX_URL_PREFIX)) {
-            // FIXME: Do we know for sure that the
-            // initial '/' will be there?
-            $browser_url = str_replace('/'.TRAX_URL_PREFIX,"",$browser_url);
+            $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
         }
-        //error_log('browser url='.$browser_url);
 
         # strip leading slash
         // FIXME: Do we know for sure that the
         // initial '/' will be there?
         $browser_url = substr($browser_url,1);
-        //error_log('browser url='.$browser_url);
 
         # strip trailing slash (if any)
         if(substr($browser_url, -1) == "/") {
             $browser_url = substr($browser_url, 0, -1);
         }
-        //error_log('browser url='.$browser_url);
 
         if($browser_url) {
             $this->url_path = explode("/", $browser_url);
@@ -480,7 +486,7 @@ class ActionController {
                 }
                 //error_log('controller='.$this->controller);
 
-                //  Find the actionfrom the route and URL
+                //  Find the action from the route and URL
                 if(is_array($route_params)
                    && array_key_exists(":action",$route_params)) {
 
@@ -503,11 +509,17 @@ class ActionController {
                    && array_key_exists(@array_search(":id", $route_path),
                                        $this->url_path)) {
                     $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
+                    //  Parameters for the action routine.
+                    //  FIXME: make more general than just id
+                    if($this->id != "") {
+                        $this->action_params['id'] = $this->id;
+                    }
+                    //  For historical reasons, continue to pass id
+                    //  in $_REQUEST
                     if($this->id != "") {
                         $_REQUEST['id'] = $this->id;
                     }
                 }
-                //error_log('id='.$this->id);
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
                 $this->controller_class = Inflector::camelize($this->controller) . "Controller";
@@ -528,6 +540,7 @@ class ActionController {
      *  Parse URL, extract controller and action and execute them
      *
      *  @uses $action
+     *  @uses $action_params
      *  @uses $application_controller_file
      *  @uses $application_helper_file
      *  @uses $controller
@@ -560,14 +573,13 @@ class ActionController {
 			     "404");
             }
         }
+        //error_log('process_route(): controller="'.$this->controller
+        //          .'"  action="'.$this->action.'"  id="'.$this->id.'"');
 
         # Include main application controller file
         if(file_exists($this->application_controller_file)) {
             include_once($this->application_controller_file);
         }
-
-        //error_log('process_route() controller="'.$this->controller
-        //          .'"  action="'.$this->action.'"');
 
         # If controller is loaded then start processing           
         if($this->loaded) {
@@ -589,17 +601,9 @@ class ActionController {
                     $GLOBALS['current_controller_name'] = $this->controller;
                     $GLOBALS['current_action_name'] = $this->action;
                     $GLOBALS['current_controller_object'] =& $this->controller_object;
-                    // error_log('$GLOBALS[\'current_action_name\']='
-                    //           .$GLOBALS['current_action_name']);
-                    // error_log('$GLOBALS[\'current_controller_name\']='
-                    //           .$GLOBALS['current_controller_name']);
-                    // error_log('$GLOBALS[\'current_controller_path\']='
-                    //           .$GLOBALS['current_controller_path']);
-
                     # Which layout should we use?
                     $layout_file = $this->controller_object->determine_layout();
-                    //error_log('layout_file="'.$layout_file.'"');
-                    
+                    //error_log('using layout_file "'.$layout_file.'"');
                     # Check if there is any defined scaffolding to load
                     if(isset($this->controller_object->scaffold)) {
                         $scaffold = $this->controller_object->scaffold;
@@ -657,14 +661,21 @@ class ActionController {
                     if(method_exists($this->controller_object, $this->action)) {
                         //error_log('method '.$this->action.' exists, calling it');
                         $action = $this->action;
-                        $this->controller_object->$action();
+                        //error_log('calling action routine '
+                        //          . get_class($this->controller_object)
+                        //          .'::'.$action.'() with params '
+                        //          .var_export($this->action_params,true));
+                        $this->controller_object->$action($this->action_params);
                     } elseif(file_exists($this->views_path . "/" . $this->action . "." . $this->views_file_extention)) {
                         //error_log('views file "'.$this->action.'"');
                         $action = $this->action;
                     } elseif(method_exists($this->controller_object, "index")) {
-                        //error_log('calling index()');
+                        //error_log('calling action routine '
+                        //          . get_class($this->controller_object)
+                        //          .'::index() with params '
+                        //          .var_export($this->action_params,true));
                         $action = "index";
-                        $this->controller_object->index();
+                        $this->controller_object->index($this->action_params);
                     } else {
                         //error_log('no action');
                         $this->raise("No action responded to ".$this->action, "Unknown action", "404");

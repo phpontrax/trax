@@ -8,14 +8,14 @@
         < ?php endforeach; ? >
 	</tr>
   
-	< ?php foreach($<?php echo $plural_model_name ?> as $<?php echo $singluar_model_name ?>): ? >
+	< ?php foreach($<?php echo $plural_model_name ?> as $<?php echo $singular_model_name ?>): ? >
 	    <tr>
-		    < ?php foreach($<?php echo $singluar_model_name ?>->content_columns as $column): ? >
-    			<td>< ?php echo $<?php echo $singluar_model_name ?>->send($column['name']) ? ></td>
+		    < ?php foreach($<?php echo $singular_model_name ?>->content_columns as $column): ? >
+    			<td>< ?php echo $<?php echo $singular_model_name ?>->send($column['name']) ? ></td>
 		    < ?php endforeach; ? >
-		    <td>< ?php echo link_to("Show",   array(":action" => "show",   ":id" => $<?php echo $singluar_model_name ?>)) ? ></td>
-		    <td>< ?php echo link_to("Edit",   array(":action" => "edit",   ":id" => $<?php echo $singluar_model_name ?>)) ? ></td>
-		    <td>< ?php echo link_to("Delete", array(":action" => "delete", ":id" => $<?php echo $singluar_model_name ?>), array("confirm" => "Are you sure?")) ? ></td>
+		    <td>< ?php echo link_to("Show",   array(":action" => "show",   ":id" => $<?php echo $singular_model_name ?>)) ? ></td>
+		    <td>< ?php echo link_to("Edit",   array(":action" => "edit",   ":id" => $<?php echo $singular_model_name ?>)) ? ></td>
+		    <td>< ?php echo link_to("Delete", array(":action" => "delete", ":id" => $<?php echo $singular_model_name ?>), array("confirm" => "Are you sure?")) ? ></td>
 	    </tr>
 	< ?php endforeach; ? >
 < ?php else: ? >

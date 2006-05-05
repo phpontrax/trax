@@ -7,7 +7,7 @@
  * @package PHPonTraxTest
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright (c) Walter O. Haas 2006
- * @version $Id: TraxErrorTest.php 163 2006-03-07 16:44:21Z haas $
+ * @version $Id$
  * @author Walt Haas <haas@xmission.com>
  */
 

@@ -5,7 +5,7 @@
  *  (PHP 5)
  *
  *  @package PHPonTrax
- *  @version $Id $
+ *  @version $Id$
  *  @copyright (c) 2005 John Peterson
  *
  *  Permission is hereby granted, free of charge, to any person obtaining

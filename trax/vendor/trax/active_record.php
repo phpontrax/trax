@@ -62,12 +62,15 @@ require_once('DB.php');
 class ActiveRecord {
 
     /**
-     *  Reference to the object returned by PEAR DB::Connect()
+     *  Reference to the database object
      *
+     *  Reference to the database object returned by
+     *  {@link http://pear.php.net/manual/en/package.database.db.db.connect.php  PEAR DB::Connect()}
      *  @var object DB
-     *  <b>FIXME: static should be after private</b>
+     *  see
+     *  {@link http://pear.php.net/manual/en/package.database.db.php PEAR DB}
      */
-    static private $db = null;
+    private static $db = null;
 
     /**
      *  Description of a row in the associated table in the database
@@ -134,31 +137,31 @@ class ActiveRecord {
 
     # Table associations
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      *  @var string[]
      */
     protected $has_many = null;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      *  @var string[]
      */
     protected $has_one = null;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      *  @var string[]
      */
     protected $has_and_belongs_to_many = null;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      *  @var string[]
      */
     protected $belongs_to = null;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      *  @var string[]
      */
     protected $habtm_attributes = null;
@@ -270,7 +273,7 @@ class ActiveRecord {
     public $rows_per_page_default = 20;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      */
     public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
 
@@ -301,12 +304,12 @@ class ActiveRecord {
     public $auto_timestamps = true;
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      */
     public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
 
     /**
-     *  @todo Document this API
+     *  @todo Document this variable
      */    
     public $auto_delete_habtm = true; # auto delete $has_and_belongs_to_many associations
 
@@ -358,9 +361,9 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Override get() if they do $model->some_association->field_name
      *  dynamically load the requested contents from the database.
+     *  @todo Document this API
      *  @uses $belongs_to
      *  @uses get_association_type()
      *  @uses $has_and_belongs_to_many
@@ -436,8 +439,8 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Override call() to dynamically call the database associations
+     *  @todo Document this API
      *  @uses $aggregrations
      *  @uses aggregrate_all()
      *  @uses get_association_type()
@@ -493,13 +496,13 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Returns a the name of the join table that would be used for the two
      *  tables.  The join table name is decided from the alphabetical order
      *  of the two tables.  e.g. "genres_movies" because "g" comes before "m"
      *
      *  Parameters: $first_table, $second_table: the names of two database tables,
      *   e.g. "movies" and "genres"
+     *  @todo Document this API
      */
     private function get_join_table_name($first_table, $second_table) {
         $tables = array();
@@ -510,7 +513,6 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Find all records using a "has_and_belongs_to_many" relationship
      * (many-to-many with a join table in between).  Note that you can also
      *  specify an optional "paging limit" by setting the corresponding "limit"
@@ -522,6 +524,7 @@ class ActiveRecord {
      *              $other_table_name: The name of the database table that has the
      *                                 many rows you are interested in.  E.g. movies
      *  Returns: An array of ActiveRecord objects. (e.g. Movie objects)
+     *  @todo Document this API
      */
     private function find_all_habtm($other_table_name, $parameters = null) {
         $other_class_name = Inflector::classify($other_table_name);
@@ -571,12 +574,12 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Find all records using a "has_many" relationship (one-to-many)
      *
      *  Parameters: $other_table_name: The name of the other table that contains
      *                                 many rows relating to this object's id.
      *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+     *  @todo Document this API
      */
     private function find_all_has_many($other_table_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
@@ -628,12 +631,12 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Find all records using a "has_one" relationship (one-to-one)
      *  (the foreign key being in the other table)
      *  Parameters: $other_table_name: The name of the other table that contains
      *                                 many rows relating to this object's id.
      *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+     *  @todo Document this API
      */
     private function find_one_has_one($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
@@ -659,13 +662,13 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Find all records using a "belongs_to" relationship (one-to-one)
      *  (the foreign key being in the table itself)
      *  Parameters: $other_object_name: The singularized version of a table name.
      *                                  E.g. If the Contact class belongs_to the
      *                                  Customer class, then $other_object_name
      *                                  will be "customer".
+     *  @todo Document this API
      */
     private function find_one_belongs_to($other_object_name, $parameters = null) {
         # Prepare the class name and primary key, e.g. if
@@ -748,9 +751,9 @@ class ActiveRecord {
     }
 
    /**
-    *  @todo Document this API
     *  get the attributes for a specific column.
     *  @uses $content_columns
+    *  @todo Document this API
     */
     function column_for_attribute($attribute) {
         if(is_array($this->content_columns)) {
@@ -809,10 +812,10 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      * Only used if you want to do transactions and your db supports transactions
      *
      *  @uses $db
+     *  @todo Document this API
      */
     function begin() {
         self::$db->query("BEGIN");
@@ -820,10 +823,10 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Only used if you want to do transactions and your db supports transactions
      *
      *  @uses $db
+     *  @todo Document this API
      */
     function commit() {
         self::$db->query("COMMIT"); 
@@ -831,10 +834,10 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Only used if you want to do transactions and your db supports transactions
      *
      *  @uses $db
+     *  @todo Document this API
      */
     function rollback() {
         self::$db->query("ROLLBACK");
@@ -844,10 +847,11 @@ class ActiveRecord {
      *  Perform an SQL query and return the results
      *
      *  @param string $sql  SQL for the query command
-     *  @return mixed {@link http://pear.php.net/manual/en/package.database.db.db-result.php object DB_result}
+     *  @return DB_result {@link http://pear.php.net/manual/en/package.database.db.db-result.php}
      *    Result set from query
      *  @uses $db
      *  @uses is_error()
+     *  @uses log_query()
      *  @throws {@link ActiveRecordError}
      */
     function query($sql) {
@@ -926,7 +930,7 @@ class ActiveRecord {
      *  Return rows selected by $conditions
      *
      *  If no rows match, an empty array is returned.
-     *  @param string $conditions SQL to use in the query.  If
+     *  @param string  SQL to use in the query.  If
      *    $conditions contains "SELECT", then $orderings, $limit and
      *    $joins are ignored and the query is completely specified by
      *    $conditions.  If $conditions is omitted or does not contain
@@ -934,13 +938,13 @@ class ActiveRecord {
      *    specified and does not contain "SELECT", the query will
      *    include "WHERE $conditions".  If $conditions is null, the
      *    entire table is returned.
-     *  @param string $orderings Argument to "ORDER BY" in query.
+     *  @param string  Argument to "ORDER BY" in query.
      *    If specified, the query will include
      *    "ORDER BY $orderings". If omitted, no ordering will be
      *    applied.  
-     *  @param integer[] $limit Page, rows per page???
+     *  @param integer[] Page, rows per page???
+     *  @param string ???
      *  @todo Document the $limit and $joins parameters
-     *  @param string $joins ???
      *  @uses $rows_per_page_default
      *  @uses $rows_per_page
      *  @uses $offset
@@ -954,39 +958,83 @@ class ActiveRecord {
      *    for that object in the array.
      *  @throws {@link ActiveRecordError}
      */
-    function find_all($conditions = null, $orderings = null, $limit = null, $joins = null) {
+    function find_all($conditions = null, $orderings = null,
+                      $limit = null, $joins = null) {
+        //error_log("find_all(".(is_null($conditions)?'null':$conditions)
+        //          .', ' . (is_null($orderings)?'null':$orderings)
+        //          .', ' . (is_null($limit)?'null':var_export($limit,true))
+        //          .', ' . (is_null($joins)?'null':$joins).')');
+
+        //  Is output to be generated in pages?
         if (is_array($limit)) {
-            list(self::$page, self::$rows_per_page) = $limit;
-            if(self::$$page <= 0) self::$page = 1;
+
+            //  Yes, get next page number and rows per page from argument
+            list($this->page, $this->rows_per_page) = $limit;
+            if($this->page <= 0) {
+                $this->page = 1;
+            }
             # Default for rows_per_page:
-            if (self::$rows_per_page == null) self::$rows_per_page = self::$rows_per_page_default;
+            if ($this->rows_per_page == null) {
+                $this->rows_per_page = $this->rows_per_page_default;
+            }
             # Set the LIMIT string segment for the SQL in the find_all
-            self::$offset = (self::$page - 1) * self::$rows_per_page;
+            $this->offset = ($this->page - 1) * $this->rows_per_page;
             # mysql 3.23 doesn't support OFFSET
             //$limit = "$rows_per_page OFFSET $offset";
-            $limit = self::$offset.", ".self::$rows_per_page;
+            $limit = $this->offset.", ".$this->rows_per_page;
+
+            //  Remember that we're generating output in pages
+            //  so $limit needs to be added to the query
             $set_pages = true;
         }
 
+        //  Test source of SQL for query
         if(stristr($conditions, "SELECT")) {
+
+            //  SQL completely specified in argument so use it as is
             $sql = $conditions;
         } else {
+
+            //  SQL will be built from specifications in argument
             $sql  = "SELECT * FROM ".$this->table_name." ";
+
+            //  If join specified, include it
             if(!is_null($joins)) {
                 if(substr($joins,0,4) != "LEFT") $sql .= ",";
                 $sql .= " $joins ";
             }
-            if(!is_null($conditions)) $sql .= "WHERE $conditions ";
-            if(!is_null($orderings)) $sql .= "ORDER BY $orderings ";
+
+            //  If conditions specified, include them
+            if(!is_null($conditions)) {
+                $sql .= "WHERE $conditions ";
+            }
+
+            //  If ordering specified, include it
+            if(!is_null($orderings)) {
+                $sql .= "ORDER BY $orderings ";
+            }
+
+            //  If limit specified, divide into pages
             if(!is_null($limit)) {
+                //  FIXME: Isn't the  second test redundant?
                 if($set_pages) {
-                    //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-                    if(self::$is_error($rs = self::query($sql))) {
-                        self::raise($rs->getMessage());
+
+                    //  Send query to database
+                    //echo "query: $sql\n";
+                    if($this->is_error($rs = $this->query($sql))) {
+
+                        //  Error returned, throw error exception
+                        $this->raise($rs->getMessage());
+                        //  Execution doesn't return here
                     } else {
-                        # Set number of total pages in result set without the LIMIT
+
+                        # Set number of total pages in result set 
+                        # without the LIMIT  
                         if($count = $rs->numRows())
-                            self::$pages = (($count % self::$rows_per_page) == 0) ? $count / self::$rows_per_page : floor($count / self::$rows_per_page) + 1;
+                            $this->pages = (
+                               ($count % $this->rows_per_page) == 0)
+                                ? $count / $this->rows_per_page
+                                : floor($count / $this->rows_per_page) + 1;
                     }
                 }
                 $sql .= "LIMIT $limit";
@@ -994,8 +1042,9 @@ class ActiveRecord {
         }
 
         //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-        if(self::is_error($rs = self::query($sql))) {
-            self::raise($rs->getMessage());
+        //echo "query: $sql\n";
+        if($this->is_error($rs = $this->query($sql))) {
+            $this->raise($rs->getMessage());
         }
 
         $objects = array();
@@ -1109,9 +1158,9 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Reloads the attributes of this object from the database.
      *  @uses get_primary_key_conditions()
+     *  @todo Document this API
      */
     function reload($conditions = null) {
         if(is_null($conditions)) {
@@ -1155,9 +1204,9 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Finds the record from the passed id, instantly saves it with the passed attributes 
      *  (if the validation permits it). Returns true on success and false on error.
+     *  @todo Document this API
      */
     function update($id, $attributes, $dont_validate = false) {
         if(is_array($id)) {
@@ -1171,7 +1220,6 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Updates all records with the SET-part of an SQL update statement in updates and 
      *  returns an integer with the number of rows updates. A subset of the records can 
      *  be selected by specifying conditions. 
@@ -1180,6 +1228,7 @@ class ActiveRecord {
      *  @uses is_error()
      *  @uses query()
      *  @throws {@link ActiveRecordError}
+     *  @todo Document this API
      */
     function update_all($updates, $conditions = null) {
         $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
@@ -1192,8 +1241,8 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Save without valdiating anything.
+     *  @todo Document this API
      */
     function save_without_validation($attributes = null) {
         return $this->save($attributes, true);
@@ -1411,9 +1460,9 @@ class ActiveRecord {
     }
     
     /**
-     *  @todo Document this API
      *  Saves any associations objects assigned to this instance
      *  @uses $auto_save_associations
+     *  @todo Document this API
      */
     private function save_associations() {      
         if(count($this->save_associations) && $this->auto_save_associations) {
@@ -1434,8 +1483,8 @@ class ActiveRecord {
     }
     
     /**
-     *  @todo Document this API
      *  save the association to the database
+     *  @todo Document this API
      */
     private function save_association($object, $type) {
         if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
@@ -1445,7 +1494,7 @@ class ActiveRecord {
                 case "has_one":
                     $foreign_key = Inflector::singularize($this->table_name)."_id";
                     $object->$foreign_key = $this->id; 
-                    echo "fk:$foreign_key = $this->id<br>";
+                    //echo "fk:$foreign_key = $this->id<br>";
                     break;
             }
             $object->save();        
@@ -1453,12 +1502,12 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Deletes the record with the given $id or if you have done a
      *  $model = $model->find($id), then $model->delete() it will delete
      *  the record it just loaded from the find() without passing anything
      *  to delete(). If an array of ids is provided, all ids in array are deleted.
      *  @uses $errors
+     *  @todo Document this API
      */
     function delete($id = null) {
         if($this->id > 0 && is_null($id)) {
@@ -1525,9 +1574,8 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
-     * 
      *  @uses $has_and_belongs_to_many
+     *  @todo Document this API
      */
     private function set_habtm_attributes($attributes) {
         if(is_array($attributes)) {
@@ -1558,10 +1606,10 @@ class ActiveRecord {
 
     /**
      *
-     *  @todo Document this API
      *  @uses is_error()
      *  @uses query()
      *  @throws {@link ActiveRecordError}
+     *  @todo Document this API
      */
     private function add_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
@@ -1592,11 +1640,11 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *
      *  @uses is_error()
      *  @uses query()
      *  @throws {@link ActiveRecordError}
+     *  @todo Document this API
      */
     private function delete_habtm_records($this_foreign_value) {
         if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
@@ -1811,7 +1859,7 @@ class ActiveRecord {
             } else {
                 $return[$key] = $value;
             }
-            //$return[$key] = self::$db->quoteSmart($value);
+            //$return[$key] = $this->$db->quoteSmart($value);
         }
         return $return;
     }
@@ -2166,109 +2214,115 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      *  Overwrite this method for validation checks on all saves and
      *  use $this->errors[] = "My error message."; or
      *  for invalid attributes $this->errors['attribute'] = "Attribute is invalid.";
+     *  @todo Document this API
      */
     function validate() {}
 
     /**
-     *  @todo Document this API
      *  Override this method for validation checks used only on creation.
+     *  @todo Document this API
      */
     function validate_on_create() {}
 
     /**
-     *  @todo Document this API
      *  Override this method for validation checks used only on updates.
+     *  @todo Document this API
      */
     function validate_on_update() {}
 
     /**
-     *  @todo Document this API
      *  Is called before validate().
+     *  @todo Document this API
      */
     function before_validation() {}
 
     /**
-     *  @todo Document this API
      *  Is called after validate().
+     *  @todo Document this API
      */
     function after_validation() {}
 
     /**
-     *  @todo Document this API
      *  Is called before validate() on new objects that haven't been saved yet (no record exists).
+     *  @todo Document this API
      */
     function before_validation_on_create() {}
 
     /**
-     *  @todo Document this API
      *  Is called after validate() on new objects that haven't been saved yet (no record exists).
+     *  @todo Document this API
      */
     function after_validation_on_create()  {}
 
     /**
-     *  @todo Document this API
      *  Is called before validate() on existing objects that has a record.
+     *  @todo Document this API
      */
     function before_validation_on_update() {}
 
     /**
-     *  @todo Document this API
      *  Is called after validate() on existing objects that has a record.
+     *  @todo Document this API
      */
     function after_validation_on_update()  {}
 
     /**
-     *  @todo Document this API
      *  Is called before save() (regardless of whether its a create or update save)
+     *  @todo Document this API
      */
     function before_save() {}
 
     /**
-     *  @todo Document this API
      *  Is called after save (regardless of whether its a create or update save).
+     *  @todo Document this API
      */
     function after_save() {}
 
     /**
-     *  @todo Document this API
      *  Is called before save() on new objects that havent been saved yet (no record exists).
+     *  @todo Document this API
      */
     function before_create() {}
 
     /**
-     *  @todo Document this API
      *  Is called after save() on new objects that havent been saved yet (no record exists).
+     *  @todo Document this API
      */
     function after_create() {}
 
     /**
-     *  @todo Document this API
      *  Is called before save() on existing objects that has a record.
+     *  @todo Document this API
      */
     function before_update() {}
 
     /**
-     *  @todo Document this API
      *  Is called after save() on existing objects that has a record.
+     *  @todo Document this API
      */
     function after_update() {}
 
     /**
-     *  @todo Document this API
      *  Is called before delete().
+     *  @todo Document this API
      */
     function before_delete() {}
 
     /**
-     *  @todo Document this API
      *  Is called after delete().
+     *  @todo Document this API
      */
     function after_delete() {}
 
+    /**
+     *  Log SQL query in development mode
+     *
+     *  If running in development mode, log the query to $GLOBAL
+     *  @param string SQL to be logged
+     */
     function log_query($sql) {
         if(TRAX_MODE == "development" && $sql) {
             $GLOBALS['ACTIVE_RECORD_SQL_LOG'][] = $sql;       
@@ -2276,8 +2330,8 @@ class ActiveRecord {
     }
 
     /**
-     *  @todo Document this API
      * Paging html functions
+     *  @todo Document this API
      */
     function limit_select($controller =null, $additional_query = null) {
         if($this->pages > 0) {
@@ -2298,6 +2352,12 @@ class ActiveRecord {
     /**
      *  @todo Document this API
      *
+     *  @return string HTML to link to previous and next pages
+     *  @uses $display
+     *  @uses $page
+     *  @uses $pages
+     *  @uses $paging_extra_params
+     *  @uses rows_per_page
      */
     function page_list(){
         $page_list  = "";

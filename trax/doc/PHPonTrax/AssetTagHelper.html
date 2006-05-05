@@ -35,6 +35,9 @@
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
 <ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_rails_examples.pkg.html">Examples From The Rails Book</a>
+</ul>
+<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
@@ -294,19 +297,22 @@ Source Location: /vendor/trax/action_view/helpers/asset_tag_helper.php<br /><br 
 <pre><a href="../PHPonTrax/Helpers.html">Helpers</a>
    |
    --AssetTagHelper</pre><br />
-<div class="description"></div><br /><br />
-<h4>Author(s):</h4>
-<ul>
-        </ul>
+<div class="description">Utility to help build HTML/XML link tags for public assets</div><br /><br />
 
 
 
 
-    
+
 
 
 </td>
 
+<td valign="top">
+<h3><a href="#class_vars">Variables</a></h3>
+<ul>
+    <li><a href="../PHPonTrax/AssetTagHelper.html#var$javascript_default_sources">$javascript_default_sources</a></li>
+  </ul>
+</td>
 
 
 <td valign="top">
@@ -452,19 +458,42 @@ Source Location: /vendor/trax/action_view/helpers/asset_tag_helper.php<br /><br 
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 34]<br />
-<br /><br />
+[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a34">34</a>]<br />
+Utility to help build HTML/XML link tags for public assets<br /><br /></div><br /><br />
+<div class="top">[ <a href="#top">Top</a> ]</div><br />
+
+<hr />
+<a name="class_vars"></a>
+<h3>Class Variables</h3>
+<div class="tags">
+	<a name="var$javascript_default_sources"></a>
+	<p></p>
+	<h4>$javascript_default_sources = <span class="value">&nbsp;null</span></h4>
+	<p>[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a39">39</a>]</p>
+  <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this class</td>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodjavascript_include_tag">AssetTagHelper::javascript_include_tag()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#method__construct">AssetTagHelper::__construct()</a></td>
   </tr>
 </table>
 </div>
-</div><br /><br />
-<div class="top">[ <a href="#top">Top</a> ]</div><br />
 
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>string[]</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+</div><br />
 
 <hr />
 <a name="class_methods"></a>
@@ -472,7 +501,7 @@ Source Location: /vendor/trax/action_view/helpers/asset_tag_helper.php<br /><br 
 <div class="tags">
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line 40]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a46">46</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -486,6 +515,9 @@ Source Location: /vendor/trax/action_view/helpers/asset_tag_helper.php<br /><br 
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#var$javascript_default_sources">AssetTagHelper::$javascript_default_sources</a></td>
+  </tr>
+  <tr>
     <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
   </tr>
 </table>
@@ -497,7 +529,7 @@ Overrides <a href="../PHPonTrax/Helpers.html#method__construct">Helpers::__const
   </div>
   <hr />
 	<a name="methodauto_discovery_link_tag"></a>
-	<h3>method auto_discovery_link_tag <span class="smalllinenumber">[line 212]</span></h3>
+	<h3>method auto_discovery_link_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a308">308</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -509,12 +541,15 @@ $tag_options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns a link tag that browsers and news readers can use to auto-detect a RSS or ATOM feed for this page. The $type can  either be &lt;tt&gt;:rss&lt;/tt&gt; (default) or &lt;tt&gt;:atom&lt;/tt&gt; and the $options follow the url_for() style of declaring a link target.<br /><br /><p>Examples:   auto_discovery_link_tag # =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;RSS&quot; href=&quot;http://www.curenthost.com/controller/action&quot; /&gt;   auto_discovery_link_tag(:atom) # =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/atom+xml&quot; title=&quot;ATOM&quot; href=&quot;http://www.curenthost.com/controller/action&quot; /&gt;   auto_discovery_link_tag(:rss, {:action =&gt; &quot;feed&quot;}) # =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;RSS&quot; href=&quot;http://www.curenthost.com/controller/feed&quot; /&gt;   auto_discovery_link_tag(:rss, {:action =&gt; &quot;feed&quot;}, {:title =&gt; &quot;My RSS&quot;}) # =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;My RSS&quot; href=&quot;http://www.curenthost.com/controller/feed&quot; /&gt;</p><br /><br /><br />
+		Returns a link tag that browsers and news readers can use to<br /><br /><p>auto-detect a RSS or ATOM feed for this page. The $type can   either be &lt;tt&gt;:rss&lt;/tt&gt; (default) or &lt;tt&gt;:atom&lt;/tt&gt; and the   $options follow the url_for() style of declaring a link   target.</p><p>Examples:   auto_discovery_link_tag  =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;RSS&quot;   href=&quot;http://www.curenthost.com/controller/action&quot; /&gt;   auto_discovery_link_tag(:atom) =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/atom+xml&quot;   title=&quot;ATOM&quot;   href=&quot;http://www.curenthost.com/controller/action&quot; /&gt;   auto_discovery_link_tag(:rss, {:action =&gt; &quot;feed&quot;}) =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;RSS&quot;   href=&quot;http://www.curenthost.com/controller/feed&quot; /&gt;   auto_discovery_link_tag(:rss, {:action =&gt; &quot;feed&quot;}, {:title =&gt;   &quot;My RSS&quot;})  =&gt;    &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;My   RSS&quot; href=&quot;http://www.curenthost.com/controller/feed&quot; /&gt;</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionauto_discovery_link_tag">auto_discovery_link_tag()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/_vendor_trax_action_view_helpers_url_helper_php.html#functionurl_for">url_for()</a></td>
   </tr>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Helpers.html#methodtag">Helpers::tag()</a></td>
@@ -528,57 +563,89 @@ $tag_options = array()])</code>
   </div>
   <hr />
 	<a name="methodcompute_public_path"></a>
-	<h3>method compute_public_path <span class="smalllinenumber">[line 49]</span></h3>
+	<h3>method compute_public_path <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a67">67</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void compute_public_path(
-mixed
-$source, mixed
-$dir, mixed
+		<code>string compute_public_path(
+string
+$source, string
+$dir, string
 $ext)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
+		Compute public path to an asset<br /><br /><p>Build the public path, suitable for inclusion in a URL, to an   asset.  Arguments are the filename, directory and extension of   the asset.</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodimage_path">AssetTagHelper::image_path()</a></td>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Public path to the asset</td>
   </tr>
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodstylesheet_path">AssetTagHelper::stylesheet_path()</a></td>
   </tr>
   <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodimage_path">AssetTagHelper::image_path()</a></td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodjavascript_path">AssetTagHelper::javascript_path()</a></td>
+  </tr>
+  <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>private</td>
   </tr>
   <tr>
-    <td><b>todo:</b>&nbsp;&nbsp;</td><td>Document this method</td>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td>ActionController::asset_host</td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Helpers.html#var$controller_object">Helpers::$controller_object</a></td>
   </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$source</b>&nbsp;&nbsp;</td>
+        <td>Filename of asset</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$dir</b>&nbsp;&nbsp;</td>
+        <td>Default directory name, if none in $source</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$ext</b>&nbsp;&nbsp;</td>
+        <td>Default file extension, if none in $source</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodimage_path"></a>
-	<h3>method image_path <span class="smalllinenumber">[line 165]</span></h3>
+	<h3>method image_path <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a238">238</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void image_path(
-mixed
+		<code>string image_path(
+string
 $source)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns path to an image asset. Example:<br /><br /><p>The src can be supplied as a...  * full path, like &quot;/my_images/image.gif&quot;  * file name, like &quot;rss.gif&quot;, that gets expanded to &quot;/images/rss.gif&quot;  * file name without extension, like &quot;logo&quot;, that gets expanded to &quot;/images/logo.png&quot;</p><br /><br /><br />
+		Compute public path to a image asset<br /><br /><p>Build the public path, suitable for inclusion in a URL, to a   image asset.  Argument is the filename of the asset.   Default directory to 'images', extension to '.png'</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Public path to the image asset</td>
+  </tr>
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodimage_tag">AssetTagHelper::image_tag()</a></td>
   </tr>
@@ -590,25 +657,38 @@ $source)</code>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$source</b>&nbsp;&nbsp;</td>
+        <td>Filename of asset, in one of the formats                  accepted as the $filename argument of                  <a href="../PHPonTrax/AssetTagHelper.html#methodcompute_public_path">compute_public_path()</a></td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodimage_tag"></a>
-	<h3>method image_tag <span class="smalllinenumber">[line 183]</span></h3>
+	<h3>method image_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a268">268</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void image_tag(
+		<code>string image_tag(
 mixed
 $source, [mixed
 $options = array()])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns an image tag converting the $options instead html options on the tag, but with these special cases:<br /><br /><p>* &lt;tt&gt;:alt&lt;/tt&gt; - If no alt text is given, the file name part of the src is used (capitalized and without the extension)  * &lt;tt&gt;:size&lt;/tt&gt; - Supplied as &quot;XxY&quot;, so &quot;30x45&quot; becomes width=&quot;30&quot; and height=&quot;45&quot;</p><p>The src can be supplied as a...  * full path, like &quot;/my_images/image.gif&quot;  * file name, like &quot;rss.gif&quot;, that gets expanded to &quot;/images/rss.gif&quot;  * file name without extension, like &quot;logo&quot;, that gets expanded to &quot;/images/logo.png&quot;</p><br /><br /><br />
+		Build image tags to an image asset<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>A image tag for each asset in the argument list</td>
+  </tr>
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionimage_tag">image_tag()</a></td>
   </tr>
@@ -618,73 +698,130 @@ $options = array()])</code>
   <tr>
     <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodimage_path">AssetTagHelper::image_path()</a></td>
   </tr>
-  <tr>
-    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Inflector.html#methodcapitalize">Inflector::capitalize()</a></td>
-  </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$source</b>&nbsp;&nbsp;</td>
+        <td>An image asset optionally followed by an                 array describing options to apply to the tag                 generated for this asset.<br />The asset is a                 string in one of the formats accepted as value                 of the $source argument of                 <a href="../PHPonTrax/AssetTagHelper.html#methodimage_path">image_path()</a>.<br />  The optional second                 argument is an array whose keys are names of                 attributes of the image tag and whose corresponding                 values are the values assigned to each                 attribute.  The image size can be specified in                 two ways: by specifying option values &quot;width&quot; =&gt;                 <em>width</em> and &quot;height&quot; =&gt; <em>height</em>, or                 by specifying option &quot;size&quot; =&gt; &quot;<em>width</em>                 x <em>height</em>&quot;.  If omitted, options default to:                 <ul><li>&quot;alt&quot; =&gt; <em>humanized filename</em></li><li>&quot;width&quot; and &quot;height&quot; value computed from
+                       value of &quot;size&quot;</li></ul></td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodjavascript_include_tag"></a>
-	<h3>method javascript_include_tag <span class="smalllinenumber">[line 93]</span></h3>
+	<h3>method javascript_include_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a142">142</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void javascript_include_tag(
-)</code>
+		<code>string javascript_include_tag(
+mixed
+0)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns a script include tag per source given as argument. Examples:<br /><br /><p>javascript_include_tag(&quot;xmlhr&quot;) # =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/xmlhr.js&quot;&gt;&lt;/script&gt;</p><p>javascript_include_tag(&quot;common.javascript&quot;, &quot;/elsewhere/cools&quot;) # =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/common.javascript&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/elsewhere/cools.js&quot;&gt;&lt;/script&gt;</p><p>javascript_include_tag(&quot;defaults&quot;) # =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/prototype.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/effects.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/controls.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/dragdrop.js&quot;&gt;&lt;/script&gt;</p><br /><br /><br />
+		Return script include tag for one or more javascript assets<br /><br /><p>javascript_include_tag(&quot;xmlhr&quot;); =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/xmlhr.js&quot;&gt;&lt;/script&gt;</p><p>javascript_include_tag(&quot;common.javascript&quot;, &quot;/elsewhere/cools&quot;); =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/common.javascript&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/elsewhere/cools.js&quot;&gt;&lt;/script&gt;</p><p>javascript_include_tag(&quot;defaults&quot;); =&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/prototype.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/effects.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/controls.js&quot;&gt;&lt;/script&gt;    &lt;script type=&quot;text/javascript&quot; src=&quot;/javascripts/dragdrop.js&quot;&gt;&lt;/script&gt;</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionjavascript_include_tag">javascript_include_tag()</a></td>
   </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodjavascript_path">AssetTagHelper::javascript_path()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#var$javascript_default_sources">AssetTagHelper::$javascript_default_sources</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/Helpers.html#methodcontent_tag">Helpers::content_tag()</a></td>
+  </tr>
 </table>
 </div>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>0</b>&nbsp;&nbsp;</td>
+        <td>The arguments are zero or more strings, followed                 by an optional array containing options</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodjavascript_path"></a>
-	<h3>method javascript_path <span class="smalllinenumber">[line 73]</span></h3>
+	<h3>method javascript_path <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a116">116</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void javascript_path(
-mixed
+		<code>string javascript_path(
+string
 $source)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns path to a javascript asset. Example:<br /><br /><p>javascript_path &quot;xmlhr&quot; # =&gt; /javascripts/xmlhr.js</p><br /><br /><br />
+		Compute public path to a javascript asset<br /><br /><p>Build the public path, suitable for inclusion in a URL, to a   javascript asset.  Argument is the filename of the asset.   Default directory to 'javascripts', extension to '.js'</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Public path to the javascript asset</td>
+  </tr>
+  <tr>
+    <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodjavascript_include_tag">AssetTagHelper::javascript_include_tag()</a></td>
+  </tr>
+  <tr>
+    <td><b>uses:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodcompute_public_path">AssetTagHelper::compute_public_path()</a></td>
+  </tr>
+</table>
+</div>
+<br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$source</b>&nbsp;&nbsp;</td>
+        <td>Filename of asset, in one of the formats                  accepted as the $filename argument of                  <a href="../PHPonTrax/AssetTagHelper.html#methodcompute_public_path">compute_public_path()</a></td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodstylesheet_link_tag"></a>
-	<h3>method stylesheet_link_tag <span class="smalllinenumber">[line 143]</span></h3>
+	<h3>method stylesheet_link_tag <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a208">208</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void stylesheet_link_tag(
-)</code>
+		<code>string stylesheet_link_tag(
+mixed
+0)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns a css link tag per source given as argument.<br /><br /><p>Examples:</p><p>stylesheet_link_tag(&quot;style&quot;) # =&gt;    &lt;link href=&quot;/stylesheets/style.css&quot; media=&quot;screen&quot; rel=&quot;Stylesheet&quot; type=&quot;text/css&quot; /&gt;</p><p>stylesheet_link_tag(&quot;style&quot;, array(&quot;media&quot; =&gt; &quot;all&quot;)) # =&gt;    &lt;link href=&quot;/stylesheets/style.css&quot; media=&quot;all&quot; rel=&quot;Stylesheet&quot; type=&quot;text/css&quot; /&gt;</p><p>stylesheet_link_tag(&quot;random.styles&quot;, &quot;/css/stylish&quot;) # =&gt;    &lt;link href=&quot;/stylesheets/random.styles&quot; media=&quot;screen&quot; rel=&quot;Stylesheet&quot; type=&quot;text/css&quot; /&gt;    &lt;link href=&quot;/css/stylish.css&quot; media=&quot;screen&quot; rel=&quot;Stylesheet&quot; type=&quot;text/css&quot; /&gt;</p><br /><br /><br />
+		Build link tags to one or more stylesheet assets<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>A link tag for each asset in the argument list</td>
+  </tr>
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/_vendor_trax_action_view_helpers_asset_tag_helper_php.html#functionstylesheet_link_tag">stylesheet_link_tag()</a></td>
   </tr>
@@ -699,24 +836,37 @@ $source)</code>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>0</b>&nbsp;&nbsp;</td>
+        <td>One or more assets, optionally followed by an                 array describing options to apply to the tags                 generated for these assets.<br />  Each asset is a                 string in one of the formats accepted as value                 of the $source argument of                 <a href="../PHPonTrax/AssetTagHelper.html#methodstylesheet_path">stylesheet_path()</a>.<br />  The optional last                 argument is an array whose keys are names of                 attributes of the link tag and whose corresponding                 values are the values assigned to each                 attribute.  If omitted, options default to:                 <ul><li>&quot;rel&quot; =&gt; &quot;Stylesheet&quot;</li><li>&quot;type&quot; =&gt; &quot;text/css&quot;</li><li>&quot;media&quot; =&gt; &quot;screen&quot;</li><li>&quot;href&quot; =&gt; <em>path-to-source</em></li></ul></td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodstylesheet_path"></a>
-	<h3>method stylesheet_path <span class="smalllinenumber">[line 122]</span></h3>
+	<h3>method stylesheet_path <span class="smalllinenumber">[line <a href="..//__filesource/fsource_PHPonTrax__vendortraxaction_viewhelpersasset_tag_helper.php.html#a181">181</a>]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void stylesheet_path(
-mixed
+		<code>string stylesheet_path(
+string
 $source)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns path to a stylesheet asset. Example:<br /><br /><p>stylesheet_path(&quot;style&quot;) # =&gt; /stylesheets/style.css</p><br /><br /><br />
+		Compute public path to a stylesheet asset<br /><br /><p>Build the public path, suitable for inclusion in a URL, to a   stylesheet asset.  Argument is the filename of the asset.   Default directory to 'stylesheets', extension to '.css'</p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Public path to the stylesheet asset</td>
+  </tr>
   <tr>
     <td><b>usedby:</b>&nbsp;&nbsp;</td><td><a href="../PHPonTrax/AssetTagHelper.html#methodstylesheet_link_tag">AssetTagHelper::stylesheet_link_tag()</a></td>
   </tr>
@@ -728,6 +878,16 @@ $source)</code>
 <br /><br />
 
 
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$source</b>&nbsp;&nbsp;</td>
+        <td>Filename of asset, in one of the formats                  accepted as the $filename argument of                  <a href="../PHPonTrax/AssetTagHelper.html#methodcompute_public_path">compute_public_path()</a></td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
 </div><br />
@@ -735,7 +895,7 @@ $source)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 20 Apr 2006 10:12:10 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:47:18 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

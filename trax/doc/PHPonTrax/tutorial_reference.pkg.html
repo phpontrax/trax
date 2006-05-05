@@ -35,6 +35,9 @@
 							<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_PHPonTrax.pkg.html">PHP On Trax</a>
 <ul>
+	<li type="square"><a href="../PHPonTrax/tutorial_rails_examples.pkg.html">Examples From The Rails Book</a>
+</ul>
+<ul>
 	<li type="square"><a href="../PHPonTrax/tutorial_simpleapp.pkg.html">Build A Simple Trax Application</a>
 </ul>
 <ul>
@@ -318,10 +321,6 @@
       Determines which  database to use.
       Get it from $_SERVER['TRAX_MODE'] if that exists</div></li>
 
-    <li><span class="cmd-title">TRAX_PATH_SEPERATOR</span>
-     <div class="cmd-synopsis">Character to use as the separator when defining the
-     PHP include path. ';' for Windows, otherwise ':'.</div></li>
-
     <li><span class="cmd-title">TRAX_PUBLIC</span>
      <div class="cmd-synopsis">Subdirectory of the user's home directory referenced
      by the Apache configuration variable <code>UserDir</code>.</div></li>
@@ -346,6 +345,12 @@
      <a href="http://pear.php.net/package/DB">DB</a> error if
      the connection attempt failed.  Set in 
     <a href="../PHPonTrax/ActiveRecord.html#methodestablish_connection">ActiveRecord::establish_connection()</a>.</div></li>
+
+    <li><span class="cmd-title">$GLOBALS['ACTIVE_RECORD_SQL_LOG']</span>
+     <div class="cmd-synopsis">An array which contains a log of SQL queries sent to
+     the DBMS, one query per element.  Created only when TRAX_MODE is
+     'development'.  Written in <a href="../PHPonTrax/ActiveRecord.html#methodlog_query">ActiveRecord::log_query()</a>.</div></li>
+
 
     <li><span class="cmd-title">$GLOBALS['COUNTRIES']</span>
      <div class="cmd-synopsis">List of countries.  Set in <a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html">form_options_helper.php</a>.</div></li>
@@ -385,6 +390,9 @@
     <li><span class="cmd-title">$GLOBALS['DEFAULT_TEXT_AREA_OPTIONS']</span>
      <div class="cmd-synopsis">Referenced in <a href="../PHPonTrax/FormHelper.html">FormHelper</a></div></li>
 
+    <li><span class="cmd-title">$GLOBALS['JAVASCRIPT_DEFAULT_SOURCES']</span>
+     <div class="cmd-synopsis">Referenced in <a href="../PHPonTrax/AssetTagHelper.html">AssetTagHelper</a> constructor</div></li>
+
     <li><span class="cmd-title">$GLOBALS['TRAX_DB_SETTINGS']</span>
      <div class="cmd-synopsis">Array with keys 'test', 'development' and 'production' specifying
      the database connection parameters for each of the three modes of
@@ -418,7 +426,7 @@
 </table>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 20 Apr 2006 10:12:00 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:46:54 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

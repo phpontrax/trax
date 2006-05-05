@@ -3,6 +3,7 @@
  *  File containing the ApplicationController class
  *
  *  @package PHPonTraxTest
+ *  $Id$
  */
 
 /**

@@ -1,11 +1,11 @@
-<h1>Editing <?php echo $singluar_model_name ?></h1>
+<h1>Editing <?php echo $singular_model_name ?></h1>
 
-< ?php echo start_form_tag(array(":action" => "edit", ":id" => $<?php echo $singluar_model_name ?>)) ? >
+< ?php echo start_form_tag(array(":action" => "edit", ":id" => $<?php echo $singular_model_name ?>)) ? >
     < ?php echo $this->render_partial("form") ? ><br>
     < ?php echo submit_tag("Edit") ? >
 < ?php echo end_form_tag() ? >
 
 <br>
 
-< ?php echo link_to("Show", array(":action" => "show", ":id" => $<?php echo $singluar_model_name ?>)) ? > |
+< ?php echo link_to("Show", array(":action" => "show", ":id" => $<?php echo $singular_model_name ?>)) ? > |
 < ?php echo link_to("Back", array(":action" => "index")) ? >

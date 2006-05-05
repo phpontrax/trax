@@ -1,9 +1,9 @@
-< ?php echo error_messages_for("<?php echo $singluar_model_name ?>") ? >
+< ?php echo error_messages_for("<?php echo $singular_model_name ?>") ? >
 
-<!--[form:<?php echo $singluar_model_name ?>]-->
+<!--[form:<?php echo $singular_model_name ?>]-->
 <?php
     $ar_helper = new ActiveRecordHelper();
     $ar_helper->scaffolding = true;
-    echo $ar_helper->all_input_tags($this->{$singluar_model_name}, $singluar_model_name, array()); 
+    echo $ar_helper->all_input_tags($this->{$singular_model_name}, $singular_model_name, array()); 
 ?>
-<!--[eoform:<?php echo $singluar_model_name ?>]-->
+<!--[eoform:<?php echo $singular_model_name ?>]-->

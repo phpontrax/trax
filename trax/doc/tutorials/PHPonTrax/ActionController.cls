@@ -211,7 +211,9 @@ router->connect(':controller/:action/:id');
   <title>Action Call</title>
   <para>When the names of the controller and action have been
    successfully determined from the URL, the associated filesystem
-   paths are constructed and relevant files are loaded.
+   paths are constructed and relevant files are loaded, and any
+   parameters and their values are stored in
+   {@link ActionController::action_params}.
    First file <literal>app/controllers/application.php</literal> is
    loaded if it exists. This file contains the definition of the
    {@link ApplicationController} class, which extends

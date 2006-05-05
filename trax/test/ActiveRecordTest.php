@@ -427,15 +427,6 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
-     *  Test the create() method
-     *  @todo Implement testCreate() (figure out create() first)
-     */
-    public function testCreate() {
-        // Remove the following line when you implement this test.
-        throw new PHPUnit2_Framework_IncompleteTestError;
-    }
-
-    /**
      *  Test the add_error() method
      */
     public function testAdd_error() {
@@ -477,6 +468,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
                  "SELECT mumble,foo FROM person_names",
                  new DB_find_all_result);
         $result = $p->find_all("SELECT mumble,foo FROM person_names");
+        $this->assertTrue(is_array($result));
 
         //  Conditions without "SELECT" should appear in WHERE clause
         $p = new PersonName;
@@ -484,6 +476,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
                  "SELECT * FROM person_names WHERE last_name = 'Dover' ",
                  new DB_find_all_result);
         $result = $p->find_all("last_name = 'Dover'");
+        $this->assertTrue(is_array($result));
 
         //  Orderings should appear in ORDER BY clause
         $p = new PersonName;
@@ -491,6 +484,17 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
                  "SELECT * FROM person_names ORDER BY last_name ",
                  new DB_find_all_result);
         $result = $p->find_all(null, "last_name");
+        $this->assertTrue(is_array($result));
+
+        //  Test limit
+        //$GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        //         "SELECT * FROM person_names WHERE last_name = 'Dover' "
+        //         . "ORDER BY last_name ",
+        //         new DB_find_all_result);
+        //$result = $p->find_all("last_name = 'Dover'", "last_name",
+        //                       array(1,20));
+
+        //  Test joins
 
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
@@ -696,6 +700,15 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
+     *  Test the column_attribute_exists() method
+     *  @todo Implement testColumn_attribute_exists()
+     */
+    public function testColumn_attribute_exists() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
      *  Test the column_for_attribute() method
      *  @todo Implement testColumn_for_attribute()
      */
@@ -718,6 +731,15 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 	 *  @todo Implement testCount_all()
 	 */
     public function testCount_all() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+	}
+
+	/**
+	 *  Test the create() method
+	 *  @todo Implement testCreate()
+	 */
+    public function testCreate() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
 	}
@@ -791,6 +813,15 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     }
 
     /**
+     *  Test the get_association() method
+     *  @todo Implement testGet_association()
+     */
+    public function testGet_association() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
      *  Test the get_errors() method
      *  @todo Implement testGet_errors()
      */
@@ -822,6 +853,24 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
      *  @todo Implement testLimit_select()
      */
     public function testLimit_select() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test the load() method
+     *  @todo Implement testLoad()
+     */
+    public function testLoad() {
+        // Remove the following line when you implement this test.
+        throw new PHPUnit2_Framework_IncompleteTestError;
+    }
+
+    /**
+     *  Test the log_query() method
+     *  @todo Implement testLog_query()
+     */
+    public function testLog_query() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }
@@ -989,10 +1038,10 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 	}
 
 	/**
-	 *  Test the _get() method
-	 *  @todo Implement test_get()
+	 *  Test the __get() method
+	 *  @todo Implement test__get()
 	 */
-    public function test_get() {
+    public function test__get() {
         // Remove the following line when you implement this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
 	}

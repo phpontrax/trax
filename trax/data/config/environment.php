@@ -2,6 +2,7 @@
 /**
  *  Trax runtime environment definitions
  *  @package PHPonTrax
+ *  $Id$
  */
 
 /**
@@ -43,7 +44,7 @@ define("TRAX_PUBLIC", dirname(dirname(dirname(__FILE__)))."/public");
  *  {@link http://httpd.apache.org/docs/2.0/mod/core.html#documentroot DocumentRoot}, 
  *  then TRAX_URL_PREFIX is null.
  */
-define("TRAX_URL_PREFIX",       null); # no leading or trailing slashes
+define("TRAX_URL_PREFIX",       null); # no trailing slash
 
 /**
  *  The file extension of files in app/views.  Normally '.phtml'

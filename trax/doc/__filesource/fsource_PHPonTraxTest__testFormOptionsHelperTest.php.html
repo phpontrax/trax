@@ -47,7 +47,7 @@
 <li><a name="a7"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTraxTest</span></li>
 <li><a name="a8"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://opensource.org/licenses/gpl-license.php GNU Public License</span></li>
 <li><a name="a9"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> (c) Walter O. Haas 2006</span></li>
-<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: FormOptionsHelperTest.php 192 2006-03-27 22:02:53Z haas $</span></li>
+<li><a name="a10"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: FormOptionsHelperTest.php 198 2006-04-20 16:20:30Z haas $</span></li>
 <li><a name="a11"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Walt Haas &lt;haas@xmission.com&gt;</span></li>
 <li><a name="a12"></a><span class="src-doc"> */</span></li>
 <li><a name="a13"></a>&nbsp;</li>
@@ -106,31 +106,146 @@
 <li><a name="a66"></a>    <span class="src-sym">}</span></li>
 <li><a name="a67"></a>&nbsp;</li>
 <li><a name="a68"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a69"></a><span class="src-doc">     *  Empty test to prevent failure</span></li>
-<li><a name="a70"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for the FormOptionsHelper class</span></li>
-<li><a name="a71"></a><span class="src-doc">     */</span></li>
-<li><a name="a72"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestEmpty">testEmpty</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a73"></a>    <span class="src-sym">}</span></li>
-<li><a name="a74"></a><span class="src-sym">}</span></li>
+<li><a name="a69"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for add_options()</span></li>
+<li><a name="a70"></a><span class="src-doc">     */</span></li>
+<li><a name="a71"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestAdd_options">testAdd_options</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a72"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a73"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a74"></a>    <span class="src-sym">}</span></li>
 <li><a name="a75"></a>&nbsp;</li>
-<li><a name="a76"></a><span class="src-comm">// Call FormOptionsHelperTest::main() if this source file is executed directly.</span></li>
-<li><a name="a77"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_FormOptionsHelperTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;FormOptionsHelperTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a78"></a>    <span class="src-id"><a href="../PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a79"></a><span class="src-sym">}</span></li>
+<li><a name="a76"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a77"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for country_options_for_select()</span></li>
+<li><a name="a78"></a><span class="src-doc">     */</span></li>
+<li><a name="a79"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_options_for_select">testCountry_options_for_select</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a80"></a>&nbsp;</li>
-<li><a name="a81"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
-<li><a name="a82"></a><span class="src-comm">// Local variables:</span></li>
-<li><a name="a83"></a><span class="src-comm">// tab-width: 4</span></li>
-<li><a name="a84"></a><span class="src-comm">// c-basic-offset: 4</span></li>
-<li><a name="a85"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
-<li><a name="a86"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
-<li><a name="a87"></a><span class="src-comm">// End:</span></li>
-<li><a name="a88"></a><span class="src-php">?&gt;</span></li>
+<li><a name="a81"></a>        <span class="src-comm">//  Spot check a few countries</span></li>
+<li><a name="a82"></a>        <span class="src-var">$fo </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">;</span></li>
+<li><a name="a83"></a>        <span class="src-var">$countries </span>= <span class="src-var">$fo</span><span class="src-sym">-&gt;</span><span class="src-id">country_options_for_select</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a84"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertContains</span><span class="src-sym">(</span><span class="src-str">'Bangladesh'</span><span class="src-sym">, </span><span class="src-var">$countries</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a85"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertContains</span><span class="src-sym">(</span><span class="src-str">'Canada'</span><span class="src-sym">, </span><span class="src-var">$countries</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a86"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertContains</span><span class="src-sym">(</span><span class="src-str">'Ecuador'</span><span class="src-sym">, </span><span class="src-var">$countries</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a87"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertContains</span><span class="src-sym">(</span><span class="src-str">'France'</span><span class="src-sym">, </span><span class="src-var">$countries</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a88"></a>&nbsp;</li>
+<li><a name="a89"></a>        <span class="src-comm">//  Select a country</span></li>
+<li><a name="a90"></a>        <span class="src-var">$fo </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">;</span></li>
+<li><a name="a91"></a>        <span class="src-var">$countries </span>= <span class="src-var">$fo</span><span class="src-sym">-&gt;</span><span class="src-id">country_options_for_select</span><span class="src-sym">(</span><span class="src-num">17</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a92"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertContains</span><span class="src-sym">(</span><span class="src-str">'value=&quot;17&quot; selected=&quot;selected&quot;'</span><span class="src-sym">, </span><span class="src-var">$countries</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a93"></a>&nbsp;</li>
+<li><a name="a94"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a95"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a96"></a>    <span class="src-sym">}</span></li>
+<li><a name="a97"></a>&nbsp;</li>
+<li><a name="a98"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a99"></a><span class="src-doc">     *  Test the options_for_select() method</span></li>
+<li><a name="a100"></a><span class="src-doc">     */</span></li>
+<li><a name="a101"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_method">testOptions_for_select_method</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a102"></a>&nbsp;</li>
+<li><a name="a103"></a>        <span class="src-comm">//  Test choices with none selected</span></li>
+<li><a name="a104"></a>        <span class="src-var">$fo </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">;</span></li>
+<li><a name="a105"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'&lt;option value=&quot;0&quot;&gt;foo&lt;/option&gt;' </span>. <span class="src-str">&quot;\n&quot;</span></li>
+<li><a name="a106"></a>                            . <span class="src-str">'&lt;option value=&quot;1&quot;&gt;bar&lt;/option&gt;'</span><span class="src-sym">,</span></li>
+<li><a name="a107"></a>                            <span class="src-var">$fo</span><span class="src-sym">-&gt;</span><span class="src-id">options_for_select</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">,</span><span class="src-str">'bar'</span><span class="src-sym">)))</span><span class="src-sym">;</span></li>
+<li><a name="a108"></a>&nbsp;</li>
+<li><a name="a109"></a>        <span class="src-comm">//  Test choices with one selected</span></li>
+<li><a name="a110"></a>        <span class="src-var">$fo </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/FormOptionsHelper.html">FormOptionsHelper</a></span><span class="src-sym">;</span></li>
+<li><a name="a111"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'&lt;option value=&quot;0&quot;&gt;mumble&lt;/option&gt;' </span>. <span class="src-str">&quot;\n&quot;</span></li>
+<li><a name="a112"></a>                  . <span class="src-str">'&lt;option value=&quot;1&quot; selected=&quot;selected&quot;&gt;grumble&lt;/option&gt;'</span><span class="src-sym">,</span></li>
+<li><a name="a113"></a>                  <span class="src-var">$fo</span><span class="src-sym">-&gt;</span><span class="src-id">options_for_select</span><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'mumble'</span><span class="src-sym">,</span><span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-num">1</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a114"></a>    <span class="src-sym">}</span></li>
+<li><a name="a115"></a>&nbsp;</li>
+<li><a name="a116"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a117"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for options_from_collection_for_select()</span></li>
+<li><a name="a118"></a><span class="src-doc">     */</span></li>
+<li><a name="a119"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_from_collection_for_select">testOptions_from_collection_for_select</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a120"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a121"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a122"></a>    <span class="src-sym">}</span></li>
+<li><a name="a123"></a>&nbsp;</li>
+<li><a name="a124"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a125"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for to_collection_select_tag()</span></li>
+<li><a name="a126"></a><span class="src-doc">     */</span></li>
+<li><a name="a127"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_collection_select_tag">testTo_collection_select_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a128"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a129"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a130"></a>    <span class="src-sym">}</span></li>
+<li><a name="a131"></a>&nbsp;</li>
+<li><a name="a132"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a133"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for to_country_select_tag()</span></li>
+<li><a name="a134"></a><span class="src-doc">     */</span></li>
+<li><a name="a135"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_country_select_tag">testTo_country_select_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a136"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a137"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a138"></a>    <span class="src-sym">}</span></li>
+<li><a name="a139"></a>&nbsp;</li>
+<li><a name="a140"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a141"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for to_select_tag()</span></li>
+<li><a name="a142"></a><span class="src-doc">     */</span></li>
+<li><a name="a143"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestTo_select_tag">testTo_select_tag</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a144"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a145"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a146"></a>    <span class="src-sym">}</span></li>
+<li><a name="a147"></a>&nbsp;</li>
+<li><a name="a148"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a149"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for collection_select()</span></li>
+<li><a name="a150"></a><span class="src-doc">     */</span></li>
+<li><a name="a151"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCollection_select">testCollection_select</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a152"></a>        echo <a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functioncollection_select">collection_select</a><span class="src-sym">(</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-id">null</span><span class="src-sym">,</span><span class="src-id">null</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a153"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a154"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a155"></a>    <span class="src-sym">}</span></li>
+<li><a name="a156"></a>&nbsp;</li>
+<li><a name="a157"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a158"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for country_select()</span></li>
+<li><a name="a159"></a><span class="src-doc">     */</span></li>
+<li><a name="a160"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestCountry_select">testCountry_select</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a161"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a162"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a163"></a>    <span class="src-sym">}</span></li>
+<li><a name="a164"></a>&nbsp;</li>
+<li><a name="a165"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a166"></a><span class="src-doc">     *  Test options_for_select() function</span></li>
+<li><a name="a167"></a><span class="src-doc">     */</span></li>
+<li><a name="a168"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestOptions_for_select_function">testOptions_for_select_function</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a169"></a>&nbsp;</li>
+<li><a name="a170"></a>        <span class="src-comm">//  Test choices with none selected</span></li>
+<li><a name="a171"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'&lt;option value=&quot;0&quot;&gt;foo&lt;/option&gt;' </span>. <span class="src-str">&quot;\n&quot;</span></li>
+<li><a name="a172"></a>                            . <span class="src-str">'&lt;option value=&quot;1&quot;&gt;bar&lt;/option&gt;'</span><span class="src-sym">,</span></li>
+<li><a name="a173"></a>                            <a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functionoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'foo'</span><span class="src-sym">,</span><span class="src-str">'bar'</span><span class="src-sym">)))</span><span class="src-sym">;</span></li>
+<li><a name="a174"></a>&nbsp;</li>
+<li><a name="a175"></a>        <span class="src-comm">//  Test choices with one selected by key</span></li>
+<li><a name="a176"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertEquals</span><span class="src-sym">(</span><span class="src-str">'&lt;option value=&quot;M&quot;&gt;mumble&lt;/option&gt;' </span>. <span class="src-str">&quot;\n&quot;</span></li>
+<li><a name="a177"></a>                  . <span class="src-str">'&lt;option value=&quot;G&quot; selected=&quot;selected&quot;&gt;grumble&lt;/option&gt;'</span><span class="src-sym">,</span></li>
+<li><a name="a178"></a>                  <a href="../PHPonTrax/_vendor_trax_action_view_helpers_form_options_helper_php.html#functionoptions_for_select">options_for_select</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'M' </span>=&gt; <span class="src-str">'mumble'</span><span class="src-sym">,</span></li>
+<li><a name="a179"></a>                                           <span class="src-str">'G' </span>=&gt; <span class="src-str">'grumble'</span><span class="src-sym">)</span><span class="src-sym">,</span><span class="src-str">'G'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a180"></a>    <span class="src-sym">}</span></li>
+<li><a name="a181"></a>&nbsp;</li>
+<li><a name="a182"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a183"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Write test for select()</span></li>
+<li><a name="a184"></a><span class="src-doc">     */</span></li>
+<li><a name="a185"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodtestSelect">testSelect</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a186"></a>        <span class="src-comm">// Remove the following line when you implement this test.</span></li>
+<li><a name="a187"></a>        throw <span class="src-key">new </span><span class="src-id">PHPUnit2_Framework_IncompleteTestError</span><span class="src-sym">;</span></li>
+<li><a name="a188"></a>    <span class="src-sym">}</span></li>
+<li><a name="a189"></a><span class="src-sym">}</span></li>
+<li><a name="a190"></a>&nbsp;</li>
+<li><a name="a191"></a><span class="src-comm">// Call FormOptionsHelperTest::main() if this source file is executed directly.</span></li>
+<li><a name="a192"></a><span class="src-key">if </span><span class="src-sym">(</span><span class="src-id"><a href="../PHPonTraxTest/_test_FormOptionsHelperTest_php.html#definePHPUnit2_MAIN_METHOD">PHPUnit2_MAIN_METHOD</a> </span>== <span class="src-str">&quot;FormOptionsHelperTest::main&quot;</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a193"></a>    <span class="src-id"><a href="../PHPonTraxTest/FormOptionsHelperTest.html">FormOptionsHelperTest</a></span><span class="src-sym">::</span><a href="../PHPonTraxTest/FormOptionsHelperTest.html#methodmain">main</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a194"></a><span class="src-sym">}</span></li>
+<li><a name="a195"></a>&nbsp;</li>
+<li><a name="a196"></a><span class="src-comm">// -- set Emacs parameters --</span></li>
+<li><a name="a197"></a><span class="src-comm">// Local variables:</span></li>
+<li><a name="a198"></a><span class="src-comm">// tab-width: 4</span></li>
+<li><a name="a199"></a><span class="src-comm">// c-basic-offset: 4</span></li>
+<li><a name="a200"></a><span class="src-comm">// c-hanging-comment-ender-p: nil</span></li>
+<li><a name="a201"></a><span class="src-comm">// indent-tabs-mode: nil</span></li>
+<li><a name="a202"></a><span class="src-comm">// End:</span></li>
+<li><a name="a203"></a><span class="src-php">?&gt;</span></li>
 </ol></pre></div>
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:37 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:47:35 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

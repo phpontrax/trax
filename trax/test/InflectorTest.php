@@ -79,6 +79,7 @@ class InflectorTest extends PHPUnit2_Framework_TestCase {
     public function testSingularize() {
         $this->assertEquals(Inflector::singularize('orders'), 'order');
         $this->assertEquals(Inflector::singularize('people'), 'person');
+        $this->assertEquals(Inflector::singularize('processes'), 'process');
         $this->assertEquals(Inflector::singularize('queries'), 'query');
     }
 
@@ -125,6 +126,8 @@ class InflectorTest extends PHPUnit2_Framework_TestCase {
     public function testClassify() {
         $this->assertEquals(Inflector::classify('people'), 'Person');
         $this->assertEquals(Inflector::classify('queries'), 'Query');
+        $this->assertEquals(Inflector::classify('accesses'), 'Access');
+        echo Inflector::classify('Access')."\n";
     }
 
     /**

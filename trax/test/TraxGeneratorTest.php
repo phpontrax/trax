@@ -353,6 +353,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $tg = new TraxGenerator;
         ob_start();
         $tg->generate_scaffold('PersonName', 'membership');
+
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertNotContains('Error:', $output);

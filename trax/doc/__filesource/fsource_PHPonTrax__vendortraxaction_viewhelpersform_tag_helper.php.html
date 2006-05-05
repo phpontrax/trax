@@ -69,18 +69,18 @@
 <li><a name="a29"></a><span class="src-doc"> */</span></li>
 <li><a name="a30"></a>&nbsp;</li>
 <li><a name="a31"></a><span class="src-doc">/**</span></li>
-<li><a name="a32"></a><span class="src-doc"> *</span></li>
-<li><a name="a33"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPonTrax</span></li>
-<li><a name="a34"></a><span class="src-doc"> */</span></li>
-<li><a name="a35"></a><span class="src-key">class </span><a href="../PHPonTrax/FormTagHelper.html">FormTagHelper</a> <span class="src-key">extends </span><a href="../PHPonTrax/Helpers.html">Helpers</a> <span class="src-sym">{</span></li>
-<li><a name="a36"></a>&nbsp;</li>
-<li><a name="a37"></a>    <span class="src-doc">/**</span></li>
-<li><a name="a38"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
-<li><a name="a39"></a><span class="src-doc">     */</span></li>
-<li><a name="a40"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormTagHelper.html#methodform_tag">form_tag</a><span class="src-sym">(</span><span class="src-var">$url_for_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
-<li><a name="a41"></a>        <span class="src-var">$html_options </span>= <a href="http://www.php.net/array_merge">array_merge</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;method&quot; </span>=&gt; <span class="src-str">&quot;post&quot;</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
-<li><a name="a42"></a>&nbsp;</li>
-<li><a name="a43"></a>        <span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">[</span><span class="src-str">'multipart'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a32"></a><span class="src-doc"> *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this class</span></li>
+<li><a name="a33"></a><span class="src-doc"> */</span></li>
+<li><a name="a34"></a><span class="src-key">class </span><a href="../PHPonTrax/FormTagHelper.html">FormTagHelper</a> <span class="src-key">extends </span><a href="../PHPonTrax/Helpers.html">Helpers</a> <span class="src-sym">{</span></li>
+<li><a name="a35"></a>&nbsp;</li>
+<li><a name="a36"></a>    <span class="src-doc">/**</span></li>
+<li><a name="a37"></a><span class="src-doc">     *  </span><span class="src-doc-coretag">@todo</span><span class="src-doc"> Document this method</span></li>
+<li><a name="a38"></a><span class="src-doc">     */</span></li>
+<li><a name="a39"></a>    <span class="src-key">function </span><a href="../PHPonTrax/FormTagHelper.html#methodform_tag">form_tag</a><span class="src-sym">(</span><span class="src-var">$url_for_options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$options </span>= <span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a40"></a>        <span class="src-var">$html_options </span>= <a href="http://www.php.net/array_merge">array_merge</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;method&quot; </span>=&gt; <span class="src-str">&quot;post&quot;</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-var">$options</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a41"></a>&nbsp;</li>
+<li><a name="a42"></a>        <span class="src-key">if</span><span class="src-sym">(</span><a href="http://www.php.net/array_key_exists">array_key_exists</a><span class="src-sym">(</span><span class="src-str">'multipart'</span><span class="src-sym">,</span><span class="src-var">$html_options</span><span class="src-sym">)</span></li>
+<li><a name="a43"></a>       &amp;&amp; <span class="src-var">$html_options</span><span class="src-sym">[</span><span class="src-str">'multipart'</span><span class="src-sym">]</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a44"></a>            <span class="src-var">$html_options</span><span class="src-sym">[</span><span class="src-str">'enctype'</span><span class="src-sym">] </span>= <span class="src-str">&quot;multipart/form-data&quot;</span><span class="src-sym">;</span></li>
 <li><a name="a45"></a>            unset<span class="src-sym">(</span><span class="src-var">$html_options</span><span class="src-sym">[</span><span class="src-str">'multipart'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a46"></a>        <span class="src-sym">}</span></li>
@@ -327,7 +327,7 @@
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:23:42 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:47:43 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

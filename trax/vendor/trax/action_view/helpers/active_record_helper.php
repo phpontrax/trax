@@ -203,6 +203,7 @@ class ActiveRecordHelper extends Helpers {
     /**
      *  @todo Document this method
      *  @uses scaffolding
+     *  @uses input_scaffolding()
      */
     function default_input_block() {
         if($this->scaffolding) {

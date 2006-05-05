@@ -59,7 +59,7 @@
 <li><a name="a19"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_VIEWS_EXTENTION&quot;</span><span class="src-sym">,  </span><span class="src-str">&quot;phtml&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a20"></a><span class="src-comm">//  you don't really need a 'haas' account to test,</span></li>
 <li><a name="a21"></a><span class="src-comm">//  the use of this prefix is purely syntactic</span></li>
-<li><a name="a22"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_URL_PREFIX&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;~haas&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a22"></a><a href="http://www.php.net/define">define</a><span class="src-sym">(</span><span class="src-str">&quot;TRAX_URL_PREFIX&quot;</span><span class="src-sym">, </span><span class="src-str">&quot;/~haas&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a23"></a><span class="src-var">$GLOBALS</span><span class="src-sym">[</span><span class="src-str">'TRAX_INCLUDES'</span><span class="src-sym">] </span>=</li>
 <li><a name="a24"></a>    <span class="src-key">array</span><span class="src-sym">( </span><span class="src-str">&quot;config&quot;      </span>=&gt; <span class="src-str">&quot;config&quot;</span><span class="src-sym">,</span></li>
 <li><a name="a25"></a>           <span class="src-str">&quot;controllers&quot; </span>=&gt; <span class="src-str">&quot;controllers&quot;</span><span class="src-sym">,</span></li>
@@ -125,7 +125,7 @@
 <li><a name="a85"></a><span class="src-doc">     *   routes from config/routes.php</span></li>
 <li><a name="a86"></a><span class="src-doc">     */</span></li>
 <li><a name="a87"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtest__construct">test__construct</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a88"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a88"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a89"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertTrue</span><span class="src-sym">(</span><a href="http://www.php.net/is_object">is_object</a><span class="src-sym">(</span><span class="src-var">$ac</span><span class="src-sym">-&gt;</span><span class="src-id">router</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
 <li><a name="a90"></a>    <span class="src-sym">}</span></li>
 <li><a name="a91"></a>&nbsp;</li>
@@ -136,7 +136,7 @@
 <li><a name="a96"></a><span class="src-doc">     */</span></li>
 <li><a name="a97"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestRecognize_route">testRecognize_route</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a98"></a>        <span class="src-comm">//  read routes from config/routes.php</span></li>
-<li><a name="a99"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a99"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a100"></a>        <span class="src-comm">//  this URL doesn't match any route</span></li>
 <li><a name="a101"></a>        <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REDIRECT_URL'</span><span class="src-sym">] </span>= <span class="src-str">'/~haas/foo/bar'</span><span class="src-sym">;</span></li>
 <li><a name="a102"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">assertFalse</span><span class="src-sym">(</span><span class="src-var">$ac</span><span class="src-sym">-&gt;</span><span class="src-id">recognize_route</span><span class="src-sym">(</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
@@ -152,7 +152,7 @@
 <li><a name="a112"></a><span class="src-doc">     *  Test raise() with default value of code</span></li>
 <li><a name="a113"></a><span class="src-doc">     */</span></li>
 <li><a name="a114"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestRaise_default_code">testRaise_default_code</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a115"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a115"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a116"></a>        try <span class="src-sym">{</span></li>
 <li><a name="a117"></a>            <span class="src-var">$ac</span><span class="src-sym">-&gt;</span><span class="src-id">raise</span><span class="src-sym">(</span><span class="src-str">'text1'</span><span class="src-sym">,</span><span class="src-str">'text2'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a118"></a>        <span class="src-sym">}</span></li>
@@ -171,7 +171,7 @@
 <li><a name="a131"></a><span class="src-doc">     *  Test raise() with specified of code</span></li>
 <li><a name="a132"></a><span class="src-doc">     */</span></li>
 <li><a name="a133"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestSpecified_code">testSpecified_code</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
-<li><a name="a134"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a134"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a135"></a>        try <span class="src-sym">{</span></li>
 <li><a name="a136"></a>            <span class="src-var">$ac</span><span class="src-sym">-&gt;</span><span class="src-id">raise</span><span class="src-sym">(</span><span class="src-str">'text3'</span><span class="src-sym">,</span><span class="src-str">'text4'</span><span class="src-sym">, </span><span class="src-num">250</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
 <li><a name="a137"></a>        <span class="src-sym">}</span></li>
@@ -191,7 +191,7 @@
 <li><a name="a151"></a><span class="src-doc">     */</span></li>
 <li><a name="a152"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestProcess_route_unrecognized">testProcess_route_unrecognized</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a153"></a>        <span class="src-comm">//  read routes from config/routes.php</span></li>
-<li><a name="a154"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a154"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a155"></a>        <span class="src-comm">//  this URL doesn't match any route</span></li>
 <li><a name="a156"></a>        <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REDIRECT_URL'</span><span class="src-sym">] </span>= <span class="src-str">'/~haas/foo/bar'</span><span class="src-sym">;</span></li>
 <li><a name="a157"></a>        try <span class="src-sym">{</span></li>
@@ -216,7 +216,7 @@
 <li><a name="a176"></a><span class="src-doc">     */</span></li>
 <li><a name="a177"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestProcess_route_missing_controller">testProcess_route_missing_controller</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a178"></a>        <span class="src-comm">//  read routes from config/routes.php</span></li>
-<li><a name="a179"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a179"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a180"></a>        <span class="src-comm">//  this URL matches default route</span></li>
 <li><a name="a181"></a>        <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REDIRECT_URL'</span><span class="src-sym">] </span>= <span class="src-str">'/~haas/nocontroller/foo/bar'</span><span class="src-sym">;</span></li>
 <li><a name="a182"></a>        try <span class="src-sym">{</span></li>
@@ -242,7 +242,7 @@
 <li><a name="a202"></a><span class="src-doc">     */</span></li>
 <li><a name="a203"></a>    <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPonTraxTest/ActionControllerTest.html#methodtestProcess_route_missing_class">testProcess_route_missing_class</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
 <li><a name="a204"></a>        <span class="src-comm">//  read routes from config/routes.php</span></li>
-<li><a name="a205"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTrax/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
+<li><a name="a205"></a>        <span class="src-var">$ac </span>= <span class="src-key">new </span><span class="src-id"><a href="../PHPonTraxTest/ActionController.html">ActionController</a></span><span class="src-sym">;</span></li>
 <li><a name="a206"></a>        <span class="src-comm">//  this URL matches default route, but the controller</span></li>
 <li><a name="a207"></a>        <span class="src-comm">//  file doesn't have a Noclass class</span></li>
 <li><a name="a208"></a>        <span class="src-var">$_SERVER</span><span class="src-sym">[</span><span class="src-str">'REDIRECT_URL'</span><span class="src-sym">] </span>= <span class="src-str">'/~haas/noclass/foo/bar'</span><span class="src-sym">;</span></li>
@@ -395,7 +395,7 @@
 </div>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 06 Apr 2006 11:22:59 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
+		    Documentation generated on Thu, 04 May 2006 19:46:58 -0600 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.0RC4</a>
 	      </div>
       </td></tr></table>
     </td>

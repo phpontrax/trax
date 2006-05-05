@@ -1,8 +1,8 @@
-< ?php if(count($<?php echo $singluar_model_name ?>->content_columns)): ? >
-    < ?php foreach($<?php echo $singluar_model_name ?>->content_columns as $column): ? >
+< ?php if(count($<?php echo $singular_model_name ?>->content_columns)): ? >
+    < ?php foreach($<?php echo $singular_model_name ?>->content_columns as $column): ? >
         <p>
             <b>< ?php echo $column['human_name'] ? >:</b>
-            < ?php echo $<?php echo $singluar_model_name ?>->send($column['name']) ? >
+            < ?php echo $<?php echo $singular_model_name ?>->send($column['name']) ? >
         </p>
     < ?php endforeach; ? >
 < ?php else: ? >
@@ -11,5 +11,5 @@
 
 <br>
 
-< ?php echo link_to("Edit", array(":action" => "edit", ":id" => $<?php echo $singluar_model_name ?>)) ? > |
+< ?php echo link_to("Edit", array(":action" => "edit", ":id" => $<?php echo $singular_model_name ?>)) ? > |
 < ?php echo link_to("Back", array(":action" => "index")) ? >
