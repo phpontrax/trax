@@ -176,11 +176,15 @@ class TraxGenerator {
         $this->helper_template_file =
                TRAX_LIB_ROOT . "/templates/helper.php";
         $this->view_template_file =
-               TRAX_LIB_ROOT . "/templates/view.".$this->view_file_extention;
+               TRAX_LIB_ROOT . "/templates/view.phtml";
         $this->model_template_file =
                TRAX_LIB_ROOT . "/templates/model.php";
         $this->scaffold_template_path =
                TRAX_LIB_ROOT . "/templates/scaffolds/generator_templates";
+        $this->mailer_view_template_file =
+               TRAX_LIB_ROOT . "/templates/mailer_view.phtml";
+        $this->mailer_model_template_file =
+               TRAX_LIB_ROOT . "/templates/mailer_model.php";
 
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->mkdir_cmd = "mkdir";
@@ -248,6 +252,20 @@ class TraxGenerator {
                 //  Process "scaffold" command
                 //  $command_name has the name of the model
                 //  $_SERVER['argv'][3] has the name of the controller
+                case "mailer":
+                    if(empty($command_name)) {
+                        $this->mailer_help();
+                    } else {
+                        $views = array();
+                        if(array_key_exists(3, $_SERVER['argv'])
+                           && ($_SERVER["argv"][3] != "")) {
+                            for($i=3;$i < count($_SERVER["argv"]);$i++) {
+                               $views[] = strtolower($_SERVER["argv"][$i]);
+                            }
+                        }
+                        $this->generate_mailer($command_name, $views);
+                    }
+                    break;                    
                 case "scaffold":
 
                     //  Model name is required
@@ -326,7 +344,7 @@ class TraxGenerator {
      *  @uses $layout_filename    Set during call
      *  @uses $view_path          Must be set before call.
      */
-    function generate_controller($name, $views="", $scaffolding = false) {
+    function generate_controller($name, $views = "", $scaffolding = false) {
 
         # Set the View and Controller extra path info
         if(stristr($name, "/")) {
@@ -383,6 +401,88 @@ class TraxGenerator {
         } elseif(!empty($views)) {
             $this->create_view($views,$name);
         }
+    }
+
+    function generate_mailer($name, $views = "") {
+        if(stristr($name, "_")) {
+            $model_file = $this->model_path."/".strtolower($name).".php";
+        } else {
+            $model_file = $this->model_path."/".Inflector::underscore($name).".php";
+        }
+
+        $model_class = Inflector::camelize($name);
+
+        if(!file_exists($model_file)) {
+            if(file_exists($this->mailer_model_template_file)) {
+                $template = file_get_contents($this->mailer_model_template_file);
+                $template = str_replace('[class_name]',$model_class,$template);
+                # Add view methods
+                if (!empty($views)) {
+                    # There are some views, add a method for each
+                    if(is_array($views)) {
+                        # Multiple views in an array
+                        foreach($views as $view) {
+                            $method  = "\tfunction $view() {\n";
+                            $method .= "\t\t\$this->subject    = '".$model_class."->".$view."';\n";
+                            $method .= "\t\t\$this->recipients = '';\n";
+                            $method .= "\t\t\$this->from       = '';\n";
+                            $method .= "\t\t\$this->headers    = array();\n";
+                            $method .= "\t\t\$this->body       = array();\n";
+                            $method .= "\t}";
+                            $class_methods[] = $method;
+                        }
+                        $class_methods = implode("\n\n",$class_methods);
+                    } else {
+                        $class_methods  = "\tfunction $views() {\n";
+                        $class_methods .= "\t\t\$this->subject    = '".$model_class."->".$views."';\n";
+                        $class_methods .= "\t\t\$this->recipients = '';\n";
+                        $class_methods .= "\t\t\$this->from       = '';\n";
+                        $class_methods .= "\t\t\$this->headers    = array();\n";
+                        $class_methods .= "\t\t\$this->body       = array();\n";
+                        $class_methods .= "\t}";                        
+                    }
+                    $template = str_replace('[class_methods]', $class_methods, $template);
+                } else {
+                    # No view methods to add, so remove unneeded template
+                    $template = str_replace('[class_methods]', '', $template);
+                }
+                # Write the mailer model to disk
+                if(!file_put_contents($model_file, $template)) {
+                    echo "error creating mailer model file: $model_file\n";
+                } else {
+                    echo "create $model_file\n";
+                }
+            } else {
+                echo "error mailer model template file doesn't exist: $this->mailer_model_template_file\n";
+            }
+        } else {
+            echo "exists $model_file\n";
+        }        
+        
+        # Now create the view files
+        $name = Inflector::underscore($name);
+        $this->view_path .= "/$name"; 
+        $this->view_template_file = $this->mailer_view_template_file;
+        $this->controller_class = $model_class;
+
+        # Create the extra folders for View / Controller
+        if(file_exists($this->view_path)) {
+            echo "exists $this->view_path\n";
+        } else{
+            $this->exec("$this->mkdir_cmd $this->view_path");
+            echo "create $this->view_path\n";
+        }
+
+        # Create view files if any
+        if(is_array($views)) {
+            foreach($views as $view) {
+                $this->create_view($view, $name);
+            }
+        } elseif(!empty($views)) {
+            $this->create_view($views, $name);
+        }
+             
+        
     }
 
     /**
@@ -662,14 +762,14 @@ class TraxGenerator {
 
                         //  Multiple views in an array
                         foreach($views as $view) {
-                            $classMethods[] = "\tfunction $view() {\n\t}";
+                            $class_methods[] = "\tfunction $view() {\n\t}";
                         }
-                        $classMethods = implode("\n\n",$classMethods);
+                        $class_methods = implode("\n\n",$class_methods);
                     } else {
-                        $classMethods = "\tfunction $views() {\n\t}\n\n";
+                        $class_methods = "\tfunction $views() {\n\t}\n\n";
                     }
                     $template = str_replace('[class_methods]',
-                                            $classMethods,$template);
+                                            $class_methods,$template);
                 } else {
 
                     //  No view methods to add, so remove unneeded template
@@ -837,6 +937,24 @@ class TraxGenerator {
         echo "\tThis will create an Account model:\n";
         echo "\t\tModel:      app/models/account.php\n\n";
     }
+
+    /**
+     *  Output console help message for "generate mailer"
+     */
+    function mailer_help() {
+        echo "Usage: php script/generate.php mailer MailerName [view1 view2 ...]\n\n";
+        echo "Description:\n";
+        echo "\tThe mailer generator creates class methods for a new mailer and its views.\n\n";
+        echo "\tThe generator takes a mailer name and a list of views as arguments.\n";
+        echo "\tThe mailer name may be given in CamelCase or under_score.\n\n";
+        echo "\tThe generator creates a mailer class in app/models with view templates\n";
+        echo "\tin app/views/mailer_name.\n\n";
+        echo "Example:\n";
+        echo "\tphp script/generate.php mailer Notifications signup forgot_password invoice\n\n";
+        echo "\tThis will create a Notifications mailer class:\n";
+        echo "\t\tMailer:     app/models/notifications.php\n";
+        echo "\t\tViews:      app/views/notifications/signup.phtml [...]\n\n";  
+    }
     
     /**
      *  Output console help message for "generate scaffold"
@@ -874,11 +992,14 @@ class TraxGenerator {
     function generator_help() {
         echo "Usage:\n";
         echo "Generate Controller:\n";
-        echo "php script/generate.php controller controller_name [view1 view2 ..]\n";
+        echo "php script/generate.php controller controller_name [view1 view2 ...]\n";
         echo "for more controller info php script/generate.php controller\n\n";
         echo "Generate Model:\n";
         echo "php script/generate.php model ModelName\n";
         echo "for more model info php script/generate.php model\n\n";
+        echo "Generate Mailer:\n";
+        echo "php script/generate.php mailer MailerName [view1 view2 ...]\n";
+        echo "for more mailer info php script/generate.php mailer\n\n";
         echo "Generate Scaffold:\n";
         echo "php script/generate.php scaffold ModelName [controller_name] [view1 view2 ...]\n";
         echo "for more scaffold info php script/generate.php scaffold\n\n";        

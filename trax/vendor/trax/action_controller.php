@@ -1048,7 +1048,7 @@ class ActionController {
                 }    
                 unset($tmp_key);
                 unset($tmp_value);
-            }        
+            }     
             include($path);
             $this->render_performed = true;  
             return true;      
@@ -1101,7 +1101,7 @@ class ActionController {
             $file = $path;
             $file_with_path = $this->views_path."/_".$file.".".$this->views_file_extention;
         }
-
+        
         if(file_exists($file_with_path)) {
             
             if(array_key_exists("spacer_template", $options)) {
@@ -1120,7 +1120,7 @@ class ActionController {
             }          
 
             $locals = array_key_exists("locals", $options) ? $options['locals'] : array();
-            if(array_key_exists("collection", $options)) {
+            if(array_key_exists("collection", $options) && is_array($options['collection'])) {
                 foreach($options['collection'] as $tmp_value) {
                     ${$file."_counter"}++;
                     $locals[$file] = $tmp_value;
@@ -1162,7 +1162,7 @@ class ActionController {
         $layout = (isset($this->layout)
                    && $this->layout != '')
             ? $this->layout : $this->controller;
-        
+    
         # Check if a method has been defined to determine the layout at runtime
         if(method_exists($this, $layout)) {
             $layout = $this->$layout();
@@ -1180,9 +1180,6 @@ class ActionController {
                 $file = substr(strrchr($layout, "/"), 1);
                 $path = substr($layout, 0, strripos($layout, "/"));
                 $layout = $layouts_base_path."/".$path."/".$file.".".$this->views_file_extention;
-            } elseif( isset($this->layout) && ($this->layout != '') ) {
-                # Is there a layout for the current controller
-                $layout = $layouts_base_path."/".$this->layout.".".$this->views_file_extention;                    
             } else {
                 # Is there a layout for the current controller
                 $layout = $this->layouts_path."/".$layout.".".$this->views_file_extention;
