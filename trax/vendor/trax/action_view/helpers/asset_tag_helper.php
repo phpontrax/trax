@@ -81,8 +81,8 @@ class AssetTagHelper extends Helpers {
             }
 
             //  If TRAX_URL_PREFIX non-null, prefix it to path
-            if(!is_null(TRAX_URL_PREFIX)) {
-                $prefix = TRAX_URL_PREFIX;
+            if(!is_null(Trax::$url_prefix)) {
+                $prefix = Trax::$url_prefix;
                 if($prefix{0} != "/") {
                     $prefix = "/$prefix";
                 }
@@ -149,7 +149,7 @@ class AssetTagHelper extends Helpers {
                     $sources = array_merge($this->javascript_default_sources,
                                            $sources);    
                 }                  
-                if(file_exists(TRAX_PUBLIC. "/javascripts/application.js")) {
+                if(file_exists(Trax::$public_path. "/javascripts/application.js")) {
                     $sources[] = 'application';
                 }
                 # remove defaults from array
@@ -330,8 +330,7 @@ class AssetTagHelper extends Helpers {
 function auto_discovery_link_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
-    return call_user_func_array(array($asset_helper,
-                                      'auto_discovery_link_tag'), $args);
+    return call_user_func_array(array($asset_helper, 'auto_discovery_link_tag'), $args);
 }
 
 /**
@@ -351,8 +350,7 @@ function image_tag() {
 function stylesheet_link_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
-    return call_user_func_array(array($asset_helper,
-                                      'stylesheet_link_tag'), $args);
+    return call_user_func_array(array($asset_helper, 'stylesheet_link_tag'), $args);
 }
 
 /**
@@ -362,8 +360,7 @@ function stylesheet_link_tag() {
 function javascript_include_tag() {
     $asset_helper = new AssetTagHelper();
     $args = func_get_args();
-    return call_user_func_array(array($asset_helper,
-                                      'javascript_include_tag'), $args);
+    return call_user_func_array(array($asset_helper, 'javascript_include_tag'), $args);
 }
 
 // -- set Emacs parameters --

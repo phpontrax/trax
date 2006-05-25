@@ -56,7 +56,7 @@ class Helpers {
     /**
      *  Current controller object
      *
-     *  Local copy of $GLOBALS['current_controller_object']<br />
+     *  Local copy of Trax::$current_controller_object<br />
      *  <b>NB:</b> {@link object()} faults if this does not contain a
      *  valid instance of ActionController.
      *  @var ActionController
@@ -66,7 +66,7 @@ class Helpers {
     /**
      *  Current controller name
      *
-     *  Local copy of $GLOBALS['current_controller_name']
+     *  Local copy of Trax::$current_controller_name
      *  @var string
      */
     public $controller_name;
@@ -74,7 +74,7 @@ class Helpers {
     /**
      *  Current controller path
      *
-     *  Local copy of $GLOBALS['current_controller_path']
+     *  Local copy of Trax::$current_controller_path
      *  @var string
      */
     public $controller_path;
@@ -104,17 +104,15 @@ class Helpers {
 
         //  Copy controller information from $GLOBALS
         $this->controller_name =
-            (array_key_exists('current_controller_name',$GLOBALS)
-             && $GLOBALS['current_controller_name'])
-            ? $GLOBALS['current_controller_name'] : null;
+            !is_null(Trax::$current_controller_name)           
+            ? Trax::$current_controller_name : null;
         $this->controller_path =
-            (array_key_exists('current_controller_path', $GLOBALS)
-             && $GLOBALS['current_controller_path'])
-            ? $GLOBALS['current_controller_path'] : null;
+            !is_null(Trax::$current_controller_path)
+            ? Trax::$current_controller_path : null;
         $this->controller_object =
-            (array_key_exists('current_controller_object', $GLOBALS)
-             && $GLOBALS['current_controller_object'])
-            ? $GLOBALS['current_controller_object'] : null;
+            (!is_null(Trax::$current_controller_object) 
+            && is_object(Trax::$current_controller_object))
+            ? Trax::$current_controller_object : null;
     	if($auto_index) {
         	$object = $this->object();
             if(is_object($object)) {

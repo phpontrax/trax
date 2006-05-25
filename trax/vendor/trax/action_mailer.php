@@ -58,7 +58,6 @@ class ActionMailer {
             'path' => '/usr/sbin/sendmail',
             'args' => '-i -t'
         ),
-        $views_file_extention = TRAX_VIEWS_EXTENTION,
         $delivery_method = "mail", # mail | sendmail | smtp | test
         $perform_deliveries = true, # true will attempt to deliver mail | false will not deliver mail
         $default_charset = "utf-8", # default charset for email.
@@ -216,7 +215,7 @@ class ActionMailer {
      *  @todo Document this API
      */
     private function initialize_defaults($method_name) {       
-        $this->template_root = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
+        $this->template_root = Trax::$views_path;
         $this->template_path = "{$this->template_root}/".Inflector::underscore(get_class($this));
         $this->template = $this->template ? $this->template : $method_name;        
         $this->headers = $this->headers ? $this->headers : array();
@@ -277,9 +276,9 @@ class ActionMailer {
      */
     function render_message($method_name, $body = array()) {
         if(strstr($method_name, "/")) {
-            $template = "{$this->template_root}/{$method_name}.{$this->views_file_extention}";
+            $template = "{$this->template_root}/{$method_name}.".Trax::$views_extension;
         } else {
-            $template = "{$this->template_path}/{$method_name}.{$this->views_file_extention}";
+            $template = "{$this->template_path}/{$method_name}.".Trax::$views_extension;
         }
 
         if(file_exists($template)) {

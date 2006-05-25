@@ -135,20 +135,12 @@ class TraxGenerator {
     private $controller_class;
 
     /**
-     *  Value of the view files extension (usually '.phtml')
-     *  @var string
-     */
-    public $view_file_extention = TRAX_VIEWS_EXTENTION;
-
-    /**
      *  Constructor for the TraxGenerator object
      *
      *  Compute and store filesystem paths to the various
      *  subdirectories of the Trax work area and the template files
      *  used to generate application files
-     *  @uses $GLOBALS['TRAX_INCLUDES']
-     *  @global string[] $GLOBALS['TRAX_INCLUDES'] Array of paths to
-     *                                             various Trax directories
+     *
      *  @uses controller_path
      *  @uses controller_template_file
      *  @uses helper_path
@@ -161,16 +153,11 @@ class TraxGenerator {
      *  @uses view_template_file
      */
     function __construct() {
-        $this->view_path =
-               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
-        $this->controller_path =
-               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
-        $this->helper_path =
-               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
-        $this->model_path =
-               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['models'];
-        $this->layouts_path =
-               TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
+        $this->view_path = Trax::$views_path;
+        $this->controller_path = Trax::$controllers_path;
+        $this->helper_path = Trax::$helpers_path;
+        $this->model_path = Trax::$models_path;
+        $this->layouts_path = Trax::$layouts_path;
         $this->controller_template_file =
                TRAX_LIB_ROOT . "/templates/controller.php";
         $this->helper_template_file =
@@ -572,13 +559,13 @@ class TraxGenerator {
             echo "Can't create model.\n";
             echo $e->getMessage()."\n";
             echo "for database '"
-                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['database']
+                . Trax::$database_settings[TRAX_ENV]['database']
                 . "' on host '"
-                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['hostspec']
+                . Trax::$database_settings[TRAX_ENV]['hostspec']
                 . "' as user '"
-                . $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['username']
+                . Trax::$database_settings[TRAX_ENV]['username']
                 . "'\nDid you configure file "
-                . TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['config']
+                . Trax::$config_path
                 . "/database.ini correctly?\n";
             die();
         }
@@ -630,7 +617,7 @@ class TraxGenerator {
         } 
                 
         # Generate the index.phtml view
-        $view_file = "$this->view_path/index.".$this->view_file_extention;
+        $view_file = "$this->view_path/index.".Trax::$views_extension;
         ob_start();    
         include("$this->scaffold_template_path/view_index.phtml");
         $index_contents = $this->fix_php_brackets(ob_get_contents());
@@ -646,7 +633,7 @@ class TraxGenerator {
         } 
                
         # Generate the add.phtml view
-        $view_file = "$this->view_path/add.".$this->view_file_extention;
+        $view_file = "$this->view_path/add.".Trax::$views_extension;
         ob_start();    
         include("$this->scaffold_template_path/view_add.phtml");
         $add_contents = $this->fix_php_brackets(ob_get_contents());
@@ -662,7 +649,7 @@ class TraxGenerator {
         } 
         
         # Generate the edit.phtml view
-        $view_file = "$this->view_path/edit.".$this->view_file_extention;
+        $view_file = "$this->view_path/edit.".Trax::$views_extension;
         ob_start();    
         include("$this->scaffold_template_path/view_edit.phtml");
         $edit_contents = $this->fix_php_brackets(ob_get_contents());
@@ -678,7 +665,7 @@ class TraxGenerator {
         } 
         
         # Generate the show.phtml view
-        $view_file = "$this->view_path/show.".$this->view_file_extention;
+        $view_file = "$this->view_path/show.".Trax::$views_extension;
         ob_start();    
         include("$this->scaffold_template_path/view_show.phtml");
         $show_contents = $this->fix_php_brackets(ob_get_contents());
@@ -694,7 +681,7 @@ class TraxGenerator {
         } 
                
         # Generate the partial containing the form elments from the database
-        $view_file = "$this->view_path/_form.".$this->view_file_extention;
+        $view_file = "$this->view_path/_form.".Trax::$views_extension;
         ob_start();    
         require "$this->scaffold_template_path/form_scaffolding.phtml";
         $_form_contents = $this->fix_php_brackets(ob_get_contents());
@@ -710,9 +697,7 @@ class TraxGenerator {
         } 
         
         # Generate the layout for the scaffolding
-        $layout_file = $this->layouts_path."/"
-            . $this->layout_filename."."
-            . $this->view_file_extention;
+        $layout_file = $this->layouts_path."/".$this->layout_filename.".".Trax::$views_extension;
         if(!file_exists($this->layouts_path)) {
             mkdir($this->layouts_path);        
         }
@@ -838,8 +823,6 @@ class TraxGenerator {
      *  @param string $controller     Name of the controller
      *  @uses controller_class        Must be set before call.
      *                                Not changed during call.
-     *  @uses view_file_extension     Must be set before call.
-     *                                Not changed during call.
      *  @uses view_path               Must be set before call.
      *                                Not changed during call.
      *  @uses view_template_file      Must be set before call.
@@ -847,7 +830,7 @@ class TraxGenerator {
      *  @todo Should return succeed/fail indication
      */
     function create_view($view, $controller) {
-        $view_file = "$this->view_path/".$view.".".$this->view_file_extention;
+        $view_file = "$this->view_path/".$view.".".Trax::$views_extension;
         if(!file_exists($view_file)) {
             if(file_exists($this->view_template_file)) {
                 $template = file_get_contents($this->view_template_file);

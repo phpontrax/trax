@@ -28,6 +28,9 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
+include_once(TRAX_LIB_ROOT . "/inflections.php");
+
 /**
  *  Implement the Trax naming convention
  *
@@ -39,45 +42,6 @@
 class Inflector {
 
     /**
-     *  Rules for converting an English singular word to plural form
-     */
-    private static $plural_rules =
-        array(  '/(x|ch|ss|sh)$/' => '\1es',            # search, switch, fix, box, process, address
-                '/series$/' => '\1series',
-                '/([^aeiouy]|qu)ies$/' => '\1y',
-                '/([^aeiouy]|qu)y$/' => '\1ies',        # query, ability, agency
-                '/(?:([^f])fe|([lr])f)$/' => '\1\2ves', # half, safe, wife
-                '/sis$/' => 'ses',                      # basis, diagnosis
-                '/([ti])um$/' => '\1a',                 # datum, medium
-                '/person$/' => 'people',                # person, salesperson
-                '/man$/' => 'men',                      # man, woman, spokesman
-                '/child$/' => 'children',               # child
-                '/(.*)status$/' => '\1statuses',
-                '/s$/' => 's',                          # no change (compatibility)
-                '/$/' => 's'
-        );
-
-    /**
-     *  Rules for converting an English plural word to singular form
-     */
-    private static $singular_rules =
-        array(  '/(x|ch|ss)es$/' => '\1',
-                '/movies$/' => 'movie',
-                '/series$/' => 'series',
-                '/([^aeiouy]|qu)ies$/' => '\1y',
-                '/([lr])ves$/' => '\1f',
-                '/([^f])ves$/' => '\1fe',
-                '/(analy|ba|diagno|parenthe|progno|synop|the)ses$/' => '\1sis',
-                '/([ti])a$/' => '\1um',
-                '/people$/' => 'person',
-                '/men$/' => 'man',
-                '/(.*)statuses$/' => '\1status',
-                '/children$/' => 'child',
-                '/news$/' => 'news',
-                '/s$/' => ''
-        );
-
-    /**
      *  Pluralize a word according to English rules
      *
      *  Convert a lower-case singular word to plural form.
@@ -85,10 +49,12 @@ class Inflector {
      *  @return string  Plural of $word
      */
     function pluralize($word) {
-        $original = $word;
-        foreach(self::$plural_rules as $rule => $replacement) {
-            $word = preg_replace($rule,$replacement,$word);
-            if($original != $word) break;
+        if(!in_array($word, Inflections::$uncountables)) { 
+            $original = $word;   
+            foreach(Inflections::$plurals as $plural_rule) {
+                $word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $word);
+                if($original != $word) break;
+            }
         }
         return $word;
     }
@@ -100,10 +66,12 @@ class Inflector {
      *  @return string  Singular of $word
      */
     function singularize($word) {
-        $original = $word;
-        foreach(self::$singular_rules as $rule => $replacement) {
-            $word = preg_replace($rule,$replacement,$word);
-            if($original != $word) break;
+        if(!in_array($word, Inflections::$uncountables)) { 
+            $original = $word;   
+            foreach(Inflections::$singulars as $singular_rule) {
+                $word = preg_replace($singular_rule['rule'], $singular_rule['replacement'], $word);
+                if($original != $word) break;
+            }
         }
         return $word;
     }
@@ -153,6 +121,26 @@ class Inflector {
     function humanize($lower_case_and_underscored_word) {
         return ucwords(str_replace("_"," ",$lower_case_and_underscored_word));
     }
+    
+    /**
+     *  Convert a word or phrase into a title format "Welcome To My Site"
+     *
+     *  @param string $word  A word or phrase
+     *  @return string A string that has all words capitalized and splits on existing caps.
+     */    
+    function titleize($word) {
+        return preg_replace('/\b([a-z])/', self::capitalize('$1'), self::humanize(self::underscore($word)));
+    }
+
+    /**
+     *  Convert a word's underscores into dashes
+     *
+     *  @param string $underscored_word  Word to convert
+     *  @return string All underscores converted to dashes
+     */    
+    function dasherize($underscored_word) {
+        return str_replace('_', '-', self::underscore($underscored_word));
+    }
 
     /**
      *  Convert a class name to the corresponding table name
@@ -186,6 +174,36 @@ class Inflector {
      */
     function foreign_key($class_name) {
         return self::underscore($class_name) . "_id";
+    }
+
+
+    /**
+     *  Add to a number st, nd, rd, th
+     *
+     *  @param integer $number Number to append to
+     *    key
+     *  @return string Number formatted with correct st, nd, rd, or th
+     */    
+    function ordinalize($number) {
+        $test = (intval($number) % 100);
+        if($test >= 11 && $test <= 13) {
+            $number = "{$number}th";
+        } else {
+            switch((intval($number) % 10)) {
+                case 1:
+                    $number = "{$number}st";
+                    break;
+                case 2:
+                    $number = "{$number}nd";
+                    break;
+                case 3:
+                    $number = "{$number}rd";
+                    break;
+                default:
+                    $number = "{$number}th"; 
+            }    
+        }
+        return $number;
     }
     
 }

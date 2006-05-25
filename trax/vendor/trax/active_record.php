@@ -2005,13 +2005,11 @@ class ActiveRecord {
      */
     function establish_connection() {
         # Connect to the database and throw an error if the connect fails.
-      if(!array_key_exists('ACTIVE_RECORD_DB',$GLOBALS)
-	 || !is_object($GLOBALS['ACTIVE_RECORD_DB'])
-	 || $this->force_reconnect) {
-            if(array_key_exists("use", $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE])) {
-                $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][$GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]['use']];
+        if(!is_object(Trax::$active_record_connection) || $this->force_reconnect) {
+            if(array_key_exists("use", Trax::$database_settings[TRAX_ENV])) {
+                $connection_settings = Trax::$database_settings[Trax::$database_settings[TRAX_ENV]['use']];
             } else {
-                $connection_settings = $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE];
+                $connection_settings = Trax::$database_settings[TRAX_ENV];
             }
             # Override database name if param is set
             if($this->database_name) {
@@ -2019,15 +2017,14 @@ class ActiveRecord {
             }            
             # Set optional Pear parameters
             if(isset($connection_settings['persistent'])) {
-                $connection_options['persistent'] =
-                    $connection_settings['persistent'];
+                $connection_options['persistent'] = $connection_settings['persistent'];
             }
-            $GLOBALS['ACTIVE_RECORD_DB'] =& DB::Connect($connection_settings, $connection_options);
+            Trax::$active_record_connection =& DB::Connect($connection_settings, $connection_options);
         }
-        if(!$this->is_error($GLOBALS['ACTIVE_RECORD_DB'])) {
-            self::$db = $GLOBALS['ACTIVE_RECORD_DB'];
+        if(!$this->is_error(Trax::$active_record_connection)) {
+            self::$db = Trax::$active_record_connection;
         } else {
-            $this->raise($GLOBALS['ACTIVE_RECORD_DB']->getMessage());
+            $this->raise(Trax::$active_record_connection->getMessage());
         }
         self::$db->setFetchMode($this->fetch_mode);
         return self::$db;
@@ -2324,7 +2321,7 @@ class ActiveRecord {
      *  @param string SQL to be logged
      */
     function log_query($sql) {
-        if(TRAX_MODE == "development" && $sql) {
+        if(TRAX_ENV == "development" && $sql) {
             $GLOBALS['ACTIVE_RECORD_SQL_LOG'][] = $sql;       
         }    
     }

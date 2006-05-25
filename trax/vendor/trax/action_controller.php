@@ -281,14 +281,6 @@ class ActionController {
     public $asset_host = null;
 
     /**
-     *  File extension appended to view files
-     *
-     *  Set from a define in {@link environment.php}.  Usually phtml
-     *  @var string
-     */
-    public $views_file_extention = TRAX_VIEWS_EXTENTION;
-
-    /**
      *  Render controllers layout
      *
      *  Can be overridden in the child controller to false
@@ -374,7 +366,7 @@ class ActionController {
         $router = new Router();
 
         // Load the routes.
-        require(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['config']."/routes.php");
+        require(Trax::$config_path."/routes.php");
         $this->router = $router;
         if(is_object($this->router)) {
             $this->router_loaded = true;
@@ -409,7 +401,6 @@ class ActionController {
      *  @uses $router_loaded
      *  @uses set_paths()
      *  @uses $url_path
-     *  @uses $views_file_extention
      *  @uses $views_path
      *  @return boolean
      *  <ul>
@@ -431,8 +422,8 @@ class ActionController {
         
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
-        if(!is_null(TRAX_URL_PREFIX)) {
-            $browser_url = str_replace(TRAX_URL_PREFIX,"",$browser_url);
+        if(!is_null(Trax::$url_prefix)) {
+            $browser_url = str_replace(Trax::$url_prefix, "", $browser_url);
         }
 
         # strip leading slash
@@ -452,12 +443,12 @@ class ActionController {
         }
 
         if($this->router->routes_count > 0) {
-            $this->controllers_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['controllers'];
-            $this->helpers_path = $this->helpers_base_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['helpers'];
+            $this->controllers_path = Trax::$controllers_path;
+            $this->helpers_path = $this->helpers_base_path = Trax::$helpers_path;
             $this->application_controller_file = $this->controllers_path . "/application.php";
             $this->application_helper_file = $this->helpers_path . "/application_helper.php";
-            $this->layouts_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
-            $this->views_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['views'];
+            $this->layouts_path = Trax::$layouts_path;
+            $this->views_path = Trax::$views_path;
 
             $route = $this->router->find_route($browser_url);
 
@@ -559,7 +550,6 @@ class ActionController {
      *  @uses ScaffoldController
      *  @uses Session::unset_var()
      *  @uses $view_file
-     *  @uses $views_file_extention
      *  @uses $views_path
      *  @return boolean true
      */
@@ -597,10 +587,10 @@ class ActionController {
                     $this->controller_object->controller_path = "$this->added_path/$this->controller";
                     $this->controller_object->views_path = $this->views_path;
                     $this->controller_object->layouts_path = $this->layouts_path;
-                    $GLOBALS['current_controller_path'] = "$this->added_path/$this->controller";
-                    $GLOBALS['current_controller_name'] = $this->controller;
-                    $GLOBALS['current_action_name'] = $this->action;
-                    $GLOBALS['current_controller_object'] =& $this->controller_object;
+                    Trax::$current_controller_path = "$this->added_path/$this->controller";
+                    Trax::$current_controller_name = $this->controller;
+                    Trax::$current_action_name = $this->action;
+                    Trax::$current_controller_object =& $this->controller_object;
                     # Which layout should we use?
                     $layout_file = $this->controller_object->determine_layout();
                     //error_log('using layout_file "'.$layout_file.'"');
@@ -610,7 +600,7 @@ class ActionController {
                         if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
                             include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
                             $this->controller_object = new ScaffoldController($scaffold);
-                            $GLOBALS['current_controller_object'] =& $this->controller_object;
+                            Trax::$current_controller_object =& $this->controller_object;
                             $render_options['scaffold'] = true;
                             if(!file_exists($layout_file)) {
                                 # the generic scaffold layout
@@ -666,7 +656,7 @@ class ActionController {
                         //          .'::'.$action.'() with params '
                         //          .var_export($this->action_params,true));
                         $this->controller_object->$action($this->action_params);
-                    } elseif(file_exists($this->views_path . "/" . $this->action . "." . $this->views_file_extention)) {
+                    } elseif(file_exists($this->views_path . "/" . $this->action . "." . Trax::$views_extension)) {
                         //error_log('views file "'.$this->action.'"');
                         $action = $this->action;
                     } elseif(method_exists($this->controller_object, "index")) {
@@ -721,7 +711,7 @@ class ActionController {
                         //error_log("rendering layout: $layout_file");
                         if(!$this->controller_object->render_file($layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
-                            echo "HERE";
+                            //echo "HERE";
                             echo $content_for_layout;        
                         }
                     } else {
@@ -990,7 +980,7 @@ class ActionController {
         if($options['scaffold']) {
             $this->view_file = TRAX_LIB_ROOT."/templates/scaffolds/".$action.".phtml";    
         } else {    
-            $this->view_file = $this->views_path . "/" . $action . "." . $this->views_file_extention;
+            $this->view_file = $this->views_path . "/" . $action . "." . Trax::$views_extension;
         }
         //error_log(get_class($this)." - render_action() view_file: $this->view_file");
         return $this->render_file($this->view_file);
@@ -1029,7 +1019,7 @@ class ActionController {
         
         # Renders a template relative to app/views
         if($use_full_path) {
-            $path = $this->views_path."/".$path.".".$this->views_file_extention;
+            $path = $this->views_path."/".$path.".".Trax::$views_extension;
         } 
 
         //error_log("render_file() path:$path");
@@ -1096,10 +1086,10 @@ class ActionController {
         if(strstr($path, "/")) {
             $file = substr(strrchr($path, "/"), 1);
             $path = substr($path, 0, strripos($path, "/"));
-            $file_with_path = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$path."/_".$file.".".$this->views_file_extention;
+            $file_with_path = Trax::$views_path."/".$path."/_".$file.".".Trax::$views_extension;
         } else {
             $file = $path;
-            $file_with_path = $this->views_path."/_".$file.".".$this->views_file_extention;
+            $file_with_path = $this->views_path."/_".$file.".".Trax::$views_extension;
         }
         
         if(file_exists($file_with_path)) {
@@ -1109,10 +1099,10 @@ class ActionController {
                 if(strstr($spacer_path, "/")) {
                     $spacer_file = substr(strrchr($spacer_path, "/"), 1);
                     $spacer_path = substr($spacer_path, 0, strripos($spacer_path, "/"));
-                    $spacer_file_with_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$spacer_path."/_".$spacer_file.".".$this->views_file_extention;
+                    $spacer_file_with_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$spacer_path."/_".$spacer_file.".".Trax::$views_extension;
                 } else {
                     $spacer_file = $spacer_path;
-                    $spacer_file_with_file = $this->views_path."/_".$spacer_file.".".$this->views_file_extention;
+                    $spacer_file_with_file = $this->views_path."/_".$spacer_file.".".Trax::$views_extension;
                 }  
                 if(file_exists($spacer_file_with_file)) {
                     $add_spacer = true;    
@@ -1169,8 +1159,8 @@ class ActionController {
         }
 
         # Default settings
-        $layouts_base_path = TRAX_ROOT . $GLOBALS['TRAX_INCLUDES']['layouts'];
-        $default_layout_file = $layouts_base_path . "/application." . $this->views_file_extention;
+        $layouts_base_path = Trax::$layouts_path;
+        $default_layout_file = $layouts_base_path . "/application." . Trax::$views_extension;
         
         if(!$full_path && $layout) {
             return $layout;       
@@ -1179,10 +1169,10 @@ class ActionController {
             if(strstr($layout, "/")) {
                 $file = substr(strrchr($layout, "/"), 1);
                 $path = substr($layout, 0, strripos($layout, "/"));
-                $layout = $layouts_base_path."/".$path."/".$file.".".$this->views_file_extention;
+                $layout = $layouts_base_path."/".$path."/".$file.".".Trax::$views_extension;
             } else {
                 # Is there a layout for the current controller
-                $layout = $this->layouts_path."/".$layout.".".$this->views_file_extention;
+                $layout = $this->layouts_path."/".$layout.".".Trax::$views_extension;
             }
 
             if(file_exists($layout)) {
@@ -1260,12 +1250,12 @@ class ActionController {
         header('HTTP/1.0 {$error_code} {$error_heading}');
         header('status: {$error_code} {$error_heading}'); 
         # check for user's layout for errors
-        if(DEBUG && file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.".TRAX_VIEWS_EXTENTION)) {
-            include(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['layouts']."/trax_error.".TRAX_VIEWS_EXTENTION);
-        } elseif(DEBUG && file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
+        if(TRAX_ENV == "development" && file_exists(Trax::$layouts_path."/trax_error.".Trax::$views_extension)) {
+            include(Trax::$layouts_path."/trax_error.".Trax::$views_extension);
+        } elseif(TRAX_ENV == "development" && file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
             # use default layout for errors
             include(TRAX_LIB_ROOT."/templates/error.phtml");
-        } elseif(DEBUG) {
+        } elseif(TRAX_ENV == "development") {
             echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
             echo "<h1>$error_heading</h1>\n";
             echo "<p>$error_message</p>\n";
