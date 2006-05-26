@@ -116,6 +116,16 @@ class ActiveRecord {
      *  @var string
      */
     public $database_name = null;
+    
+    /**
+     *  Index into the Trax::$active_record_connections array
+     *
+     *  Name of the index to use to return or set the current db connection
+     *  Mainly used if you want to connect to different databases between
+     *  different models.
+     *  @var string
+     */    
+    public $connection_name = TRAX_ENV;
 
     /**
      *  Mode to use when fetching data from database
@@ -133,7 +143,10 @@ class ActiveRecord {
      *  @var boolean
      */
     public $force_reconnect = false; # should we force a connection everytime
+    
     public $index_on = "id"; # find_all returns an array of objects each object index is off of this field
+    
+    public $lock_optimistically = true; # page 222 Rails books
 
     # Table associations
     /**
@@ -315,14 +328,13 @@ class ActiveRecord {
 
     /**
      *  Transactions (only use if your db supports it)
-     *  <b>FIXME: static should be after private</b>
      */
-    static private $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
+    private static $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
 
     /**
-     *  <b>FIXME: static should be after public</b>
+     *  Transactions (only use if your db supports it)
      */
-    static public $use_transactions = false; # this will issue a rollback command if any sql fails
+    public static $use_transactions = false; # this will issue a rollback command if any sql fails
 
     /**
      *  Construct an ActiveRecord object
@@ -642,7 +654,7 @@ class ActiveRecord {
         # Prepare the class name and primary key, e.g. if
         # customers has_many contacts, then we'll need a Contact
         # object, and the customer_id field name.
-        $other_class_name = Inflector::camelize($other_object_name);
+        $other_  = Inflector::camelize($other_object_name);
         if(@array_key_exists("foreign_key", $parameters))
             $foreign_key = $parameters['foreign_key'];
         else
@@ -799,9 +811,9 @@ class ActiveRecord {
      *  @uses is_error()
      */
     function send($column) {
-        if($this->column_attribute_exists($column)) {
+        if($this->column_attribute_exists($column) && ($conditions = $this->get_primary_key_conditions())) {
             # Run the query to grab a specific columns value.
-            $sql = "SELECT $column FROM $this->table_name WHERE id='$this->id'";
+            $sql = "SELECT $column FROM $this->table_name WHERE $conditions";
             $this->log_query($sql);
             $result = self::$db->getOne($sql);
             if($this->is_error($result)) {
@@ -1049,8 +1061,8 @@ class ActiveRecord {
 
         $objects = array();
         while($row = $rs->fetchRow()) {
-            #$class = get_class($this);
-            $class = Inflector::classify($this->table_name);
+            $class = get_class($this);
+            #$class = Inflector::classify($this->table_name);
             $object = new $class();
             $object->new_record = false;
             foreach($row as $field => $val) {
@@ -1328,7 +1340,7 @@ class ActiveRecord {
      *  @uses get_insert_id()
      *  @uses is_error()
      *  @uses query()
-     *  @uses quoted_attributes()
+     *  @uses get_inserts()
      *  @uses raise()
      *  @uses $table_name
      *  @return boolean
@@ -1339,7 +1351,7 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     private function add_record() {
-        $attributes = $this->quoted_attributes();
+        $attributes = $this->get_inserts();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
         $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
@@ -1348,6 +1360,7 @@ class ActiveRecord {
         if ($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
+            $habtm_result = true;
             $this->id = $this->get_insert_id();
             if($this->id > 0) {
                 if($this->auto_save_habtm) {
@@ -1390,6 +1403,7 @@ class ActiveRecord {
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
+            $habtm_result = true;
             if($this->id > 0) {
                 if($this->auto_save_habtm) {
                     $habtm_result = $this->update_habtm_records($this->id);
@@ -1850,8 +1864,10 @@ class ActiveRecord {
         $return = array();
         foreach ($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
-            # If the value isn't a function or null quote it.
-            if(!(preg_match('/^\w+\(.*\)$/U', $value)) && !(strcasecmp($value, 'NULL') == 0)) {
+            # If the value isn't a function, null, or numeric quote it.
+            if(!(preg_match('/^\w+\(.*\)$/U', $value)) 
+               && !(strcasecmp($value, 'NULL') == 0) 
+               && !is_numeric($value)) {
                 $value = str_replace("\\\"","\"",$value);
                 $value = str_replace("\'","'",$value);
                 $value = str_replace("\\\\","\\",$value);
@@ -1862,6 +1878,26 @@ class ActiveRecord {
             //$return[$key] = $this->$db->quoteSmart($value);
         }
         return $return;
+    }
+
+    /**
+     *  Return column values for SQL insert statement
+     *
+     *  Return an array containing the column names and values of this
+     *  object, filtering out the primary keys, which are not set.
+     *
+     *  @uses $primary_keys
+     *  @uses quoted_attributes()
+     */
+    function get_inserts() {
+        $attributes = $this->quoted_attributes();
+    	$inserts = array();
+    	foreach($attributes as $key => $value) {
+    		if(!in_array($key, $this->primary_keys) || ($value != "''")) {
+    			$inserts[$key] = $value;
+    		}
+    	}
+        return $inserts;
     }
 
     /**
@@ -1888,11 +1924,7 @@ class ActiveRecord {
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
                 if(in_array($key, $this->primary_keys)) {
-                    if(!is_numeric($value) && !strstr($value, "'")) {
-                        $conditions[] = "$key = '$value'";
-                    } else {
-                        $conditions[] = "$key = $value";    
-                    }
+                    $conditions[] = "$key = $value";    
                 }
             }
             $conditions = implode(" AND ", $conditions);
@@ -2000,15 +2032,26 @@ class ActiveRecord {
      *  @uses $db
      *  @uses $database_name
      *  @uses $force_reconnect
+     *  @uses Trax::$active_record_connections
      *  @uses is_error()
      *  @throws {@link ActiveRecordError}
      */
     function establish_connection() {
-        # Connect to the database and throw an error if the connect fails.
-        if(!is_object(Trax::$active_record_connection) || $this->force_reconnect) {
-            if(array_key_exists("use", Trax::$database_settings[TRAX_ENV])) {
-                $connection_settings = Trax::$database_settings[Trax::$database_settings[TRAX_ENV]['use']];
+        $connection = Trax::$active_record_connections[$this->connection_name];
+        if(!is_object($connection) || $this->force_reconnect) {
+            if(array_key_exists($this->connection_name, Trax::$database_settings)) {
+                 # Use a different custom sections settings ?
+                if(array_key_exists("use", Trax::$database_settings[$this->connection_name])) {
+                    $connection_settings = Trax::$database_settings[Trax::$database_settings[$this->connection_name]['use']];
+                } else {
+                    # Custom defined db settings in database.ini 
+                    $connection_settings = Trax::$database_settings[$this->connection_name];
+                }
             } else {
+                # Just use the current TRAX_ENV's environment db settings
+                # $this->connection_name's default value is TRAX_ENV so
+                # if should never really get here unless override $this->connection_name
+                # and you define a custom db section in database.ini and it can't find it.
                 $connection_settings = Trax::$database_settings[TRAX_ENV];
             }
             # Override database name if param is set
@@ -2019,12 +2062,14 @@ class ActiveRecord {
             if(isset($connection_settings['persistent'])) {
                 $connection_options['persistent'] = $connection_settings['persistent'];
             }
-            Trax::$active_record_connection =& DB::Connect($connection_settings, $connection_options);
+            # Connect to the database and throw an error if the connect fails.
+            $connection =& DB::Connect($connection_settings, $connection_options);
         }
-        if(!$this->is_error(Trax::$active_record_connection)) {
-            self::$db = Trax::$active_record_connection;
+        if(!$this->is_error($connection)) {
+            Trax::$active_record_connections[$this->connection_name] =& $connection;
+            self::$db =& $connection;
         } else {
-            $this->raise(Trax::$active_record_connection->getMessage());
+            $this->raise($connection->getMessage());
         }
         self::$db->setFetchMode($this->fetch_mode);
         return self::$db;
