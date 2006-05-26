@@ -1222,8 +1222,13 @@ class ActionController {
         } else {
             $url = url_for($options);     
         }
-        echo "<html><head><META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=".$url."\"></head></html>";
-        #header("Location: ".$url);   
+        
+        if(headers_sent()) {
+            echo "<html><head><META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=".$url."\"></head></html>";
+        } else {
+            header("Location: ".$url);
+        }        
+  
         exit;            
     }
 
