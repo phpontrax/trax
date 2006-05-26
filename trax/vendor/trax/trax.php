@@ -51,7 +51,7 @@ class Trax {
         $url_prefix = null,
         $views_extension = 'phtml',
         $path_seperator = ":", # default is Unix
-        $active_record_connection = null,
+        $active_record_connections = array(),
         $current_controller_path = null,
         $current_controller_name = null,
         $current_action_name = null,
@@ -94,7 +94,7 @@ class Trax {
         
         # Load databse settings
         self::$database_settings = parse_ini_file(self::$config_path."/database.ini",true);
-               
+     
         # Set the include_path
         ini_set("include_path",
                 ".".self::$path_seperator.   # current directory
