@@ -80,7 +80,7 @@ class AssetTagHelper extends Helpers {
                 $source = "{$source}.{$ext}";
             }
 
-            //  If TRAX_URL_PREFIX non-null, prefix it to path
+            //  If Trax::$url_prefix non-null, prefix it to path
             if(!is_null(Trax::$url_prefix)) {
                 $prefix = Trax::$url_prefix;
                 if($prefix{0} != "/") {

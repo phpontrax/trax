@@ -232,9 +232,13 @@ class UrlHelper extends Helpers {
             } else {
                 $url_base = "http://".$url_base;
             }
-            //  Insert value of TRAX_URL_PREFIX (must start with /)
-            if(!is_null(TRAX_URL_PREFIX)) {
-                $url_base .= TRAX_URL_PREFIX;
+            //  Insert value of Trax::$url_prefix
+            if(!is_null(Trax::$url_prefix)) {
+                $prefix = Trax::$url_prefix;
+                if($prefix{0} != "/") {
+                    $prefix = "/$prefix";
+                }
+                $url_base .= $prefix;
             }
             
             //  Get controller from $options or $controller_path
