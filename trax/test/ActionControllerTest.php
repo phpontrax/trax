@@ -12,20 +12,11 @@
  */
 
 echo "testing ActionController\n";
-require_once 'testenv.php';
 
 //  root Trax files in the test directory
-define("TRAX_ROOT", dirname(__FILE__) . "/");
-define("TRAX_VIEWS_EXTENTION",  "phtml");
-//  you don't really need a 'haas' account to test,
-//  the use of this prefix is purely syntactic
-define("TRAX_URL_PREFIX", "/~haas");
-$GLOBALS['TRAX_INCLUDES'] =
-    array( "config"      => "config",
-           "controllers" => "controllers",
-           "helpers"     => "helpers",
-           "layouts"     => "layouts",
-           "views"       => "views");
+define("TRAX_ROOT", dirname(__FILE__));
+
+require_once 'testenv.php';
 
 // Call ActionControllerTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {

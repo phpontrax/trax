@@ -38,7 +38,7 @@ require_once 'inflector.php';
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
 // Set Trax operating mode
-define("TRAX_MODE",   "development");
+define("TRAX_ENV",   "development");
 
 /**
  *  Regression tester for the ActiveRecord class
@@ -112,10 +112,10 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     protected function setUp() {
 
         //  Force constructor to get a connection
-        $GLOBALS['ACTIVE_RECORD_DB'] = null;
+        Trax::$active_record_connections = array();
 
         // Set up information that normally comes from database.ini
-        $GLOBALS['TRAX_DB_SETTINGS'][TRAX_MODE]
+        Trax::$database_settings[TRAX_ENV]
             = array('phptype'    => 'mysql',
                     'database'   => 'database_development',
                     'hostspec'   => 'localhost',
@@ -137,7 +137,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $p = new PersonName;
         $this->assertEquals(get_class($p), 'PersonName');
         $this->assertEquals($p->table_name, 'person_names');
-        $this->assertTrue($GLOBALS['ACTIVE_RECORD_DB']->options['persistent']);
+        $this->assertTrue(Trax::$active_record_connections[TRAX_ENV]->options['persistent']);
         //  We don't completely check content_columns
         $this->assertTrue(is_array($p->content_columns));
         $this->assertEquals(count($p->content_columns),6);
@@ -286,7 +286,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     public function testQuery() {
         //  Test normal case: send query, get result
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query('foo','bar');
+        Trax::$active_record_connections[TRAX_ENV]->expect_query('foo','bar');
         $result = $p->query('foo');
         $this->assertEquals($result,'bar');
     }
@@ -296,7 +296,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
      */
     public function testGet_insert_id() {
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query("SELECT LAST_INSERT_ID();",
+        Trax::$active_record_connections[TRAX_ENV]->expect_query("SELECT LAST_INSERT_ID();",
                                                    '17');
         $result =& $p->get_insert_id();
         $this->assertEquals($result,'17');
@@ -380,7 +380,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     public function testSave() {
         //  A valid new row should be inserted
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_queries(array(
+        Trax::$active_record_connections[TRAX_ENV]->expect_queries(array(
           array('query' => "INSERT INTO person_names"
              ." (id, prefix, first_name, mi, last_name, suffix)"
              ." VALUES ('', 'Dr.', 'Anon', 'E', 'Moose', 'Ph.D.')",
@@ -394,7 +394,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
                                  'suffix'     => 'Ph.D.'));
         $this->assertTrue($result);
         //  Verify DB received all expected queries
-        $GLOBALS['ACTIVE_RECORD_DB']->tally_queries();
+        Trax::$active_record_connections[TRAX_ENV]->tally_queries();
 
         // An invalid row should fail immediately
         $p = new PersonName;
@@ -408,7 +408,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 
         //  An invalid new row with validation disabled should be inserted
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_queries(array(
+        Trax::$active_record_connections[TRAX_ENV]->expect_queries(array(
           array('query' => "INSERT INTO person_names"
              ." (id, prefix, first_name, mi, last_name, suffix)"
              ." VALUES ('', '', 'Anon', 'E', 'Moose', 'Ph.D.')",
@@ -421,7 +421,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
                                  'suffix'     => 'Ph.D.'),true);
         $this->assertTrue($result);
         //  Verify DB received all expected queries
-        $GLOBALS['ACTIVE_RECORD_DB']->tally_queries();
+        Trax::$active_record_connections[TRAX_ENV]->tally_queries();
         // Remove the following line when you complete this test.
         throw new PHPUnit2_Framework_IncompleteTestError;
     }
@@ -451,7 +451,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 
         //  Test return of the entire table
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names ",
                  new DB_find_all_result);
         $result = $p->find_all();
@@ -464,7 +464,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 
         //  Conditions including "SELECT" should pass thru unedited
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT mumble,foo FROM person_names",
                  new DB_find_all_result);
         $result = $p->find_all("SELECT mumble,foo FROM person_names");
@@ -472,7 +472,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 
         //  Conditions without "SELECT" should appear in WHERE clause
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE last_name = 'Dover' ",
                  new DB_find_all_result);
         $result = $p->find_all("last_name = 'Dover'");
@@ -480,14 +480,14 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
 
         //  Orderings should appear in ORDER BY clause
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names ORDER BY last_name ",
                  new DB_find_all_result);
         $result = $p->find_all(null, "last_name");
         $this->assertTrue(is_array($result));
 
         //  Test limit
-        //$GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        //Trax::$active_record_connections[TRAX_ENV]->expect_query(
         //         "SELECT * FROM person_names WHERE last_name = 'Dover' "
         //         . "ORDER BY last_name ",
         //         new DB_find_all_result);
@@ -506,7 +506,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
      */
     public function testFind_first() {
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE last_name = 'Dover' ",
                  new DB_find_all_result);
         $result = $p->find_first("last_name = 'Dover'");
@@ -524,7 +524,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $p = new PersonName;
 
         //  Find by a single id value
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE id='17' ",
                  new DB_find_all_result);
         $result = $p->find(17);
@@ -532,7 +532,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $this->assertEquals($result->id,'17');
 
         //  Find by an array of id values
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE id IN(17,23) ",
                  new DB_find_all_result);
         $result = $p->find(array(17,23));
@@ -544,7 +544,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $this->assertEquals($result[23]->first_name,'Eileen');
 
         //  Find by WHERE clause expression
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE last_name='Dover' ",
                  new DB_find_all_result);
         $result = $p->find("last_name='Dover'");
@@ -777,26 +777,26 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
     public function testFind_by() {
         // Test find_by_first_name()
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE first_name='Ben' ",
                  new DB_find_all_result);
         $result = $p->find_by_first_name('Ben');
         // Test find_by_first_name_and_last_name()
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names"
                  ." WHERE first_name='Ben' AND last_name='Dover' ",
                  new DB_find_all_result);
         $result = $p->find_by_first_name_and_last_name('Ben','Dover');
         // Test find_all_by_last_name()
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names WHERE last_name='Dover' ",
                  new DB_find_all_result);
         $result = $p->find_all_by_last_name('Dover');
         // Test find_all_by_first_name_and_last_name()
         $p = new PersonName;
-        $GLOBALS['ACTIVE_RECORD_DB']->expect_query(
+        Trax::$active_record_connections[TRAX_ENV]->expect_query(
                  "SELECT * FROM person_names"
                  ." WHERE first_name='Ben' AND last_name='Dover' ",
                  new DB_find_all_result);

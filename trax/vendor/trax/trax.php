@@ -92,9 +92,13 @@ class Trax {
             ini_set("display_errors", "Off");
         }
         
-        # Load databse settings
-        self::$database_settings = parse_ini_file(self::$config_path."/database.ini",true);
-     
+        # Make sure database settings are cleared out
+        self::$database_settings = array();
+        if(file_exists(self::$config_path."/database.ini")) {
+            # Load databse settings 
+            self::$database_settings = parse_ini_file(self::$config_path."/database.ini",true);
+        }
+        
         # Set the include_path
         ini_set("include_path",
                 ".".self::$path_seperator.   # current directory
@@ -109,8 +113,8 @@ class Trax {
         include_once("trax_exceptions.php");
         include_once("inflector.php");
         include_once("active_record.php");
-        include_once("action_view.php");
         include_once("action_controller.php");
+        include_once("action_view.php");
         include_once("action_mailer.php");
         include_once("dispatcher.php");
         include_once("router.php");

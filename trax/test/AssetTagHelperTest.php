@@ -12,7 +12,6 @@
  */
 
 echo "testing AssetTagHelper\n";
-require_once 'testenv.php';
 
 // Call AssetTagHelperTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -27,15 +26,9 @@ require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
 //  root Trax files in the test directory
 define("TRAX_ROOT", dirname(__FILE__) . "/");
-define("TRAX_PUBLIC", dirname(__FILE__) . "/public");
-define("TRAX_URL_PREFIX", "/testprefix");
-define("TRAX_VIEWS_EXTENTION",  "phtml");
-$GLOBALS['TRAX_INCLUDES'] =
-    array( "config"      => "config",
-           "controllers" => "controllers",
-           "helpers"     => "helpers",
-           "layouts"     => "layouts",
-           "views"       => "views");
+require_once 'testenv.php';
+Trax::$public_path = dirname(__FILE__) . "/public";
+Trax::$url_prefix = "/testprefix";
 
 require_once "action_view/helpers.php";
 require_once "inflector.php";

@@ -12,7 +12,6 @@
  */
 
 echo "testing Helpers\n";
-require_once 'testenv.php';
 
 // Call HelpersTest::main() if this source file is executed directly.
 if (!defined("PHPUnit2_MAIN_METHOD")) {
@@ -26,14 +25,8 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
 //  root Trax files in the test directory
-define("TRAX_ROOT", dirname(__FILE__) . "/");
-define("TRAX_VIEWS_EXTENTION",  "phtml");
-$GLOBALS['TRAX_INCLUDES'] =
-    array( "config"      => "config",
-           "controllers" => "controllers",
-           "helpers"     => "helpers",
-           "layouts"     => "layouts",
-           "views"       => "views");
+define("TRAX_ROOT", dirname(__FILE__));
+require_once 'testenv.php';
 
 require_once "action_view/helpers.php";
 require_once "action_controller.php";
@@ -95,9 +88,9 @@ class HelpersTest extends PHPUnit2_Framework_TestCase {
      * @access protected
      */
     protected function setUp() {
-        $GLOBALS['current_controller_name'] = 'foo_controller';
-        $GLOBALS['current_controller_path'] = '/foo/bar/mumble';
-        $GLOBALS['current_controller_object'] = 'nonobject';
+        Trax::$current_controller_name = 'foo_controller';
+        Trax::$current_controller_path = '/foo/bar/mumble';
+        Trax::$current_controller_object = 'nonobject';
     }
 
     /**
@@ -232,7 +225,7 @@ class HelpersTest extends PHPUnit2_Framework_TestCase {
         $this->assertNull($e->object());
         //  Create a dummy controller object
         $d = new DummyController;
-        $GLOBALS['current_controller_object'] = $d;
+        Trax::$current_controller_object = $d;
         //  This should inherit value of current_controller_object
         $e = new ExtHelpers;
         $this->assertEquals('attr value', $e->object('some_attr'));

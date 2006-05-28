@@ -31,21 +31,14 @@ static $tmpdir;            // temporary directory
 //  Create a temporary directory to receive generated files
 //  @todo <b>FIXME:</b> Is this platform independent?
 do {
-    $tmpdir = '/tmp/traxtest' . mt_rand(0, 99999999) . '/';
- } while (!mkdir($tmpdir,0700));
+    $tmpdir = '/tmp/traxtest' . mt_rand(0, 99999999);
+} while(!mkdir($tmpdir,0700));
 define('TRAX_ROOT', $tmpdir);
 
-define('TRAX_MODE', 'test');
-
-//  Directories where Trax stores things
-$GLOBALS['TRAX_INCLUDES'] = array('controllers' => 'controllers',
-                                 'helpers' => 'helpers',
-                                 'models' => 'models',
-                                 'views' => 'views',
-                                 'layouts' => 'views/layouts');
+define('TRAX_ENV', 'test');
 
 // Set up information that normally comes from database.ini
-$GLOBALS['TRAX_DB_SETTINGS']['test']
+Trax::$database_settings['test']
             = array('phptype'    => 'mysql',
                     'database'   => 'test_development',
                     'hostspec'   => 'localhost',
@@ -56,15 +49,13 @@ $GLOBALS['TRAX_DB_SETTINGS']['test']
 //  Create a DB to test with
 @ini_set('include_path','./mockDB:'.ini_get('include_path'));
 require_once "DB.php";
-$db =&  DB::Connect($GLOBALS['TRAX_DB_SETTINGS']['test'],
+$db =&  DB::Connect(Trax::$database_settings[TRAX_ENV],
                     array('persistent' => true));
 if (PEAR::isError($db) || is_a($db, 'DB_Error')) {
     PHPUnit2_Framework_Assert::fail("Unable to create database");
  }
 $db->setFetchMode(DB_FETCHMODE_ASSOC);
-$GLOBALS['ACTIVE_RECORD_DB'] = $db;
-
-define('TRAX_VIEWS_EXTENTION', 'phtml');
+Trax::$active_record_connections[TRAX_ENV] =& $db;
 
 require_once "trax_generator.php";
 require_once "action_view/helpers.php";
@@ -79,9 +70,9 @@ function __autoload($class_name) {
     $file = Inflector::underscore($class_name).".php";
     $file_org = $class_name.".php";
 
-    if(file_exists(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file")) {
+    if(file_exists(Trax::$models_path."/$file")) {
 # Include model classes
-        include_once(TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['models']."/$file");
+        include_once(Trax::$models_path."/$file");
     } elseif(file_exists(TRAX_LIB_ROOT."/$file")) {
 # Include extra controller classes
         include_once(TRAX_LIB_ROOT."/$file");
@@ -117,10 +108,10 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
     protected function setUp() {
 
         //  Create empty directories representing the Trax work area
-        mkdir(TRAX_ROOT.'controllers',0700,true);
-        mkdir(TRAX_ROOT.'helpers',0700,true);
-        mkdir(TRAX_ROOT.'models',0700,true);
-        mkdir(TRAX_ROOT.'views/layouts',0700,true);
+        mkdir(TRAX_ROOT.'/controllers',0700,true);
+        mkdir(TRAX_ROOT.'/helpers',0700,true);
+        mkdir(TRAX_ROOT.'/models',0700,true);
+        mkdir(TRAX_ROOT.'/views/layouts',0700,true);
     }
 
     /**
@@ -233,14 +224,14 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/mumble_controller.php'));
+                                  . '/controllers/mumble_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                        . 'controllers/mumble_controller.php');
+                                        . '/controllers/mumble_controller.php');
         $this->assertContains('class MumbleController extends'
                               . ' ApplicationController', $controller);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/mumble_helper.php'));
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/mumble'));
+                                  . '/helpers/mumble_helper.php'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/mumble'));
 
         //  Verify that a second attempt to create the same controller
         //  reports that it exists
@@ -250,7 +241,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('exists', $output);
         $this->assertTrue(file_exists(TRAX_ROOT
-                                      . 'controllers/mumble_controller.php'));
+                                      . '/controllers/mumble_controller.php'));
         
         //  Generate a controller with one view file
         $tg = new TraxGenerator;
@@ -259,17 +250,15 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/store_controller.php'));
+                                  . '/controllers/store_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                        . 'controllers/store_controller.php');
+                                        . '/controllers/store_controller.php');
         $this->assertContains('class StoreController extends'
                               . ' ApplicationController', $controller);
-        $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/store_helper.php'));
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/store'));
-        $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/store/manager.phtml'));
-        $view = file_get_contents(TRAX_ROOT . 'views/store/manager.phtml');
+        $this->assertTrue(is_file(TRAX_ROOT . '/helpers/store_helper.php'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/store'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/store/manager.phtml'));
+        $view = file_get_contents(TRAX_ROOT . '/views/store/manager.phtml');
         $this->assertContains('Store->manager',$view);
         $this->assertContains('store/manager.phtml',$view);
         
@@ -280,22 +269,22 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/account_controller.php'));
+                                  . '/controllers/account_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                   . 'controllers/account_controller.php');
+                                   . '/controllers/account_controller.php');
         $this->assertContains('class AccountController extends'
                               . ' ApplicationController', $controller);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/account_helper.php'));
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/account'));
+                                  . '/helpers/account_helper.php'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/account'));
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/account/customer.phtml'));
-        $view = file_get_contents(TRAX_ROOT . 'views/account/customer.phtml');
+                                  . '/views/account/customer.phtml'));
+        $view = file_get_contents(TRAX_ROOT . '/views/account/customer.phtml');
         $this->assertContains('Account->customer',$view);
         $this->assertContains('account/customer.phtml',$view);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/account/teller.phtml'));
-        $view = file_get_contents(TRAX_ROOT . 'views/account/teller.phtml');
+                                  . '/views/account/teller.phtml'));
+        $view = file_get_contents(TRAX_ROOT . '/views/account/teller.phtml');
         $this->assertContains('Account->teller',$view);
         $this->assertContains('account/teller.phtml',$view);
 
@@ -306,14 +295,14 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
-                                . 'controllers/forum/admin_controller.php'));
+                                . '/controllers/forum/admin_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                 . 'controllers/forum/admin_controller.php');
+                                 . '/controllers/forum/admin_controller.php');
         $this->assertContains('class AdminController extends'
                               . ' ApplicationController', $controller);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/forum/admin_helper.php'));
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/forum/admin'));
+                                  . '/helpers/forum/admin_helper.php'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/forum/admin'));
     }
 
     /**
@@ -327,8 +316,8 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $tg->generate_model('CreditCard');
         $output = ob_get_clean();
         $this->assertContains('create', $output);
-        $this->assertTrue(is_file(TRAX_ROOT . 'models/credit_card.php'));
-        $model = file_get_contents(TRAX_ROOT . 'models/credit_card.php');
+        $this->assertTrue(is_file(TRAX_ROOT . '/models/credit_card.php'));
+        $model = file_get_contents(TRAX_ROOT . '/models/credit_card.php');
         $this->assertContains('class CreditCard extends ActiveRecord',
                               $model);
 
@@ -338,8 +327,8 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $tg->generate_model('soap_opera');
         $output = ob_get_clean();
         $this->assertContains('create', $output);
-        $this->assertTrue(is_file(TRAX_ROOT . 'models/soap_opera.php'));
-        $model = file_get_contents(TRAX_ROOT . 'models/soap_opera.php');
+        $this->assertTrue(is_file(TRAX_ROOT . '/models/soap_opera.php'));
+        $model = file_get_contents(TRAX_ROOT . '/models/soap_opera.php');
         $this->assertContains('class SoapOpera extends ActiveRecord',
                               $model);
     }
@@ -361,9 +350,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify controller
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/membership_controller.php'));
+                                  . '/controllers/membership_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                  . 'controllers/membership_controller.php');
+                                  . '/controllers/membership_controller.php');
         $this->assertContains('class MembershipController extends'
                               . ' ApplicationController', $controller);
         $this->assertNotContains('Error:', $controller);
@@ -371,9 +360,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify model
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'models/person_name.php'));
+                                  . '/models/person_name.php'));
         $model = file_get_contents(TRAX_ROOT
-                                  . 'models/person_name.php');
+                                  . '/models/person_name.php');
         $this->assertContains('class PersonName extends'
                               . ' ActiveRecord', $model);
         $this->assertNotContains('Error:', $model);
@@ -381,57 +370,57 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify helper
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/membership_helper.php'));
+                                  . '/helpers/membership_helper.php'));
         $helper = file_get_contents(TRAX_ROOT
-                                  . 'helpers/membership_helper.php');
+                                  . '/helpers/membership_helper.php');
         $this->assertContains('MembershipController', $helper);
         $this->assertNotContains('Error:', $helper);
         $this->assertNotContains('Notice:', $helper);
 
         //  verify views
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/membership'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/membership'));
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/add.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/add.phtml'));
         $add = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/add.phtml');
+                                  . '/views/membership/add.phtml');
         $this->assertContains('New PersonName', $add);
         $this->assertNotContains('Error:', $add);
         $this->assertNotContains('Notice:', $add);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/edit.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/edit.phtml'));
         $edit = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/edit.phtml');
+                                  . '/views/membership/edit.phtml');
         $this->assertContains('Editing PersonName', $edit);
         $this->assertNotContains('Error:', $edit);
         $this->assertNotContains('Notice:', $edit);
 
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/_form.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/_form.phtml'));
         $_form = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/_form.phtml');
+                                  . '/views/membership/_form.phtml');
         $this->assertContains('PersonName', $_form);
         $this->assertNotContains('Error:', $_form);
         $this->assertNotContains('Notice:', $_form);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/index.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/index.phtml'));
         $index = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/index.phtml');
+                                  . '/views/membership/index.phtml');
         $this->assertContains('Listing PersonNames', $index);
         $this->assertNotContains('Error:', $index);
         $this->assertNotContains('Notice:', $index);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/show.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/show.phtml'));
         $show = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/show.phtml');
+                                  . '/views/membership/show.phtml');
         $this->assertContains('PersonName', $show);
         $this->assertNotContains('Error:', $show);
         $this->assertNotContains('Notice:', $show);
 
         //  verify layout
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/layouts/membership.phtml'));
+                                  . '/views/layouts/membership.phtml'));
         $layout = file_get_contents(TRAX_ROOT
-                                  . 'views/layouts/membership.phtml');
+                                  . '/views/layouts/membership.phtml');
         $this->assertContains('membership', $layout);
     }
 
@@ -451,9 +440,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify controller
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/person_name_controller.php'));
+                                  . '/controllers/person_name_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                  . 'controllers/person_name_controller.php');
+                                  . '/controllers/person_name_controller.php');
         $this->assertContains('class PersonNameController extends'
                               . ' ApplicationController', $controller);
         $this->assertNotContains('Error:', $controller);
@@ -461,9 +450,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify model
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'models/person_name.php'));
+                                  . '/models/person_name.php'));
         $model = file_get_contents(TRAX_ROOT
-                                  . 'models/person_name.php');
+                                  . '/models/person_name.php');
         $this->assertContains('class PersonName extends'
                               . ' ActiveRecord', $model);
         $this->assertNotContains('Error:', $model);
@@ -471,59 +460,59 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify helper
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/person_name_helper.php'));
+                                  . '/helpers/person_name_helper.php'));
         $helper = file_get_contents(TRAX_ROOT
-                                  . 'helpers/person_name_helper.php');
+                                  . '/helpers/person_name_helper.php');
         $this->assertContains('PersonNameController', $helper);
         $this->assertNotContains('Error:', $helper);
         $this->assertNotContains('Notice:', $helper);
 
         //  verify views
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/person_name'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/person_name'));
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/person_name/add.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/person_name/add.phtml'));
         $add = file_get_contents(TRAX_ROOT
-                                  . 'views/person_name/add.phtml');
+                                  . '/views/person_name/add.phtml');
         $this->assertContains('New PersonName', $add);
         $this->assertNotContains('Error:', $add);
         $this->assertNotContains('Notice:', $add);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/person_name/edit.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/person_name/edit.phtml'));
         $edit = file_get_contents(TRAX_ROOT
-                                  . 'views/person_name/edit.phtml');
+                                  . '/views/person_name/edit.phtml');
         $this->assertContains('Editing PersonName', $edit);
         $this->assertNotContains('Error:', $edit);
         $this->assertNotContains('Notice:', $edit);
 
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/person_name/_form.phtml'));
+                                  . '/views/person_name/_form.phtml'));
         $_form = file_get_contents(TRAX_ROOT
-                                  . 'views/person_name/_form.phtml');
+                                  . '/views/person_name/_form.phtml');
         $this->assertContains('PersonName', $_form);
         $this->assertNotContains('Error:', $_form);
         $this->assertNotContains('Notice:', $_form);
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/person_name/index.phtml'));
+                                  . '/views/person_name/index.phtml'));
         $index = file_get_contents(TRAX_ROOT
-                                  . 'views/person_name/index.phtml');
+                                  . '/views/person_name/index.phtml');
         $this->assertContains('Listing PersonNames', $index);
         $this->assertNotContains('Error:', $index);
         $this->assertNotContains('Notice:', $index);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/person_name/show.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/person_name/show.phtml'));
         $show = file_get_contents(TRAX_ROOT
-                                  . 'views/person_name/show.phtml');
+                                  . '/views/person_name/show.phtml');
         $this->assertContains('PersonName', $show);
         $this->assertNotContains('Error:', $show);
         $this->assertNotContains('Notice:', $show);
 
         //  verify layout
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/layouts/person_name.phtml'));
+                                  . '/views/layouts/person_name.phtml'));
         $layout = file_get_contents(TRAX_ROOT
-                                  . 'views/layouts/person_name.phtml');
+                                  . '/views/layouts/person_name.phtml');
         $this->assertContains('person_name', $layout);
     }
 
@@ -544,9 +533,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify controller
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/membership_controller.php'));
+                                  . '/controllers/membership_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                                  . 'controllers/membership_controller.php');
+                                  . '/controllers/membership_controller.php');
         $this->assertContains('class MembershipController extends'
                               . ' ApplicationController', $controller);
         $this->assertNotContains('Error:', $controller);
@@ -554,9 +543,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify model
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'models/person_name.php'));
+                                  . '/models/person_name.php'));
         $model = file_get_contents(TRAX_ROOT
-                                  . 'models/person_name.php');
+                                  . '/models/person_name.php');
         $this->assertContains('class PersonName extends'
                               . ' ActiveRecord', $model);
         $this->assertNotContains('Error:', $model);
@@ -564,71 +553,71 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify helper
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/membership_helper.php'));
+                                  . '/helpers/membership_helper.php'));
         $helper = file_get_contents(TRAX_ROOT
-                                  . 'helpers/membership_helper.php');
+                                  . '/helpers/membership_helper.php');
         $this->assertContains('MembershipController', $helper);
         $this->assertNotContains('Error:', $helper);
         $this->assertNotContains('Notice:', $helper);
 
         //  verify views
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/membership'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/membership'));
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/add.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/add.phtml'));
         $add = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/add.phtml');
+                                  . '/views/membership/add.phtml');
         $this->assertContains('New PersonName', $add);
         $this->assertNotContains('Error:', $add);
         $this->assertNotContains('Notice:', $add);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/edit.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/edit.phtml'));
         $edit = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/edit.phtml');
+                                  . '/views/membership/edit.phtml');
         $this->assertContains('Editing PersonName', $edit);
         $this->assertNotContains('Error:', $edit);
         $this->assertNotContains('Notice:', $edit);
 
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/_form.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/_form.phtml'));
         $_form = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/_form.phtml');
+                                  . '/views/membership/_form.phtml');
         $this->assertContains('PersonName', $_form);
         $this->assertNotContains('Error:', $_form);
         $this->assertNotContains('Notice:', $_form);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/index.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/index.phtml'));
         $index = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/index.phtml');
+                                  . '/views/membership/index.phtml');
         $this->assertContains('Listing PersonNames', $index);
         $this->assertNotContains('Error:', $index);
         $this->assertNotContains('Notice:', $index);
 
         $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/show.phtml'));
         $show = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/show.phtml');
+                                  . '/views/membership/show.phtml');
         $this->assertContains('PersonName', $show);
         $this->assertNotContains('Error:', $show);
         $this->assertNotContains('Notice:', $show);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/join.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/join.phtml'));
         $join = file_get_contents(TRAX_ROOT
                                   . 'views/membership/join.phtml');
         $this->assertContains('Membership->join', $join);
         $this->assertNotContains('Error:', $join);
         $this->assertNotContains('Notice:', $join);
 
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/renew.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/renew.phtml'));
         $renew = file_get_contents(TRAX_ROOT
-                                  . 'views/membership/renew.phtml');
+                                  . '/views/membership/renew.phtml');
         $this->assertContains('Membership->renew', $renew);
         $this->assertNotContains('Error:', $renew);
         $this->assertNotContains('Notice:', $renew);
 
         //  verify layout
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/layouts/membership.phtml'));
+                                  . '/views/layouts/membership.phtml'));
         $layout = file_get_contents(TRAX_ROOT
-                                  . 'views/layouts/membership.phtml');
+                                  . '/views/layouts/membership.phtml');
         $this->assertContains('membership', $layout);
     }
 
@@ -648,9 +637,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify controller
         $this->assertTrue(is_file(TRAX_ROOT
-                            . 'controllers/admin/membership_controller.php'));
+                            . '/controllers/admin/membership_controller.php'));
         $controller = file_get_contents(TRAX_ROOT
-                            . 'controllers/admin/membership_controller.php');
+                            . '/controllers/admin/membership_controller.php');
         $this->assertContains('class MembershipController extends'
                               . ' ApplicationController', $controller);
         $this->assertNotContains('Error:', $controller);
@@ -658,9 +647,9 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify model
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'models/person_name.php'));
+                                  . '/models/person_name.php'));
         $model = file_get_contents(TRAX_ROOT
-                                  . 'models/person_name.php');
+                                  . '/models/person_name.php');
         $this->assertContains('class PersonName extends'
                               . ' ActiveRecord', $model);
         $this->assertNotContains('Error:', $model);
@@ -668,62 +657,62 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify helper
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/admin/membership_helper.php'));
+                                  . '/helpers/admin/membership_helper.php'));
         $helper = file_get_contents(TRAX_ROOT
-                                  . 'helpers/admin/membership_helper.php');
+                                  . '/helpers/admin/membership_helper.php');
         $this->assertContains('MembershipController', $helper);
         $this->assertNotContains('Error:', $helper);
         $this->assertNotContains('Notice:', $helper);
 
         //  verify views
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/admin/membership'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/admin/membership'));
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/admin/membership/add.phtml'));
+                                  . '/views/admin/membership/add.phtml'));
         $add = file_get_contents(TRAX_ROOT
-                                  . 'views/admin/membership/add.phtml');
+                                  . '/views/admin/membership/add.phtml');
         $this->assertContains('New PersonName', $add);
         $this->assertNotContains('Error:', $add);
         $this->assertNotContains('Notice:', $add);
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/admin/membership/edit.phtml'));
+                                  . '/views/admin/membership/edit.phtml'));
         $edit = file_get_contents(TRAX_ROOT
-                                  . 'views/admin/membership/edit.phtml');
+                                  . '/views/admin/membership/edit.phtml');
         $this->assertContains('Editing PersonName', $edit);
         $this->assertNotContains('Error:', $edit);
         $this->assertNotContains('Notice:', $edit);
 
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/admin/membership/_form.phtml'));
+                                  . '/views/admin/membership/_form.phtml'));
         $_form = file_get_contents(TRAX_ROOT
-                                  . 'views/admin/membership/_form.phtml');
+                                  . '/views/admin/membership/_form.phtml');
         $this->assertContains('PersonName', $_form);
         $this->assertNotContains('Error:', $_form);
         $this->assertNotContains('Notice:', $_form);
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/admin/membership/index.phtml'));
+                                  . '/views/admin/membership/index.phtml'));
         $index = file_get_contents(TRAX_ROOT
-                                  . 'views/admin/membership/index.phtml');
+                                  . '/views/admin/membership/index.phtml');
         $this->assertContains('Listing PersonNames', $index);
         $this->assertNotContains('Error:', $index);
         $this->assertNotContains('Notice:', $index);
 
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/admin/membership/show.phtml'));
+                                  . '/views/admin/membership/show.phtml'));
         $show = file_get_contents(TRAX_ROOT
-                                  . 'views/admin/membership/show.phtml');
+                                  . '/views/admin/membership/show.phtml');
         $this->assertContains('PersonName', $show);
         $this->assertNotContains('Error:', $show);
         $this->assertNotContains('Notice:', $show);
 
         //  verify layout
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/layouts/admin/membership.phtml'));
+                                  . '/views/layouts/admin/membership.phtml'));
         $layout = file_get_contents(TRAX_ROOT
-                                  . 'views/layouts/admin/membership.phtml');
+                                  . '/views/layouts/admin/membership.phtml');
         $this->assertContains('membership', $layout);
     }
 
@@ -764,7 +753,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $tg->run();
         $output = ob_get_clean();
         $this->assertContains('create', $output);
-        $this->assertTrue(is_file(TRAX_ROOT . 'models/credit_card.php'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/models/credit_card.php'));
 
         //  Generate a mumble controller with no views
         $_SERVER['argv'][1] = 'controller';
@@ -775,10 +764,10 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $output = ob_get_clean();
         $this->assertContains('create', $output);
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/mumble_controller.php'));
+                                  . '/controllers/mumble_controller.php'));
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/mumble_helper.php'));
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/mumble'));
+                                  . '/helpers/mumble_helper.php'));
+        $this->assertTrue(is_dir(TRAX_ROOT . '/views/mumble'));
 
 
         //  Generate a PersonName/membership scaffold
@@ -795,27 +784,27 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
 
         //  verify controller
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'controllers/membership_controller.php'));
+                                  . '/controllers/membership_controller.php'));
 
         //  verify model
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'models/person_name.php'));
+                                  . '/models/person_name.php'));
 
         //  verify helper
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'helpers/membership_helper.php'));
+                                  . '/helpers/membership_helper.php'));
 
         //  verify views
-        $this->assertTrue(is_dir(TRAX_ROOT . 'views/membership'));
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/add.phtml'));
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/edit.phtml'));
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/_form.phtml'));
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/index.phtml'));
-        $this->assertTrue(is_file(TRAX_ROOT . 'views/membership/show.phtml'));
+        $this->assertTrue(is_dir(TRAX_ROOT  . '/views/membership'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/add.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/edit.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/_form.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/index.phtml'));
+        $this->assertTrue(is_file(TRAX_ROOT . '/views/membership/show.phtml'));
 
         //  verify layout
         $this->assertTrue(is_file(TRAX_ROOT
-                                  . 'views/layouts/membership.phtml'));
+                                  . '/views/layouts/membership.phtml'));
     }
 }
 

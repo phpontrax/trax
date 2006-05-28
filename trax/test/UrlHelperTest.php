@@ -25,7 +25,7 @@ require_once "PHPUnit2/Framework/TestSuite.php";
 // You may remove the following line when all tests have been implemented.
 require_once "PHPUnit2/Framework/IncompleteTestError.php";
 
-define("TRAX_URL_PREFIX", "/testprefix");
+Trax::$url_prefix = "/testprefix";
 
 require_once "action_view/helpers.php";
 require_once "action_view/helpers/form_helper.php";
@@ -34,7 +34,7 @@ require_once "action_view/helpers/url_helper.php";
 //  parameters need by UrlHelper
 $_SERVER['HTTP_HOST'] = 'www.example.com';
 $_SERVER['SERVER_PORT'] = '80';
-$GLOBALS['current_controller_path'] = 'testcontrol';
+Trax::$current_controller_path = 'testcontrol';
 
 /**
  * Test class for UrlHelper.

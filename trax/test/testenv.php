@@ -31,8 +31,10 @@ ini_set('include_path', '.' . PATH_SEPARATOR
         . dirname(__FILE__) . PATH_SEPARATOR
         . TRAX_LIB_ROOT . PATH_SEPARATOR . ini_get('include_path'));
 
+define('TRAX_TEST', true);
+
 # Bootstrap the Trax environment, framework, and default configuration
-include_once(dirname(dirname(__FILE__)
+include_once(dirname(dirname(__FILE__))
              . DIRECTORY_SEPARATOR . 'config'
              . DIRECTORY_SEPARATOR . 'boot.php');
 
