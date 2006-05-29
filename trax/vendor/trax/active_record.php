@@ -2016,18 +2016,18 @@ class ActiveRecord {
      *  Open a database connection if one is not currently open
      *
      *  The name of the database normally comes from
-     *  $GLOBALS['TRAX_DB_SETTINGS'] which is set in {@link
+     *  Trax::$database_settings which is set in {@link
      *  environment.php} by reading file config/database.ini. The
      *  database name may be overridden by assigning a different name
      *  to {@link $database_name}. 
      *  
      *  If there is a connection now open, as indicated by the saved
-     *  value of a DB object in $GLOBALS['ACTIVE_RECORD_DB'], and
+     *  value of a DB object in Trax::$active_record_connections[$connection_name], and
      *  {@link force_reconnect} is not true, then set the database
      *  fetch mode and return.
      *
      *  If there is no connection, open one and save a reference to
-     *  it in $GLOBALS['ACTIVE_RECORD_DB'].
+     *  it in Trax::$active_record_connections[$connection_name].
      *
      *  @uses $db
      *  @uses $database_name

@@ -1099,7 +1099,7 @@ class ActionController {
                 if(strstr($spacer_path, "/")) {
                     $spacer_file = substr(strrchr($spacer_path, "/"), 1);
                     $spacer_path = substr($spacer_path, 0, strripos($spacer_path, "/"));
-                    $spacer_file_with_file = TRAX_ROOT.$GLOBALS['TRAX_INCLUDES']['views']."/".$spacer_path."/_".$spacer_file.".".Trax::$views_extension;
+                    $spacer_file_with_file = Trax::$views_path."/".$spacer_path."/_".$spacer_file.".".Trax::$views_extension;
                 } else {
                     $spacer_file = $spacer_path;
                     $spacer_file_with_file = $this->views_path."/_".$spacer_file.".".Trax::$views_extension;

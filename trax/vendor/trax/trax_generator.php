@@ -547,7 +547,7 @@ class TraxGenerator {
             return;
         }
 
-        $GLOBALS['current_controller_object'] =& $this;
+        Trax::$current_controller_object =& $this;
         $model_class_name = Inflector::classify($model_name);
         $singular_model_name = Inflector::singularize($model_name);
         $plural_model_name = Inflector::pluralize($model_name);  
@@ -574,10 +574,9 @@ class TraxGenerator {
         } else {
             $controller_name = Inflector::underscore($controller_name);    
         }
-        $GLOBALS['current_controller_name'] = $controller_name;
-        $controller_file =
-            "$this->controller_path/" . $controller_name."_controller.php";
-        $GLOBALS['current_controller_path'] = $controller_file;
+        Trax::$current_controller_name = $controller_name;
+        $controller_file = "$this->controller_path/" . $controller_name."_controller.php";
+        Trax::$current_controller_path = $controller_file;
         $non_scaffolded_actions = array();
         $illegal_views = array("index","add","edit","show");      
         if(is_array($views)) {
