@@ -481,7 +481,162 @@ class ActiveRecordHelper extends Helpers {
         $column = $this->object()->column_for_attribute($this->attribute_name);
         return $column['type'];
     }
+    
+    /**
+     * Paging html functions
+     *  @todo Document this API
+     */
+    function pagination_limit_select($object_name_or_object, $default_text = "per page:") {
 
+        if(is_object($object_name_or_object)) {
+            $object = $object_name_or_object;
+        } else {
+            $object = $this->object($object_name_or_object);  
+        }
+
+        if(!is_object($object)) {
+            return null;    
+        }
+
+        if($object->pages > 0) {
+            $html .= "
+                <select name=\"per_page\" onChange=\"document.location = '?".escape_javascript($object->paging_extra_params)."&per_page=' + this.options[this.selectedIndex].value;\">
+                    <option value=\"$object->rows_per_page\" selected>$default_text</option>
+                    <option value=10>10</option>
+                    <option value=20>20</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                    <option value=999999999>ALL</option>
+                </select>
+            ";
+        }
+        return $html;
+    }
+
+    /**
+     *  @todo Document this API
+     *
+     *  @return string HTML to link to previous and next pages
+     *  @uses $display
+     *  @uses $page
+     *  @uses $pages
+     *  @uses $paging_extra_params
+     *  @uses rows_per_page
+     */
+    function pagination_links($object_name_or_object){
+        
+        if(is_object($object_name_or_object)) {
+            $object = $object_name_or_object;
+        } else {
+            $object = $this->object($object_name_or_object);  
+        }
+
+        if(!is_object($object)) {
+            return null;    
+        }
+           
+        //$html  = "<pre>".print_r($object,1);
+        /* Print the first and previous page links if necessary */
+        if(($object->page != 1) && ($object->page)) {
+            $html .= link_to("<<", 
+                                  "?$object->paging_extra_params&page=1&per_page=$object->rows_per_page",
+                                  array(
+                                    "class" => "pageList",
+                                    "title" => "First page"
+                                  ))." ";
+        }
+        if(($object->page-1) > 0) {
+            $html .= link_to("<", 
+                                  "?$object->paging_extra_params&page=".($object->page-1)."&per_page=$object->rows_per_page",
+                                  array(
+                                    "class" => "pageList",
+                                    "title" => "Previous Page"                                    
+                                  ));
+        }
+        
+        if($object->pages < $object->display) {
+            $object->display = $object->pages;
+        }
+        
+        if($object->page == $object->pages) {
+            if(($object->pages - $object->display) == 0) {
+                $start = 1;
+            } else {
+                $start = $object->pages - $object->display;
+            }
+            $end = $object->pages;
+        } else {
+            if($object->page >= $object->display) {
+                $start = $object->page - ($object->display / 2);
+                $end   = $object->page + (($object->display / 2) - 1);
+            } else {
+                $start = 1;
+                $end   = $object->display;
+            }
+        }
+
+        if($end >= $object->pages) {
+            $end = $object->pages;
+        }
+                
+        /* Print the numeric page list; make the current page unlinked and bold */
+        if($end != 1) {
+            for($i=$start; $i<=$end; $i++) {
+                if($i == $object->page) {
+                    $html .= "<span class=\"pageList\"><b>".$i."</b></span>";
+                } else {
+                    $html .= link_to($i,
+                                          "?$object->paging_extra_params&page=$i&per_page=$object->rows_per_page",
+                                          array(
+                                            "class" => "pageList",
+                                            "title" => "Page $i"                                           
+                                          ));
+                }
+                $html .= " ";
+            }
+        }
+
+        /* Print the Next and Last page links if necessary */
+        if(($object->page+1) <= $object->pages) {
+            $html .= link_to(">",
+                                  "?$object->paging_extra_params&page=".($object->page+1)."&per_page=$object->rows_per_page",
+                                  array(
+                                    "class" => "pageList",
+                                    "title" => "Next Page"                                    
+                                  ));
+        }
+        if(($object->page != $object->pages) && ($object->pages != 0)) {
+            $html .= link_to(">>",
+                                  "?$object->paging_extra_params&page=".$object->pages."&per_page=$object->rows_per_page",
+                                  array(
+                                    "class" => "pageList",
+                                    "title" => "Last Page"                                    
+                                  ));
+        }
+        $html .= "\n";
+
+        return $html;
+    }    
+    
+    function pagination_range_text($object_name_or_object, $showing_text = "Showing", $showing_type = "items") {
+        if(is_object($object_name_or_object)) {
+            $object = $object_name_or_object;
+        } else {
+            $object = $this->object($object_name_or_object);  
+        }
+
+        if(!is_object($object)) {
+            return null;    
+        }
+        $end = $object->rows_per_page * $object->page;
+        $start = $end - ($object->rows_per_page - 1);
+        if($end >= $object->pagination_count) {
+            $end = $object->pagination_count;
+        }
+        
+        return "{$showing_text} {$start} - {$end} of {$object->pagination_count} {$showing_type}.";                     
+    }
+    
 }
 
 /**
@@ -536,6 +691,36 @@ function input_scaffolding() {
     $ar_helper = new ActiveRecordHelper();
     $args = func_get_args();
     return call_user_func_array(array($ar_helper, 'input_scaffolding'), $args);
+}
+
+/**
+ *
+ *  @uses ActiveRecordHelper::pagination_limit_select()
+ */
+function pagination_limit_select() {
+    $ar_helper = new ActiveRecordHelper();
+    $args = func_get_args();
+    return call_user_func_array(array($ar_helper, 'pagination_limit_select'), $args);
+}
+
+/**
+ *
+ *  @uses ActiveRecordHelper::pagination_links()
+ */
+function pagination_links() {
+    $ar_helper = new ActiveRecordHelper();
+    $args = func_get_args();
+    return call_user_func_array(array($ar_helper, 'pagination_links'), $args);
+}
+
+/**
+ *
+ *  @uses ActiveRecordHelper::pagination_range_text()
+ */
+function pagination_range_text() {
+    $ar_helper = new ActiveRecordHelper();
+    $args = func_get_args();
+    return call_user_func_array(array($ar_helper, 'pagination_range_text'), $args);
 }
 
 // -- set Emacs parameters --

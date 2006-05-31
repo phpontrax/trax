@@ -99,6 +99,16 @@ class ActiveRecord {
     public $content_columns = null; # info about each column in the table
 
     /**
+     *  Class name
+     *
+     *  Name of the child class. (this is optional and will automatically be determined)
+     *  Normally set to the singular camel case form of the table name.  
+     *  May be overridden.
+     *  @var string
+     */
+    public $class_name = null; 
+
+    /**
      *  Table name
      *
      *  Name of the table in the database associated with the subclass.
@@ -289,6 +299,11 @@ class ActiveRecord {
      *  @todo Document this variable
      */
     public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
+
+    /**
+     *  @todo Document this variable
+     */    
+    public $pagination_count = 0;
 
     /**
      *  Description of non-fatal errors found
@@ -539,19 +554,6 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_all_habtm($other_table_name, $parameters = null) {
-        $other_class_name = Inflector::classify($other_table_name);
-        # Instantiate an object to access find_all
-        $results = new $other_class_name();
-
-        # Prepare the join table name primary keys (fields) to do the join on
-        $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
-        $this_foreign_key = Inflector::singularize($this->table_name)."_id";
-        $other_foreign_key = Inflector::singularize($other_table_name)."_id";
-        # Set up the SQL segments
-        $conditions = "{$join_table}.{$this_foreign_key}=".intval($this->id);
-        $orderings = null;
-        $limit = null;
-        $joins = "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
 
         # Use any passed-in parameters
         if (!is_null($parameters)) {
@@ -560,61 +562,8 @@ class ActiveRecord {
             elseif($parameters[0] != "")
                 $additional_conditions = $parameters[0];
 
-            if(@array_key_exists("orderings", $parameters))
-                $orderings = $parameters['orderings'];
-            elseif($parameters[1] != "")
-                $orderings = $parameters[1];
-
-            if(@array_key_exists("limit", $parameters))
-                $limit = $parameters['limit'];
-            elseif($parameters[2] != "")
-                $limit = $parameters[2];
-
-            if(@array_key_exists("joins", $parameters))
-                $additional_joins = $parameters['joins'];
-            elseif($parameters[3] != "")
-                $additional_joins = $parameters[3];
-
-            if (!empty($additional_conditions))
-                $conditions .= " AND (" . $additional_conditions . ")";
-            if (!empty($additional_joins))
-                $joins .= " " . $additional_joins;
-        }
-
-        # Get the list of other_class_name objects
-        return $results->find_all($conditions, $orderings, $limit, $joins);
-    }
-
-    /**
-     *  Find all records using a "has_many" relationship (one-to-many)
-     *
-     *  Parameters: $other_table_name: The name of the other table that contains
-     *                                 many rows relating to this object's id.
-     *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
-     *  @todo Document this API
-     */
-    private function find_all_has_many($other_table_name, $parameters = null) {
-        # Prepare the class name and primary key, e.g. if
-        # customers has_many contacts, then we'll need a Contact
-        # object, and the customer_id field name.
-        if(@array_key_exists("foreign_key", $parameters))
-            $foreign_key = $parameters['foreign_key'];
-        else
-            $foreign_key = Inflector::singularize($this->table_name)."_id";
-
-        $other_class_name = Inflector::classify($other_table_name);
-        $conditions = "{$foreign_key}=$this->id";
-
-        # Use any passed-in parameters
-        if (!is_null($parameters)) {
-            //echo "<pre>";print_r($parameters);
-            if(@array_key_exists("conditions", $parameters))
-                $additional_conditions = $parameters['conditions'];
-            elseif($parameters[0] != "")
-                $additional_conditions = $parameters[0];
-
-            if(@array_key_exists("orderings", $parameters))
-                $orderings = $parameters['orderings'];
+            if(@array_key_exists("order", $parameters))
+                $orderings = $parameters['order'];
             elseif($parameters[1] != "")
                 $orderings = $parameters[1];
 
@@ -632,14 +581,109 @@ class ActiveRecord {
                 $conditions .= " AND (" . $additional_conditions . ")";
             if(!empty($additional_joins))
                 $joins .= " " . $additional_joins;
+                
+            if(@array_key_exists("class_name", $parameters)) {
+                $other_object_name = $parameters['class_name'];
+            }            
+            if(@array_key_exists("join_table", $parameters)) {
+                $join_table = $parameters['join_table'];
+            } 
+        }
+        if(!is_null($other_object_name)) {
+            $other_class_name = Inflector::camelize($other_object_name);    
+        } else {
+            $other_class_name = Inflector::classify($other_table_name);
+        }
+        # Instantiate an object to access find_all
+        $object = new $other_class_name();
+
+        # Prepare the join table name primary keys (fields) to do the join on
+        if(is_null($join_table)) {
+            $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
+        }
+        $this_foreign_key = Inflector::singularize($this->table_name)."_id";
+        $other_foreign_key = Inflector::singularize($other_table_name)."_id";
+        # Set up the SQL segments
+        $conditions = "{$join_table}.{$this_foreign_key}=".intval($this->id);
+        $orderings = null;
+        $limit = null;
+        $joins .= "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
+
+        # Get the list of other_class_name objects
+        return $object->find_all($conditions, $orderings, $limit, $joins);
+    }
+
+    /**
+     *  Find all records using a "has_many" relationship (one-to-many)
+     *
+     *  Parameters: $other_table_name: The name of the other table that contains
+     *                                 many rows relating to this object's id.
+     *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
+     *  @todo Document this API
+     */
+    private function find_all_has_many($other_table_name, $parameters = null) {
+
+        # Use any passed-in parameters
+        if (!is_null($parameters)) {
+            //echo "<pre>";print_r($parameters);
+            if(@array_key_exists("conditions", $parameters))
+                $additional_conditions = $parameters['conditions'];
+            elseif($parameters[0] != "")
+                $additional_conditions = $parameters[0];
+
+            if(@array_key_exists("order", $parameters))
+                $orderings = $parameters['order'];
+            elseif($parameters[1] != "")
+                $orderings = $parameters[1];
+
+            if(@array_key_exists("limit", $parameters))
+                $limit = $parameters['limit'];
+            elseif($parameters[2] != "")
+                $limit = $parameters[2];
+
+            if(@array_key_exists("joins", $parameters))
+                $additional_joins = $parameters['joins'];
+            elseif($parameters[3] != "")
+                $additional_joins = $parameters[3];
+
+            if(!empty($additional_conditions))
+                $conditions .= " AND (" . $additional_conditions . ")";
+            if(!empty($additional_joins))
+                $joins .= " " . $additional_joins;
+
+            if(@array_key_exists("class_name", $parameters)) {
+                $other_object_name = $parameters['class_name'];
+            }  
+        }
+
+        if(!is_null($other_object_name)) {
+            $other_class_name = Inflector::camelize($other_object_name);    
+        } else {
+            $other_class_name = Inflector::classify($other_table_name);
         }
 
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
-        # Get the list of other_class_name objects
-        $results = $other_class_object->find_all($conditions, $orderings, $limit, $joins);
+        
+        if(@array_key_exists("foreign_key", $parameters)) {
+            $foreign_key = $parameters['foreign_key'];
+        } else {
+            $foreign_key = Inflector::singularize($this->table_name)."_id";
+        }
+        if(count($other_class_object->primary_keys) == 1) {
+            $id = $other_class_object->primary_keys[0];    
+        } else {
+            $id = "id";    
+        }
+        $id_value = $this->$id;
+        if(is_numeric($id_value)) {
+            $conditions = "$foreign_key={$id_value}";
+        } else {
+            $conditions = "$foreign_key='{$id_value}'";        
+        }         
 
-        return $results;
+        # Get the list of other_class_name objects
+        return $other_class_object->find_all($conditions, $orderings, $limit, $joins);
     }
 
     /**
@@ -651,23 +695,37 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_one_has_one($other_object_name, $parameters = null) {
-        # Prepare the class name and primary key, e.g. if
-        # customers has_many contacts, then we'll need a Contact
-        # object, and the customer_id field name.
-        $other_  = Inflector::camelize($other_object_name);
-        if(@array_key_exists("foreign_key", $parameters))
-            $foreign_key = $parameters['foreign_key'];
-        else
-            $foreign_key = Inflector::singularize($this->table_name)."_id";
-
-        $conditions = "$foreign_key='{$this->id}'";
+        if(@array_key_exists("class_name", $parameters)) {
+            $other_object_name = $parameters['class_name'];
+        }
+        $other_class_name = Inflector::camelize($other_object_name);
+        
         # Instantiate an object to access find_all
-        $results = new $other_class_name();
+        $other_class_object = new $other_class_name();
+
+        if(@array_key_exists("foreign_key", $parameters)) {
+            $foreign_key = $parameters['foreign_key'];
+        } else {
+            $foreign_key = Inflector::singularize($this->table_name)."_id";
+        }
+        
+        if(count($other_class_object->primary_keys) == 1) {
+            $id = $other_class_object->primary_keys[0];    
+        } else {
+            $id = "id";    
+        }
+        $id_value = $this->$id;
+        if(is_numeric($id_value)) {
+            $conditions = "$foreign_key={$id_value}";
+        } else {
+            $conditions = "$foreign_key='{$id_value}'";        
+        }         
+        
         # Get the list of other_class_name objects
-        $results = $results->find_first($conditions, $orderings);
+        $result = $other_class_object->find_first($conditions, $orderings);
         # There should only be one result, an object, if so return it
-        if(is_object($results)) {
-            return $results;
+        if(is_object($result)) {
+            return $result;
         } else {
             return null;
         }
@@ -683,23 +741,37 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_one_belongs_to($other_object_name, $parameters = null) {
-        # Prepare the class name and primary key, e.g. if
-        # customers has_many contacts, then we'll need a Contact
-        # object, and the customer_id field name.
+        if(@array_key_exists("class_name", $parameters)) {
+            $other_object_name = $parameters['class_name'];
+        }        
         $other_class_name = Inflector::camelize($other_object_name);
-        if(@array_key_exists("foreign_key", $parameters))
-            $foreign_key = $parameters['foreign_key'];
-        else
-            $foreign_key = $other_object_name."_id";
-
-        $conditions = "id='".$this->$foreign_key."'";
+     
         # Instantiate an object to access find_all
-        $results = new $other_class_name();
+        $other_class_object = new $other_class_name();
+
+        if(@array_key_exists("foreign_key", $parameters)) {
+            $foreign_key = $parameters['foreign_key'];
+        } else {
+            $foreign_key = $other_object_name."_id";
+        }
+        
+        if(count($other_class_object->primary_keys) == 1) {
+            $id = $other_class_object->primary_keys[0];    
+        } else {
+            $id = "id";    
+        }
+        $foreign_key_value = $this->$foreign_key;
+        if(is_numeric($foreign_key_value)) {
+            $conditions = "$id = $foreign_key_value";
+        } else {
+            $conditions = "$id = '$foreign_key_value'";        
+        }           
+        
         # Get the list of other_class_name objects
-        $results = $results->find_first($conditions, $orderings);
+        $result = $other_class_object->find_first($conditions, $orderings);
         # There should only be one result, an object, if so return it
-        if(is_object($results)) {
-            return $results;
+        if(is_object($result)) {
+            return $result;
         } else {
             return null;
         }
@@ -743,12 +815,14 @@ class ActiveRecord {
         if(!empty($joins)) $sql .= ",$joins ";
         if(!empty($conditions)) $sql .= "WHERE $conditions ";
 
-        //echo "sql:$sql<br>";
+        # echo "$aggregrate_type sql:$sql<br>";
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());
         } else {
             $row = $rs->fetchRow();
-            return $row["agg_result"];
+            if($row["agg_result"]) {
+                return $row["agg_result"];    
+            }
         }
         return 0;
     }
@@ -977,98 +1051,98 @@ class ActiveRecord {
         //          .', ' . (is_null($limit)?'null':var_export($limit,true))
         //          .', ' . (is_null($joins)?'null':$joins).')');
 
-        //  Is output to be generated in pages?
-        if (is_array($limit)) {
-
-            //  Yes, get next page number and rows per page from argument
-            list($this->page, $this->rows_per_page) = $limit;
-            if($this->page <= 0) {
-                $this->page = 1;
-            }
-            # Default for rows_per_page:
-            if ($this->rows_per_page == null) {
-                $this->rows_per_page = $this->rows_per_page_default;
-            }
-            # Set the LIMIT string segment for the SQL in the find_all
-            $this->offset = ($this->page - 1) * $this->rows_per_page;
-            # mysql 3.23 doesn't support OFFSET
-            //$limit = "$rows_per_page OFFSET $offset";
-            $limit = $this->offset.", ".$this->rows_per_page;
-
-            //  Remember that we're generating output in pages
-            //  so $limit needs to be added to the query
-            $set_pages = true;
-        }
-
-        //  Test source of SQL for query
+        # Test source of SQL for query
         if(stristr($conditions, "SELECT")) {
-
-            //  SQL completely specified in argument so use it as is
+            # SQL completely specified in argument so use it as is
             $sql = $conditions;
         } else {
-
-            //  SQL will be built from specifications in argument
+            # SQL will be built from specifications in argument
             $sql  = "SELECT * FROM ".$this->table_name." ";
-
-            //  If join specified, include it
+            
+            # this is if they passed in an associative array to emulate
+            # named parameters.
+            if(is_array($conditions)) {
+                extract($conditions);  
+                if(is_array($conditions)) {
+                    $conditions = null;    
+                }  
+            }
+            
+            # If join specified, include it
             if(!is_null($joins)) {
                 if(substr($joins,0,4) != "LEFT") $sql .= ",";
                 $sql .= " $joins ";
             }
 
-            //  If conditions specified, include them
+            # If conditions specified, include them
             if(!is_null($conditions)) {
                 $sql .= "WHERE $conditions ";
             }
 
-            //  If ordering specified, include it
+            # If ordering specified, include it
             if(!is_null($orderings)) {
                 $sql .= "ORDER BY $orderings ";
             }
 
-            //  If limit specified, divide into pages
-            if(!is_null($limit)) {
-                //  FIXME: Isn't the  second test redundant?
-                if($set_pages) {
+            # If limit specified, divide into pages
+            if(!is_null($limit) || !is_null($offset) || !is_null($per_page)) {
 
-                    //  Send query to database
-                    //echo "query: $sql\n";
-                    if($this->is_error($rs = $this->query($sql))) {
-
-                        //  Error returned, throw error exception
-                        $this->raise($rs->getMessage());
-                        //  Execution doesn't return here
-                    } else {
-
-                        # Set number of total pages in result set 
-                        # without the LIMIT  
-                        if($count = $rs->numRows())
-                            $this->pages = (
-                               ($count % $this->rows_per_page) == 0)
-                                ? $count / $this->rows_per_page
-                                : floor($count / $this->rows_per_page) + 1;
-                    }
+                # Is output to be generated in pages?
+                if(is_array($limit)) {    
+                    # Yes, get next page number and rows per page from argument
+                    list($this->page, $this->rows_per_page) = $limit;
+                } else {
+                    $this->rows_per_page = $limit;        
                 }
-                $sql .= "LIMIT $limit";
+                if(!is_null($per_page)) {
+                    $this->rows_per_page = $per_page;            
+                }
+                # Default for rows_per_page:
+                if ($this->rows_per_page <= 0) {
+                    $this->rows_per_page = $this->rows_per_page_default;
+                }
+                                
+                $this->page = $_REQUEST['page'];
+                if($this->page <= 0) {
+                    $this->page = 1;
+                }
+                                
+                # Set the LIMIT string segment for the SQL
+                if(!$offset) {
+                    $offset = ($this->page - 1) * $this->rows_per_page;
+                }
+
+                $sql .= "LIMIT $this->rows_per_page OFFSET $offset";
+                # $sql .= "LIMIT $offset, $this->rows_per_page";
+        
+                # Send query to database
+                # Set number of total pages in result set 
+                # without the LIMIT  
+                if($count = $this->count_all("*", $conditions, $joins)) {
+                    $this->pagination_count = $count;
+                    $this->pages = (
+                       ($count % $this->rows_per_page) == 0)
+                        ? $count / $this->rows_per_page
+                        : floor($count / $this->rows_per_page) + 1;
+                } 
             }
         }
 
-        //echo "ActiveRecord::find_all() - sql: $sql\n<br>";
-        //echo "query: $sql\n";
+        # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
+        # echo "query: $sql\n";
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());
         }
 
         $objects = array();
         while($row = $rs->fetchRow()) {
-            $class = get_class($this);
-            #$class = Inflector::classify($this->table_name);
-            $object = new $class();
+            $class_name = $this->get_class_name();
+            $object = new $class_name();
             $object->new_record = false;
-            foreach($row as $field => $val) {
-                $object->$field = $val;
+            foreach($row as $field => $value) {
+                $object->$field = $value;
                 if($field == $this->index_on) {
-                    $objects_key = $val;
+                    $objects_key = $value;
                 }
             }
             $objects[$objects_key] = $object;
@@ -1209,8 +1283,8 @@ class ActiveRecord {
                 $this->create($attr, $dont_validate);
             }
         } else {
-            $class = get_class($this);
-            $object = new $class();
+            $class_name = $this->get_class_name();
+            $object = new $class_name();
             $object->save($attributes, $dont_validate);
         }
     }
@@ -1967,8 +2041,24 @@ class ActiveRecord {
      */
     function set_table_name_using_class_name() {
         if(!$this->table_name) {
-            $this->table_name = Inflector::tableize(get_class($this));
+            $class_name = $this->get_class_name();
+            $this->table_name = Inflector::tableize($class_name);
         }
+    }
+
+    /**
+     *  Get class name of child object 
+     *
+     *  this will return the manually set name or get_class($this)
+     *  @return string child class name
+     */    
+    private function get_class_name() {
+        if(!is_null($this->class_name)) {
+            $class_name = $this->class_name;
+        } else {
+            $class_name = get_class($this);        
+        } 
+        return $class_name;               
     }
 
     /**
@@ -2095,7 +2185,7 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function raise($message) {
-        $error_message  = "Model Class: ".get_class($this)."<br>";
+        $error_message  = "Model Class: ".$this->get_class_name()."<br>";
         $error_message .= "Error Message: ".$message;
         throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");
     }
@@ -2224,7 +2314,7 @@ class ActiveRecord {
     function validate_model_attributes() {
         $validated_ok = true;
         $attrs = $this->get_attributes();
-        $methods = get_class_methods(get_class($this));
+        $methods = get_class_methods($this->get_class_name());
         foreach($methods as $method) {
             if(preg_match('/^validate_(.+)/', $method, $matches)) {
                 # If we find, for example, a method named validate_name, then
@@ -2369,93 +2459,6 @@ class ActiveRecord {
         if(TRAX_ENV == "development" && $sql) {
             $GLOBALS['ACTIVE_RECORD_SQL_LOG'][] = $sql;       
         }    
-    }
-
-    /**
-     * Paging html functions
-     *  @todo Document this API
-     */
-    function limit_select($controller =null, $additional_query = null) {
-        if($this->pages > 0) {
-            $html = "
-                <select name=\"per_page\" onChange=\"document.location = '?$this->paging_extra_params&per_page=' + this.options[this.selectedIndex].value;\">
-                    <option value=\"$this->rows_per_page\" selected>per page:</option>
-                    <option value=10>10</option>
-                    <option value=20>20</option>
-                    <option value=50>50</option>
-                    <option value=100>100</option>
-                    <option value=999999999>ALL</option>
-                </select>
-            ";
-        }
-        return $html;
-    }
-
-    /**
-     *  @todo Document this API
-     *
-     *  @return string HTML to link to previous and next pages
-     *  @uses $display
-     *  @uses $page
-     *  @uses $pages
-     *  @uses $paging_extra_params
-     *  @uses rows_per_page
-     */
-    function page_list(){
-        $page_list  = "";
-
-        /* Print the first and previous page links if necessary */
-        if(($this->page != 1) && ($this->page))
-            $page_list .= "<a href=\"?$this->paging_extra_params&page=1&per_page=$this->rows_per_page\" class=\"page_list\" title=\"First Page\"><<</a> ";
-
-        if(($this->page-1) > 0)
-            $page_list .= "<a href=\"?$this->paging_extra_params&page=".($this->page-1)."&per_page=$this->rows_per_page\" class=\"page_list\" title=\"Previous Page\"><</a> ";
-
-        if($this->pages < $this->display)
-            $this->display = $this->pages;
-
-        if($this->page == $this->pages) {
-            if($this->pages - $this->display == 0)
-                $start = 1;
-            else
-                $start = $this->pages - $this->display;
-            $max = $this->pages;
-        } else {
-            if($this->page >= $this->display) {
-                $start = $this->page - ($this->display / 2);
-                $max   = $this->page + (($this->display / 2)-1);
-            } else {
-                $start = 1;
-                $max   = $this->display;
-            }
-        }
-
-        if($max >= $this->pages)
-            $max = $this->pages;
-
-        /* Print the numeric page list; make the current page unlinked and bold */
-        if($max != 1) {
-            for ($i=$start; $i<=$max; $i++) {
-                if ($i == $this->page)
-                    $page_list .= "<span class=\"pageList\"><b>".$i."</b></span>";
-                else
-                    $page_list .= "<a href=\"?$this->paging_extra_params&page=$i&per_page=$this->rows_per_page\" class=\"page_list\" title=\"Page ".$i."\">".$i."</a>";
-
-                $page_list .= " ";
-            }
-        }
-
-        /* Print the Next and Last page links if necessary */
-        if(($this->page+1) <= $this->pages)
-            $page_list .= "<a href=\"?$this->paging_extra_params&page=".($this->page+1)."&per_page=$this->rows_per_page\" class=\"page_list\" title=\"Next Page\">></a> ";
-
-        if(($this->page != $this->pages) && ($this->pages != 0))
-            $page_list .= "<a href=\"?$this->paging_extra_params&page=".$this->pages."&per_page=$this->rows_per_page\" class=\"page_list\" title=\"Last Page\">>></a> ";
-
-        $page_list .= "\n";
-
-        //error_log("Page list=[$page_list]");
-        return $page_list;
     }
 
 }
