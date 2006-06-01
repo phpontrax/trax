@@ -563,9 +563,9 @@ class ActiveRecord {
                 $additional_conditions = $parameters[0];
 
             if(@array_key_exists("order", $parameters))
-                $orderings = $parameters['order'];
+                $order = $parameters['order'];
             elseif($parameters[1] != "")
-                $orderings = $parameters[1];
+                $order = $parameters[1];
 
             if(@array_key_exists("limit", $parameters))
                 $limit = $parameters['limit'];
@@ -605,12 +605,12 @@ class ActiveRecord {
         $other_foreign_key = Inflector::singularize($other_table_name)."_id";
         # Set up the SQL segments
         $conditions = "{$join_table}.{$this_foreign_key}=".intval($this->id);
-        $orderings = null;
+        $order = null;
         $limit = null;
         $joins .= "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
 
         # Get the list of other_class_name objects
-        return $object->find_all($conditions, $orderings, $limit, $joins);
+        return $object->find_all($conditions, $order, $limit, $joins);
     }
 
     /**
@@ -632,9 +632,9 @@ class ActiveRecord {
                 $additional_conditions = $parameters[0];
 
             if(@array_key_exists("order", $parameters))
-                $orderings = $parameters['order'];
+                $order = $parameters['order'];
             elseif($parameters[1] != "")
-                $orderings = $parameters[1];
+                $order = $parameters[1];
 
             if(@array_key_exists("limit", $parameters))
                 $limit = $parameters['limit'];
@@ -683,7 +683,7 @@ class ActiveRecord {
         }         
 
         # Get the list of other_class_name objects
-        return $other_class_object->find_all($conditions, $orderings, $limit, $joins);
+        return $other_class_object->find_all($conditions, $order, $limit, $joins);
     }
 
     /**
@@ -722,7 +722,7 @@ class ActiveRecord {
         }         
         
         # Get the list of other_class_name objects
-        $result = $other_class_object->find_first($conditions, $orderings);
+        $result = $other_class_object->find_first($conditions, $order);
         # There should only be one result, an object, if so return it
         if(is_object($result)) {
             return $result;
@@ -768,7 +768,7 @@ class ActiveRecord {
         }           
         
         # Get the list of other_class_name objects
-        $result = $other_class_object->find_first($conditions, $orderings);
+        $result = $other_class_object->find_first($conditions, $order);
         # There should only be one result, an object, if so return it
         if(is_object($result)) {
             return $result;
@@ -997,7 +997,7 @@ class ActiveRecord {
                     if($part_size == $part_cnt) {
                         $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."'";
                         if($parameters[$param_cnt]) {
-                            $orderings = $parameters[$param_cnt];
+                            $order = $parameters[$param_cnt];
                         }
                     }
                 }
@@ -1005,9 +1005,9 @@ class ActiveRecord {
             }
 
             if($find_all) {
-            	return $this->find_all($method_params, $orderings);
+            	return $this->find_all($method_params, $order);
             } else {
-                return $this->find_first($method_params, $orderings);
+                return $this->find_first($method_params, $order);
             }
         }
     }
@@ -1017,7 +1017,7 @@ class ActiveRecord {
      *
      *  If no rows match, an empty array is returned.
      *  @param string  SQL to use in the query.  If
-     *    $conditions contains "SELECT", then $orderings, $limit and
+     *    $conditions contains "SELECT", then $order, $limit and
      *    $joins are ignored and the query is completely specified by
      *    $conditions.  If $conditions is omitted or does not contain
      *    "SELECT", "SELECT * FROM" will be used.  If $conditions is
@@ -1026,7 +1026,7 @@ class ActiveRecord {
      *    entire table is returned.
      *  @param string  Argument to "ORDER BY" in query.
      *    If specified, the query will include
-     *    "ORDER BY $orderings". If omitted, no ordering will be
+     *    "ORDER BY $order". If omitted, no ordering will be
      *    applied.  
      *  @param integer[] Page, rows per page???
      *  @param string ???
@@ -1044,10 +1044,10 @@ class ActiveRecord {
      *    for that object in the array.
      *  @throws {@link ActiveRecordError}
      */
-    function find_all($conditions = null, $orderings = null,
+    function find_all($conditions = null, $order = null,
                       $limit = null, $joins = null) {
         //error_log("find_all(".(is_null($conditions)?'null':$conditions)
-        //          .', ' . (is_null($orderings)?'null':$orderings)
+        //          .', ' . (is_null($order)?'null':$order)
         //          .', ' . (is_null($limit)?'null':var_export($limit,true))
         //          .', ' . (is_null($joins)?'null':$joins).')');
 
@@ -1062,7 +1062,13 @@ class ActiveRecord {
             # this is if they passed in an associative array to emulate
             # named parameters.
             if(is_array($conditions)) {
-                extract($conditions);  
+                if(@array_key_exists("per_page", $conditions) && !is_numeric($conditions['per_page'])) {
+                    extract($conditions); 
+                    $per_page = 0;   
+                } else {
+                    extract($conditions);     
+                }
+                # If conditions wasn't in the array set it to null
                 if(is_array($conditions)) {
                     $conditions = null;    
                 }  
@@ -1080,21 +1086,17 @@ class ActiveRecord {
             }
 
             # If ordering specified, include it
-            if(!is_null($orderings)) {
-                $sql .= "ORDER BY $orderings ";
+            if(!is_null($order)) {
+                $sql .= "ORDER BY $order ";
             }
 
-            # If limit specified, divide into pages
-            if(!is_null($limit) || !is_null($offset) || !is_null($per_page)) {
+            # Is output to be generated in pages?
+            if(is_numeric($limit) || is_numeric($offset) || is_numeric($per_page)) {
 
-                # Is output to be generated in pages?
-                if(is_array($limit)) {    
-                    # Yes, get next page number and rows per page from argument
-                    list($this->page, $this->rows_per_page) = $limit;
-                } else {
+                if(is_numeric($limit)) {    
                     $this->rows_per_page = $limit;        
                 }
-                if(!is_null($per_page)) {
+                if(is_numeric($per_page)) {
                     $this->rows_per_page = $per_page;            
                 }
                 # Default for rows_per_page:
@@ -1115,9 +1117,7 @@ class ActiveRecord {
                 $sql .= "LIMIT $this->rows_per_page OFFSET $offset";
                 # $sql .= "LIMIT $offset, $this->rows_per_page";
         
-                # Send query to database
-                # Set number of total pages in result set 
-                # without the LIMIT  
+                # Set number of total pages in result set  
                 if($count = $this->count_all("*", $conditions, $joins)) {
                     $this->pagination_count = $count;
                     $this->pages = (
@@ -1128,7 +1128,7 @@ class ActiveRecord {
             }
         }
 
-        # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
+        echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         # echo "query: $sql\n";
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());
@@ -1168,9 +1168,9 @@ class ActiveRecord {
      *    value of {@link $primary_keys}.  Therefore if you need to
      *    select based on some column other than "id", you must pass a
      *    string argument ready to insert in the SQL SELECT.
-     *  @param string $orderings Argument to "ORDER BY" in query.
+     *  @param string $order Argument to "ORDER BY" in query.
      *    If specified, the query will include "ORDER BY
-     *    $orderings". If omitted, no ordering will be applied.
+     *    $order". If omitted, no ordering will be applied.
      *  @param integer[] $limit Page, rows per page???
      *  @param string $joins ???
      *  @todo Document the $limit and $joins parameters
@@ -1187,7 +1187,7 @@ class ActiveRecord {
      *    empty.
      *  @throws {@link ActiveRecordError}
      */
-    function find($id, $orderings = null, $limit = null, $joins = null) {
+    function find($id, $order = null, $limit = null, $joins = null) {
         if(is_array($id)) {
             $conditions = "id IN(".implode(",",$id).")";
         } elseif(stristr($id,"=")) { # has an = so must be a where clause
@@ -1197,9 +1197,9 @@ class ActiveRecord {
         }
 
         if(is_array($id)) {
-            return $this->find_all($conditions, $orderings, $limit, $joins);
+            return $this->find_all($conditions, $order, $limit, $joins);
         } else {
-            return $this->find_first($conditions, $orderings, $limit, $joins);
+            return $this->find_first($conditions, $order, $limit, $joins);
         }
     }
 
@@ -1208,16 +1208,16 @@ class ActiveRecord {
      *
      *  If no rows match, null is returned.
      *  @param string $conditions SQL to use in the query.  If
-     *    $conditions contains "SELECT", then $orderings, $limit and
+     *    $conditions contains "SELECT", then $order, $limit and
      *    $joins are ignored and the query is completely specified by
      *    $conditions.  If $conditions is omitted or does not contain
      *    "SELECT", "SELECT * FROM" will be used.  If $conditions is
      *    specified and does not contain "SELECT", the query will
      *    include "WHERE $conditions".  If $conditions is null, the
      *    entire table is returned.
-     *  @param string $orderings Argument to "ORDER BY" in query.
+     *  @param string $order Argument to "ORDER BY" in query.
      *    If specified, the query will include
-     *    "ORDER BY $orderings". If omitted, no ordering will be
+     *    "ORDER BY $order". If omitted, no ordering will be
      *    applied.  
      *  FIXME This parameter doesn't seem to make sense
      *  @param integer[] $limit Page, rows per page??? @todo Document this parameter
@@ -1228,8 +1228,8 @@ class ActiveRecord {
      *    matching $conditions, or null if none did.
      *  @throws {@link ActiveRecordError}
      */
-    function find_first($conditions, $orderings = null, $limit = null, $joins = null) {
-        $result = $this->find_all($conditions, $orderings, $limit, $joins);
+    function find_first($conditions, $order = null, $limit = null, $joins = null) {
+        $result = $this->find_all($conditions, $order, $limit, $joins);
         return @current($result);
     }
 

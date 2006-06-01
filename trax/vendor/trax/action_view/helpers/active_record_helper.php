@@ -618,7 +618,7 @@ class ActiveRecordHelper extends Helpers {
         return $html;
     }    
     
-    function pagination_range_text($object_name_or_object, $showing_text = "Showing", $showing_type = "items") {
+    function pagination_range_text($object_name_or_object, $range_text = "Showing", $range_type = "items") {
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
@@ -634,7 +634,7 @@ class ActiveRecordHelper extends Helpers {
             $end = $object->pagination_count;
         }
         
-        return "{$showing_text} {$start} - {$end} of {$object->pagination_count} {$showing_type}.";                     
+        return "{$range_text} {$start} - {$end} of {$object->pagination_count} {$range_type}.";                     
     }
     
 }
