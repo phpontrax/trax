@@ -1128,7 +1128,7 @@ class ActiveRecord {
             }
         }
 
-        echo "ActiveRecord::find_all() - sql: $sql\n<br>";
+        # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         # echo "query: $sql\n";
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());

@@ -523,7 +523,7 @@ class ActiveRecordHelper extends Helpers {
      *  @uses $paging_extra_params
      *  @uses rows_per_page
      */
-    function pagination_links($object_name_or_object){
+    function pagination_links($object_name_or_object) {
         
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
