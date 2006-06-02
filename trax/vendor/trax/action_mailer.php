@@ -131,7 +131,7 @@ class ActionMailer {
             $this->set_header_line("Reply-To", $reply_to);            
         }
         
-        if(!is_null($this->from)) {
+        if(is_null($this->from) || $this->from == '') {
             $this->from = $this->default_from;            
         } 
         $from = $this->format_emails($this->from, "From");
