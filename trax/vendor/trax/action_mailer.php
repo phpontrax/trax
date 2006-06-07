@@ -397,6 +397,24 @@ class ActionMailer {
     }
     
     /**
+     *  Add or overwrite description of an error to the list of errors
+     *  @param string $error Error message text
+     *  @param string $key Key to associate with the error (in the
+     *    simple case, column name).  If omitted, numeric keys will be
+     *    assigned starting with 0.  If specified and the key already
+     *    exists in $errors, the old error message will be overwritten
+     *    with the value of $error.
+     *  @uses $errors
+     */
+    function add_error($error, $key = null) {
+        if(!is_null($key)) { 
+            $this->errors[$key] = $error;
+        } else {
+            $this->errors[] = $error;
+        }
+    }
+    
+    /**
      *  Return description of non-fatal errors
      *
      *  @uses $errors
