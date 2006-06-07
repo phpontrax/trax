@@ -617,26 +617,26 @@ class ActiveRecordHelper extends Helpers {
 
         return $html;
     }    
-    
-    function pagination_range_text($object_name_or_object, $range_text = "Showing", $range_type = "items") {
+        
+    function pagination_range_text($object_name_or_object, $format = "Showing %d - %d of %d items.") {
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
-            $object = $this->object($object_name_or_object);  
+            $object = $this->object($object_name_or_object);
         }
 
         if(!is_object($object)) {
-            return null;    
+            return null;
         }
         $end = $object->rows_per_page * $object->page;
         $start = $end - ($object->rows_per_page - 1);
         if($end >= $object->pagination_count) {
             $end = $object->pagination_count;
         }
-        
-        return "{$range_text} {$start} - {$end} of {$object->pagination_count} {$range_type}.";                     
-    }
-    
+
+        return sprintf($format, $start, $end, $object->pagination_count);
+    }    
+
 }
 
 /**
