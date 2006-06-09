@@ -54,10 +54,11 @@ $packagexml = new PEAR_PackageFileManager;
 
 $e = $packagexml->setOptions(
           array('package' => 'PHPonTrax',
+		'channel' => 'pear.phpontrax.com',
                 'summary' => 'Rapid Application Development Made Easy',
                 'description' => 'PHP port of Ruby on Rails',
                 'baseinstalldir' => 'PHPonTrax',
-                'version' => '221svn',
+                'version' => '222svn',
                 'packagedirectory' => '.',
                 'state' => 'alpha',
                 'filelistgenerator' => 'svn', // generate from svn
