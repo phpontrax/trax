@@ -559,39 +559,39 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_all_habtm($other_table_name, $parameters = null) {
+        
         # Use any passed-in parameters
         if (!is_null($parameters)) {
-            if(@array_key_exists("conditions", $parameters))
-                $additional_conditions = $parameters['conditions'];
-            elseif($parameters[0] != "")
-                $additional_conditions = $parameters[0];
-
-            if(@array_key_exists("order", $parameters))
+            if(@array_key_exists("conditions", $parameters)) {
+                $additional_conditions = " AND (".$parameters['conditions'].")";
+            } elseif($parameters[0] != "") {
+                $additional_conditions = " AND (".$parameters[0].")";
+            }
+            if(@array_key_exists("order", $parameters)) {
                 $order = $parameters['order'];
-            elseif($parameters[1] != "")
+            } elseif($parameters[1] != "") {
                 $order = $parameters[1];
-
-            if(@array_key_exists("limit", $parameters))
+            }
+            if(@array_key_exists("limit", $parameters)) {
                 $limit = $parameters['limit'];
-            elseif($parameters[2] != "")
+            } elseif($parameters[2] != "") {
                 $limit = $parameters[2];
-
-            if(@array_key_exists("joins", $parameters))
-                $additional_joins = $parameters['joins'];
-            elseif($parameters[3] != "")
-                $additional_joins = $parameters[3];
-
-            if(!empty($additional_conditions))
-                $conditions .= " AND (" . $additional_conditions . ")";
-            if(!empty($additional_joins))
-                $joins .= " " . $additional_joins;
-                
+            }    
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }            
             if(@array_key_exists("join_table", $parameters)) {
                 $join_table = $parameters['join_table'];
             } 
+            if(@array_key_exists("foreign_key", $parameters)) {
+                $this_foreign_key = $parameters['foreign_key'];
+            }
+            if(@array_key_exists("association_foreign_key", $parameters)) {
+                $other_foreign_key = $parameters['association_foreign_key'];
+            }            
+            if(@array_key_exists("finder_sql", $parameters)) {
+                $finder_sql = $parameters['finder_sql'];
+            }   
         }
         
         if(!is_null($other_object_name)) {
@@ -601,30 +601,42 @@ class ActiveRecord {
         }
         
         # Instantiate an object to access find_all
-        $object = new $other_class_name();
+        $other_class_object = new $other_class_name();
 
-        # Prepare the join table name primary keys (fields) to do the join on
-        if(is_null($join_table)) {
-            $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
+        # If finder_sql is specified just use it instead of determining the joins/sql
+        if(!is_null($finder_sql)) {
+            $conditions = $finder_sql;    
+            $order = null;
+            $limit = null;
+            $joins = null;
+        } else {
+            # Prepare the join table name primary keys (fields) to do the join on
+            if(is_null($join_table)) {
+                $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
+            }
+            
+            # Primary keys
+            $this_primary_key  = $this->primary_keys[0];
+            $other_primary_key = $other_class_object->primary_keys[0];
+            
+            # Foreign keys
+            if(is_null($this_foreign_key)) {
+                $this_foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
+            }
+            if(is_null($other_foreign_key)) {
+                $other_foreign_key = Inflector::singularize($other_table_name)."_".$other_primary_key;
+            }
+            
+            # Primary key value
+            $this_primary_key_value = is_numeric($this->$this_primary_key) ? $this->$this_primary_key : "'".$this->$this_primary_key."'";
+
+            # Set up the SQL segments
+            $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}".$additional_conditions;
+            $joins = "LEFT JOIN {$join_table} ON {$other_table_name}.{$other_primary_key} = {$join_table}.{$other_foreign_key}";
         }
         
-        # Primary keys
-        $this_primary_key  = $this->primary_keys[0];
-        $other_primary_key = $object->primary_keys[0];
-        
-        # Foreign keys
-        $this_foreign_key  = ($this_primary_key != 'id')  ? $this_primary_key  : Inflector::singularize($this->table_name)."_id";
-        $other_foreign_key = ($other_primary_key != 'id') ? $other_primary_key : Inflector::singularize($other_table_name)."_id";
-        
-        # Primary key value
-        $this_primary_key_value = is_numeric($this->$this_primary_key) ? $this->$this_primary_key : "'".$this->$this_primary_key."'";
-
-        # Set up the SQL segments
-        $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}";
-        $joins .= "LEFT JOIN {$join_table} ON {$other_table_name}.{$other_primary_key} = {$join_table}.{$other_foreign_key}";
-
         # Get the list of other_class_name objects
-        return $object->find_all($conditions, $order, $limit, $joins);
+        return $other_class_object->find_all($conditions, $order, $limit, $joins);
     }
 
     /**
@@ -638,36 +650,31 @@ class ActiveRecord {
     private function find_all_has_many($other_table_name, $parameters = null) {
 
         # Use any passed-in parameters
-        if (!is_null($parameters)) {
-            //echo "<pre>";print_r($parameters);
-            if(@array_key_exists("conditions", $parameters))
-                $additional_conditions = $parameters['conditions'];
-            elseif($parameters[0] != "")
-                $additional_conditions = $parameters[0];
-
-            if(@array_key_exists("order", $parameters))
+        if (is_array($parameters)) {
+            if(@array_key_exists("conditions", $parameters)) {
+                $additional_conditions = " AND (".$parameters['conditions'].")";
+            } elseif($parameters[0] != "") {
+                $additional_conditions = " AND (".$parameters[0].")";
+            }
+            if(@array_key_exists("order", $parameters)) {
                 $order = $parameters['order'];
-            elseif($parameters[1] != "")
+            } elseif($parameters[1] != "") {
                 $order = $parameters[1];
-
-            if(@array_key_exists("limit", $parameters))
+            }
+            if(@array_key_exists("limit", $parameters)) {
                 $limit = $parameters['limit'];
-            elseif($parameters[2] != "")
+            } elseif($parameters[2] != "") {
                 $limit = $parameters[2];
-
-            if(@array_key_exists("joins", $parameters))
-                $additional_joins = $parameters['joins'];
-            elseif($parameters[3] != "")
-                $additional_joins = $parameters[3];
-
-            if(!empty($additional_conditions))
-                $conditions .= " AND (" . $additional_conditions . ")";
-            if(!empty($additional_joins))
-                $joins .= " " . $additional_joins;
-
+            }
+            if(@array_key_exists("foreign_key", $parameters)) {
+                $foreign_key = $parameters['foreign_key'];
+            }             
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }  
+            if(@array_key_exists("finder_sql", $parameters)) {
+                $finder_sql = $parameters['finder_sql'];
+            }
         }
 
         if(!is_null($other_object_name)) {
@@ -679,23 +686,28 @@ class ActiveRecord {
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
         
-        if(@array_key_exists("foreign_key", $parameters)) {
-            $foreign_key = $parameters['foreign_key'];
-        } else {
-            $foreign_key = Inflector::singularize($this->table_name)."_id";
+        # If finder_sql is specified just use it instead of determining the association
+        if(!is_null($finder_sql)) {
+            $conditions = $finder_sql;  
+            $order = null;
+            $limit = null;
+            $joins = null; 
+        } else {          
+            # This class primary key
+            $this_primary_key = $this->primary_keys[0];
+    
+            if(!$foreign_key) {
+                # this should end up being like user_id or account_id but if you specified
+                # a primaray key other than 'id' it will be like user_field
+                $foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
+            }
+            
+            $foreign_key_value = $this->$this_primary_key;
+            $conditions = is_numeric($foreign_key_value) ? 
+                "$foreign_key = {$foreign_key_value}" : 
+                "$foreign_key = '{$foreign_key_value}'" . $additional_conditions; 
         }
-        if(count($other_class_object->primary_keys) == 1) {
-            $id = $other_class_object->primary_keys[0];    
-        } else {
-            $id = "id";    
-        }
-        $id_value = $this->$id;
-        if(is_numeric($id_value)) {
-            $conditions = "$foreign_key={$id_value}";
-        } else {
-            $conditions = "$foreign_key='{$id_value}'";        
-        }         
-
+                         
         # Get the list of other_class_name objects
         return $other_class_object->find_all($conditions, $order, $limit, $joins);
     }
@@ -709,31 +721,44 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_one_has_one($other_object_name, $parameters = null) {
-        if(@array_key_exists("class_name", $parameters)) {
-            $other_object_name = $parameters['class_name'];
+
+        # Use any passed-in parameters
+        if (is_array($parameters)) {
+            //echo "<pre>";print_r($parameters);
+            if(@array_key_exists("conditions", $parameters)) {
+                $additional_conditions = " AND (".$parameters['conditions'].")";
+            } elseif($parameters[0] != "") {
+                $additional_conditions = " AND (".$parameters[0].")";
+            }
+            if(@array_key_exists("order", $parameters)) {
+                $order = $parameters['order'];
+            } elseif($parameters[1] != "") {
+                $order = $parameters[1];
+            }
+            if(@array_key_exists("foreign_key", $parameters)) {
+                $foreign_key = $parameters['foreign_key'];
+            }         
+            if(@array_key_exists("class_name", $parameters)) {
+                $other_object_name = $parameters['class_name'];
+            }  
         }
+        
         $other_class_name = Inflector::camelize($other_object_name);
         
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
 
-        if(@array_key_exists("foreign_key", $parameters)) {
-            $foreign_key = $parameters['foreign_key'];
-        } else {
-            $foreign_key = Inflector::singularize($this->table_name)."_id";
-        }
+        # This class primary key
+        $this_primary_key = $this->primary_keys[0];
         
-        if(count($other_class_object->primary_keys) == 1) {
-            $id = $other_class_object->primary_keys[0];    
-        } else {
-            $id = "id";    
+        if(!$foreign_key){
+            $foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
         }
-        $id_value = $this->$id;
-        if(is_numeric($id_value)) {
-            $conditions = "$foreign_key={$id_value}";
-        } else {
-            $conditions = "$foreign_key='{$id_value}'";        
-        }         
+
+        $foreign_key_value = $this->$this_primary_key;
+        $conditions = is_numeric($foreign_key_value) ? 
+            "{$foreign_key} = {$foreign_key_value}" : 
+            "{$foreign_key} = '{$foreign_key_value}'"; 
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -755,31 +780,44 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_one_belongs_to($other_object_name, $parameters = null) {
-        if(@array_key_exists("class_name", $parameters)) {
-            $other_object_name = $parameters['class_name'];
-        }        
+
+        # Use any passed-in parameters
+        if (is_array($parameters)) {
+            //echo "<pre>";print_r($parameters);
+            if(@array_key_exists("conditions", $parameters)) {
+                $additional_conditions = $parameters['conditions'];
+            } elseif($parameters[0] != "") {
+                $additional_conditions = $parameters[0];
+            }
+            if(@array_key_exists("order", $parameters)) {
+                $order = $parameters['order'];
+            } elseif($parameters[1] != "") {
+                $order = $parameters[1];
+            }
+            if(@array_key_exists("foreign_key", $parameters)) {
+                $foreign_key = $parameters['foreign_key'];
+            }         
+            if(@array_key_exists("class_name", $parameters)) {
+                $other_object_name = $parameters['class_name'];
+            }  
+        }
+        
         $other_class_name = Inflector::camelize($other_object_name);
      
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
 
-        if(@array_key_exists("foreign_key", $parameters)) {
-            $foreign_key = $parameters['foreign_key'];
-        } else {
-            $foreign_key = $other_object_name."_id";
+        # This class primary key
+        $other_primary_key = $other_class_object->primary_keys[0];
+
+        if(!$foreign_key) {
+            $foreign_key = $other_object_name."_".$other_primary_key;
         }
         
-        if(count($other_class_object->primary_keys) == 1) {
-            $id = $other_class_object->primary_keys[0];    
-        } else {
-            $id = "id";    
-        }
-        $foreign_key_value = $this->$foreign_key;
-        if(is_numeric($foreign_key_value)) {
-            $conditions = "$id = $foreign_key_value";
-        } else {
-            $conditions = "$id = '$foreign_key_value'";        
-        }           
+        $other_primary_key_value = $this->$foreign_key;
+        $conditions = is_numeric($other_primary_key_value) ? 
+            "{$other_primary_key} = {$other_primary_key_value}" : 
+            "{$other_primary_key} = '{$other_primary_key_value}'";
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -1151,7 +1189,7 @@ class ActiveRecord {
                     $offset = ($this->page - 1) * $this->rows_per_page;
                 }
 
-                $sql .= "LIMIT $this->rows_per_page OFFSET $offset";
+                $sql .= "LIMIT {$this->rows_per_page} OFFSET {$offset}";
                 # $sql .= "LIMIT $offset, $this->rows_per_page";
         
                 # Set number of total pages in result set  
