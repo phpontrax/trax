@@ -158,6 +158,12 @@ function copy_dir($src_path,$dst_path) {
             if (substr($src_file,-4,4) == '.log') {
                 chmod($dst_path . $src_file, 0666);
             }
+
+            // Generator needs to be executable 
+            if ($src_file == 'generate.php') {
+                chmod($dst_path . $src_file, 0754);
+            }
+
             echo  "$dst_path$src_file created\n";
         } else {
 
