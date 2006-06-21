@@ -406,6 +406,7 @@ class ActiveRecord {
         if (is_null($association_type)) {
             return null;
         }
+        //error_log("association_type:$association_type");
         switch($association_type) {
             case "has_many":
                 $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
@@ -511,12 +512,16 @@ class ActiveRecord {
             # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
                 //echo "calling method: $method_name<br>";
-                $result = $this->find_by($method_name, $parameters, true);
+                $result = $this->find_by($method_name, $parameters, "all");
             }
             # check for the find_by_* magic functions
             elseif(strlen($method_name) > 7 && substr($method_name, 0, 7) == "find_by") {
                 //echo "calling method: $method_name<br>";
                 $result = $this->find_by($method_name, $parameters);
+            }
+            # check for find_or_create_by_* magic functions
+            elseif(strlen($method_name) > 17 && substr($method_name, 0, 17) == "find_or_create_by") {
+                $result = $this->find_by($method_name, $parameters, "find_or_create");        
             }
         }
         return $result;
@@ -554,7 +559,6 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_all_habtm($other_table_name, $parameters = null) {
-
         # Use any passed-in parameters
         if (!is_null($parameters)) {
             if(@array_key_exists("conditions", $parameters))
@@ -589,11 +593,13 @@ class ActiveRecord {
                 $join_table = $parameters['join_table'];
             } 
         }
+        
         if(!is_null($other_object_name)) {
             $other_class_name = Inflector::camelize($other_object_name);    
         } else {
             $other_class_name = Inflector::classify($other_table_name);
         }
+        
         # Instantiate an object to access find_all
         $object = new $other_class_name();
 
@@ -601,13 +607,21 @@ class ActiveRecord {
         if(is_null($join_table)) {
             $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
         }
-        $this_foreign_key = Inflector::singularize($this->table_name)."_id";
-        $other_foreign_key = Inflector::singularize($other_table_name)."_id";
+        
+        # Primary keys
+        $this_primary_key  = $this->primary_keys[0];
+        $other_primary_key = $object->primary_keys[0];
+        
+        # Foreign keys
+        $this_foreign_key  = ($this_primary_key != 'id')  ? $this_primary_key  : Inflector::singularize($this->table_name)."_id";
+        $other_foreign_key = ($other_primary_key != 'id') ? $other_primary_key : Inflector::singularize($other_table_name)."_id";
+        
+        # Primary key value
+        $this_primary_key_value = is_numeric($this->$this_primary_key) ? $this->$this_primary_key : "'".$this->$this_primary_key."'";
+
         # Set up the SQL segments
-        $conditions = "{$join_table}.{$this_foreign_key}=".intval($this->id);
-        $order = null;
-        $limit = null;
-        $joins .= "LEFT JOIN {$join_table} ON {$other_table_name}.id = {$other_foreign_key}";
+        $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}";
+        $joins .= "LEFT JOIN {$join_table} ON {$other_table_name}.{$other_primary_key} = {$join_table}.{$other_foreign_key}";
 
         # Get the list of other_class_name objects
         return $object->find_all($conditions, $order, $limit, $joins);
@@ -972,42 +986,66 @@ class ActiveRecord {
      *  @uses find_all()
      *  @uses find_first()
      */
-    private function find_by($method_name, $parameters, $find_all = false) {
-	$method_parts = explode("_",substr($method_name, ($find_all ? 12 : 8)));
-        if(is_array($method_parts)) {
-            $param_cnt = 0;
-            $part_cnt = 1;
-            $and_cnt = substr_count(strtolower($method_name), "_and_");
-            $or_cnt = substr_count(strtolower($method_name), "_or_");
-            $part_size = count($method_parts) - $and_cnt - $or_cnt;
-            // FIXME: This loop doesn't work right for either
-	    // find_by_first_name_and_last_name or
-	    // find_all_by_first_name_and_last_name
+    private function find_by($method_name, $parameters, $find_type = null) {
+        if($find_type == "find_or_create") {
+            $explode_len = 18;
+        } elseif($find_type == "all") {
+            $explode_len = 12;
+        } else {
+            $explode_len = 8;     
+        }
+        $method_name = substr(strtolower($method_name), $explode_len);
+	    $method_parts = explode("|", str_replace("_and_", "|AND|", $method_name));
+        if(count($method_parts)) {
+            $options = array();
+            $create_fields = array();
+            $param_index = 0;
             foreach($method_parts as $part) {
-                if(strtoupper($part) == "AND") {
-                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' AND ";
-                    $part_cnt--;
-                    unset($field);
-                } elseif(strtoupper($part) == "OR") {
-                    $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."' OR ";
-                    $part_cnt--;
-                    unset($field);
+                $value = is_numeric($parameters[$param_index]) ? $parameters[$param_index] : "'".$parameters[$param_index]."'";
+                if($part == "AND") {
+                    $conditions .= " AND ";
+                    $param_index++;
                 } else {
-                    $field[] = $part;
-                    if($part_size == $part_cnt) {
-                        $method_params .= implode("_",$field)."='".$parameters[$param_cnt++]."'";
-                        if($parameters[$param_cnt]) {
-                            $order = $parameters[$param_cnt];
-                        }
-                    }
+                    $create_fields[$part] = $parameters[$param_index];  
+                    $conditions .= "{$part} = {$value}";
+                } 
+            }
+            # If last param exists and is a string set it as the ORDER BY clause            
+            # or if the last param is an array set it as the $options
+            if($last_param = $parameters[++$param_index]) {
+                if(is_string($last_param)) {
+                    $options['order'] = $last_param;        
+                } elseif(is_array($last_param)) {
+                    $options = $last_param;    
                 }
-                $part_cnt++;
+            }  
+            # Set the conditions
+            if($options['conditions'] && $conditions) {
+                $options['conditions'] = "(".$options['conditions'].") AND (".$conditions.")";    
+            } else {
+                $options['conditions'] = $conditions;    
             }
 
-            if($find_all) {
-            	return $this->find_all($method_params, $order);
+            # Now do the actual find with condtions from above
+            if($find_type == "find_or_create") {
+                # see if we can find a record with specified parameters
+                $object = $this->find($options);
+                if(is_object($object)) {
+                    # we found a record with the specified parameters so return it
+                    return $object;    
+                } elseif(count($create_fields)) { 
+                    # can't find a record with specified parameters so create a new record 
+                    # and return new object       
+                    foreach($create_fields as $field => $value) {
+                        $this->$field = $value;    
+                    }
+                    $this->save();
+                    return $this->find($options);
+                }
+            } elseif($find_type == "all") {
+            	return $this->find_all($options);
             } else {
-                return $this->find_first($method_params, $order);
+                return $this->find($options);
             }
         }
     }
@@ -1044,8 +1082,7 @@ class ActiveRecord {
      *    for that object in the array.
      *  @throws {@link ActiveRecordError}
      */
-    function find_all($conditions = null, $order = null,
-                      $limit = null, $joins = null) {
+    function find_all($conditions = null, $order = null, $limit = null, $joins = null) {
         //error_log("find_all(".(is_null($conditions)?'null':$conditions)
         //          .', ' . (is_null($order)?'null':$order)
         //          .', ' . (is_null($limit)?'null':var_export($limit,true))
@@ -1130,6 +1167,7 @@ class ActiveRecord {
 
         # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         # echo "query: $sql\n";
+        # error_log("ActiveRecord::find_all -> $sql");
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());
         }
@@ -1189,17 +1227,34 @@ class ActiveRecord {
      */
     function find($id, $order = null, $limit = null, $joins = null) {
         if(is_array($id)) {
-            $conditions = "id IN(".implode(",",$id).")";
-        } elseif(stristr($id,"=")) { # has an = so must be a where clause
-            $conditions = $id;
+            if($id[0]) {
+                # passed in array of numbers array(1,2,4,23)
+                $primary_key = $this->primary_keys[0];
+                $primary_key_values = is_numeric($id[0]) ? implode(",", $id) : "'".implode("','", $id)."'";
+                $options['conditions'] = "{$primary_key} IN({$primary_key_values})";
+                $find_all = true;
+            } else {
+                # passed in an options array
+                $options = $id;    
+            }
+        } elseif(stristr($id, "=")) { 
+            # has an "=" so must be a WHERE clause
+            $options['conditions'] = $id;
         } else {
-            $conditions = "id='$id'";
+            # find an single record with id = $id
+            $primary_key = $this->primary_keys[0];
+            $primary_key_value = is_numeric($id) ? $id : "'".$id."'";
+            $options['conditions'] = "{$primary_key} = {$primary_key_value}";
         }
+        if(!is_null($order)) $options['order'] = $order; 
+        if(!is_null($limit)) $options['limit'] = $limit;
+        if(!is_null($joins)) $options['joins'] = $joins;
 
-        if(is_array($id)) {
-            return $this->find_all($conditions, $order, $limit, $joins);
+
+        if($find_all) {
+            return $this->find_all($options);
         } else {
-            return $this->find_first($conditions, $order, $limit, $joins);
+            return $this->find_first($options);
         }
     }
 
@@ -1229,7 +1284,16 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function find_first($conditions, $order = null, $limit = null, $joins = null) {
-        $result = $this->find_all($conditions, $order, $limit, $joins);
+        if(is_array($conditions)) {
+            $options = $conditions;    
+        } else {
+            $options['conditions'] = $conditions;    
+        }
+        if(!is_null($order)) $options['order'] = $order; 
+        if(!is_null($limit)) $options['limit'] = $limit;
+        if(!is_null($joins)) $options['joins'] = $joins;
+
+        $result = $this->find_all($options);
         return @current($result);
     }
 
@@ -1509,7 +1573,7 @@ class ActiveRecord {
     function get_association_type($association_name) {
         $type = null;
         if(is_string($this->has_many)) {
-            if(preg_match("/$association_name/", $this->has_many)) {
+            if(preg_match("/\b$association_name\b/", $this->has_many)) {
                 $type = "has_many";    
             }
         } elseif(is_array($this->has_many)) {
@@ -1518,7 +1582,7 @@ class ActiveRecord {
             }
         }
         if(is_string($this->has_one)) {
-            if(preg_match("/$association_name/", $this->has_one)) {
+            if(preg_match("/\b$association_name/\b", $this->has_one)) {
                 $type = "has_one";     
             }
         } elseif(is_array($this->has_one)) {
@@ -1527,7 +1591,7 @@ class ActiveRecord {
             }
         }
         if(is_string($this->belongs_to)) { 
-            if(preg_match("/$association_name/", $this->belongs_to)) {
+            if(preg_match("/\b$association_name\b/", $this->belongs_to)) {
                 $type = "belongs_to";      
             }
         } elseif(is_array($this->belongs_to)) {
@@ -1536,7 +1600,7 @@ class ActiveRecord {
             }
         }
         if(is_string($this->has_and_belongs_to_many)) {
-            if(preg_match("/$association_name/", $this->has_and_belongs_to_many)) {
+            if(preg_match("/\b$association_name\b/", $this->has_and_belongs_to_many)) {
                 $type = "has_and_belongs_to_many";      
             }
         } elseif(is_array($this->has_and_belongs_to_many)) {
