@@ -48,7 +48,7 @@ class AssetTagHelper extends Helpers {
         $this->javascript_default_sources =
             array_key_exists('JAVASCRIPT_DEFAULT_SOURCES',$GLOBALS)
             ? $GLOBALS['JAVASCRIPT_DEFAULT_SOURCES']
-            : array('prototype', 'effects', 'dragdrop', 'controls');    
+            : array('prototype', 'effects', 'dragdrop', 'controls', 'slider', 'builder');    
     }
     
     /**

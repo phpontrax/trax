@@ -5,7 +5,7 @@
 //  Richard Livsey
 //  Rahul Bhargava
 //  Rob Wills
-// 
+//  
 // See scriptaculous.js for full license.
 
 // Autocompleter.Base handles all the autocompletion functionality 

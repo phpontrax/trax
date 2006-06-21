@@ -1,6 +1,6 @@
 // Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //           (c) 2005 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
-// 
+//  
 // See scriptaculous.js for full license.
 
 /*--------------------------------------------------------------------------*/
