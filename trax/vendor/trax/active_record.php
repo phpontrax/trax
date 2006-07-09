@@ -1126,28 +1126,31 @@ class ActiveRecord {
         //          .', ' . (is_null($limit)?'null':var_export($limit,true))
         //          .', ' . (is_null($joins)?'null':$joins).')');
 
+        $offset = null;
+        $per_page = null;
+
+        # this is if they passed in an associative array to emulate
+        # named parameters.
+        if(is_array($conditions)) {
+            if(@array_key_exists("per_page", $conditions) && !is_numeric($conditions['per_page'])) {
+                extract($conditions); 
+                $per_page = 0;   
+            } else {
+                extract($conditions);     
+            }
+            # If conditions wasn't in the array set it to null
+            if(is_array($conditions)) {
+                $conditions = null;    
+            }  
+        }
+
         # Test source of SQL for query
         if(stristr($conditions, "SELECT")) {
             # SQL completely specified in argument so use it as is
             $sql = $conditions;
         } else {
             # SQL will be built from specifications in argument
-            $sql  = "SELECT * FROM ".$this->table_name." ";
-            
-            # this is if they passed in an associative array to emulate
-            # named parameters.
-            if(is_array($conditions)) {
-                if(@array_key_exists("per_page", $conditions) && !is_numeric($conditions['per_page'])) {
-                    extract($conditions); 
-                    $per_page = 0;   
-                } else {
-                    extract($conditions);     
-                }
-                # If conditions wasn't in the array set it to null
-                if(is_array($conditions)) {
-                    $conditions = null;    
-                }  
-            }
+            $sql  = "SELECT * FROM ".$this->table_name." ";         
             
             # If join specified, include it
             if(!is_null($joins)) {
@@ -1264,6 +1267,7 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function find($id, $order = null, $limit = null, $joins = null) {
+        $find_all = false;
         if(is_array($id)) {
             if($id[0]) {
                 # passed in array of numbers array(1,2,4,23)

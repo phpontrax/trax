@@ -159,10 +159,10 @@ function copy_dir($src_path,$dst_path) {
                 chmod($dst_path . $src_file, 0666);
             }
 
-            // Generator needs to be executable 
-            if ($src_file == 'generate.php') {
+            // Generator & Console needs to be executable 
+            if ($src_file == 'generate.php' || $src_file == 'console.php') {
                 chmod($dst_path . $src_file, 0754);
-            }
+            }           
 
             echo  "$dst_path$src_file created\n";
         } else {
