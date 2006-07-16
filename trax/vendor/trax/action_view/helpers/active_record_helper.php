@@ -453,16 +453,6 @@ class ActiveRecordHelper extends Helpers {
     /**
      *  @todo Document this method
      *
-     *  @param string  $html_tag
-     *  @param boolean $has_error
-     */
-    function error_wrapping($html_tag, $has_error) {
-        return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
-    }
-
-    /**
-     *  @todo Document this method
-     *
      *  @uses attribute_name
      *  @uses object()
      */

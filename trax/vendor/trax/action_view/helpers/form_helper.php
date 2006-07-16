@@ -291,22 +291,9 @@ class FormHelper extends Helpers {
         }
         $tag_text .= ">True</option>\n";
         $tag_text .= "</select>\n";
-        return $this->error_wrapping($tag_text,$this->object()->errors[$this->attribute_name]);;
+        return $this->error_wrapping($tag_text,$this->object()->errors[$this->attribute_name]);
     }
     
-    /**
-     *  If this tag has an error, wrap it with a visual indicator
-     *
-     *  @param string HTML to be wrapped
-     *  @param boolean  true=>error, false=>no error
-     *  @return string
-     */
-    function error_wrapping($html_tag, $has_error) {
-        return ($has_error
-                ? '<span class="fieldWithErrors">' . $html_tag . '</span>'
-                : $html_tag);
-    }    
-
 }
 
 

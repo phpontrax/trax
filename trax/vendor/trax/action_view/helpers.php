@@ -302,7 +302,18 @@ class Helpers {
      */    
     function to_content_tag($tag_name, $options = array()) {
         return $this->content_tag($tag_name, $this->value(), $options);
-    }     
+    } 
+    
+    /**
+     *  If this tag has an error, wrap it with a visual indicator
+     *
+     *  @param string HTML to be wrapped
+     *  @param boolean  true=>error, false=>no error
+     *  @return string
+     */
+    function error_wrapping($html_tag, $has_error) {
+        return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
+    }         
 
 }
 

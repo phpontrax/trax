@@ -201,13 +201,15 @@ class FormOptionsHelper extends FormHelper {
      */
     function to_select_tag($choices, $options, $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
-        return $this->content_tag(
-             "select",
-             $this->add_options(
-                       $this->options_for_select($choices, $this->value()),
-                       $options,
-                       $this->value()),
-             $html_options);
+        return $this->error_wrapping(
+            $this->content_tag(
+                 "select",
+                 $this->add_options(
+                           $this->options_for_select($choices, $this->value()),
+                           $options,
+                           $this->value()),
+                 $html_options),
+             $this->object()->errors[$this->attribute_name]);
     }
     
     /**
@@ -223,16 +225,19 @@ class FormOptionsHelper extends FormHelper {
                                       $attribute_text, $options,
                                       $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
-        return $this->content_tag(
-          "select",
-          $this->add_options(
-            $this->options_from_collection_for_select($collection,
-                                                      $attribute_value,
-                                                      $attribute_text,
-                                                      $this->value()),
-            $options,
-            $this->value()),
-         $html_options);
+        return $this->error_wrapping(
+            $this->content_tag(
+                "select",
+                $this->add_options(
+                    $this->options_from_collection_for_select(
+                        $collection,
+                        $attribute_value,
+                        $attribute_text,
+                        $this->value()),
+                    $options,
+                    $this->value()),
+                $html_options),
+            $this->object()->errors[$this->attribute_name]);
     }
     
     /**
@@ -246,14 +251,16 @@ class FormOptionsHelper extends FormHelper {
     function to_country_select_tag($priority_countries,
                                    $options, $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
-        return $this->content_tag(
+        return $this->error_wrapping(
+            $this->content_tag(
                 "select",
                 $this->add_options(
                         $this->country_options_for_select($this->value(),
                                                           $priority_countries),
                         $options,
                         $this->value),
-                $html_options);
+                $html_options),
+            $this->object()->errors[$this->attribute_name]);
     }
 
     /**

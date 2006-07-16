@@ -63,6 +63,9 @@ class FormTagHelper extends Helpers {
      *
      */
     function select_tag($name, $option_tags = null, $options = array()) {
+        if(is_array($option_tags)) {
+            $option_tags = implode('', $option_tags);    
+        }
         return $this->content_tag("select", $option_tags, array_merge(array("name" => $name, "id" => $name), $this->convert_options($options)));
     }
 

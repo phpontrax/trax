@@ -1170,11 +1170,12 @@ class ActionController {
                 $file = substr(strrchr($layout, "/"), 1);
                 $path = substr($layout, 0, strripos($layout, "/"));
                 $layout = $layouts_base_path."/".$path."/".$file.".".Trax::$views_extension;
-            } else {
+            } elseif(file_exists($this->layouts_path."/".$layout.".".Trax::$views_extension)) {
                 # Is there a layout for the current controller
                 $layout = $this->layouts_path."/".$layout.".".Trax::$views_extension;
-            }
-
+            } else {
+				$layout = $layouts_base_path."/".$layout.".".Trax::$views_extension;
+			}
             if(file_exists($layout)) {
                 $layout_file = $layout;
             }
