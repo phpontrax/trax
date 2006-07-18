@@ -597,7 +597,8 @@ class DateHelper extends Helpers {
         } elseif(strlen($datetime) == 2 && is_numeric($datetime)) {
             $datetime_sec = $datetime;
         } else {                  
-            $datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            $datetime = $options['value'] ? $options['value'] :
+                ($datetime ? $datetime : date("Y-m-d H:i:s")); 
             $datetime_sec = date("s",strtotime($datetime));
         }
         
@@ -673,7 +674,9 @@ class DateHelper extends Helpers {
         } elseif(strlen($datetime) == 2 && is_numeric($datetime)) {
             $datetime_min = $datetime;
         } else {                  
-            $datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            $datetime = $options['value'] ? $options['value'] :
+                ($datetime ? $datetime : date("Y-m-d H:i:s"));            
             $datetime_min = date("i",strtotime($datetime));
         }
         
@@ -761,7 +764,9 @@ class DateHelper extends Helpers {
         //  First argument is missing or invalid,
         //  initially select current hour
         else {                  
-            $datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            $datetime = $options['value'] ? $options['value'] :
+                ($datetime ? $datetime : date("Y-m-d H:i:s"));
             $datetime_hour = date("H",strtotime($datetime)); 
         }
 
@@ -853,7 +858,9 @@ class DateHelper extends Helpers {
         //  First argument is missing or invalid,
         //  initially select current day
         else {                  
-            $datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s");
+            $datetime = $options['value'] ? $options['value'] :
+                ($datetime ? $datetime : date("Y-m-d H:i:s"));
             $datetime_day = date("d",strtotime($datetime));  
         }
         
@@ -951,7 +958,8 @@ class DateHelper extends Helpers {
         //  Parse initially selected month from US English description
         //  in first argument if present, otherwise select current month
         else {
-            $date = $date ? $date : date("Y-m-d H:i:s"); 
+            $date = $options['value'] ? $options['value'] :
+                ($date ? $date : date("Y-m-d H:i:s"));
             $date_month = date("m",strtotime($date));  
         }
    
@@ -1071,7 +1079,9 @@ class DateHelper extends Helpers {
             //  use as the initial value.
             //  If first argument was null, use the current year for
             //  the initial value.
-            $date_year = $date ? date("Y",strtotime($date)) : date("Y");
+            $date = $options['value'] ? $options['value'] :
+                ($date ? $date : date("Y-m-d H:i:s"));
+            $date_year = date("Y",strtotime($date));
         } 
 
         //  Set first year to appear in the option list
