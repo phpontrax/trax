@@ -414,7 +414,11 @@ class ActionController {
         }
 
         # current url
-        $browser_url = $_SERVER['REDIRECT_URL'];
+        if(isset($_SERVER['REDIRECT_URL'])) {
+            $browser_url = $_SERVER['REDIRECT_URL'];
+        } else {
+            $browser_url = $_SERVER['REQUEST_URI'];        
+        }        
         #if(strstr($_SERVER['REQUEST_URI'], "?"))
         #    $browser_url = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?"));
         #else

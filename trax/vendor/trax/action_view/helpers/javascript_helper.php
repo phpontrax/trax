@@ -281,7 +281,7 @@ class JavaScriptHelper extends Helpers {
         $options['html']['onclick'] = $this->remote_function($options) . "; return false;";
         $options['html']['name'] = $name;
         $options['html']['value'] = $value;      
-        $this->tag("input", $options['html']);
+        return $this->tag("input", $options['html']);
     }
     
     # Returns a Javascript function (or expression) that'll update a DOM element according to the options passed.
