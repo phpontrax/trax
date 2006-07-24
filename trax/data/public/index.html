@@ -1,81 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-<head>
-  <title>Trax: Welcome on board</title>
-  <style>
-    body { background-color: #fff; color: #333; }
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>PHP on Trax: Welcome aboard</title>
+    <style type="text/css" media="screen">
+      body {
+        margin: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        background-color: #f0f0f0;
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+        font-size: 13px;
+        color: #333;
+      }
+      
+      h1 {
+        font-size: 28px;
+        color: #000;
+      }
+      
+      a  {color: #03c}
+      a:hover {
+        background-color: #03c;
+        color: white;
+        text-decoration: none;
+      }
+      
+      
+      #page {
+        background-color: #f0f0f0;
+        width: 750px;
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      #content {
+        float: left;
+        background-color: white;
+        border: 3px solid #aaa;
+        border-top: none;
+        padding: 25px;
+        width: 500px;
+      }
+      
+      #sidebar {
+        float: right;
+        width: 175px;
+      }
 
-    body, p, ol, ul, td {
-      font-family: verdana, arial, helvetica, sans-serif;
-      font-size:   12px;
-      line-height: 18px;
-    }
+      #footer {
+        clear: both;
+      }
+      
 
-    li {
-      margin-bottom: 7px;
-    }
+      #header, #getting-started {
+        padding-left: 100px;
+        padding-right: 30px;
+      }
 
-    pre {
-      background-color: #eee;
-      padding: 10px;
-      font-size: 11px;
-    }
 
-    a { color: #000; }
-    a:visited { color: #666; }
-    a:hover { color: #fff; background-color:#000; }
-  </style>
-</head>
-<body>
+      #header {
+        background-image: url("images/trax.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        height: 78px;
+      }
+      #header h1, #header h2 {margin: 0}
+      #header h2 {
+        color: #888;
+        font-weight: normal;
+        font-size: 16px;
+      }
+   
+      
+      #getting-started {
+        border-top: 1px solid #ccc;
+        margin-top: 25px;
+        padding-top: 15px;
+      }
+      #getting-started h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      #getting-started h2 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: normal;
+        color: #333;
+        margin-bottom: 25px;
+      }
+      #getting-started ol {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #getting-started li {
+        font-size: 18px;
+        color: #888;
+        margin-bottom: 25px;
+      }
+      #getting-started li h2 {
+        margin: 0;
+        font-weight: normal;
+        font-size: 18px;
+        color: #333;
+      }
+      #getting-started li p {
+        color: #555;
+        font-size: 13px;
+      }
+      
+      
+      #search {
+        margin: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 11px;
+      }
+      #search input {
+        font-size: 11px;
+        margin: 2px;
+      }
+      #search-text {width: 170px}
+      
+      
+      #sidebar ul {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #sidebar ul h3 {
+        margin-top: 25px;
+        font-size: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+      #sidebar li {
+        list-style-type: none;
+      }
+      #sidebar ul.links li {
+        margin-bottom: 5px;
+      }
+      
+    </style>
+    <script type="text/javascript" src="javascripts/prototype.js"></script>
+    <script type="text/javascript" src="javascripts/effects.js"></script>
 
-<h1>Congratulations, you've put PHP on Trax!</h1>
+    <script type="text/javascript">  
+      window.onload = function() {
+        $('search-text').value = '';
+        $('search').onsubmit = function() {
+          $('search-text').value = 'site:phpontrax.com ' + $F('search-text');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="page">
+      <div id="sidebar">
+        <ul id="sidebar-items">
+          <li>
+            <form id="search" action="http://www.google.com/search" method="get">
 
-<p><b>Before you move on</b>, verify that the following conditions have been met:</p>
+              <input type="hidden" name="hl" value="en" />
+              <input type="text" id="search-text" name="q" value="site:phpontrax.com " />
+              <input type="submit" value="Search" /> the Trax site
+            </form>
+          </li>
+        
+          <li>
+            <h3>Join the community</h3>
+            <ul class="links">
 
-<ol>
-  <li>The log files must be writable to the web server (<code>chmod 775 log/*</code>).
-  <li>
-    Trax on Apache needs to have mod_rewrite enabled.  <br/>
-    Somewhere in your httpd.conf, you should have:<br/>
-    <code>LoadModule rewrite_module     libexec/httpd/mod_rewrite.so</code><br/>
-    <code>AddModule mod_rewrite.c</code>
-  </li>
-  <li>
-    Edit <code>public_html|public/.htaccess</code> and add to the end of the <code>include_path</code> the path to the trax/config dir
-    <br><small>example: <code>php_value include_path .:/usr/local/lib/php:/home/&lt;username&gt;/config</code></small>
-  </li>
-</ol>
+              <li><a href="http://www.phpontrax.com/">PHP on Trax</a></li>
+              <li><a href="http://forum.phpontrax.com/">Official forum</a></li>
+              <li><a href="http://wiki.phpontrax.com/IRC">IRC channel</a></li>
+              <li><a href="http://wiki.phpontrax.com/">Wiki</a></li>
+              <li><a href="http://svn.phpontrax.com/">Bug tracker</a></li>
 
-<p>Take the following steps to get started:</p>
+            </ul>
+          </li>
+          
+          <li>
+            <h3>Browse the documentation</h3>
+            <ul class="links">
+              <li><a href="http://api.phpontrax.com/">Trax API</a></li>
+              <li><a href="http://www.php.net">PHP</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
-<ol>
-  <li>Create empty development and test databases for your application.<br/>
-    <small>Recommendation: Use *_development and *_test names, such as database_development and database_test</small><br/>
-  <li>Edit config/database.ini with your database settings.
-  <li>Create controllers and models using the generator in <code>script/generate.php</code> <br/>
-    <small>Help: Run the generator with no arguments for documentation or with only model or controller for each instructions</small>
-  <li>
-    main site layouts should be in <code>app/views/layouts</code><br>
-    default: <code>public.phtml</code><br>
-    content from view files are displayed in the layout phtml file<br>
-    by using the variable <code>$content_for_layout</code><br>
-  <li>Develop your Trax application!
-</ol>
+      <div id="content">
+        <div id="header">
+          <h1>Welcome aboard</h1>
 
-<p>
-  Trying to setup a default page for Trax using Routes? You'll have to delete this file (public/index.html) to get under way. Then define a new route in <tt>trax/config/routes.php</tt> of the form:
-  
-  <pre>
-    # this is for the root directory
-    $router->connect( "", array(":controller" => "welcome") );
-    # this is the default route
-    $router->connect( ":controller/:action/:id" );      
-  </pre>
-</p>
+          <h2>You&rsquo;re riding on Trax!</h2>
+        </div>
+      
+        <div id="getting-started">
+          <h1>Getting started</h1>
+          <h2>Here&rsquo;s how to get rolling:</h2>
+          
+          <ol>
+            <li>
+              <h2>Create your databases and edit <tt>config/database.ini</tt></h2>
 
-<p>
-  Having problems getting up and running? First try debugging it yourself by looking at the php error log files for your app in the trax/log directory. <br/>
-  Support is also available via Mailing list trax@phpontrax.com or IRC irc.freenode.net channel trax.
-</p>
+              <p>Trax needs to know your login and password.</p>
+            </li>
+          
+            <li>
+              <h2>Use <tt>script/generate.php</tt> to create your models and controllers</h2>
+              <p>To see all available options, run it without parameters.</p>
+            </li>
 
-</body>
+            
+            <li>
+              <h2>Set up a default route and remove or rename this file</h2>
+              <p>Routes are setup in config/routes.php.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+      
+      <div id="footer">&nbsp;</div>
+
+    </div>
+  </body>
 </html>
