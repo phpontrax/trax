@@ -291,6 +291,9 @@ class Helpers {
     function content_tag($name, $content, $options = array()) {
         $html = "<$name ";
         $html .= $this->tag_options($options);
+        if($options['strip_slashes']) {
+            $content = stripslashes($content);    
+        }
         $html .= ">$content</$name>";
         return $html."\n";
     }
@@ -312,7 +315,7 @@ class Helpers {
      *  @return string
      */
     function error_wrapping($html_tag, $has_error) {
-        return ($has_error ? '<span class="fieldWithErrors">' . $html_tag . '</span>' : $html_tag);
+        return ($has_error ? '<span class="fieldWithErrors">' . eregi_replace("[\n\r]", '', $html_tag) . '</span>' : $html_tag);
     }         
 
 }

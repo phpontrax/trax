@@ -268,7 +268,7 @@ class FormHelper extends Helpers {
         }
 
         $options = $this->add_default_name_and_id($options);
-        return $this->error_wrapping($this->tag("input", $options) . $this->tag("input", array("name" => $options["name"], "type" => "hidden", "value" => $unchecked_value)),$this->object()->errors[$this->attribute_name]);
+        return $this->error_wrapping($this->tag("input", array("name" => $options["name"], "type" => "hidden", "value" => $unchecked_value)) . $this->tag("input", $options),$this->object()->errors[$this->attribute_name]);
     }
 
     /**

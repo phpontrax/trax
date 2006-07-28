@@ -109,7 +109,7 @@ class FormOptionsHelper extends FormHelper {
         $options = array();
         if(is_array($choices)) {
             foreach($choices as $choice_value => $choice_text) {
-                if(!empty($choice_value)) {
+                if(!empty($choice_value) || is_numeric($choice_value)) {
                     $is_selected = ($choice_value == $selected)
                         ? true : false;   
                 } else {
@@ -118,14 +118,14 @@ class FormOptionsHelper extends FormHelper {
                 }
                 if($is_selected) {
                     $options[] = "<option value=\""
-		      . htmlspecialchars($choice_value)
-		      . "\" selected=\"selected\">"
-		      . htmlspecialchars($choice_text)."</option>";
+		            . htmlspecialchars($choice_value)
+		            . "\" selected=\"selected\">"
+		            . htmlspecialchars($choice_text)."</option>";
                 } else {
                     $options[] = "<option value=\""
-		      . htmlspecialchars($choice_value)
-		      . "\">"
-		      . htmlspecialchars($choice_text)."</option>";
+		            . htmlspecialchars($choice_value)
+		            . "\">"
+		            . htmlspecialchars($choice_text)."</option>";
                 }                        
             }    
         }
@@ -201,13 +201,14 @@ class FormOptionsHelper extends FormHelper {
      */
     function to_select_tag($choices, $options, $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
+        $value = $this->value();
         return $this->error_wrapping(
             $this->content_tag(
                  "select",
                  $this->add_options(
-                           $this->options_for_select($choices, $this->value()),
+                           $this->options_for_select($choices, $value),
                            $options,
-                           $this->value()),
+                           $value),
                  $html_options),
              $this->object()->errors[$this->attribute_name]);
     }
@@ -225,6 +226,7 @@ class FormOptionsHelper extends FormHelper {
                                       $attribute_text, $options,
                                       $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
+        $value = $this->value();
         return $this->error_wrapping(
             $this->content_tag(
                 "select",
@@ -233,9 +235,9 @@ class FormOptionsHelper extends FormHelper {
                         $collection,
                         $attribute_value,
                         $attribute_text,
-                        $this->value()),
+                        $value),
                     $options,
-                    $this->value()),
+                    $value),
                 $html_options),
             $this->object()->errors[$this->attribute_name]);
     }
@@ -251,14 +253,15 @@ class FormOptionsHelper extends FormHelper {
     function to_country_select_tag($priority_countries,
                                    $options, $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
+        $value = $this->value();
         return $this->error_wrapping(
             $this->content_tag(
                 "select",
                 $this->add_options(
-                        $this->country_options_for_select($this->value(),
+                        $this->country_options_for_select($value,
                                                           $priority_countries),
                         $options,
-                        $this->value),
+                        $value),
                 $html_options),
             $this->object()->errors[$this->attribute_name]);
     }
@@ -269,7 +272,6 @@ class FormOptionsHelper extends FormHelper {
      *  @param string
      *  @param string[]
      *  @param string
-     *  @todo <b>FIXME:</b> Why the third argument?  It's overwritten!
      *  @uses value()
      */
     private function add_options($option_tags, $options, $value = null) {
@@ -277,7 +279,6 @@ class FormOptionsHelper extends FormHelper {
            && $options["include_blank"] == true) {
             $option_tags = "<option value=\"\"></option>\n" . $option_tags;
         } 
-        $value = $this->value();
         if(empty($value) && array_key_exists('prompt', $options)) {
             $text = $options['prompt'] ? $options['prompt'] : "Please select";
             return ("<option value=\"\">$text</option>\n" . $option_tags);
