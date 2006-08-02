@@ -166,15 +166,7 @@ class UrlHelper extends Helpers {
             $image_options["width"]  = current(explode("x", $html_options["size"]));
             $image_options["height"] = end(explode("x", $html_options["size"]));
             unset($html_options["size"]);
-        } else {
-            if(isset($html_options["width"])) {
-                $image_options["width"] = $html_options["width"];
-                unset($html_options["width"]);            
-            } elseif(isset($html_options["height"])) {
-                $image_options["height"] = $html_options["height"];
-                unset($html_options["height"]);            
-            }
-        }
+        } 
         
         if (isset($html_options["border"])) {
             $image_options["border"] = $html_options["border"];
