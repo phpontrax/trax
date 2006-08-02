@@ -174,7 +174,7 @@ class UrlHelper extends Helpers {
                 $image_options["height"] = $html_options["height"];
                 unset($html_options["height"]);            
             }
-        }
+        } 
         
         if (isset($html_options["border"])) {
             $image_options["border"] = $html_options["border"];
