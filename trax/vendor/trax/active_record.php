@@ -451,8 +451,9 @@ class ActiveRecord {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
                 if($association_type == "belongs_to") {
-                    $foreign_key = Inflector::singularize($value->table_name)."_id";
-                    $this->$foreign_key = $value->id; 
+                    $primary_key = $value->primary_keys[0];
+                    $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                    $this->$foreign_key = $value->$primary_key; 
                 }
             }
             # this elseif checks if its an array of objects and if its parent is ActiveRecord                
@@ -462,7 +463,7 @@ class ActiveRecord {
             }
         }         
         
-	//  Assignment to something else, do it
+	    //  Assignment to something else, do it
         $this->$key = $value;
     }
 
@@ -648,7 +649,7 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_all_has_many($other_table_name, $parameters = null) {
-
+        $additional_conditions = null;
         # Use any passed-in parameters
         if (is_array($parameters)) {
             if(@array_key_exists("conditions", $parameters)) {
@@ -703,9 +704,9 @@ class ActiveRecord {
             }
             
             $foreign_key_value = $this->$this_primary_key;
-            $conditions = is_numeric($foreign_key_value) ? 
+            $conditions = (is_numeric($foreign_key_value) ? 
                 "$foreign_key = {$foreign_key_value}" : 
-                "$foreign_key = '{$foreign_key_value}'" . $additional_conditions; 
+                "$foreign_key = '{$foreign_key_value}'") . $additional_conditions; 
         }
                          
         # Get the list of other_class_name objects
@@ -721,7 +722,8 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_one_has_one($other_object_name, $parameters = null) {
-
+        
+        $additional_conditions = null;
         # Use any passed-in parameters
         if (is_array($parameters)) {
             //echo "<pre>";print_r($parameters);
@@ -756,9 +758,9 @@ class ActiveRecord {
         }
 
         $foreign_key_value = $this->$this_primary_key;
-        $conditions = is_numeric($foreign_key_value) ? 
+        $conditions = (is_numeric($foreign_key_value) ? 
             "{$foreign_key} = {$foreign_key_value}" : 
-            "{$foreign_key} = '{$foreign_key_value}'"; 
+            "{$foreign_key} = '{$foreign_key_value}'") . $additional_conditions; 
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -781,13 +783,14 @@ class ActiveRecord {
      */
     private function find_one_belongs_to($other_object_name, $parameters = null) {
 
+        $additional_conditions = null;
         # Use any passed-in parameters
         if (is_array($parameters)) {
             //echo "<pre>";print_r($parameters);
             if(@array_key_exists("conditions", $parameters)) {
-                $additional_conditions = $parameters['conditions'];
+                $additional_conditions = " AND (".$parameters['conditions'].")";
             } elseif($parameters[0] != "") {
-                $additional_conditions = $parameters[0];
+                $additional_conditions = " AND (".$parameters[0].")";
             }
             if(@array_key_exists("order", $parameters)) {
                 $order = $parameters['order'];
@@ -815,9 +818,9 @@ class ActiveRecord {
         }
         
         $other_primary_key_value = $this->$foreign_key;
-        $conditions = is_numeric($other_primary_key_value) ? 
+        $conditions = (is_numeric($other_primary_key_value) ? 
             "{$other_primary_key} = {$other_primary_key_value}" : 
-            "{$other_primary_key} = '{$other_primary_key_value}'";
+            "{$other_primary_key} = '{$other_primary_key_value}'") . $additional_conditions;
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -1128,6 +1131,7 @@ class ActiveRecord {
 
         $offset = null;
         $per_page = null;
+        $select = null;
 
         # this is if they passed in an associative array to emulate
         # named parameters.
@@ -1149,12 +1153,17 @@ class ActiveRecord {
             # SQL completely specified in argument so use it as is
             $sql = $conditions;
         } else {
+
+            # If select fields not specified just do a SELECT *
+            if(is_null($select)) {
+                $select = "*";
+            }
+
             # SQL will be built from specifications in argument
-            $sql  = "SELECT * FROM ".$this->table_name." ";         
+            $sql  = "SELECT {$select} FROM {$this->table_name} ";         
             
             # If join specified, include it
             if(!is_null($joins)) {
-                if(substr($joins,0,4) != "LEFT") $sql .= ",";
                 $sql .= " $joins ";
             }
 
@@ -1218,6 +1227,7 @@ class ActiveRecord {
             $class_name = $this->get_class_name();
             $object = new $class_name();
             $object->new_record = false;
+            $objects_key = null;
             foreach($row as $field => $value) {
                 $object->$field = $value;
                 if($field == $this->index_on) {
@@ -1226,7 +1236,6 @@ class ActiveRecord {
             }
             $objects[$objects_key] = $object;
             unset($object);
-            unset($objects_key);
         }
         return $objects;
     }
@@ -1325,7 +1334,7 @@ class ActiveRecord {
      *    matching $conditions, or null if none did.
      *  @throws {@link ActiveRecordError}
      */
-    function find_first($conditions, $order = null, $limit = null, $joins = null) {
+    function find_first($conditions = null, $order = null, $limit = null, $joins = null) {
         if(is_array($conditions)) {
             $options = $conditions;    
         } else {
@@ -1541,10 +1550,12 @@ class ActiveRecord {
             $this->raise($results->getMessage());
         } else {
             $habtm_result = true;
-            $this->id = $this->get_insert_id();
-            if($this->id > 0) {
+            $primary_key = $this->primary_keys[0];
+            $primary_key_value = $this->get_insert_id();
+             $this->$primary_key = $primary_key_value;
+            if($primary_key_value > 0) {
                 if($this->auto_save_habtm) {
-                    $habtm_result = $this->add_habtm_records($this->id);
+                    $habtm_result = $this->add_habtm_records($primary_key_value);
                 }
                 $this->save_associations();
             }          
@@ -1577,16 +1588,19 @@ class ActiveRecord {
         //error_log('update_record()');
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
-        $sql = "UPDATE $this->table_name SET $updates WHERE $conditions";
+        $sql = "UPDATE {$this->table_name} SET {$updates} WHERE {$conditions}";
+        //echo "update_record:$sql<br>";
         //error_log("update_record: SQL: $sql<br>");
         $result = $this->query($sql);
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
             $habtm_result = true;
-            if($this->id > 0) {
+            $primary_key = $this->primary_keys[0];
+            $primary_key_value = $this->$primary_key;
+            if($primary_key_value > 0) { 
                 if($this->auto_save_habtm) {
-                    $habtm_result = $this->update_habtm_records($this->id);
+                    $habtm_result = $this->update_habtm_records($primary_key_value);
                 }
                 $this->save_associations();
             }         
@@ -1624,7 +1638,7 @@ class ActiveRecord {
             }
         }
         if(is_string($this->has_one)) {
-            if(preg_match("/\b$association_name/\b", $this->has_one)) {
+            if(preg_match("/\b$association_name\b/", $this->has_one)) {
                 $type = "has_one";     
             }
         } elseif(is_array($this->has_one)) {
@@ -1686,9 +1700,10 @@ class ActiveRecord {
             switch($type) {
                 case "has_many":
                 case "has_one":
-                    $foreign_key = Inflector::singularize($this->table_name)."_id";
-                    $object->$foreign_key = $this->id; 
-                    //echo "fk:$foreign_key = $this->id<br>";
+                    $primary_key = $this->primary_keys[0];
+                    $foreign_key = Inflector::singularize($this->table_name)."_".$primary_key;
+                    $object->$foreign_key = $this->$primary_key; 
+                    //echo "fk:$foreign_key = ".$this->$primary_key."<br>";
                     break;
             }
             $object->save();        
@@ -1704,26 +1719,38 @@ class ActiveRecord {
      *  @todo Document this API
      */
     function delete($id = null) {
-        if($this->id > 0 && is_null($id)) {
-            $id = $this->id;
+
+        $primary_key_value = null;
+        $primary_key = $this->primary_keys[0];
+        if(is_null($id)) {
+            # Primary key's where clause from already loaded values
+            $conditions = $this->get_primary_key_conditions();
+            $primary_key_value = $this->$primary_key;
+        } elseif(!is_array($id)) { 
+            $primary_key_value = $id;         
+            $id = is_numeric($id) ? $id : "'".$id."'";
+            $conditions = "{$primary_key} = $id";
+        } elseif(is_array($id)) {
+            //$ids = ($this->attribute_is_string($primary_key)) ? "'".implode("','", $id)."'" : implode(',', $id);
+            //$conditions = "{$primary_key} IN ($ids)";
         }
 
-        if(is_null($id)) {
-            $this->errors[] = "No id specified to delete on.";
+        if(is_null($conditions)) {
+            $this->errors[] = "No conditions specified to delete on.";
             return false;
         }
 
-        $this->before_delete();
-        $result = $this->delete_all("id IN ($id)");
-        if($this->auto_delete_habtm) {
+        $this->before_delete(); 
+        $result = $this->delete_all($conditions);
+        if($this->auto_delete_habtm && $primary_key_value != '') {
             if(is_string($this->has_and_belongs_to_many)) {
                 $habtms = explode(",", $this->has_and_belongs_to_many);
                 foreach($habtms as $other_table_name) {
-                    $this->delete_all_habtm_records(trim($other_table_name), $id);                             
+                    $this->delete_all_habtm_records(trim($other_table_name), $primary_key_value);                             
                 }
             } elseif(is_array($this->has_and_belongs_to_many)) {
                 foreach($this->has_and_belongs_to_many as $other_table_name => $values) {
-                    $this->delete_all_habtm_records($other_table_name, $id);                             
+                    $this->delete_all_habtm_records($other_table_name, $primary_key_value);                             
                 }
             } 
         }
@@ -1777,7 +1804,7 @@ class ActiveRecord {
             foreach($attributes as $key => $habtm_array) {
                 if(is_array($habtm_array)) {
                     if(is_string($this->has_and_belongs_to_many)) {
-                        if(preg_match("/$key/", $this->has_and_belongs_to_many)) {
+                        if(preg_match("/\b$key\b/", $this->has_and_belongs_to_many)) {
                             $this->habtm_attributes[$key] = $habtm_array;
                         }
                     } elseif(is_array($this->has_and_belongs_to_many)) {
@@ -1968,8 +1995,9 @@ class ActiveRecord {
                 if($association_type = $this->get_association_type($field)) {
                     $this->save_associations[$association_type][] = $value;
                     if($association_type == "belongs_to") {
-                        $foreign_key = Inflector::singularize($value->table_name)."_id";
-                        $this->$foreign_key = $value->id; 
+                        $primary_key = $value->primary_keys[0];
+                        $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                        $this->$foreign_key = $value->$primary_key; 
                     }
                 }
                 # this elseif checks if its an array of objects and if its parent is ActiveRecord                
@@ -2129,7 +2157,7 @@ class ActiveRecord {
             $updates = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
-                if($key && $value && !in_array($key, $this->primary_keys)) {
+                if($key && ($value || is_numeric($value)) && !in_array($key, $this->primary_keys)) {
                     $updates[] = "$key = $value";
                 }
             }
