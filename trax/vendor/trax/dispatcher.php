@@ -60,7 +60,7 @@ class Dispatcher {
      */
     function dispatch() {
         try {
-            InputFilter::process_all(array(),array(),1,1);
+            InputFilter::process_all();
             Session::start();
             $ac = new ActionController();
             $ac->process_route();

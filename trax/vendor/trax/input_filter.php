@@ -36,20 +36,18 @@ class InputFilter {
      *
      *  Whether the tags in this list are accepted or rejected is
      *  determined by the value of {@link $tagsMethod}.
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      *  @var string[]
      */
-	static protected $tagsArray = array();	// default = empty array
+	protected static $tagsArray = array();	// default = empty array
     
     /**
      *  User-provided list of attributes to either accept or reject
      *
      *  Whether the attributes in this list are accepted or rejected is
      *  determined by the value of {@link $attrMethod}.
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      *  @var string[]
      */
-	static protected $attrArray = array();	// default = empty array
+	protected static $attrArray = array();	// default = empty array
     
     /**
      *  How to apply user-provided tags list
@@ -66,9 +64,8 @@ class InputFilter {
      *    <li>false => Allow only those tags which are listed in
      *                 {@link $tagsArray}.</li> 
      *  </ul>
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      */
-	static protected $tagsMethod = 0;	// default = 0
+	protected static $tagsMethod = true;
     
     /**
      *  How to apply user-provided attribute list
@@ -85,9 +82,8 @@ class InputFilter {
      *    <li>false => Allow only those tags which are listed in
      *                 {@link $attrArray}.</li> 
      *  </ul>
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      */
-	static protected $attrMethod = 0;	// default = 0
+	protected static $attrMethod = true;
 
     
     /**
@@ -105,18 +101,23 @@ class InputFilter {
      *      without consulting{@link $tagBlacklist} or
      *      {@link $attrBlacklist}.</li> 
      *  </ul>
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      */
-	static protected $xssAuto = 1;     // default = 1
+	protected static $xssAuto = true;
+
+    /**
+     *  Fields to ignore that you want html and other banned stuff in.
+     *
+     *  @var array
+     */	
+	protected static $exception_fields = array();
     
     /**
      *  List of tags to be removed
      *
      *  If {@link $xssAuto} is true, remove the tags in this list.
      *  @var string[]
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      */
-	static protected $tagBlacklist =
+	protected static $tagBlacklist =
         array('applet', 'body', 'bgsound', 'base', 'basefont', 'embed',
               'frame', 'frameset', 'head', 'html', 'id', 'iframe',
               'ilayer', 'layer', 'link', 'meta', 'name', 'object',
@@ -127,13 +128,12 @@ class InputFilter {
      *
      *  If {@link $xssAuto} is true, remove the attributes in this list.
      *  @var string[]
-     *  <b>FIXME:</b> static declaration must be after visibility declaration
      */
-	static protected $attrBlacklist =
+	protected static $attrBlacklist =
         array('action', 'background', 'codebase', 'dynsrc', 'lowsrc'); 
 		
 	/** 
-     *  Constructor for InputFilter class.
+     *  Initializer for InputFilter class.
      *
      *  @param string[] $tagsArray  User-provided list of tags to
      *                              either accept or reject.  Default: none
@@ -171,9 +171,10 @@ class InputFilter {
      *  @uses $tagsArray
      *  @uses $tagsMethod
      */
-	public function __construct($tagsArray = array(), $attrArray = array(),
-                                $tagsMethod = 0, $attrMethod = 0,
-                                $xssAuto = 1) { 
+	public function init($tagsArray = array(), $attrArray = array(),
+                                $tagsMethod = true, $attrMethod = true,
+                                $xssAuto = true) { 
+                                    
 		// make sure user defined arrays are in lowercase
 		for ($i = 0; $i < count($tagsArray); $i++) $tagsArray[$i] = strtolower($tagsArray[$i]);
 		for ($i = 0; $i < count($attrArray); $i++) $attrArray[$i] = strtolower($attrArray[$i]);
@@ -184,6 +185,24 @@ class InputFilter {
 		self::$attrMethod = $attrMethod;
 		self::$xssAuto = $xssAuto;
 	}
+
+    /**
+     *  Adds a field to exclude from filtering
+     *
+     */	
+	public function add_field_exception($field) {
+	    if($field) {
+	        self::$exception_fields[] = $field;   
+	    }
+	}
+
+    /**
+     *  Clears all previous field exceptions
+     *
+     */		
+	public function clear_field_exceptions() {
+	    self::$exception_fields = array();        
+	} 
 
     /**
      *  Remove forbidden tags and attributes from user input
@@ -232,9 +251,9 @@ class InputFilter {
      *  @todo Check out FIXMEs
      */
     public function process_all($tagsArray = array(), $attrArray = array(),
-                                $tagsMethod = 0, $attrMethod = 0,
-                                $xssAuto = 1) {
-        self::__construct($tagsArray, $attrArray, $tagsMethod,
+                                $tagsMethod = true, $attrMethod = true,
+                                $xssAuto = true) {
+        self::init($tagsArray, $attrArray, $tagsMethod,
                           $attrMethod, $xssAuto);
         if(count($_POST)) {
             $_POST = self::process($_POST);
@@ -257,22 +276,26 @@ class InputFilter {
      *  @uses decode()
      *  @uses remove()
      */
-	public function process($source) {
+	public function process($source, $extra_key = null) {
 		// clean all elements in this array
-		if (is_array($source)) {
+		if(is_array($source)) {
 			foreach($source as $key => $value) {
+			    //error_log("key:".$extra_key.$key);
+			    if(in_array($extra_key.$key, self::$exception_fields)) { $source[$key] = $value; continue; }
                 // for arrays in arrays
-                if (is_array($value)) $source[$key] = self::process($value);
+                if (is_array($value)) $source[$key] = self::process($value, $key.":");
             	// filter element for XSS and other 'bad' code etc.
 				if (is_string($value)) $source[$key] = self::remove(self::decode($value));
             }
 			return $source;
 		// clean this string
-		} else if (is_string($source)) {
+		} elseif(is_string($source)) {
 			// filter source for XSS and other 'bad' code etc.
 			return self::remove(self::decode($source));
 		// return parameter as given
-		} else return $source;	
+		} else {
+		    return $source;	
+	    }
 	}
 
 	/** 
@@ -285,12 +308,9 @@ class InputFilter {
      *  @uses filterTags()
      */
 	protected function remove($source) {
-        //  FIXME: what do we use $loopCounter for?
-		$loopCounter=0;
 		// provides nested-tag protection
 		while($source != self::filterTags($source)) {
 			$source = self::filterTags($source);
-			$loopCounter++;
 		}
 		return $source;
 	}	
@@ -317,12 +337,12 @@ class InputFilter {
      */
 	protected function filterTags($source) {
 		// filter pass setup
-		$preTag = NULL;
+		$preTag = null;
 		$postTag = $source;
 		// find initial tag's position
 		$tagOpen_start = strpos($source, '<');
 		// interate through string until no tags left
-		while($tagOpen_start !== FALSE) {
+		while($tagOpen_start !== false) {
 			// process tag interatively
 			$preTag .= substr($postTag, 0, $tagOpen_start);
 			$postTag = substr($postTag, $tagOpen_start);
@@ -351,12 +371,12 @@ class InputFilter {
 			$currentSpace = strpos($tagLeft, ' ');
 			// is end tag
 			if (substr($currentTag, 0, 1) == "/") {
-				$isCloseTag = TRUE;
+				$isCloseTag = true;
 				list($tagName) = explode(' ', $currentTag);
 				$tagName = substr($tagName, 1);
 			// is start tag
 			} else {
-				$isCloseTag = FALSE;
+				$isCloseTag = false;
 				list($tagName) = explode(' ', $currentTag);
 			}		
 			// excludes all "non-regular" tagnames OR no tagname OR remove if xssauto is on and tag is blacklisted
@@ -367,15 +387,15 @@ class InputFilter {
 				continue;
 			}
 			// this while is needed to support attribute values with spaces in!
-			while ($currentSpace !== FALSE) {
+			while ($currentSpace !== false) {
 				$fromSpace = substr($tagLeft, ($currentSpace+1));
 				$nextSpace = strpos($fromSpace, ' ');
 				$openQuotes = strpos($fromSpace, '"');
 				$closeQuotes = strpos(substr($fromSpace, ($openQuotes+1)), '"') + $openQuotes + 1;
 				// another equals exists
-				if (strpos($fromSpace, '=') !== FALSE) {
+				if (strpos($fromSpace, '=') !== false) {
 					// opening and closing quotes exists
-					if (($openQuotes !== FALSE) && (strpos(substr($fromSpace, ($openQuotes+1)), '"') !== FALSE))
+					if (($openQuotes !== false) && (strpos(substr($fromSpace, ($openQuotes+1)), '"') !== false))
 						$attr = substr($fromSpace, 0, ($closeQuotes+1));
 					// one or neither exist
 					else $attr = substr($fromSpace, 0, $nextSpace);
@@ -456,7 +476,7 @@ class InputFilter {
 			if ((!eregi("^[a-z]*$",$attrSubSet[0])) || ((self::$xssAuto) && ((in_array(strtolower($attrSubSet[0]), self::$attrBlacklist)) || (substr($attrSubSet[0], 0, 2) == 'on'))))
 				continue;
 			// xss attr value filtering
-			if ($attrSubSet[1]) {
+			if ($attrSubSet[1] || is_numeric($attrSubSet[1])) {
 				// strips unicode, hex, etc
 				$attrSubSet[1] = str_replace('&#', '', $attrSubSet[1]);
 				// strip normal newline within attr value
@@ -470,24 +490,31 @@ class InputFilter {
 				$attrSubSet[1] = stripslashes($attrSubSet[1]);
 			}
 			// auto strip attr's with "javascript:
-			if (	((strpos(strtolower($attrSubSet[1]), 'expression') !== false) &&	(strtolower($attrSubSet[0]) == 'style')) ||
-					(strpos(strtolower($attrSubSet[1]), 'javascript:') !== false) ||
-					(strpos(strtolower($attrSubSet[1]), 'behaviour:') !== false) ||
-					(strpos(strtolower($attrSubSet[1]), 'vbscript:') !== false) ||
-					(strpos(strtolower($attrSubSet[1]), 'mocha:') !== false) ||
-					(strpos(strtolower($attrSubSet[1]), 'livescript:') !== false) 
-			) continue;
+			if (((strpos(strtolower($attrSubSet[1]), 'expression') !== false) && 
+			    (strtolower($attrSubSet[0]) == 'style')) ||
+				(strpos(strtolower($attrSubSet[1]), 'javascript:') !== false) ||
+				(strpos(strtolower($attrSubSet[1]), 'behaviour:') !== false) ||
+				(strpos(strtolower($attrSubSet[1]), 'vbscript:') !== false) ||
+				(strpos(strtolower($attrSubSet[1]), 'mocha:') !== false) ||
+				(strpos(strtolower($attrSubSet[1]), 'livescript:') !== false) 
+			) { continue; }
 
 			// if matches user defined array
 			$attrFound = in_array(strtolower($attrSubSet[0]), self::$attrArray);
+			//error_log("attrFound:".($attrFound ? "Yes" : "No"));
 			// keep this attr on condition
 			if ((!$attrFound && self::$attrMethod) || ($attrFound && !self::$attrMethod)) {
+			    //error_log($attrSubSet[0]."=".$attrSubSet[1]);
 				// attr has value
-				if ($attrSubSet[1]) $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[1] . '"';
+				if($attrSubSet[1]) {
+				    $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[1] . '"';
 				// attr has decimal zero as value
-				else if ($attrSubSet[1] == "0") $newSet[] = $attrSubSet[0] . '="0"';
+			    } elseif ($attrSubSet[1] == "0") { 
+			        $newSet[] = $attrSubSet[0] . '="0"';
 				// reformat single attributes to XHTML
-				else $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[0] . '"';
+			    } else {
+			        $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[0] . '"';
+			    }
 			}	
 		}
 		return $newSet;
@@ -513,98 +540,6 @@ class InputFilter {
 		// convert hex &#xXXX; to character XXX
 		$source = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)", $source);
 		return $source;
-	}
-
-	/** 
-     *  Remove HTML entities and magic quotes, insert SQL special
-     *  character escapes
-     *
-     *  If the input is a string or an array of strings, then each
-     *  string is edited to convert any HTML entities to the
-     *  corresponding character and remove slashes inserted by
-     *  {@link http://www.php.net/manual/en/security.magicquotes.php magic quotes},
-     *  then the result has SQL special characters
-     *  escaped.
-     *  @param mixed $source Input to be 'cleaned'
-     *  @param resource $connection  An open MySQL connection
-     *  @return mixed $source with HTML entities and GPC magic quotes
-     *                removed from, and SQL special character escapes
-     *                inserted in, the string or array of strings.
-     *  @uses decode()
-     *  @uses quoteSmart()
-     */
-	public function safeSQL($source, &$connection) {
-		// clean all elements in this array
-		if (is_array($source)) {
-			foreach($source as $key => $value)
-				// filter element for SQL injection
-				if (is_string($value)) $source[$key] = self::quoteSmart(self::decode($value), $connection);
-			return $source;
-		// clean this string
-		} else if (is_string($source)) {
-			// filter source for SQL injection
-			if (is_string($source)) return self::quoteSmart(self::decode($source), $connection);
-		// return parameter as given
-		} else return $source;	
-	}
-
-	/** 
-     *  Remove GPC magic quotes from input string & escape SQL special
-     *  characters
-     *
-     *  The input is a string that came from a GET or POST HTTP
-     *  operation, or a cookie.  If GPC magic quotes are currently in
-     *  effect, the resulting slashes are stripped.  Then any SQL
-     *  special characters in the string are escaped, taking into
-     *  account the character set in use on $connection.
-     *  @author Chris Tobin, Daniel Morris
-     *  @param string $source Input string to be converted
-     *  @param resource $connection An open MySQL connection
-     *  @return string Input string with any GPC magic quotes stripped
-     *                 and SQL special characters escaped
-     *  @uses escapeString()
-     *  @uses get_magic_quotes_gpc()
-     *  @uses stripslashes()
-     */
-	protected function quoteSmart($source, &$connection) {
-		// strip slashes
-		if (get_magic_quotes_gpc()) $source = stripslashes($source);
-		// quote both numeric and text
-		$source = self::escapeString($source, $connection);
-		return $source;
-	}
-	
-	/** 
-     *  Escape SQL special characters in string
-     *
-     *  Escape SQL special characters in the input string, taking into
-     *  account the character set of the connection.
-     *
-     *  <b>FIXME:</b> since we require PHP 5 can't we remove the use
-     *  of mysql_esacape_string()?
-     *
-     *  <b>FIXME:</b>Shouldn't we pass the connection to
-     *  mysql_real_escape_string()? 
-     *
-     *  <b>FIXME:</b>Is this really RDBMS independent?
-     *  @todo Check FIXMEs
-     *  @author Chris Tobin, Daniel Morris
-     *  @param string $string  String to be protected
-     *  @param resource $connection - An open MySQL connection
-     *  @return string Value of $string with characters special in
-     *                 SQL escaped by '\'s
-     *  @uses mysql_escape_string()
-     *  @uses mysql_real_escape_string()
-     *  @uses phpversion()
-     *  @uses version_compare()
-     */	
-	protected function escapeString($string, &$connection) {
-		// depreciated function
-		if (version_compare(phpversion(),"4.3.0", "<"))
-            return mysql_escape_string($string);
-		// current function
-		else
-            return mysql_real_escape_string($string);
 	}
 }
 
