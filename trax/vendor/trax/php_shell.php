@@ -59,11 +59,7 @@ set_error_handler("__shell_default_error_handler");
 $__shell = new PHP_Shell();
 
 $f = <<<EOF
-PHP-Shell - Version %s %s
-(c) 2006, Jan Kneschke <jan@kneschke.de>
-
 >> use '?' to open the inline help 
-
 EOF;
 
 printf($f, 
