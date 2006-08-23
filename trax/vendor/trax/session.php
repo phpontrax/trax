@@ -72,11 +72,17 @@ class Session {
     private static $user_agent = null;
 
     /**
+     *  Session started
+     *  @var boolean
+     */
+    private static $started = false;  
+
+    /**
      *  Session ID
      *  @var string
      */
     public static $id = null;
-
+    
     /**
      *  Get a session variable
      *
@@ -187,28 +193,31 @@ class Session {
      */
     function start() {
         
-        $session_name = defined("TRAX_SESSION_NAME") ? TRAX_SESSION_NAME : self::TRAX_SESSION_NAME;
-        $session_lifetime = defined("TRAX_SESSION_LIFETIME") ? TRAX_SESSION_LIFETIME : self::TRAX_SESSION_LIFETIME;
-        $session_maxlifetime_minutes = defined("TRAX_SESSION_MAXLIFETIME_MINUTES") ? TRAX_SESSION_MAXLIFETIME_MINUTES : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
-        
-        # set the session default for this app
-        ini_set('session.name', $session_name);
-        ini_set('session.cookie_lifetime', $session_lifetime);
-        ini_set('session.gc_probability', 1);
-        ini_set('session.gc_maxlifetime', $session_maxlifetime_minutes * 60);
-
-        header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
-
-        self::$ip = $_SERVER['REMOTE_ADDR'];
-        self::$user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-        if(self::is_valid_host() && array_key_exists('sess_id',$_REQUEST)) {
-            session_id($_REQUEST['sess_id']);
+        if(self::$started) {
+            $session_name = defined("TRAX_SESSION_NAME") ? TRAX_SESSION_NAME : self::TRAX_SESSION_NAME;
+            $session_lifetime = defined("TRAX_SESSION_LIFETIME") ? TRAX_SESSION_LIFETIME : self::TRAX_SESSION_LIFETIME;
+            $session_maxlifetime_minutes = defined("TRAX_SESSION_MAXLIFETIME_MINUTES") ? TRAX_SESSION_MAXLIFETIME_MINUTES : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
+            
+            # set the session default for this app
+            ini_set('session.name', $session_name);
+            ini_set('session.cookie_lifetime', $session_lifetime);
+            ini_set('session.gc_probability', 1);
+            ini_set('session.gc_maxlifetime', $session_maxlifetime_minutes * 60);
+    
+            header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
+    
+            self::$ip = $_SERVER['REMOTE_ADDR'];
+            self::$user_agent = $_SERVER['HTTP_USER_AGENT'];
+    
+            if(self::is_valid_host() && array_key_exists('sess_id',$_REQUEST)) {
+                session_id($_REQUEST['sess_id']);
+            }
+    
+            session_cache_limiter("must-revalidate");
+            session_start();
+            self::$id = session_id();
+            self::$started = true;
         }
-
-        session_cache_limiter("must-revalidate");
-        session_start();
-        self::$id = session_id();
     }
 
     /**
