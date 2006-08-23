@@ -119,6 +119,14 @@ class ActiveRecord {
     public $table_name = null;
 
     /**
+     *  Table prefix
+     *
+     *  Name to prefix to the $table_name. May be overridden.
+     *  @var string
+     */
+    public $table_prefix = null;
+
+    /**
      *  Database name override
      *
      *  Name of the database to use, if you are not using the value
@@ -153,10 +161,21 @@ class ActiveRecord {
      *  @var boolean
      */
     public $force_reconnect = false; # should we force a connection everytime
-    
-    public $index_on = "id"; # find_all returns an array of objects each object index is off of this field
-    
-    public $lock_optimistically = true; # page 222 Rails books
+
+    /**
+     *  find_all() returns an array of objects, 
+     *  each object index is off of this field
+     *
+     *  @var boolean
+     */    
+    public $index_on = "id"; 
+
+    /**
+     *  Not yet implemented (page 222 Rails books)
+     *
+     *  @var boolean
+     */    
+    public $lock_optimistically = true;
 
     # Table associations
     /**
@@ -270,8 +289,8 @@ class ActiveRecord {
      *  Not all of these functions are implemented by all DBMS's
      *  @var string[]
      */
-    protected $aggregrations = array("count","sum","avg","max","min");
-     
+    protected $aggregations = array("count","sum","avg","max","min");
+               
     /**
      *  Primary key of the associated table
      *
@@ -470,8 +489,8 @@ class ActiveRecord {
     /**
      *  Override call() to dynamically call the database associations
      *  @todo Document this API
-     *  @uses $aggregrations
-     *  @uses aggregrate_all()
+     *  @uses $aggregations
+     *  @uses aggregate_all()
      *  @uses get_association_type()
      *  @uses $belongs_to
      *  @uses $has_one
@@ -481,14 +500,17 @@ class ActiveRecord {
      *  @uses find_by()
      */
     function __call($method_name, $parameters) {
-        if(method_exists($this,$method_name)) {
+        if(method_exists($this, $method_name)) {
             # If the method exists, just call it
-            $result = call_user_func(array($this,$method_name), $parameters);
+            $result = call_user_func_array(array($this, $method_name), $parameters);
         } else {
             # ... otherwise, check to see if the method call is one of our
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
+            if(is_array($parameters[0])) {
+                $parameters = $parameters[0];    
+            }
             $association_type = $this->get_association_type($method_name);
             switch($association_type) {
                 case "has_many":
@@ -506,9 +528,9 @@ class ActiveRecord {
             }
 
             # check for the [count,sum,avg,etc...]_all magic functions
-            if(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4),$this->aggregrations)) {
+            if(substr($method_name, -4) == "_all" && in_array(substr($method_name, 0, -4), $this->aggregations)) {
                 //echo "calling method: $method_name<br>";
-                $result = $this->aggregrate_all($method_name, $parameters);
+                $result = $this->aggregate_all($method_name, $parameters);
             }
             # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
@@ -529,23 +551,6 @@ class ActiveRecord {
     }
 
     /**
-     *  Returns a the name of the join table that would be used for the two
-     *  tables.  The join table name is decided from the alphabetical order
-     *  of the two tables.  e.g. "genres_movies" because "g" comes before "m"
-     *
-     *  Parameters: $first_table, $second_table: the names of two database tables,
-     *   e.g. "movies" and "genres"
-     *  @todo Document this API
-     */
-    private function get_join_table_name($first_table, $second_table) {
-        $tables = array();
-        $tables["one"] = $first_table;
-        $tables["many"] = $second_table;
-        @asort($tables);
-        return @implode("_", $tables);
-    }
-
-    /**
      *  Find all records using a "has_and_belongs_to_many" relationship
      * (many-to-many with a join table in between).  Note that you can also
      *  specify an optional "paging limit" by setting the corresponding "limit"
@@ -560,9 +565,9 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function find_all_habtm($other_table_name, $parameters = null) {
-        
+        $additional_conditions = null;
         # Use any passed-in parameters
-        if (!is_null($parameters)) {
+        if(!is_null($parameters)) {
             if(@array_key_exists("conditions", $parameters)) {
                 $additional_conditions = " AND (".$parameters['conditions'].")";
             } elseif($parameters[0] != "") {
@@ -629,7 +634,9 @@ class ActiveRecord {
             }
             
             # Primary key value
-            $this_primary_key_value = is_numeric($this->$this_primary_key) ? $this->$this_primary_key : "'".$this->$this_primary_key."'";
+            $this_primary_key_value = $this->attribute_is_string($this_primary_key) ? 
+                "'".$this->$this_primary_key."'" : 
+                $this->$this_primary_key;
 
             # Set up the SQL segments
             $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}".$additional_conditions;
@@ -651,7 +658,7 @@ class ActiveRecord {
     private function find_all_has_many($other_table_name, $parameters = null) {
         $additional_conditions = null;
         # Use any passed-in parameters
-        if (is_array($parameters)) {
+        if(is_array($parameters)) {
             if(@array_key_exists("conditions", $parameters)) {
                 $additional_conditions = " AND (".$parameters['conditions'].")";
             } elseif($parameters[0] != "") {
@@ -704,9 +711,9 @@ class ActiveRecord {
             }
             
             $foreign_key_value = $this->$this_primary_key;
-            $conditions = (is_numeric($foreign_key_value) ? 
-                "$foreign_key = {$foreign_key_value}" : 
-                "$foreign_key = '{$foreign_key_value}'") . $additional_conditions; 
+            $conditions = ($other_class_object->attribute_is_string($foreign_key) ? 
+                "$foreign_key = '{$foreign_key_value}'" : 
+                "$foreign_key = {$foreign_key_value}") . $additional_conditions; 
         }
                          
         # Get the list of other_class_name objects
@@ -721,11 +728,10 @@ class ActiveRecord {
      *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
      *  @todo Document this API
      */
-    private function find_one_has_one($other_object_name, $parameters = null) {
-        
+    private function find_one_has_one($other_object_name, $parameters = null) {       
         $additional_conditions = null;
         # Use any passed-in parameters
-        if (is_array($parameters)) {
+        if(is_array($parameters)) {
             //echo "<pre>";print_r($parameters);
             if(@array_key_exists("conditions", $parameters)) {
                 $additional_conditions = " AND (".$parameters['conditions'].")";
@@ -758,18 +764,15 @@ class ActiveRecord {
         }
 
         $foreign_key_value = $this->$this_primary_key;
-        $conditions = (is_numeric($foreign_key_value) ? 
-            "{$foreign_key} = {$foreign_key_value}" : 
-            "{$foreign_key} = '{$foreign_key_value}'") . $additional_conditions; 
+        $conditions = ($other_class_object->attribute_is_string($foreign_key) ? 
+            "{$foreign_key} = '{$foreign_key_value}'" : 
+            "{$foreign_key} = {$foreign_key_value}") . $additional_conditions; 
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
+        
         # There should only be one result, an object, if so return it
-        if(is_object($result)) {
-            return $result;
-        } else {
-            return null;
-        }
+        return (is_object($result) ? $result : null);
     }
 
     /**
@@ -785,7 +788,7 @@ class ActiveRecord {
 
         $additional_conditions = null;
         # Use any passed-in parameters
-        if (is_array($parameters)) {
+        if(is_array($parameters)) {
             //echo "<pre>";print_r($parameters);
             if(@array_key_exists("conditions", $parameters)) {
                 $additional_conditions = " AND (".$parameters['conditions'].")";
@@ -818,18 +821,15 @@ class ActiveRecord {
         }
         
         $other_primary_key_value = $this->$foreign_key;
-        $conditions = (is_numeric($other_primary_key_value) ? 
-            "{$other_primary_key} = {$other_primary_key_value}" : 
-            "{$other_primary_key} = '{$other_primary_key_value}'") . $additional_conditions;
+        $conditions = ($other_class_object->attribute_is_string($other_primary_key) ? 
+            "{$other_primary_key} = '{$other_primary_key_value}'" : 
+            "{$other_primary_key} = {$other_primary_key_value}") . $additional_conditions;
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
+        
         # There should only be one result, an object, if so return it
-        if(is_object($result)) {
-            return $result;
-        } else {
-            return null;
-        }
+        return (is_object($result) ? $result : null);
     }
 
     /**
@@ -841,7 +841,7 @@ class ActiveRecord {
      *  implement all of these functions.
      *  @param string $agrregrate_type SQL aggregate function to
      *    apply, suffixed '_all'.  The aggregate function is one of
-     *  the strings in {@link $aggregrations}. 
+     *  the strings in {@link $aggregations}. 
      *  @param string[] $parameters  Conditions to apply to the
      *    aggregate function.  If present, must be an array of three
      *    strings:<ol>
@@ -856,21 +856,25 @@ class ActiveRecord {
      *  @uses query()
      *  @uses is_error()
      */
-    private function aggregrate_all($aggregrate_type, $parameters = null) {
-        $aggregrate_type = strtoupper(substr($aggregrate_type, 0, -4));
+    private function aggregate_all($aggregate_type, $parameters = null) {
+        $aggregate_type = strtoupper(substr($aggregate_type, 0, -4));
         ($parameters[0]) ? $field = $parameters[0] : $field = "*";
-        $sql = "SELECT $aggregrate_type($field) AS agg_result FROM $this->table_name ";
+        $sql = "SELECT $aggregate_type($field) AS agg_result FROM $this->table_name ";
         
         # Use any passed-in parameters
-        if (!is_null($parameters)) {
+        if(is_array($parameters[1])) {
+            extract($parameters[1]);   
+        } elseif(!is_null($parameters)) {
             $conditions = $parameters[1];
-            $joins = $parameters[2];
+            $order = $parameters[2];
+            $joins = $parameters[3];
         }
 
-        if(!empty($joins)) $sql .= ",$joins ";
-        if(!empty($conditions)) $sql .= "WHERE $conditions ";
+        if(!empty($joins)) $sql .= " $joins ";
+        if(!empty($conditions)) $sql .= " WHERE $conditions ";
+        if(!empty($order)) $sql .= " ORDER BY $order ";
 
-        # echo "$aggregrate_type sql:$sql<br>";
+        # echo "$aggregate_type sql:$sql<br>";
         if($this->is_error($rs = $this->query($sql))) {
             $this->raise($rs->getMessage());
         } else {
@@ -880,6 +884,21 @@ class ActiveRecord {
             }
         }
         return 0;
+    }
+
+    /**
+     *  Returns a the name of the join table that would be used for the two
+     *  tables.  The join table name is decided from the alphabetical order
+     *  of the two tables.  e.g. "genres_movies" because "g" comes before "m"
+     *
+     *  Parameters: $first_table, $second_table: the names of two database tables,
+     *   e.g. "movies" and "genres"
+     *  @todo Document this API
+     */
+    public function get_join_table_name($first_table, $second_table) {
+        $tables = array($first_table, $second_table);
+        @sort($tables);
+        return @implode("_", $tables);
     }
 
     /**
@@ -1009,7 +1028,7 @@ class ActiveRecord {
     }
 
     /**
-     *  Implement find_by_*() and find_all_by_* methods
+     *  Implement find_by_*() and =_* methods
      *  
      *  Converts a method name beginning 'find_by_' or 'find_all_by_'
      *  into a query for rows matching the rest of the method name and
@@ -1042,11 +1061,13 @@ class ActiveRecord {
             $create_fields = array();
             $param_index = 0;
             foreach($method_parts as $part) {
-                $value = is_numeric($parameters[$param_index]) ? $parameters[$param_index] : "'".$parameters[$param_index]."'";
                 if($part == "AND") {
                     $conditions .= " AND ";
                     $param_index++;
                 } else {
+                    $value = $this->attribute_is_string($part) ? 
+                        "'".$parameters[$param_index]."'" : 
+                        $parameters[$param_index];                    
                     $create_fields[$part] = $parameters[$param_index];  
                     $conditions .= "{$part} = {$value}";
                 } 
@@ -1281,7 +1302,9 @@ class ActiveRecord {
             if($id[0]) {
                 # passed in array of numbers array(1,2,4,23)
                 $primary_key = $this->primary_keys[0];
-                $primary_key_values = is_numeric($id[0]) ? implode(",", $id) : "'".implode("','", $id)."'";
+                $primary_key_values = $this->attribute_is_string($primary_key) ? 
+                    "'".implode("','", $id)."'" : 
+                    implode(",", $id);
                 $options['conditions'] = "{$primary_key} IN({$primary_key_values})";
                 $find_all = true;
             } else {
@@ -1294,7 +1317,7 @@ class ActiveRecord {
         } else {
             # find an single record with id = $id
             $primary_key = $this->primary_keys[0];
-            $primary_key_value = is_numeric($id) ? $id : "'".$id."'";
+            $primary_key_value = $this->attribute_is_string($primary_key) ? "'".$id."'" : $id ;
             $options['conditions'] = "{$primary_key} = {$primary_key_value}";
         }
         if(!is_null($order)) $options['order'] = $order; 
@@ -1388,20 +1411,14 @@ class ActiveRecord {
      *  @todo Document this API.  What's going on here?  It appears to
      *        either create a row with all empty values, or it tries
      *        to recurse once for each attribute in $attributes.
-     *  FIXME: resolve calling sequence
      *  Creates an object, instantly saves it as a record (if the validation permits it).
      *  If the save fails under validations it returns false and $errors array gets set.
      */
     function create($attributes, $dont_validate = false) {
-        if(is_array($attributes)) {
-            foreach($attributes as $attr) {
-                $this->create($attr, $dont_validate);
-            }
-        } else {
-            $class_name = $this->get_class_name();
-            $object = new $class_name();
-            $object->save($attributes, $dont_validate);
-        }
+        $class_name = $this->get_class_name();
+        $object = new $class_name();
+        $result = $object->save($attributes, $dont_validate);
+        return ($result ? $object : false);
     }
 
     /**
@@ -1469,7 +1486,7 @@ class ActiveRecord {
     function save($attributes = null, $dont_validate = false) {
         //error_log("ActiveRecord::save() \$attributes="
         //          . var_export($attributes,true));
-        if(!is_null($attributes)) {
+        if(is_array($attributes)) {
             $this->update_attributes($attributes);
         }
         if ($dont_validate || $this->valid()) {
@@ -1521,8 +1538,6 @@ class ActiveRecord {
      *  {@link $table_name}, the column names from {@link
      *  $content_columns} and the values from object variables.
      *  Send the insert to the RDBMS.
-     *  FIXME: Shouldn't we be saving the insert ID value as an object
-     *  variable $this->id?
      *  @uses $auto_save_habtm
      *  @uses add_habtm_records()
      *  @uses before_create()
@@ -1546,14 +1561,14 @@ class ActiveRecord {
         $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
         //echo "add_record: SQL: $sql<br>";
         $result = $this->query($sql);
-        if ($this->is_error($result)) {
+        if($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
             $habtm_result = true;
             $primary_key = $this->primary_keys[0];
             $primary_key_value = $this->get_insert_id();
              $this->$primary_key = $primary_key_value;
-            if($primary_key_value > 0) {
+            if($primary_key_value != '') {
                 if($this->auto_save_habtm) {
                     $habtm_result = $this->add_habtm_records($primary_key_value);
                 }
@@ -1611,8 +1626,6 @@ class ActiveRecord {
     /**
      *  returns the association type if defined in child class or null
      *  @todo Document this API
-     *  @todo <b>FIXME:</b> does the match algorithm match a substring
-     *        of what we want to match?
      *  @uses $belongs_to
      *  @uses $has_and_belongs_to_many
      *  @uses $has_many
@@ -1719,20 +1732,23 @@ class ActiveRecord {
      *  @todo Document this API
      */
     function delete($id = null) {
-
+        $deleted_ids = array();
         $primary_key_value = null;
         $primary_key = $this->primary_keys[0];
         if(is_null($id)) {
             # Primary key's where clause from already loaded values
             $conditions = $this->get_primary_key_conditions();
-            $primary_key_value = $this->$primary_key;
-        } elseif(!is_array($id)) { 
-            $primary_key_value = $id;         
-            $id = is_numeric($id) ? $id : "'".$id."'";
-            $conditions = "{$primary_key} = $id";
+            $deleted_ids[] = $this->$primary_key;
+        } elseif(!is_array($id)) {         
+            $deleted_ids[] = $id;
+            $id = $this->attribute_is_string($primary_key) ? "'".$id."'" : $id;
+            $conditions = "{$primary_key} = {$id}";
         } elseif(is_array($id)) {
-            //$ids = ($this->attribute_is_string($primary_key)) ? "'".implode("','", $id)."'" : implode(',', $id);
-            //$conditions = "{$primary_key} IN ($ids)";
+            $deleted_ids = $id;
+            $ids = ($this->attribute_is_string($primary_key)) ? 
+                "'".implode("','", $id)."'" : 
+                implode(',', $id);
+            $conditions = "{$primary_key} IN ({$ids})";
         }
 
         if(is_null($conditions)) {
@@ -1741,21 +1757,24 @@ class ActiveRecord {
         }
 
         $this->before_delete(); 
-        $result = $this->delete_all($conditions);
-        if($this->auto_delete_habtm && $primary_key_value != '') {
-            if(is_string($this->has_and_belongs_to_many)) {
-                $habtms = explode(",", $this->has_and_belongs_to_many);
-                foreach($habtms as $other_table_name) {
-                    $this->delete_all_habtm_records(trim($other_table_name), $primary_key_value);                             
+        if($result = $this->delete_all($conditions)) {
+            foreach($deleted_ids as $id) {
+                if($this->auto_delete_habtm && $id != '') {
+                    if(is_string($this->has_and_belongs_to_many)) {
+                        $habtms = explode(",", $this->has_and_belongs_to_many);
+                        foreach($habtms as $other_table_name) {
+                            $this->delete_all_habtm_records(trim($other_table_name), $id);                             
+                        }
+                    } elseif(is_array($this->has_and_belongs_to_many)) {
+                        foreach($this->has_and_belongs_to_many as $other_table_name => $values) {
+                            $this->delete_all_habtm_records($other_table_name, $id);                             
+                        }
+                    } 
                 }
-            } elseif(is_array($this->has_and_belongs_to_many)) {
-                foreach($this->has_and_belongs_to_many as $other_table_name => $values) {
-                    $this->delete_all_habtm_records($other_table_name, $primary_key_value);                             
-                }
-            } 
+            }
+            $this->after_delete();
         }
-        $this->after_delete();
-
+        
         return $result;
     }
 
@@ -1786,10 +1805,7 @@ class ActiveRecord {
         if($this->is_error($rs = $this->query("DELETE FROM $this->table_name WHERE $conditions"))) {
             $this->raise($rs->getMessage());
         }
-
-        //  <b>FIXME: We don't know whether this row was deleted.
-        //    What are the implications of making this a new record?</b>
-        $this->id = 0;
+        
         $this->new_record = true;
         return true;
     }
@@ -1881,7 +1897,7 @@ class ActiveRecord {
         if($other_table_name && $this_foreign_value > 0) {
             $habtm_table_name = $this->get_join_table_name($this->table_name,$other_table_name);
             $this_foreign_key = Inflector::singularize($this->table_name)."_id";
-            $sql = "DELETE FROM $habtm_table_name WHERE $this_foreign_key = $this_foreign_value";
+            $sql = "DELETE FROM {$habtm_table_name} WHERE {$this_foreign_key} = {$this_foreign_value}";
             //echo "delete_all_habtm_records: SQL: $sql<br>";
             $result = $this->query($sql);
             if($this->is_error($result)) {
@@ -1951,77 +1967,79 @@ class ActiveRecord {
     function update_attributes($attributes) {
         //error_log('update_attributes()');
 
-        //  Test each attribute to be updated
-        //  and process according to its type
-        foreach($attributes as $field => $value) {
-            # datetime / date parts check
-            if(preg_match('/^\w+\(.*i\)$/i', $field)) {
-
-                //  The name of this attribute ends in "(?i)"
-                //  indicating that it's part of a date or time
-
-                //  Accumulate all the pieces of a date and time in
-                //  array $datetime_key.  The keys in the array are
-                //  the names of date/time attributes with the final
-                //  "(?i)" stripped off.
-                $datetime_key = substr($field, 0, strpos($field, "("));
-                if( !isset($old_datetime_key)
-                    || ($datetime_key != $old_datetime_key)) {
-
-                    //  This value of $datetime_key hasn't been seen
-                    //  before, so remember it.
-                    $old_datetime_key = $datetime_key;                     
-
-                    //  $datetime_value accumulates the pieces of the
-                    //  date/time attribute $datetime_key
-                    $datetime_value = "";   
-                } 
-
-                //  Concatentate pieces of the attribute's value
-                //  FIXME: this only works if the array elements
-                //  are sorted by key.  Is this guaranteed?
-                if(strstr($field, "2i") || strstr($field, "3i")) {
-                    $datetime_value .= "-".$value;    
-                } elseif(strstr($field, "4i")) {
-                    $datetime_value .= " ".$value;        
-                } elseif(strstr($field, "5i")) {
-                    $datetime_value .= ":".$value;        
-                } else {
-                    $datetime_value .= $value;    
-                }  
-                $datetime_fields[$old_datetime_key] = $datetime_value;     
-                # this elseif checks if first its an object if its parent is ActiveRecord            
-            } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
-                if($association_type = $this->get_association_type($field)) {
-                    $this->save_associations[$association_type][] = $value;
-                    if($association_type == "belongs_to") {
-                        $primary_key = $value->primary_keys[0];
-                        $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
-                        $this->$foreign_key = $value->$primary_key; 
+        if(is_array($attributes)) {
+            //  Test each attribute to be updated
+            //  and process according to its type
+            foreach($attributes as $field => $value) {
+                # datetime / date parts check
+                if(preg_match('/^\w+\(.*i\)$/i', $field)) {
+    
+                    //  The name of this attribute ends in "(?i)"
+                    //  indicating that it's part of a date or time
+    
+                    //  Accumulate all the pieces of a date and time in
+                    //  array $datetime_key.  The keys in the array are
+                    //  the names of date/time attributes with the final
+                    //  "(?i)" stripped off.
+                    $datetime_key = substr($field, 0, strpos($field, "("));
+                    if( !isset($old_datetime_key)
+                        || ($datetime_key != $old_datetime_key)) {
+    
+                        //  This value of $datetime_key hasn't been seen
+                        //  before, so remember it.
+                        $old_datetime_key = $datetime_key;                     
+    
+                        //  $datetime_value accumulates the pieces of the
+                        //  date/time attribute $datetime_key
+                        $datetime_value = "";   
+                    } 
+    
+                    //  Concatentate pieces of the attribute's value
+                    //  FIXME: this only works if the array elements
+                    //  are sorted by key.  Is this guaranteed?
+                    if(strstr($field, "2i") || strstr($field, "3i")) {
+                        $datetime_value .= "-".$value;    
+                    } elseif(strstr($field, "4i")) {
+                        $datetime_value .= " ".$value;        
+                    } elseif(strstr($field, "5i")) {
+                        $datetime_value .= ":".$value;        
+                    } else {
+                        $datetime_value .= $value;    
+                    }  
+                    $datetime_fields[$old_datetime_key] = $datetime_value;     
+                    # this elseif checks if first its an object if its parent is ActiveRecord            
+                } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
+                    if($association_type = $this->get_association_type($field)) {
+                        $this->save_associations[$association_type][] = $value;
+                        if($association_type == "belongs_to") {
+                            $primary_key = $value->primary_keys[0];
+                            $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                            $this->$foreign_key = $value->$primary_key; 
+                        }
                     }
+                    # this elseif checks if its an array of objects and if its parent is ActiveRecord                
+                } elseif(is_array($value) && $this->auto_save_associations) {
+                    if($association_type = $this->get_association_type($field)) {
+                        $this->save_associations[$association_type][] = $value;
+                    }
+                } else {
+    
+                    //  Just a simple attribute, copy it
+                    $this->$field = $value;
                 }
-                # this elseif checks if its an array of objects and if its parent is ActiveRecord                
-            } elseif(is_array($value) && $this->auto_save_associations) {
-                if($association_type = $this->get_association_type($field)) {
-                    $this->save_associations[$association_type][] = $value;
-                }
-            } else {
-
-                //  Just a simple attribute, copy it
-                $this->$field = $value;
             }
+    
+            //  If any date/time fields were found, assign the
+            //  accumulated values to corresponding attributes
+            if(isset($datetime_fields)
+               && is_array($datetime_fields)) {
+                foreach($datetime_fields as $field => $value) {
+                    //error_log("$field = $value");
+                    $this->$field = $value;    
+                }    
+            }
+            $this->set_habtm_attributes($attributes);
         }
-
-        //  If any date/time fields were found, assign the
-        //  accumulated values to corresponding attributes
-        if(isset($datetime_fields)
-           && is_array($datetime_fields)) {
-            foreach($datetime_fields as $field => $value) {
-                //error_log("$field = $value");
-                $this->$field = $value;    
-            }    
-        }
-        $this->set_habtm_attributes($attributes);
     }
 
     /**
@@ -2075,10 +2093,10 @@ class ActiveRecord {
             # If the value isn't a function, null, or numeric quote it.
             if(!(preg_match('/^\w+\(.*\)$/U', $value)) 
                && !(strcasecmp($value, 'NULL') == 0) 
-               && !is_numeric($value)) {
-                $value = str_replace("\\\"","\"",$value);
-                $value = str_replace("\'","'",$value);
-                $value = str_replace("\\\\","\\",$value);
+               && $this->attribute_is_string($key)) {
+                $value = str_replace("\\\"","\"", $value);
+                $value = str_replace("\'","'", $value);
+                $value = str_replace("\\\\","\\", $value);
                 $return[$key] = "'" . addslashes($value) . "'";
             } else {
                 $return[$key] = $value;
@@ -2157,7 +2175,7 @@ class ActiveRecord {
             $updates = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
-                if($key && ($value || is_numeric($value)) && !in_array($key, $this->primary_keys)) {
+                if($key && isset($value) && !in_array($key, $this->primary_keys)) {
                     $updates[] = "$key = $value";
                 }
             }
@@ -2203,7 +2221,6 @@ class ActiveRecord {
      *  DB_common::tableInfo()} to get a description of the table and
      *  store it in {@link $content_columns}.  Add a more human
      *  friendly name to the element for each column.
-     *  <b>FIXME: should throw an exception if tableInfo() fails</b>
      *  @uses $db
      *  @uses $content_columns
      *  @uses Inflector::humanize()
@@ -2212,6 +2229,9 @@ class ActiveRecord {
      */
     function set_content_columns($table_name) {
         $this->content_columns = self::$db->tableInfo($table_name);
+        if($this->is_error($this->content_columns)) {
+            $this->raise($this->content_columns->getMessage());        
+        }
         if(is_array($this->content_columns)) {
             $i = 0;
             foreach($this->content_columns as $column) {
@@ -2375,6 +2395,27 @@ class ActiveRecord {
      */
     function get_errors_as_string($seperator = "<br>") {
         return $this->get_errors(true, $seperator);
+    }
+
+    /**
+     *  Determine if passed in attribute (table column) is a string
+     *  @param string $attribute Name of the table column
+     *  @uses column_for_attribute()
+     */    
+    function attribute_is_string($attribute) {
+        $column = $this->column_for_attribute($attribute);
+        switch($column['type']) {
+            case 'string':
+            case 'varchar':
+            case 'varchar2':
+            case 'text':
+            case 'blob':
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                return true;
+        }
+        return false;        
     }
 
     /**
