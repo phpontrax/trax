@@ -624,7 +624,7 @@ class ActiveRecordHelper extends Helpers {
             $end = $object->pagination_count;
         }
 
-        return sprintf($format, $start, $end, $object->pagination_count);
+        return $object->pagination_count ? sprintf($format, $start, $end, $object->pagination_count) : null;
     }    
 
 }
