@@ -129,29 +129,33 @@ class FormHelper extends Helpers {
      *  @uses tag_id_with_index()
      *  @uses tag_name_with_index()
      */
-    function add_default_name_and_id($options) {  	
+    function add_default_name_and_id($options) {  
+        $name_option_exists = array_key_exists('name', $options);	
        	if(array_key_exists("index", $options)) {
-            $options["name"] = array_key_exists("name", $options)
-                ? $options["name"]
-                : $this->tag_name_with_index($options["index"]);
-            $options["id"] = array_key_exists("id", $options)
-                ? $options["id"]
-                : $this->tag_id_with_index($options["index"]);
-            unset($options["index"]);
+            $options['name'] = $name_option_exists
+                ? $options['name']
+                : $this->tag_name_with_index($options['index']);
+            $options['id'] = array_key_exists('id', $options)
+                ? $options['id']
+                : $this->tag_id_with_index($options['index']);
+            unset($options['index']);
         } elseif($this->auto_index) {
-            $options["name"] = array_key_exists("name", $options)
-                ? $options["name"]
+            $options['name'] = $name_option_exists
+                ? $options['name']
                 : $this->tag_name_with_index($this->auto_index);
-            $options["id"] = array_key_exists("id", $options)
-                ? $options["id"]
+            $options['id'] = array_key_exists('id', $options)
+                ? $options['id']
                 : $this->tag_id_with_index($this->auto_index);
         } else {
-            $options["name"] = array_key_exists("name", $options)
-                ? $options["name"]
+            $options['name'] = $name_option_exists
+                ? $options['name']
                 : $this->tag_name();
-            $options["id"] = array_key_exists("id", $options)
-                ? $options["id"]
+            $options['id'] = array_key_exists('id', $options)
+                ? $options['id']
                 : $this->tag_id();
+        }
+        if(array_key_exists('multiple', $options) && !$name_option_exists) {
+            $options['name'] .= "[]";           
         }
         return $options;
     }
@@ -231,7 +235,7 @@ class FormHelper extends Helpers {
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping(
            $this->content_tag("textarea",
-                              htmlspecialchars($this->value()),
+                              htmlspecialchars($this->value(), ENT_COMPAT),
                               $options),
            array_key_exists($this->attribute_name,$this->object()->errors)
            ? $this->object()->errors[$this->attribute_name] : false);

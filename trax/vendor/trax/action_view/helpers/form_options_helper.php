@@ -207,8 +207,7 @@ class FormOptionsHelper extends FormHelper {
                  "select",
                  $this->add_options(
                            $this->options_for_select($choices, $value),
-                           $options,
-                           $value),
+                           $options),
                  $html_options),
              $this->object()->errors[$this->attribute_name]);
     }
@@ -236,8 +235,7 @@ class FormOptionsHelper extends FormHelper {
                         $attribute_value,
                         $attribute_text,
                         $value),
-                    $options,
-                    $value),
+                    $options),
                 $html_options),
             $this->object()->errors[$this->attribute_name]);
     }
@@ -260,8 +258,7 @@ class FormOptionsHelper extends FormHelper {
                 $this->add_options(
                         $this->country_options_for_select($value,
                                                           $priority_countries),
-                        $options,
-                        $value),
+                        $options),
                 $html_options),
             $this->object()->errors[$this->attribute_name]);
     }
@@ -270,16 +267,14 @@ class FormOptionsHelper extends FormHelper {
      *  @todo Document this method
      *
      *  @param string
-     *  @param string[]
-     *  @param string
-     *  @uses value()
+     *  @param array
      */
-    private function add_options($option_tags, $options, $value = null) {
+    private function add_options($option_tags, $options) {
         if(array_key_exists("include_blank", $options)
            && $options["include_blank"] == true) {
             $option_tags = "<option value=\"\"></option>\n" . $option_tags;
         } 
-        if(empty($value) && array_key_exists('prompt', $options)) {
+        if(array_key_exists('prompt', $options)) {
             $text = $options['prompt'] ? $options['prompt'] : "Please select";
             return ("<option value=\"\">$text</option>\n" . $option_tags);
         } else {
