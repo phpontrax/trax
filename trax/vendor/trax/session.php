@@ -193,7 +193,7 @@ class Session {
      */
     function start() {
         
-        if(self::$started) {
+        if(!self::$started) {
             $session_name = defined("TRAX_SESSION_NAME") ? TRAX_SESSION_NAME : self::TRAX_SESSION_NAME;
             $session_lifetime = defined("TRAX_SESSION_LIFETIME") ? TRAX_SESSION_LIFETIME : self::TRAX_SESSION_LIFETIME;
             $session_maxlifetime_minutes = defined("TRAX_SESSION_MAXLIFETIME_MINUTES") ? TRAX_SESSION_MAXLIFETIME_MINUTES : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
