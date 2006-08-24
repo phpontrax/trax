@@ -48,14 +48,13 @@
 <pre id="framework_trace" style="display:none"><code><?php echo $trace ?></code></pre>
 <?php endif; ?>
 
-<?php if(array_key_exists('ACTIVE_RECORD_SQL_LOG',$GLOBALS)
-	 && count($GLOBALS['ACTIVE_RECORD_SQL_LOG'])): ?>
+<?php if(count(ActiveRecord::$query_log)): ?>
 <p><a href="#" onclick="expandContract('sql_trace')">Show SQL trace</a>
 <pre id="sql_trace" style="display:none">
 <code style="word-wrap: break-word;">
 <?php $i = 0 ?>    
-<?php foreach(array_reverse($GLOBALS['ACTIVE_RECORD_SQL_LOG']) as $sql): ?>
-#<?php echo $i++ ?> <?php echo trim($sql) ?>
+<?php foreach(array_reverse(ActiveRecord::$query_log) as $query): ?>
+#<?php echo $i++ ?> <?php echo $query."\n" ?>
 <?php endforeach; ?>        
 </code>
 </pre>

@@ -369,6 +369,11 @@ class ActiveRecord {
      *  Transactions (only use if your db supports it)
      */
     public static $use_transactions = false; # this will issue a rollback command if any sql fails
+    
+    /**
+     *  Keep a log of queries executed if in development env
+     */    
+    public static $query_log = array();
 
     /**
      *  Construct an ActiveRecord object
@@ -634,9 +639,13 @@ class ActiveRecord {
             }
             
             # Primary key value
-            $this_primary_key_value = $this->attribute_is_string($this_primary_key) ? 
-                "'".$this->$this_primary_key."'" : 
-                $this->$this_primary_key;
+            if($this->attribute_is_string($this_primary_key)) {
+                $this_primary_key_value = "'".$this->$this_primary_key."'";                    
+            } elseif(is_numeric($this->$this_primary_key)) {
+                $this_primary_key_value = $this->$this_primary_key;
+            } else {
+                $this_primary_key_value = 0;
+            }
 
             # Set up the SQL segments
             $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}".$additional_conditions;
@@ -711,9 +720,14 @@ class ActiveRecord {
             }
             
             $foreign_key_value = $this->$this_primary_key;
-            $conditions = ($other_class_object->attribute_is_string($foreign_key) ? 
-                "$foreign_key = '{$foreign_key_value}'" : 
-                "$foreign_key = {$foreign_key_value}") . $additional_conditions; 
+            if($other_class_object->attribute_is_string($foreign_key)) {
+                $conditions = "{$foreign_key} = '{$foreign_key_value}'";                    
+            } elseif(is_numeric($foreign_key_value)) {
+                $conditions = "{$foreign_key} = {$foreign_key_value}";
+            } else {
+                $conditions = "{$foreign_key} = 0";
+            }            
+            $conditions .= $additional_conditions; 
         }
                          
         # Get the list of other_class_name objects
@@ -764,9 +778,15 @@ class ActiveRecord {
         }
 
         $foreign_key_value = $this->$this_primary_key;
-        $conditions = ($other_class_object->attribute_is_string($foreign_key) ? 
-            "{$foreign_key} = '{$foreign_key_value}'" : 
-            "{$foreign_key} = {$foreign_key_value}") . $additional_conditions; 
+        if($other_class_object->attribute_is_string($foreign_key)) {
+            $conditions = "{$foreign_key} = '{$foreign_key_value}'";                    
+        } elseif(is_numeric($foreign_key_value)) {
+            $conditions = "{$foreign_key} = {$foreign_key_value}";
+        } else {
+            $conditions = "{$foreign_key} = 0";
+        }
+
+        $conditions .= $additional_conditions; 
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -821,9 +841,14 @@ class ActiveRecord {
         }
         
         $other_primary_key_value = $this->$foreign_key;
-        $conditions = ($other_class_object->attribute_is_string($other_primary_key) ? 
-            "{$other_primary_key} = '{$other_primary_key_value}'" : 
-            "{$other_primary_key} = {$other_primary_key_value}") . $additional_conditions;
+        if($other_class_object->attribute_is_string($other_primary_key)) {
+            $conditions = "{$other_primary_key} = '{$other_primary_key_value}'";                    
+        } elseif(is_numeric($other_primary_key_value)) {
+            $conditions = "{$other_primary_key} = {$other_primary_key_value}";
+        } else {
+            $conditions = "{$other_primary_key} = 0";
+        }
+        $conditions .= $additional_conditions;
         
         # Get the list of other_class_name objects
         $result = $other_class_object->find_first($conditions, $order);
@@ -961,7 +986,7 @@ class ActiveRecord {
     function send($column) {
         if($this->column_attribute_exists($column) && ($conditions = $this->get_primary_key_conditions())) {
             # Run the query to grab a specific columns value.
-            $sql = "SELECT $column FROM $this->table_name WHERE $conditions";
+            $sql = "SELECT {$column} FROM {$this->table_name} WHERE {$conditions}";
             $this->log_query($sql);
             $result = self::$db->getOne($sql);
             if($this->is_error($result)) {
@@ -2094,6 +2119,7 @@ class ActiveRecord {
             if(!(preg_match('/^\w+\(.*\)$/U', $value)) 
                && !(strcasecmp($value, 'NULL') == 0) 
                && $this->attribute_is_string($key)) {
+               //&& !is_numeric($value)) {
                 $value = str_replace("\\\"","\"", $value);
                 $value = str_replace("\'","'", $value);
                 $value = str_replace("\\\\","\\", $value);
@@ -2119,7 +2145,7 @@ class ActiveRecord {
         $attributes = $this->quoted_attributes();
     	$inserts = array();
     	foreach($attributes as $key => $value) {
-    		if(!in_array($key, $this->primary_keys) || ($value != "''")) {
+    		if(!in_array($key, $this->primary_keys) || ($value != "''" && isset($value))) {
     			$inserts[$key] = $value;
     		}
     	}
@@ -2149,7 +2175,7 @@ class ActiveRecord {
             $conditions = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
-                if(in_array($key, $this->primary_keys)) {
+                if(in_array($key, $this->primary_keys) && isset($value) && $value != "''") {
                     $conditions[] = "$key = $value";    
                 }
             }
@@ -2355,10 +2381,11 @@ class ActiveRecord {
      *  @uses $errors
      */
     function add_error($error, $key = null) {
-        if(!is_null($key)) 
+        if(!is_null($key)) {
             $this->errors[$key] = $error;
-        else
+        } else {
             $this->errors[] = $error;
+        }
     }
 
     /**
@@ -2627,12 +2654,12 @@ class ActiveRecord {
     /**
      *  Log SQL query in development mode
      *
-     *  If running in development mode, log the query to $GLOBAL
+     *  If running in development mode, log the query to self::$query_log
      *  @param string SQL to be logged
      */
-    function log_query($sql) {
-        if(TRAX_ENV == "development" && $sql) {
-            $GLOBALS['ACTIVE_RECORD_SQL_LOG'][] = $sql;       
+    function log_query($query) {
+        if(TRAX_ENV == "development" && $query) {
+            self::$query_log[] = $query;       
         }    
     }
 
