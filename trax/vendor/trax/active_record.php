@@ -34,9 +34,11 @@
 require_once('PEAR.php');
 
 /**
- *  Load the {@link http://pear.php.net/manual/en/package.database.db.php PEAR DB package}
+ *  Load the {@link http://pear.php.net/manual/en/package.database.mdb2.php PEAR MDB2 package}
+ *  PEAR::DB is now deprecated.
+ *  (This package(DB) been superseded by MDB2 but is still maintained for bugs and security fixes)
  */
-require_once('DB.php');
+require_once('MDB2.php');
 
 /**
  *  Base class for the ActiveRecord design pattern
@@ -65,10 +67,10 @@ class ActiveRecord {
      *  Reference to the database object
      *
      *  Reference to the database object returned by
-     *  {@link http://pear.php.net/manual/en/package.database.db.db.connect.php  PEAR DB::Connect()}
+     *  {@link http://pear.php.net/manual/en/package.database.mdb2.intro-connect.php  PEAR MDB2::Connect()}
      *  @var object DB
      *  see
-     *  {@link http://pear.php.net/manual/en/package.database.db.php PEAR DB}
+     *  {@link http://pear.php.net/manual/en/package.database.mdb2.php PEAR MDB2}
      */
     private static $db = null;
 
@@ -153,7 +155,7 @@ class ActiveRecord {
      *  the relevant PEAR DB class documentation}
      *  @var integer
      */
-    public $fetch_mode = DB_FETCHMODE_ASSOC;
+    public $fetch_mode = MDB2_FETCHMODE_ASSOC;
 
     /**
      *  Force reconnect to database
@@ -950,6 +952,19 @@ class ActiveRecord {
         }
         return null;
     }
+
+   /**
+    *  get the columns  data type.
+    *  @uses column_for_attribute()
+    *  @todo Document this API
+    */    
+    function column_type($attribute) {
+        $column = $this->column_for_attribute($attribute);
+        if(isset($column['type'])) {
+            return $column['type'];    
+        }            
+        return null;
+    }
     
     /**
      *  Check whether a column exists in the associated table
@@ -988,7 +1003,7 @@ class ActiveRecord {
             # Run the query to grab a specific columns value.
             $sql = "SELECT {$column} FROM {$this->table_name} WHERE {$conditions}";
             $this->log_query($sql);
-            $result = self::$db->getOne($sql);
+            $result = self::$db->queryOne($sql);
             if($this->is_error($result)) {
                 $this->raise($result->getMessage());
             }
@@ -1032,7 +1047,7 @@ class ActiveRecord {
      *  Perform an SQL query and return the results
      *
      *  @param string $sql  SQL for the query command
-     *  @return DB_result {@link http://pear.php.net/manual/en/package.database.db.db-result.php}
+     *  @return $mdb2->query {@link http://pear.php.net/manual/en/package.database.mdb2.intro-query.php}
      *    Result set from query
      *  @uses $db
      *  @uses is_error()
@@ -1042,7 +1057,7 @@ class ActiveRecord {
     function query($sql) {
         # Run the query
         $this->log_query($sql);
-        $rs = self::$db->query($sql);
+        $rs =& self::$db->query($sql);
         if ($this->is_error($rs)) {
             if(self::$use_transactions && self::$begin_executed) {
                 $this->rollback();
@@ -1580,19 +1595,32 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     private function add_record() {
+        self::$db->loadModule('Extended', null, true);                
+        # $primary_key_value may either be a quoted integer or php null
+        $primary_key_value = self::$db->getBeforeID($this->table_name, $this->primary_keys[0]);
+        if($this->is_error($primary_key_value)) {
+            $this->raise($primary_key_value->getMessage());
+        }
+
         $attributes = $this->get_inserts();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
-        $sql = "INSERT INTO $this->table_name ($fields) VALUES ($values)";
+        $sql = "INSERT INTO {$this->table_name} ($fields) VALUES ($values)";
         //echo "add_record: SQL: $sql<br>";
+        error_log("add_record: SQL: $sql");
         $result = $this->query($sql);
+        
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
         } else {
             $habtm_result = true;
             $primary_key = $this->primary_keys[0];
-            $primary_key_value = $this->get_insert_id();
-             $this->$primary_key = $primary_key_value;
+            # $id is now equivalent to the value in the id field that was inserted
+            $primary_key_value = self::$db->getAfterID($primary_key_value, $this->table_name, $this->primary_keys[0]);
+            if($this->is_error($primary_key_value)) {
+                $this->raise($primary_key_value->getMessage());
+            }            
+            $this->$primary_key = $primary_key_value;
             if($primary_key_value != '') {
                 if($this->auto_save_habtm) {
                     $habtm_result = $this->add_habtm_records($primary_key_value);
@@ -1630,7 +1658,7 @@ class ActiveRecord {
         $conditions = $this->get_primary_key_conditions();
         $sql = "UPDATE {$this->table_name} SET {$updates} WHERE {$conditions}";
         //echo "update_record:$sql<br>";
-        //error_log("update_record: SQL: $sql<br>");
+        error_log("update_record: SQL: $sql");
         $result = $this->query($sql);
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
@@ -1961,13 +1989,13 @@ class ActiveRecord {
                             if(in_array($field, $this->auto_create_timestamps)) {
                                 return date($format);
                             } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
-                                return 'NULL';    
+                                return null;    
                             }
                         } elseif(!$this->new_record) {
                             if(in_array($field, $this->auto_update_timestamps)) {
                                 return date($format);
                             } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
-                                return 'NULL';    
+                                return null;    
                             }
                         }
                     }  
@@ -2113,21 +2141,10 @@ class ActiveRecord {
             $attributes = $this->get_attributes();
         }
         $return = array();
-        foreach ($attributes as $key => $value) {
+        foreach($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
-            # If the value isn't a function, null, or numeric quote it.
-            if(!(preg_match('/^\w+\(.*\)$/U', $value)) 
-               && !(strcasecmp($value, 'NULL') == 0) 
-               && $this->attribute_is_string($key)) {
-               //&& !is_numeric($value)) {
-                $value = str_replace("\\\"","\"", $value);
-                $value = str_replace("\'","'", $value);
-                $value = str_replace("\\\\","\\", $value);
-                $return[$key] = "'" . addslashes($value) . "'";
-            } else {
-                $return[$key] = $value;
-            }
-            //$return[$key] = $this->$db->quoteSmart($value);
+            $type = $this->attribute_is_string($key) ? "Text" : "Integer";
+            $return[$key] = self::$db->quote($value, $type);
         }
         return $return;
     }
@@ -2254,7 +2271,8 @@ class ActiveRecord {
      *  @param string $table_name  Name of table to get information about
      */
     function set_content_columns($table_name) {
-        $this->content_columns = self::$db->tableInfo($table_name);
+        self::$db->loadModule('Reverse', null, true);
+        $this->content_columns = self::$db->reverse->tableInfo($table_name);
         if($this->is_error($this->content_columns)) {
             $this->raise($this->content_columns->getMessage());        
         }
@@ -2275,11 +2293,16 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function get_insert_id() {
-        $id = self::$db->getOne("SELECT LAST_INSERT_ID();");
-        if ($this->is_error($id)) {
-            $this->raise($id->getMessage());
+        // fetch the last inserted id via autoincrement or current value of a sequence
+        if(self::$db->supports('auto_increment') === true) {
+            $id = self::$db->lastInsertID($this->table_name, $this->primary_keys[0]);   
+            if($this->is_error($id)) {
+                $this->raise($id->getMessage());
+            } 
+            return $id;                
         }
-        return $id;
+
+        return null;
     }
 
     /**
@@ -2307,7 +2330,7 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function establish_connection() {
-        $connection = Trax::$active_record_connections[$this->connection_name];
+        $connection =& Trax::$active_record_connections[$this->connection_name];
         if(!is_object($connection) || $this->force_reconnect) {
             if(array_key_exists($this->connection_name, Trax::$database_settings)) {
                  # Use a different custom sections settings ?
@@ -2333,7 +2356,8 @@ class ActiveRecord {
                 $connection_options['persistent'] = $connection_settings['persistent'];
             }
             # Connect to the database and throw an error if the connect fails.
-            $connection =& DB::Connect($connection_settings, $connection_options);
+            $connection =& MDB2::Connect($connection_settings, $connection_options);
+            //static $connect_cnt;  $connect_cnt++; error_log("connection #".$connect_cnt);
         }
         if(!$this->is_error($connection)) {
             Trax::$active_record_connections[$this->connection_name] =& $connection;
@@ -2346,13 +2370,13 @@ class ActiveRecord {
     }
 
     /**
-     *  Test whether argument is a PEAR Error object or a DB Error object.
+     *  Test whether argument is a PEAR Error object or a MDB2 Error object.
      *
      *  @param object $obj Object to test
      *  @return boolean  Whether object is one of these two errors
      */
     function is_error($obj) {
-        if((PEAR::isError($obj)) || (DB::isError($obj))) {
+        if((PEAR::isError($obj)) || (MDB2::isError($obj))) {
             return true;
         } else {
             return false;
@@ -2430,14 +2454,16 @@ class ActiveRecord {
      *  @uses column_for_attribute()
      */    
     function attribute_is_string($attribute) {
-        $column = $this->column_for_attribute($attribute);
-        switch($column['type']) {
+        $column_type = $this->column_type($attribute);
+        switch($column_type) {
             case 'string':
             case 'varchar':
             case 'varchar2':
             case 'text':
             case 'blob':
+            case 'clob':
             case 'date':
+            case 'time':
             case 'datetime':
             case 'timestamp':
                 return true;

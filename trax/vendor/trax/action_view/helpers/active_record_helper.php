@@ -465,11 +465,10 @@ class ActiveRecordHelper extends Helpers {
      *
      *  @uses attribute_name
      *  @uses object()
-     *  @uses ActiveRecord::column_for_attribute()
+     *  @uses ActiveRecord::column_type()
      */
     function column_type() {
-        $column = $this->object()->column_for_attribute($this->attribute_name);
-        return $column['type'];
+        return $this->object()->column_type($this->attribute_name);
     }
     
     /**
