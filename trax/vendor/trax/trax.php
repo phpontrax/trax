@@ -47,11 +47,9 @@ class Trax {
         $log_path = null,           
         $vendor_path = null,
         $public_path = null,
-        $database_settings = array(), 
         $url_prefix = null,
         $views_extension = 'phtml',
         $path_seperator = ":", # default is Unix
-        $active_record_connections = array(),
         $current_controller_path = null,
         $current_controller_name = null,
         $current_action_name = null,
@@ -91,14 +89,7 @@ class Trax {
             # Hide errors from browser if not in development mode
             ini_set("display_errors", "Off");
         }
-        
-        # Make sure database settings are cleared out
-        self::$database_settings = array();
-        if(file_exists(self::$config_path."/database.ini")) {
-            # Load databse settings 
-            self::$database_settings = parse_ini_file(self::$config_path."/database.ini",true);
-        }
-        
+                
         # Set the include_path
         ini_set("include_path",
                 ".".self::$path_seperator.   # current directory
@@ -118,6 +109,13 @@ class Trax {
         include_once("action_mailer.php");
         include_once("dispatcher.php");
         include_once("router.php");
+
+        # Make sure database settings are cleared out
+        ActiveRecord::$database_settings = array();
+        if(file_exists(self::$config_path."/database.ini")) {
+            # Load databse settings 
+            ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true);
+        }
                    
     }
     

@@ -138,7 +138,7 @@ class ActiveRecord {
     public $database_name = null;
     
     /**
-     *  Index into the Trax::$active_record_connections array
+     *  Index into the $active_connections array
      *
      *  Name of the index to use to return or set the current db connection
      *  Mainly used if you want to connect to different databases between
@@ -146,6 +146,16 @@ class ActiveRecord {
      *  @var string
      */    
     public $connection_name = TRAX_ENV;
+
+	/**
+	 * Stores the database settings
+	 */
+	public static $database_settings = array();
+	
+	/**
+	 * Stores the active connections
+	 */
+	public static $active_connections = array();
 
     /**
      *  Mode to use when fetching data from database
@@ -1266,7 +1276,7 @@ class ActiveRecord {
                 # $sql .= "LIMIT $offset, $this->rows_per_page";
         
                 # Set number of total pages in result set  
-                if($count = $this->count_all("*", $conditions, $joins)) {
+                if($count = $this->count_all($this->primary_keys[0], $conditions, $joins)) {
                     $this->pagination_count = $count;
                     $this->pages = (
                        ($count % $this->rows_per_page) == 0)
@@ -2309,43 +2319,43 @@ class ActiveRecord {
      *  Open a database connection if one is not currently open
      *
      *  The name of the database normally comes from
-     *  Trax::$database_settings which is set in {@link
+     *  $database_settings which is set in {@link
      *  environment.php} by reading file config/database.ini. The
      *  database name may be overridden by assigning a different name
      *  to {@link $database_name}. 
      *  
      *  If there is a connection now open, as indicated by the saved
-     *  value of a DB object in Trax::$active_record_connections[$connection_name], and
+     *  value of a MDB2 object in $active_connections[$connection_name], and
      *  {@link force_reconnect} is not true, then set the database
      *  fetch mode and return.
      *
      *  If there is no connection, open one and save a reference to
-     *  it in Trax::$active_record_connections[$connection_name].
+     *  it in $active_connections[$connection_name].
      *
      *  @uses $db
      *  @uses $database_name
      *  @uses $force_reconnect
-     *  @uses Trax::$active_record_connections
+     *  @uses $active_connections
      *  @uses is_error()
      *  @throws {@link ActiveRecordError}
      */
     function establish_connection() {
-        $connection =& Trax::$active_record_connections[$this->connection_name];
+        $connection =& self::$active_connections[$this->connection_name];
         if(!is_object($connection) || $this->force_reconnect) {
-            if(array_key_exists($this->connection_name, Trax::$database_settings)) {
+            if(array_key_exists($this->connection_name, self::$database_settings)) {
                  # Use a different custom sections settings ?
-                if(array_key_exists("use", Trax::$database_settings[$this->connection_name])) {
-                    $connection_settings = Trax::$database_settings[Trax::$database_settings[$this->connection_name]['use']];
+                if(array_key_exists("use", self::$database_settings[$this->connection_name])) {
+                    $connection_settings = self::$database_settings[self::$database_settings[$this->connection_name]['use']];
                 } else {
                     # Custom defined db settings in database.ini 
-                    $connection_settings = Trax::$database_settings[$this->connection_name];
+                    $connection_settings = self::$database_settings[$this->connection_name];
                 }
             } else {
                 # Just use the current TRAX_ENV's environment db settings
                 # $this->connection_name's default value is TRAX_ENV so
                 # if should never really get here unless override $this->connection_name
                 # and you define a custom db section in database.ini and it can't find it.
-                $connection_settings = Trax::$database_settings[TRAX_ENV];
+                $connection_settings = self::$database_settings[TRAX_ENV];
             }
             # Override database name if param is set
             if($this->database_name) {
@@ -2360,7 +2370,7 @@ class ActiveRecord {
             //static $connect_cnt;  $connect_cnt++; error_log("connection #".$connect_cnt);
         }
         if(!$this->is_error($connection)) {
-            Trax::$active_record_connections[$this->connection_name] =& $connection;
+            self::$active_connections[$this->connection_name] =& $connection;
             self::$db =& $connection;
         } else {
             $this->raise($connection->getMessage());
