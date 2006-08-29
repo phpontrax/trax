@@ -101,6 +101,14 @@ class ActiveRecord {
     public $content_columns = null; # info about each column in the table
 
     /**
+     *  Table Info
+     *
+     *  Array to hold all the info about table columns.  Index on $table_name.
+     *  @var array
+     */    
+    public static $table_info = array();
+
+    /**
      *  Class name
      *
      *  Name of the child class. (this is optional and will automatically be determined)
@@ -119,7 +127,7 @@ class ActiveRecord {
      *  @var string
      */
     public $table_name = null;
-
+    
     /**
      *  Table prefix
      *
@@ -2286,15 +2294,20 @@ class ActiveRecord {
      *  @param string $table_name  Name of table to get information about
      */
     function set_content_columns($table_name) {
-        self::$db->loadModule('Reverse', null, true);
-        $this->content_columns = self::$db->reverse->tableInfo($table_name);
-        if($this->is_error($this->content_columns)) {
-            $this->raise($this->content_columns->getMessage());        
-        }
-        if(is_array($this->content_columns)) {
-            $i = 0;
-            foreach($this->content_columns as $column) {
-                $this->content_columns[$i++]['human_name'] = Inflector::humanize($column['name']);
+        if(isset(self::$table_info[$table_name])) {
+            $this->content_columns = self::$table_info[$table_name];  
+        } else {
+            self::$db->loadModule('Reverse', null, true);
+            $this->content_columns = self::$db->reverse->tableInfo($table_name);
+            if($this->is_error($this->content_columns)) {
+                $this->raise($this->content_columns->getMessage());        
+            }
+            if(is_array($this->content_columns)) {
+                $i = 0;
+                foreach($this->content_columns as $column) {
+                    $this->content_columns[$i++]['human_name'] = Inflector::humanize($column['name']);
+                }
+                self::$table_info[$table_name] = $this->content_columns;
             }
         }
     }
