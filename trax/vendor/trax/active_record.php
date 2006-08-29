@@ -2156,7 +2156,7 @@ class ActiveRecord {
             $column = $this->column_for_attribute($key);
             $type = $this->attribute_is_string($key, $column) ? "Text" : "Integer";
             $value = self::$db->quote($value, $type);
-            if($value == 'NULL' && $column['notnull']) {
+            if($value == 'NULL' && stristr($field_info['flags'], "not_null")) {
                 $value = "''";    
             }
             $return[$key] = $value;
