@@ -2470,7 +2470,6 @@ class ActiveRecord {
      */    
     function attribute_is_string($attribute, $column = null) {
         $column = is_null($column) ? $this->column_for_attribute($attribute) : $column;
-        error_log($attribute . " mdb2type: " . strtolower($column['mdb2type']));
         switch(strtolower($column['mdb2type'])) {
             case 'text':
             case 'timestamp':
