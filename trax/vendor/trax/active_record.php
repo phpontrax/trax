@@ -2153,8 +2153,13 @@ class ActiveRecord {
         $return = array();
         foreach($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
-            $type = $this->attribute_is_string($key) ? "Text" : "Integer";
-            $return[$key] = self::$db->quote($value, $type);
+            $column = $this->column_for_attribute($key);
+            $type = $this->attribute_is_string($key, $column['mdb2type']) ? "Text" : "Integer";
+            $value = self::$db->quote($value, $type);
+            if($value == 'NULL' && $column['notnull']) {
+                $value = "''";    
+            }
+            $return[$key] = $value;
         }
         return $return;
     }
@@ -2463,20 +2468,16 @@ class ActiveRecord {
      *  @param string $attribute Name of the table column
      *  @uses column_for_attribute()
      */    
-    function attribute_is_string($attribute) {
-        $column_type = $this->column_type($attribute);
-        if(stristr($column_type, 'string') ||
-           stristr($column_type, 'char') ||
-           stristr($column_type, 'blob') || 
-           stristr($column_type, 'text') || 
-           stristr($column_type, 'time') || 
-           stristr($column_type, 'date') ||
-           stristr($column_type, 'string') ||
-           stristr($column_type, 'clob') ||
-           stristr($column_type, 'year') ||
-           stristr($column_type, 'enum')) {
-            
-            return true;
+    function attribute_is_string($attribute, $column = null) {
+        $column = is_null($column) ? $this->column_for_attribute($attribute) : $column;
+        switch(strtolower($column['mdb2type'])) {
+            case 'text':
+            case 'timestamp':
+            case 'date':
+            case 'time':
+            case 'blob':
+            case 'clob':
+                return true;       
         }
         return false;        
     }
