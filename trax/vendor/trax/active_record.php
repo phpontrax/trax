@@ -2465,18 +2465,18 @@ class ActiveRecord {
      */    
     function attribute_is_string($attribute) {
         $column_type = $this->column_type($attribute);
-        switch($column_type) {
-            case 'string':
-            case 'varchar':
-            case 'varchar2':
-            case 'text':
-            case 'blob':
-            case 'clob':
-            case 'date':
-            case 'time':
-            case 'datetime':
-            case 'timestamp':
-                return true;
+        if(stristr($column_type, 'string') ||
+           stristr($column_type, 'char') ||
+           stristr($column_type, 'blob') || 
+           stristr($column_type, 'text') || 
+           stristr($column_type, 'time') || 
+           stristr($column_type, 'date') ||
+           stristr($column_type, 'string') ||
+           stristr($column_type, 'clob') ||
+           stristr($column_type, 'year') ||
+           stristr($column_type, 'enum')) {
+            
+            return true;
         }
         return false;        
     }
