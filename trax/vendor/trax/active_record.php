@@ -2154,7 +2154,7 @@ class ActiveRecord {
         foreach($attributes as $key => $value) {
             $value = $this->check_datetime($key, $value);
             $column = $this->column_for_attribute($key);
-            $type = $this->attribute_is_string($key, $column['mdb2type']) ? "Text" : "Integer";
+            $type = $this->attribute_is_string($key, $column) ? "Text" : "Integer";
             $value = self::$db->quote($value, $type);
             if($value == 'NULL' && $column['notnull']) {
                 $value = "''";    
@@ -2470,6 +2470,7 @@ class ActiveRecord {
      */    
     function attribute_is_string($attribute, $column = null) {
         $column = is_null($column) ? $this->column_for_attribute($attribute) : $column;
+        error_log($attribute . " mdb2type: " . strtolower($column['mdb2type']));
         switch(strtolower($column['mdb2type'])) {
             case 'text':
             case 'timestamp':
