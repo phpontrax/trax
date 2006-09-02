@@ -559,11 +559,11 @@ class TraxGenerator {
             echo "Can't create model.\n";
             echo $e->getMessage()."\n";
             echo "for database '"
-                . Trax::$database_settings[TRAX_ENV]['database']
+                . ActiveRecord::$database_settings[TRAX_ENV]['database']
                 . "' on host '"
-                . Trax::$database_settings[TRAX_ENV]['hostspec']
+                . ActiveRecord::$database_settings[TRAX_ENV]['hostspec']
                 . "' as user '"
-                . Trax::$database_settings[TRAX_ENV]['username']
+                . ActiveRecord::$database_settings[TRAX_ENV]['username']
                 . "'\nDid you configure file "
                 . Trax::$config_path
                 . "/database.ini correctly?\n";
