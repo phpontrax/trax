@@ -472,7 +472,7 @@ class ActiveRecord {
                     $this->$key = $this->find_all_habtm($key, $parameters); 
                     break;            
             }        
-        } elseif($this->is_composite($key)) {
+        } elseif($this->is_composite($key)) {            
             $composite_object = $this->get_composite_object($key);
             if(is_object($composite_object)) {
                 $this->$key = $composite_object;    
@@ -1708,11 +1708,12 @@ class ActiveRecord {
      */    
     private function get_composite_object($name) {
         $composite_object = null;
-        if(is_array($this->composed_of)) {
+        if(is_array($this->composed_of)) { 
             if(array_key_exists($name, $this->composed_of)) {
-                $class_name = Inflector::classify($this->composed_of[$name]['class_name']);
-                if(class_exists($class_name, false)) {
-                    $composite_object = new $class_name;
+                $class_name = Inflector::classify(($this->composed_of[$name]['class_name'] ? 
+                    $this->composed_of[$name]['class_name'] : $name));           
+                if(class_exists($class_name)) {
+                    $composite_object = new $class_name();
                     $mappings = $this->composed_of[$name]['mapping'];
                     if(is_array($mappings)) {
                         foreach($mappings as $database_name => $composite_name) {
@@ -1723,7 +1724,7 @@ class ActiveRecord {
             }    
         } elseif($this->composed_of == $name) {
             $class_name = Inflector::classify($name);
-            if(class_exists($class_name, false)) {
+            if(class_exists($class_name)) {
                 $composite_object = new $class_name();
                 $composite_object->$name = $this->$name;            
             }
