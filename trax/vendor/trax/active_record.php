@@ -432,9 +432,7 @@ class ActiveRecord {
         }
 
         # If $attributes array is passed in update the class with its contents
-        if(is_array($attributes)) {
-            $this->update_attributes($attributes);
-        }
+        $this->update_attributes($attributes);
     }
 
     /**
@@ -1553,10 +1551,8 @@ class ActiveRecord {
     function save($attributes = null, $dont_validate = false) {
         //error_log("ActiveRecord::save() \$attributes="
         //          . var_export($attributes,true));
-        if(is_array($attributes)) {
-            $this->update_attributes($attributes);
-        }
-        if ($dont_validate || $this->valid()) {
+        $this->update_attributes($attributes);
+        if($dont_validate || $this->valid()) {
             return $this->add_record_or_update_record();
         } else {
             return false;
@@ -1628,12 +1624,13 @@ class ActiveRecord {
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }
+        $this->update_composite_attributes();
         $attributes = $this->get_inserts();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
         $sql = "INSERT INTO {$this->table_name} ($fields) VALUES ($values)";
         //echo "add_record: SQL: $sql<br>";
-        error_log("add_record: SQL: $sql");
+        //error_log("add_record: SQL: $sql");
         $result = $this->query($sql);
         
         if($this->is_error($result)) {
@@ -1680,11 +1677,12 @@ class ActiveRecord {
      */
     private function update_record() {
         //error_log('update_record()');
+        $this->update_composite_attributes();
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
         $sql = "UPDATE {$this->table_name} SET {$updates} WHERE {$conditions}";
         //echo "update_record:$sql<br>";
-        error_log("update_record: SQL: $sql");
+        //error_log("update_record: SQL: $sql");
         $result = $this->query($sql);
         if($this->is_error($result)) {
             $this->raise($results->getMessage());
@@ -1708,34 +1706,37 @@ class ActiveRecord {
      */    
     private function get_composite_object($name) {
         $composite_object = null;
+        $composite_attributes = array();
         if(is_array($this->composed_of)) { 
             if(array_key_exists($name, $this->composed_of)) {
                 $class_name = Inflector::classify(($this->composed_of[$name]['class_name'] ? 
                     $this->composed_of[$name]['class_name'] : $name));           
-                if(class_exists($class_name)) {
-                    $composite_object = new $class_name();
-                    $mappings = $this->composed_of[$name]['mapping'];
-                    if(is_array($mappings)) {
-                        foreach($mappings as $database_name => $composite_name) {
-                            $composite_object->$composite_name = $this->$database_name;                          
-                        }    
-                    }      
-                }
+
+                $mappings = $this->composed_of[$name]['mapping'];
+                if(is_array($mappings)) {
+                    foreach($mappings as $database_name => $composite_name) {
+                        $composite_attributes[$composite_name] = $this->$database_name;                      
+                    }    
+                }   
             }    
         } elseif($this->composed_of == $name) {
-            $class_name = Inflector::classify($name);
-            if(class_exists($class_name)) {
-                $composite_object = new $class_name();
-                $composite_object->$name = $this->$name;            
-            }
+            $class_name = $name;
+            $composite_attributes[$name] = $this->$name;        
         } 
         
-        if(is_object($composite_object)) {
-            if(method_exists($composite_object, 'initialize')) {
-                $composite_object->initialize();
-            }            
-        }
-        
+        if(class_exists($class_name)) {                     
+            $composite_object = new $class_name;        
+            if($composite_object->auto_map_attributes !== false) {
+                //echo "auto_map_attributes<br>";
+                foreach($composite_attributes as $name => $value) {
+                    $composite_object->$name = $value;    
+                }                                      
+            }           
+            if(method_exists($composite_object, '__construct')) {
+                //echo "calling constructor<br>";
+                $composite_object->__construct($composite_attributes);       
+            }         
+        } 
         return $composite_object;
     }
     
@@ -2155,7 +2156,6 @@ class ActiveRecord {
                 }    
             }
             $this->set_habtm_attributes($attributes);
-            $this->update_composite_attributes();
         }
     }
     
