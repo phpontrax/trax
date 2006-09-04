@@ -103,7 +103,7 @@ class ActiveRecord {
     /**
      *  Table Info
      *
-     *  Array to hold all the info about table columns.  Index on $table_name.
+     *  Array to hold all the info about table columns.  Indexed on $table_name.
      *  @var array
      */    
     public static $table_info = array();
@@ -161,7 +161,7 @@ class ActiveRecord {
 	public static $database_settings = array();
 	
 	/**
-	 * Stores the active connections
+	 * Stores the active connections. Indexed on $connection_name.
 	 */
 	public static $active_connections = array();
 
@@ -196,6 +196,12 @@ class ActiveRecord {
      *  @var boolean
      */    
     public $lock_optimistically = true;
+    
+    /**
+     *  Composite custom user created objects
+     *  @var mixed
+     */    
+    public $composed_of = null;
 
     # Table associations
     /**
@@ -446,30 +452,33 @@ class ActiveRecord {
      *  @uses find_one_has_one()
      */
     function __get($key) {
-        $association_type = $this->get_association_type($key);
-        if (is_null($association_type)) {
-            return null;
-        }
-        //error_log("association_type:$association_type");
-        switch($association_type) {
-            case "has_many":
-                $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
-                $this->$key = $this->find_all_has_many($key, $parameters);
-                break;
-            case "has_one":
-                $parameters = is_array($this->has_one) ? $this->has_one[$key] : null;
-                $this->$key = $this->find_one_has_one($key, $parameters);
-                break;
-            case "belongs_to":
-                $parameters = is_array($this->belongs_to) ? $this->belongs_to[$key] : null;
-                $this->$key = $this->find_one_belongs_to($key, $parameters);
-                break;
-            case "has_and_belongs_to_many":  
-                $parameters = is_array($this->has_and_belongs_to_many) ? $this->has_and_belongs_to_many[$key] : null;
-                $this->$key = $this->find_all_habtm($key, $parameters); 
-                break;            
-        }
-        //echo "<pre>id: $this->id<br>getting: $key = ".$this->$key."<br></pre>";
+        if($association_type = $this->get_association_type($key)) {
+            //error_log("association_type:$association_type");
+            switch($association_type) {
+                case "has_many":
+                    $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
+                    $this->$key = $this->find_all_has_many($key, $parameters);
+                    break;
+                case "has_one":
+                    $parameters = is_array($this->has_one) ? $this->has_one[$key] : null;
+                    $this->$key = $this->find_one_has_one($key, $parameters);
+                    break;
+                case "belongs_to":
+                    $parameters = is_array($this->belongs_to) ? $this->belongs_to[$key] : null;
+                    $this->$key = $this->find_one_belongs_to($key, $parameters);
+                    break;
+                case "has_and_belongs_to_many":  
+                    $parameters = is_array($this->has_and_belongs_to_many) ? $this->has_and_belongs_to_many[$key] : null;
+                    $this->$key = $this->find_all_habtm($key, $parameters); 
+                    break;            
+            }        
+        } elseif($this->is_composite($key)) {
+            $composite_object = $this->get_composite_object($key);
+            if(is_object($composite_object)) {
+                $this->$key = $composite_object;    
+            }                                
+        } 
+        //echo "<pre>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
     }
 
@@ -505,7 +514,7 @@ class ActiveRecord {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
             }
-        }         
+        }       
         
 	    //  Assignment to something else, do it
         $this->$key = $value;
@@ -574,7 +583,7 @@ class ActiveRecord {
         }
         return $result;
     }
-
+    
     /**
      *  Find all records using a "has_and_belongs_to_many" relationship
      * (many-to-many with a join table in between).  Note that you can also
@@ -1619,7 +1628,6 @@ class ActiveRecord {
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }
-
         $attributes = $this->get_inserts();
         $fields = @implode(', ', array_keys($attributes));
         $values = @implode(', ', array_values($attributes));
@@ -1692,6 +1700,42 @@ class ActiveRecord {
             }         
             return ($result && $habtm_result);
         }
+    }
+
+    /**
+     *  Loads the model values into composite object
+     *  @todo Document this API
+     */    
+    private function get_composite_object($name) {
+        $composite_object = null;
+        if(is_array($this->composed_of)) {
+            if(array_key_exists($name, $this->composed_of)) {
+                $class_name = Inflector::classify($this->composed_of[$name]['class_name']);
+                if(class_exists($class_name, false)) {
+                    $composite_object = new $class_name;
+                    $mappings = $this->composed_of[$name]['mapping'];
+                    if(is_array($mappings)) {
+                        foreach($mappings as $database_name => $composite_name) {
+                            $composite_object->$composite_name = $this->$database_name;                          
+                        }    
+                    }      
+                }
+            }    
+        } elseif($this->composed_of == $name) {
+            $class_name = Inflector::classify($name);
+            if(class_exists($class_name, false)) {
+                $composite_object = new $class_name();
+                $composite_object->$name = $this->$name;            
+            }
+        } 
+        
+        if(is_object($composite_object)) {
+            if(method_exists($composite_object, 'initialize')) {
+                $composite_object->initialize();
+            }            
+        }
+        
+        return $composite_object;
     }
     
     /**
@@ -2110,8 +2154,29 @@ class ActiveRecord {
                 }    
             }
             $this->set_habtm_attributes($attributes);
+            $this->update_composite_attributes();
         }
     }
+    
+    /**
+     * If a composite object was specified via $composed_of, then its values 
+     * mapped to the model will overwrite the models values.
+     *
+     */
+    function update_composite_attributes() {
+        if(is_array($this->composed_of)) {
+            foreach($this->composed_of as $name => $options) {
+                $composite_object = $this->$name;
+                if(is_array($options) && is_object($composite_object)) {
+                    if(is_array($options['mapping'])) {
+                        foreach($options['mapping'] as $database_name => $composite_name) {
+                            $this->$database_name = $composite_object->$composite_name;                          
+                        }    
+                    }        
+                }       
+            }    
+        }    
+    }    
 
     /**
      *  Return pairs of column-name:column-value
@@ -2494,6 +2559,20 @@ class ActiveRecord {
         }
         return false;        
     }
+
+    /**
+     *  Determine if passed in name is a composite class or not
+     *  @param string $name Name of the composed_of mapping
+     *  @uses $composed_of
+     */    
+    private function is_composite($name) {
+        if(is_array($this->composed_of)) {
+            if(array_key_exists($name, $this->composed_of)) {
+                return true;     
+            }
+        }        
+        return false;
+    }    
 
     /**
      *  Runs validation routines for update or create
