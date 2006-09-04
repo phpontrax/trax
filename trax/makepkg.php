@@ -58,9 +58,9 @@ $e = $packagexml->setOptions(
                 'summary' => 'Rapid Application Development Made Easy',
                 'description' => 'PHP port of Ruby on Rails',
                 'baseinstalldir' => 'PHPonTrax',
-                'version' => '227svn',
+                'version' => '264svn',
                 'packagedirectory' => '.',
-                'state' => 'alpha',
+                'state' => 'beta',
                 'filelistgenerator' => 'svn', // generate from svn
                 'notes' => 'We\'ve implemented many new and exciting features',
                 'dir_roles' => array('doc' => 'doc',
@@ -105,7 +105,7 @@ if (PEAR::isError($e)) {
  }
 
 //  Depends on these PEAR modules
-$e = $packagexml->addDependency('DB','1.0');
+$e = $packagexml->addDependency('MDB2','2.0');
 if (PEAR::isError($e)) {
     echo $e->getMessage();
     die();
