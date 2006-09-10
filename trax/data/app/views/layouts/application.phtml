@@ -4,16 +4,13 @@
 </head>
 <body>
 
-<? if( array_key_exists('flash',$_SESSION)
-       && array_key_exists('notice',$_SESSION) ): ?>
-    <font color="green"><?=$_SESSION['flash']['notice']?></font><br><br>
-<? endif; ?>
-<? if( array_key_exists('flash',$_SESSION)
-       && array_key_exists('error',$_SESSION) ): ?>
-    <font color="red"><?=$_SESSION['flash']['error']?></font><br><br>
-<? endif; ?>
+<?php if(Session::isset_flash('error')): ?>									    
+    <font color="red"><?php echo Session::flash('error') ?></font>   
+<?php elseif(Session::isset_flash('notice')): ?>    
+    <font color="green"><?php echo Session::flash('notice') ?></font>   
+<?php endif; ?> 
 
-<?=$content_for_layout?>
+<?php echo $content_for_layout ?>
 		
 </body>
 </html>
