@@ -52,187 +52,156 @@ require_once('PEAR/Packager.php');
 
 $packagexml = new PEAR_PackageFileManager;
 
-$e = $packagexml->setOptions(
-          array('package' => 'PHPonTrax',
-		'channel' => 'pear.phpontrax.com',
-                'summary' => 'Rapid Application Development Made Easy',
-                'description' => 'PHP port of Ruby on Rails',
-                'baseinstalldir' => 'PHPonTrax',
-                'version' => '264svn',
-                'packagedirectory' => '.',
-                'state' => 'beta',
-                'filelistgenerator' => 'svn', // generate from svn
-                'notes' => 'We\'ve implemented many new and exciting features',
-                'dir_roles' => array('doc' => 'doc',
-                                     'test' => 'test',
-                                     'data' => 'data'),
-                'exceptions' => array('pear-trax' => 'script',
-                                      'pear-trax.bat' => 'script',
- 'vendor/trax/templates/error.phtml' => 'php',
- 'vendor/trax/templates/view.phtml' => 'php',
- 'vendor/trax/templates/mailer_view.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/add.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/edit.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/index.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/layout.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/show.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/scaffold.css' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/form_scaffolding.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/layout.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/view_add.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/view_edit.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/view_index.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/view_show.phtml' => 'php',
- 'vendor/trax/templates/scaffolds/generator_templates/style.css' => 'php',
-),
-                'installexceptions' => array('pear-trax' => '/',
-                                             'dispatch.php' => 'public'),
-                'installas' => array('pear-trax' => 'trax',
-                                     'pear-trax.bat' => 'trax')
-                ));
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+$e = $packagexml->setOptions(array(
+	'package' => 'PHPonTrax',
+	'channel' => 'pear.phpontrax.com',
+    'summary' => 'Rapid Application Development Made Easy',
+    'description' => 'PHP port of Ruby on Rails',
+    'baseinstalldir' => 'PHPonTrax',
+    'version' => '266svn',
+    'packagedirectory' => '.',
+    'state' => 'beta',
+    'filelistgenerator' => 'svn', // generate from svn
+    'notes' => 'We\'ve implemented many new and exciting features',
+	'dir_roles' => array(
+		'doc' => 'doc',
+		'test' => 'test',
+		'data' => 'data'
+	),
+	'exceptions' => array(
+		'pear-trax' => 'script',
+		'pear-trax.bat' => 'script',
+		'vendor/trax/templates/error.phtml' => 'php',
+		'vendor/trax/templates/view.phtml' => 'php',
+		'vendor/trax/templates/mailer_view.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/add.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/edit.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/index.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/layout.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/show.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/scaffold.css' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/form_scaffolding.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/layout.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/view_add.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/view_edit.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/view_index.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/view_show.phtml' => 'php',
+		'vendor/trax/templates/scaffolds/generator_templates/style.css' => 'php'
+	),
+	'installexceptions' => array(
+		'pear-trax' => '/',
+		'dispatch.php' => 'public'
+	),
+	'installas' => array(
+		'pear-trax' => 'trax',
+		'pear-trax.bat' => 'trax'
+	)
+));
 
- }
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Depends on PHP 5
+// Depends on PHP 5
 $e = $packagexml->addDependency('php','5.0.3','ge','php','no');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
-
-//  Depends on these PEAR modules
+// Depends on these PEAR modules
 $e = $packagexml->addDependency('MDB2','2.0');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
 $e = $packagexml->addDependency('Mail','1.0');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
 $e = $packagexml->addDependency('Mail_Mime','1.0');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
-$e = $packagexml->addDependency('PHPUnit2','1.0');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+//$e = $packagexml->addDependency('PHPUnit2','1.0');
+//if(PEAR::isError($e)) {
+    //die($e->getMessage());
+//}
 
- }
+// Optionally uses these PEAR modules
+$e = $packagexml->addDependency('PhpDocumentor','1.3.0','ge','pkg','yes');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Optionally uses these PEAR modules
-$e = $packagexml->addDependency('PhpDocumentor','1.3.0RC4','ge','pkg','yes');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+// Who maintains this package
+$e = $packagexml->addMaintainer('john','lead','John Peterson','john@mytechsupport.com');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
+$e = $packagexml->addMaintainer('haas','developer','Walt Haas','haas@xmission.com');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Who maintains this package
-$e = $packagexml->addMaintainer('john','lead','John Peterson',
-                                'john@mytechsupport.com');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+// Substitute local configuration values for these symbols
+$e = $packagexml->addGlobalReplacement('pear-config', '@BIN-DIR@', 'bin_dir');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
+$e = $packagexml->addGlobalReplacement('pear-config', '@DOC-DIR@', 'doc_dir');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-$e = $packagexml->addMaintainer('haas','developer','Walt Haas',
-                                'haas@xmission.com');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-DIR@', 'php_dir');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
+$e = $packagexml->addGlobalReplacement('pear-config', '@DATA-DIR@', 'data_dir');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Substitute local configuration values for these symbols
-$e = $packagexml->addGlobalReplacement('pear-config', '@BIN-DIR@',
-                                       'bin_dir');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
+$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-BIN@', 'php_bin');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
- }
+$e = $packagexml->addGlobalReplacement('pear-config', '@TEST-DIR@', 'test_dir');
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-$e = $packagexml->addGlobalReplacement('pear-config', '@DOC-DIR@',
-                                       'doc_dir');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
-
- }
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-DIR@',
-                                       'php_dir');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
-
- }
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@DATA-DIR@',
-                                       'data_dir');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
-
- }
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-BIN@',
-                                       'php_bin');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
-
- }
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@TEST-DIR@',
-                                       'test_dir');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
-
- }
-
-//  Platform-dependent command lines
+// Platform-dependent command lines
 $e = $packagexml->addPlatformException('pear-trax.bat', 'windows');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    exit;
- }
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
 $e = $packagexml->addPlatformException('pear-trax', '*ix|*ux|*BSD|Darwin');
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    exit;
- }
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Study the Subversion .svn directories to see what goes in the
-//  package, then write package.xml
-//  (Needs: XML_Tree with patch s/clone/clone4/g)
+// Study the Subversion .svn directories to see what goes in the
+// package, then write package.xml
+// (Needs: XML_Tree with patch s/clone/clone4/g)
 $e = $packagexml->writePackageFile();
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
- }
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
-//  Make a tarball of the files listed in package.xml
+// Make a tarball of the files listed in package.xml
 $packager = new PEAR_Packager;
 $e = $packager->package();
-if (PEAR::isError($e)) {
-    echo $e->getMessage();
-    die();
- }
+if(PEAR::isError($e)) {
+    die($e->getMessage());
+}
 
 // -- set Emacs parameters --
 // Local variables:
