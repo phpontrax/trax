@@ -36,15 +36,15 @@ class Trax {
     
     public static 
         $models_path = null,
-        $views_path = null,         
-        $controllers_path = null,    
-        $helpers_path = null,       
-        $layouts_path = null,       
-        $config_path = null,        
-        $environments_path = null,  
-        $lib_path = null,           
-        $app_path = null,           
-        $log_path = null,           
+        $views_path = null,
+        $controllers_path = null,
+        $helpers_path = null,
+        $layouts_path = null,
+        $config_path = null,
+        $environments_path = null,
+        $lib_path = null,
+        $app_path = null,
+        $log_path = null,
         $vendor_path = null,
         $public_path = null,
         $url_prefix = null,
@@ -54,16 +54,15 @@ class Trax {
         $current_controller_name = null,
         $current_action_name = null,
         $current_controller_object = null;
-              
-        
+
     function initialize() {
-       
+
         if(substr(PHP_OS, 0, 3) == 'WIN') {
             # Windows
             self::$path_seperator = ";";
-        }    
-        
-        # Set include paths   
+        }
+
+        # Set include paths
         self::$models_path       = TRAX_ROOT."/app/models";
         self::$views_path        = TRAX_ROOT."/app/views";
         self::$controllers_path  = TRAX_ROOT."/app/controllers";
@@ -76,12 +75,12 @@ class Trax {
         self::$log_path          = TRAX_ROOT."/log";
         self::$vendor_path       = TRAX_ROOT."/vendor";
         self::$public_path       = TRAX_ROOT."/public"; 
-        
+
         # Set which file to log php errors to for this application
         # As well in your application you can do error_log("whatever") and it will go to this log file.
         ini_set("log_errors", "On");
-        ini_set("error_log", self::$log_path."/".TRAX_ENV.".log"); 
-        
+        ini_set("error_log", self::$log_path."/".TRAX_ENV.".log");
+
         if(TRAX_ENV == "development") {
             # Display errors to browser if in development mode for debugging
             ini_set("display_errors", "On");
@@ -89,15 +88,16 @@ class Trax {
             # Hide errors from browser if not in development mode
             ini_set("display_errors", "Off");
         }
-                
+
         # Set the include_path
         ini_set("include_path",
-                ".".self::$path_seperator.   # current directory
-                TRAX_LIB_ROOT.self::$path_seperator.  # trax libs (vendor/trax or server trax libs)
-                PHP_LIB_ROOT.self::$path_seperator.  # php libs dir (ex: /usr/local/lib/php)
-                TRAX_ROOT.self::$lib_path.self::$path_seperator. # app specific libs extra libs to include
-                ini_get("include_path")); # add on old include_path to end
-        
+            ".".self::$path_seperator.              # current directory
+            TRAX_LIB_ROOT.self::$path_seperator.    # trax libs (vendor/trax or server trax libs)
+            PHP_LIB_ROOT.self::$path_seperator.     # php libs dir (ex: /usr/local/lib/php)
+            self::$lib_path.self::$path_seperator.  # app specific libs extra libs to include
+            ini_get("include_path")                 # tack on the old include_path to the end
+        ); # add on old include_path to end
+
         # Include Trax library files.
         include_once("session.php");
         include_once("input_filter.php");
@@ -116,14 +116,14 @@ class Trax {
             # Load databse settings 
             ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true);
         }
-                   
+
     }
-    
+
     function include_env_config() {
         # Include the application environment specific config file
         if(file_exists(self::$environments_path."/".TRAX_ENV.".php")) {
             include_once(self::$environments_path."/".TRAX_ENV.".php");
-        }             
+        }
     }
 }
 
