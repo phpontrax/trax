@@ -96,7 +96,7 @@ class Trax {
             PHP_LIB_ROOT.self::$path_seperator.     # php libs dir (ex: /usr/local/lib/php)
             self::$lib_path.self::$path_seperator.  # app specific libs extra libs to include
             ini_get("include_path")                 # tack on the old include_path to the end
-        ); # add on old include_path to end
+        );
 
         # Include Trax library files.
         include_once("session.php");
