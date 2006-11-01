@@ -120,12 +120,12 @@ class FormOptionsHelper extends FormHelper {
                     $options[] = "<option value=\""
 		            . htmlspecialchars($choice_value)
 		            . "\" selected=\"selected\">"
-		            . htmlspecialchars($choice_text)."</option>";
+		            . htmlspecialchars(is_object($choice_text) ? $choice_text->__toString() : $choice_text)."</option>";
                 } else {
                     $options[] = "<option value=\""
 		            . htmlspecialchars($choice_value)
 		            . "\">"
-		            . htmlspecialchars($choice_text)."</option>";
+		            . htmlspecialchars(is_object($choice_text) ? $choice_text->__toString() : $choice_text)."</option>";
                 }                        
             }    
         }
@@ -156,8 +156,8 @@ class FormOptionsHelper extends FormHelper {
         if(is_array($collection)) {
             foreach($collection as $object) {
                 if(is_object($object)) {
-                    $options[$object->send($attribute_value)] =
-                        $object->send($attribute_text);            
+                    //$options[$object->send($attribute_value)] = $object->send($attribute_text);
+                    $options[$object->$attribute_value] = $object->$attribute_text;
                 }
             }    
         }       

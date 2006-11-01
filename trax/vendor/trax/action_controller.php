@@ -414,26 +414,24 @@ class ActionController {
         }
 
         # current url
-        if(isset($_SERVER['REDIRECT_URL'])) {
+        if(isset($_SERVER['REDIRECT_URL']) && !stristr($_SERVER['REDIRECT_URL'], 'dispatch.php')) {
             $browser_url = $_SERVER['REDIRECT_URL'];
-        } else {
-            $browser_url = $_SERVER['REQUEST_URI'];        
-        }        
-        #if(strstr($_SERVER['REQUEST_URI'], "?"))
-        #    $browser_url = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?"));
-        #else
-        #    $browser_url = $_SERVER['REQUEST_URI'];    
-        
+        } elseif(isset($_SERVER['REQUEST_URI'])) {
+            $browser_url = strstr($_SERVER['REQUEST_URI'], "?") ?
+                substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?")) :
+                $_SERVER['REQUEST_URI'];
+        }
+
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
         if(!is_null(Trax::$url_prefix)) {
             $browser_url = str_replace(Trax::$url_prefix, "", $browser_url);
         }
 
-        # strip leading slash
-        // FIXME: Do we know for sure that the
-        // initial '/' will be there?
-        $browser_url = substr($browser_url,1);
+        # strip leading slash (if any)
+        if(substr($browser_url, 0, 1) == "/") {
+            $browser_url = substr($browser_url, 1);
+        }
 
         # strip trailing slash (if any)
         if(substr($browser_url, -1) == "/") {
