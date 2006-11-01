@@ -577,9 +577,17 @@ class JavaScriptHelper extends Helpers {
     
     # Escape carrier returns and single and double quotes for JavaScript segments.
     function escape_javascript($javascript) {
-        return preg_replace('/\r\n|\n|\r/', "\\n",
-               preg_replace_callback('/["\']/', create_function('$m', 'return "\\{$m}";'),
-               (!is_null($javascript) ? $javascript : '')));
+        $escape = array(
+            "\r\n"  => '\n',
+            "\r"    => '\n',
+            "\n"    => '\n',
+            '"'     => '\"',
+            "'"     => "\\'"
+        );
+        return str_replace(array_keys($escape), array_values($escape), $javascript); 
+        #return preg_replace('/\r\n|\n|\r/', "\\n",
+        #       preg_replace_callback('/["\']/', create_function('$m', 'return "\\{$m}";'),
+        #       (!is_null($javascript) ? $javascript : '')));
     }
     
     # Returns a JavaScript tag with the $content inside. Example:
