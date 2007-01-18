@@ -152,7 +152,7 @@ class ActiveRecordHelper extends Helpers {
      * <tt>class</tt> - The class of the error div (default: errorExplanation)
      *  @param mixed object_name  The name of a PHP class, or
      *                            an object instance of that class
-     *  @param string[] options Set of options: 'header_tag', 'id', 'class'
+     *  @param string[] options Set of options: 'header_tag', 'id', 'class', 'header_message', 'header_sub_message'
      *  @uses content_tag()
      *  @uses object_name
      *  @uses Inflector::humanize()
@@ -165,16 +165,22 @@ class ActiveRecordHelper extends Helpers {
         $this->object_name = $object_name;
         $object = $this->controller_object->$object_name;
         if(!empty($object->errors)) {
-            $errors = ($num_errors = count($object->errors)) > 1 ? "$num_errors errors" : "$num_errors error";
+            $id = isset($options['id']) ? $options['id'] : "ErrorExplanation";
+            $class = isset($options['class']) ? $options['class'] : "ErrorExplanation";
+            $header_tag = isset($options['header_tag']) ? $options['header_tag'] : "h2";
+            $header_message = isset($options['header_message']) ? 
+                $options['header_message'] : "%s prohibited this %s from being saved";
+            $header_sub_message = isset($options['header_sub_message']) ?
+                $options['header_sub_message'] : "There were problems with the following fields:";
+               
             return $this->content_tag("div",
                 $this->content_tag(
-                    (isset($options['header_tag']) ? $options['header_tag'] : "h2"),
-                    $errors . 
-                    " prohibited this " . Inflector::humanize($object_name) . " from being saved"
+                    $header_tag,
+                    sprintf($header_message, Inflector::pluralize("error", count($object->errors)), Inflector::humanize($object_name))
                 ) .
                 $this->content_tag("p", "There were problems with the following fields:") .
                 $this->content_tag("ul", array_reduce($object->errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
-                array("id" => (isset($options['id']) ? $options['id'] : "ErrorExplanation"), "class" => (isset($options['class']) ? $options['class'] : "ErrorExplanation"))
+                array("id" => $id, "class" => $class)
             );
         }
     }
