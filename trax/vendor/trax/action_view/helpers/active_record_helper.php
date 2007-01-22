@@ -178,7 +178,7 @@ class ActiveRecordHelper extends Helpers {
                     $header_tag,
                     sprintf($header_message, Inflector::pluralize("error", count($object->errors)), Inflector::humanize($object_name))
                 ) .
-                $this->content_tag("p", "There were problems with the following fields:") .
+                $this->content_tag("p", $header_sub_message) .
                 $this->content_tag("ul", array_reduce($object->errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
                 array("id" => $id, "class" => $class)
             );
