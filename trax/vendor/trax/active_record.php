@@ -163,7 +163,7 @@ class ActiveRecord {
 	/**
 	 * Stores the active connections. Indexed on $connection_name.
 	 */
-	protected static $active_connections = array();
+	public static $active_connections = array();
 
     /**
      *  Mode to use when fetching data from database
