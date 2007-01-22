@@ -2535,7 +2535,7 @@ class ActiveRecord {
                 if(!$this->is_error($connection)) {
                     # Set the schema search path to a string of comma-separated schema names.
                     # First strip out all the whitespace
-                    self::$connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
+                    $connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
                 }
             } 
         }
