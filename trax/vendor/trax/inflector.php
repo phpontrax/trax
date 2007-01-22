@@ -45,18 +45,23 @@ class Inflector {
      *  Pluralize a word according to English rules
      *
      *  Convert a lower-case singular word to plural form.
+     *  If $count > 0 then prefixes $word with the $count
+     *
      *  @param  string $word  Word to be pluralized
+     *  @param  int $count How many of these $words are there
      *  @return string  Plural of $word
      */
-    function pluralize($word) {
-        if(!in_array($word, Inflections::$uncountables)) { 
-            $original = $word;   
-            foreach(Inflections::$plurals as $plural_rule) {
-                $word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $word);
-                if($original != $word) break;
+    function pluralize($word, $count = 0) {
+        if($count == 0 || $count > 1) {          
+            if(!in_array($word, Inflections::$uncountables)) { 
+                $original = $word;   
+                foreach(Inflections::$plurals as $plural_rule) {
+                    $word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $word);
+                    if($original != $word) break;
+                }
             }
         }
-        return $word;
+        return ($count >= 1 ? "{$count} {$word}" : $word);
     }
 
     /**
