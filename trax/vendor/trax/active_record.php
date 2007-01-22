@@ -79,7 +79,7 @@ class ActiveRecord {
      *
      *  <p>Retrieved from the RDBMS by {@link set_content_columns()}.
      *  See {@link 
-     *  http://pear.php.net/manual/en/package.database.db.db-common.tableinfo.php
+     *  http://pear.php.net/package/MDB2/docs/2.3.0/MDB2/MDB2_Driver_Reverse_Common.html#methodtableInfo
      *  DB_common::tableInfo()} for the format.  <b>NOTE:</b> Some
      *  RDBMS's don't return all values.</p>
      *
@@ -163,14 +163,14 @@ class ActiveRecord {
 	/**
 	 * Stores the active connections. Indexed on $connection_name.
 	 */
-	public static $active_connections = array();
+	protected static $active_connections = array();
 
     /**
      *  Mode to use when fetching data from database
      *
      *  See {@link
-     *  http://pear.php.net/manual/en/package.database.db.db-common.setfetchmode.php
-     *  the relevant PEAR DB class documentation}
+     *  http://pear.php.net/package/MDB2/docs/2.3.0/MDB2/MDB2_Driver_Common.html#methodsetFetchMode
+     *  the relevant PEAR MDB2 class documentation}
      *  @var integer
      */
     public $fetch_mode = MDB2_FETCHMODE_ASSOC;
@@ -240,10 +240,10 @@ class ActiveRecord {
     protected $save_associations = array();
     
     /**
-     *  @todo Document this property
+     *  Whether or not to auto save defined associations if set
      *  @var boolean
      */
-    public $auto_save_associations = true; # where or not to auto save defined associations if set
+    public $auto_save_associations = true;
 
     /**
      *  Whether this object represents a new record
@@ -341,9 +341,9 @@ class ActiveRecord {
     public $rows_per_page_default = 20;
 
     /**
-     *  @todo Document this variable
+     *  Pagination how many numbers in the list << < 1 2 3 4 > >>
      */
-    public $display = 10; # Pagination how many numbers in the list << < 1 2 3 4 > >>
+    public $display = 10;
 
     /**
      *  @todo Document this variable
@@ -400,11 +400,6 @@ class ActiveRecord {
         'validates_presence_of',        
         'validates_uniqueness_of'
     );
-    
-	/**
-     * An array of all the builtin validation function to validate on a save/create/update.
-     */      
-    public $builtins_to_validate = array();
 
     /**
      *  Whether to automatically update timestamps in certain columns
@@ -416,24 +411,26 @@ class ActiveRecord {
     public $auto_timestamps = true;
 
     /**
-     *  @todo Document this variable
+     *  Auto insert / update $has_and_belongs_to_many tables
      */
-    public $auto_save_habtm = true; # auto insert / update $has_and_belongs_to_many tables
+    public $auto_save_habtm = true;
 
     /**
-     *  @todo Document this variable
+     *  Auto delete $has_and_belongs_to_many associations
      */    
-    public $auto_delete_habtm = true; # auto delete $has_and_belongs_to_many associations
+    public $auto_delete_habtm = true; 
 
     /**
      *  Transactions (only use if your db supports it)
+     *  This is for transactions only to let query() know that a 'BEGIN' has been executed
      */
-    private static $begin_executed = false; # this is for transactions only to let query() know that a 'BEGIN' has been executed
+    private static $begin_executed = false;
 
     /**
      *  Transactions (only use if your db supports it)
+     *  This will issue a rollback command if any sql fails.
      */
-    public static $use_transactions = false; # this will issue a rollback command if any sql fails
+    public static $use_transactions = false; 
     
     /**
      *  Keep a log of queries executed if in development env
@@ -2532,14 +2529,23 @@ class ActiveRecord {
             # Connect to the database and throw an error if the connect fails.
             $connection =& MDB2::Connect($connection_settings, $connection_options);
             //static $connect_cnt;  $connect_cnt++; error_log("connection #".$connect_cnt);
+            
+            # For Postgres schemas (http://www.postgresql.org/docs/8.0/interactive/ddl-schemas.html)
+            if(isset($connection_settings['schema_search_path'])){
+                if(!$this->is_error($connection)) {
+                    # Set the schema search path to a string of comma-separated schema names.
+                    # First strip out all the whitespace
+                    self::$connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
+                }
+            } 
         }
         if(!$this->is_error($connection)) {
             self::$active_connections[$this->connection_name] =& $connection;
             self::$db =& $connection;
+            self::$db->setFetchMode($this->fetch_mode);
         } else {
             $this->raise($connection->getMessage());
-        }
-        self::$db->setFetchMode($this->fetch_mode);
+        }      
         return self::$db;
     }
 
