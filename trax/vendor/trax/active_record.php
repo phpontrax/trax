@@ -1381,12 +1381,12 @@ class ActiveRecord {
                 }
             }
             $objects[$objects_key] = $object;
-            unset($object);
             # If callback is defined in model run it.
             # this will probably hurt performance...
-            if(method_exists($this, 'after_find')) {
-                $this->after_find();    
+            if(method_exists($object, 'after_find')) {
+                $object->after_find();    
             }
+            unset($object);
         }
         return $objects;
     }
