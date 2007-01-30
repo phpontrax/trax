@@ -292,7 +292,7 @@ class Helpers {
     function content_tag($name, $content, $options = array()) {
         $html = "<$name ";
         $html .= $this->tag_options($options);
-        if($options['strip_slashes']) {
+        if(isset($options['strip_slashes'])) {
             $content = stripslashes($content);    
         }
         $html .= ">$content</$name>";
