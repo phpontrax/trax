@@ -143,7 +143,8 @@ class Helpers {
             //  ActiveRecord subclass instance and query it.
             $object = $this->object();
             if(is_object($object) && $this->attribute_name) {
-                $value = $object->send($this->attribute_name);
+                //$value = $object->send($this->attribute_name);
+                $value = $object->{$this->attribute_name};
             }
         }
         return $value;
