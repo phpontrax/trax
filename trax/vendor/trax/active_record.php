@@ -583,7 +583,7 @@ class ActiveRecord {
             # ... otherwise, check to see if the method call is one of our
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
-            # declared associations for this model ( e.g. $this->has_many = array("movies" => null) ) ...
+            # declared associations for this model ( e.g. public $has_many = "movies" ) ...
             if(is_array($parameters[0])) {
                 $parameters = $parameters[0];    
             }
@@ -2814,11 +2814,16 @@ class ActiveRecord {
     function validate_builtin() {
         foreach($this->builtin_validation_functions as $method_name) {
             $validation_name = $this->$method_name;
+            if(is_string($validation_name)) {
+                $validation_name = explode(",", $validation_name);    
+            }
             if(method_exists($this, $method_name) && is_array($validation_name)) {
                 foreach($validation_name as $attribute_name => $options) {
                     if(!is_array($options)) {
-                        $options = array();   
-                    }
+                        $attribute_name = $options;
+                        $options = array();
+                    }               
+                    $attribute_name = trim($attribute_name);     
                     $parameters = array();
                     $on = array_key_exists('on', $options) ? 
                         $options['on'] : 'save';
