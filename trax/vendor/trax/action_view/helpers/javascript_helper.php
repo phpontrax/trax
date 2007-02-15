@@ -92,7 +92,8 @@ class JavaScriptHelper extends Helpers {
     private function build_observer($klass, $name, $options = array()) {
         if($options['update']) {
             if(!$options['with']) {
-                $options['with'] = 'value';
+                #$options['with'] = 'value';
+		$options['with'] = "'value=' + value";
             }
         }
         $callback = $this->remote_function($options);
