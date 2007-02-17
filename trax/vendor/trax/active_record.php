@@ -678,6 +678,7 @@ class ActiveRecord {
         
         if(!is_null($other_object_name)) {
             $other_class_name = Inflector::camelize($other_object_name);    
+            $other_table_name = Inflector::tableize($other_object_name);    
         } else {
             $other_class_name = Inflector::classify($other_table_name);
         }
