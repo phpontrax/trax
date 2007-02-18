@@ -322,6 +322,9 @@ class ActionController {
             $this->render_text($value);
         } elseif($key == "redirect_to") {
             $this->redirect_to($value);       
+        } elseif($key == "layout") {
+            $this->layout = $value;
+            $this->determine_layout();    
         } else {
             $this->$key = $value;
         }
@@ -334,7 +337,7 @@ class ActionController {
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
             # If the method exists, just call it
-            $result = call_user_func(array($this, $method_name), $parameters);
+            $result = call_user_func_array(array($this, $method_name), $parameters);
         } else {        
             if($method_name == "before_filter") {
                 $result = call_user_func(array($this, 'add_before_filter'), $parameters);
@@ -577,53 +580,48 @@ class ActionController {
         if($this->loaded) {
             
             include_once($this->controller_file);            
-            if(class_exists($this->controller_class, false)) {
-                
+            if(class_exists($this->controller_class, false)) {                
                 $class = $this->controller_class;
-                $this->controller_object = new $class();
-                
-                if(is_object($this->controller_object)) {
-                   
-                    $this->controller_object->controller = $this->controller;
-                    $this->controller_object->action = $this->action;
-                    $this->controller_object->controller_path = "$this->added_path/$this->controller";
-                    $this->controller_object->views_path = $this->views_path;
-                    $this->controller_object->layouts_path = $this->layouts_path;
-                    Trax::$current_controller_path = "$this->added_path/$this->controller";
-                    Trax::$current_controller_name = $this->controller;
-                    Trax::$current_action_name = $this->action;
-                    Trax::$current_controller_object =& $this->controller_object;
-                    # Which layout should we use?
-                    $layout_file = $this->controller_object->determine_layout();
-                    //error_log('using layout_file "'.$layout_file.'"');
-                    # Check if there is any defined scaffolding to load
-                    if(isset($this->controller_object->scaffold)) {
-                        $scaffold = $this->controller_object->scaffold;
-                        if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
-                            include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
-                            $this->controller_object = new ScaffoldController($scaffold);
-                            Trax::$current_controller_object =& $this->controller_object;
-                            $render_options['scaffold'] = true;
-                            if(!file_exists($layout_file)) {
-                                # the generic scaffold layout
-                                $layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
-                            }
-                        }
-                    }
-                }                
-            }
-
-            # Include main application helper file
-            if(file_exists($this->application_helper_file)) {
-                include_once($this->application_helper_file);
-            }
-
-            # Include helper file for this controller
-            if(file_exists($this->helper_file)) {
-                include_once($this->helper_file);
+                $this->controller_object = new $class();                
             }
 			
             if(is_object($this->controller_object)) {
+                
+                $this->controller_object->controller = $this->controller;
+                $this->controller_object->action = $this->action;
+                $this->controller_object->controller_path = "$this->added_path/$this->controller";
+                $this->controller_object->views_path = $this->views_path;
+                $this->controller_object->layouts_path = $this->layouts_path;
+                Trax::$current_controller_path = "$this->added_path/$this->controller";
+                Trax::$current_controller_name = $this->controller;
+                Trax::$current_action_name = $this->action;
+                Trax::$current_controller_object =& $this->controller_object;
+                # Which layout should we use?
+                $this->controller_object->determine_layout();
+                # Check if there is any defined scaffolding to load
+                if(isset($this->controller_object->scaffold)) {
+                    $scaffold = $this->controller_object->scaffold;
+                    if(file_exists(TRAX_LIB_ROOT."/scaffold_controller.php")) {
+                        include_once(TRAX_LIB_ROOT."/scaffold_controller.php");
+                        $this->controller_object = new ScaffoldController($scaffold);
+                        Trax::$current_controller_object =& $this->controller_object;
+                        $render_options['scaffold'] = true;
+                        if(!file_exists($this->controller_object->layout_file)) {
+                            # the generic scaffold layout
+                            $this->controller_object->layout_file = TRAX_LIB_ROOT . "/templates/scaffolds/layout.phtml";
+                        }
+                    }
+                }
+
+                # Include main application helper file
+                if(file_exists($this->application_helper_file)) {
+                    include_once($this->application_helper_file);
+                }
+    
+                # Include helper file for this controller
+                if(file_exists($this->helper_file)) {
+                    include_once($this->helper_file);
+                }                               
 
                 # Include any extra helper files defined in this controller
                 if(count($this->controller_object->helpers) > 0) {
@@ -649,7 +647,10 @@ class ActionController {
                 
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
-                   
+                    $controller_layout = null;
+                    if(isset($this->controller_object->layout)) {
+                        $controller_layout = $this->controller_object->layout;       
+                    }
                     if(method_exists($this->controller_object, $this->action)) {
                         //error_log('method '.$this->action.' exists, calling it');
                         $action = $this->action;
@@ -672,6 +673,14 @@ class ActionController {
                         //error_log('no action');
                         $this->raise("No action responded to ".$this->action, "Unknown action", "404");
                     }
+                    
+                    if(isset($this->controller_object->layout)) {
+                        if($controller_layout != $this->controller_object->layout) {
+                            # layout was set in the action need to redetermine the layout file to use.
+                            $this->controller_object->determine_layout();
+                        }       
+                    }
+                    
                     $this->controller_object->execute_after_filters();
                     
                     $this->controller_object->action_called = true;
@@ -707,11 +716,11 @@ class ActionController {
                     //error_log("captured ".strlen($content_for_layout)." bytes\n");
                     if(isset($this->controller_object->render_layout)
                        && ($this->controller_object->render_layout !== false)
-                       && $layout_file) {
+                       && $this->controller_object->layout_file) {
                         $locals['content_for_layout'] = $content_for_layout;
                         # render the layout
-                        //error_log("rendering layout: $layout_file");
-                        if(!$this->controller_object->render_file($layout_file, false, $locals)) {
+                        //error_log("rendering layout: ".$this->controller_object->layout_file);
+                        if(!$this->controller_object->render_file($this->controller_object->layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
                             //echo "HERE";
                             echo $content_for_layout;        
@@ -720,9 +729,10 @@ class ActionController {
                         # Can't find any layout so throw an exception
                         # $this->raise("No layout file found.", "Unknown layout", "404"); 
                         # No layout template so just echo out whatever is in $content_for_layout
+                        //error_log("no layout found: ".$this->controller_object->layout_file);
                         echo $content_for_layout;
                     }
-                }
+                }       
             } else {
                 $this->raise("Failed to instantiate controller object \"".$this->controller."\".", "ActionController Error", "500");
             }
@@ -733,6 +743,7 @@ class ActionController {
         // error_log('keep flash='.var_export($this->keep_flash,true));
         if(!$this->keep_flash) {
             # Nuke the flash
+            unset($_SESSION['flash']);
             Session::unset_var('flash');
         }
 
@@ -762,10 +773,13 @@ class ActionController {
      */
     function set_paths() {
         if(is_array($this->url_path)) {
+            $test_path = null;
             foreach($this->url_path as $path) {
-                if(file_exists($this->controllers_path . "/$path")) {
+                $test_path = (is_null($test_path) ? $path : "$test_path/$path");
+                if(is_dir($this->controllers_path . "/$test_path")) {
                     $extra_path[] = $path;
                 } else {
+                    $test_path = null;
                     $new_path[] = $path;
                 }
             }
@@ -1188,6 +1202,7 @@ class ActionController {
         if(!isset($layout_file)) {
             $layout_file = $default_layout_file;
         }
+        $this->layout_file = $layout_file;
         return $layout_file;
     }
 
