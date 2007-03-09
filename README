@@ -19,16 +19,13 @@ The controller and view is handled by the Action Controller
 
 == Requirements
 
-* Database (MySQL, PostgreSQL, etc) (uses Pear::DB)
+* Database (MySQL, PostgreSQL, etc) (uses Pear::MDB2)
 * PHP 5.x
-* PEAR::DB, PEAR::Mail, PEAR::Mail_mime
+* PEAR::MDB2, PEAR::Mail, PEAR::Mail_mime
 * Apache 1.3.x or 2.x 
 * FreeBSD, Unix, Linux, MacOSX, Windows
 
 == Getting Started
-goto: http://svn.phpontrax.com/wiki/HowToCreateATraxApplication
-
-== Small Demo Application
-goto: http://traxtest.mytechsupport.com
-download demo: http://www.phpontrax.com/downloads
-      
+http://wiki.phpontrax.com/How_do_I_install/upgrade_Trax%3F
+http://wiki.phpontrax.com/How_do_I_create_a_Trax_application%3F
+http://wiki.phpontrax.com/How_Tos
