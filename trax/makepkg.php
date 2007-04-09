@@ -41,28 +41,19 @@
  *  </ul>
  *
  *  @package PHPonTrax
- *  @license http://opensource.org/licenses/gpl-license.php GNU Public License
- *  @copyright (c) Walter O. Haas 2006
  *  @version $Id$
- *  @author Walt Haas <haas@xmission.com>
  */
 
-require_once('PEAR/PackageFileManager.php');
+require_once('PEAR/PackageFileManager2.php');
 require_once('PEAR/Packager.php');
 
-$packagexml = new PEAR_PackageFileManager;
+$packagexml = new PEAR_PackageFileManager2;
 
+// Set package options
 $e = $packagexml->setOptions(array(
-	'package' => 'PHPonTrax',
-	'channel' => 'pear.phpontrax.com',
-    'summary' => 'Rapid Application Development Made Easy',
-    'description' => 'PHP port of Ruby on Rails',
     'baseinstalldir' => 'PHPonTrax',
-    'version' => '286svn',
     'packagedirectory' => '.',
-    'state' => 'beta',
-    'filelistgenerator' => 'svn', // generate from svn
-    'notes' => 'We\'ve implemented many new and exciting features',
+    'filelistgenerator' => 'svn', // generate from svn or file
 	'dir_roles' => array(
 		'doc' => 'doc',
 		'test' => 'test',
@@ -91,106 +82,57 @@ $e = $packagexml->setOptions(array(
 	'installexceptions' => array(
 		'pear-trax' => '/',
 		'dispatch.php' => 'public'
-	),
-	'installas' => array(
-		'pear-trax' => 'trax',
-		'pear-trax.bat' => 'trax'
 	)
 ));
-
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+$packagexml->setPackage('PHPonTrax');
+$packagexml->setSummary('Rapid Application Development Made Easy');
+$packagexml->setDescription('PHP port of Ruby on Rails');
+$packagexml->setNotes('We\'ve implemented many new and exciting features');
+$packagexml->setChannel('pear.phpontrax.com');
+$packagexml->setReleaseVersion('0.14.0');
+$packagexml->setAPIVersion('0.14.0');
+$packagexml->setReleaseStability('stable');
+$packagexml->setAPIStability('stable');
+$packagexml->setLicense('MIT License', 'http://www.opensource.org/licenses/mit-license.php');
+$packagexml->setPackageType('php'); // this is a PEAR-style php script package
 
 // Depends on PHP 5
-$e = $packagexml->addDependency('php','5.0.3','ge','php','no');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+$packagexml->setPhpDep('5.0.3');
 
-// Depends on these PEAR modules
-$e = $packagexml->addDependency('MDB2','2.0');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+// Depends on Pear 1.4.0 or greater
+$packagexml->setPearinstallerDep('1.4.0');
 
-$e = $packagexml->addDependency('Mail','1.0');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addDependency('Mail_Mime','1.0');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-//$e = $packagexml->addDependency('PHPUnit2','1.0');
-//if(PEAR::isError($e)) {
-    //die($e->getMessage());
-//}
-
-// Optionally uses these PEAR modules
-$e = $packagexml->addDependency('PhpDocumentor','1.3.0','ge','pkg','yes');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+// Depends on these PEAR packages
+$packagexml->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.0');
+$packagexml->addPackageDepWithChannel('required', 'Mail', 'pear.php.net', '1.0');
+$packagexml->addPackageDepWithChannel('required', 'Mail_Mime', 'pear.php.net', '1.0');
 
 // Who maintains this package
-$e = $packagexml->addMaintainer('john','lead','John Peterson','john@mytechsupport.com');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addMaintainer('haas','developer','Walt Haas','haas@xmission.com');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+$packagexml->addMaintainer('lead', 'john', 'John Peterson', 'john@mytechsupport.com');
+$packagexml->addMaintainer('developer', 'haas', 'Walt Haas', 'haas@xmission.com');
 
 // Substitute local configuration values for these symbols
-$e = $packagexml->addGlobalReplacement('pear-config', '@BIN-DIR@', 'bin_dir');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@DOC-DIR@', 'doc_dir');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-DIR@', 'php_dir');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@DATA-DIR@', 'data_dir');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@PHP-BIN@', 'php_bin');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
-
-$e = $packagexml->addGlobalReplacement('pear-config', '@TEST-DIR@', 'test_dir');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+$packagexml->addGlobalReplacement('pear-config', '@BIN-DIR@', 'bin_dir');
+$packagexml->addGlobalReplacement('pear-config', '@DOC-DIR@', 'doc_dir');
+$packagexml->addGlobalReplacement('pear-config', '@PHP-DIR@', 'php_dir');
+$packagexml->addGlobalReplacement('pear-config', '@DATA-DIR@', 'data_dir');
+$packagexml->addGlobalReplacement('pear-config', '@PHP-BIN@', 'php_bin');
+$packagexml->addGlobalReplacement('pear-config', '@TEST-DIR@', 'test_dir');
 
 // Platform-dependent command lines
-$e = $packagexml->addPlatformException('pear-trax.bat', 'windows');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+$packagexml->addRelease(); // set up a release section
+$packagexml->setOSInstallCondition('windows');
+$packagexml->addInstallAs('pear-trax.bat', 'trax');
+$packagexml->addIgnoreToRelease('pear-trax');
+$packagexml->addRelease(); // add another release section for all other OSes
+$packagexml->addInstallAs('pear-trax', 'trax');
+$packagexml->addIgnoreToRelease('pear-trax.bat');
 
-$e = $packagexml->addPlatformException('pear-trax', '*ix|*ux|*BSD|Darwin');
-if(PEAR::isError($e)) {
-    die($e->getMessage());
-}
+// create the <contents> tag
+$packagexml->generateContents();
 
 // Study the Subversion .svn directories to see what goes in the
 // package, then write package.xml
-// (Needs: XML_Tree with patch s/clone/clone4/g)
 $e = $packagexml->writePackageFile();
 if(PEAR::isError($e)) {
     die($e->getMessage());

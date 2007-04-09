@@ -33,6 +33,11 @@
  *  @package PHPonTrax
  */
 class Trax {
+
+    const
+        MAJOR = 0,
+        MINOR = 14,
+        TINY = 0;
     
     public static 
         $models_path = null,
@@ -53,9 +58,12 @@ class Trax {
         $current_controller_path = null,
         $current_controller_name = null,
         $current_action_name = null,
-        $current_controller_object = null;
+        $current_controller_object = null,
+        $version = null;
 
     function initialize() {
+
+        self::$version = self::version();
 
         if(substr(PHP_OS, 0, 3) == 'WIN') {
             # Windows
@@ -124,6 +132,10 @@ class Trax {
         if(file_exists(self::$environments_path."/".TRAX_ENV.".php")) {
             include_once(self::$environments_path."/".TRAX_ENV.".php");
         }
+    }
+
+    function version() {
+        return implode('.', array(self::MAJOR, self::MINOR, self::TINY));    
     }
 }
 
