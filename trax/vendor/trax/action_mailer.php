@@ -138,7 +138,7 @@ class ActionMailer {
         $this->set_header_line("From", $from);
         
         if(!is_null($this->subject))  {
-            $this->set_header_line("Subject", $this->subject);
+            $this->set_header_line("Subject", ereg_replace("[\n\r]", "", $this->subject));
         } else {
             $this->set_header_line("Subject", "");
         }
@@ -223,12 +223,7 @@ class ActionMailer {
         $this->default_from = "nobody@".$_SERVER['HTTP_HOST'];
         $this->head_charset = $this->head_charset ? $this->head_charset : $this->default_charset;
         $this->html_charset = $this->html_charset ? $this->html_charset : $this->default_charset;
-        $this->text_charset = $this->text_charset ? $this->text_charset : $this->default_charset;
-        $this->mime_params = array(
-            'head_charset' => $this->head_charset, 
-            'html_charset' =>  $this->html_charset,
-            'text_charset' =>  $this->text_charset
-        );         
+        $this->text_charset = $this->text_charset ? $this->text_charset : $this->default_charset;        
     }
 
     /**
@@ -240,7 +235,12 @@ class ActionMailer {
         if(method_exists($this, $method_name)) {
             //echo "calling $method_name<br>";
             call_user_func_array(array($this, $method_name), $parameters);   
-        }   
+        } 
+        $this->mime_params = array(
+            'head_charset' => $this->head_charset, 
+            'html_charset' =>  $this->html_charset,
+            'text_charset' =>  $this->text_charset
+        );            
         $this->set_headers();
         $body = $this->preparse_body = $this->body;
         if(!is_string($body)) {
@@ -257,7 +257,6 @@ class ActionMailer {
            
         $this->body = $this->mail_mime->get($this->mime_params);      
         $this->headers = $this->mail_mime->headers($this->headers);  
-        $this->headers['Subject'] = ereg_replace("[\n\r]", "", $this->headers['Subject']); 
 
         if($this->delivery_method == "sendmail") {
             $this->mail =& Mail::factory("sendmail", $this->sendmail_settings);
@@ -341,7 +340,7 @@ class ActionMailer {
                 return true;    
             }
             if(!count($this->errors)) { 
-                $result = $mail->mail->send(null, $mail->headers, $mail->body);
+                $result = $mail->mail->send($mail->headers['To'], $mail->headers, $mail->body);
                 if(is_object($result)) { 
                     $this->errors[] = $result->getMessage();
                     return false;
