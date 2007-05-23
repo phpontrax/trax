@@ -46,7 +46,10 @@
 
 require_once('PEAR/PackageFileManager2.php');
 require_once('PEAR/Packager.php');
+require_once('./vendor/trax/inflector.php');
+require_once('./vendor/trax/trax.php');
 
+$trax_version = Trax::version();
 $packagexml = new PEAR_PackageFileManager2;
 
 // Set package options
@@ -89,8 +92,8 @@ $packagexml->setSummary('Rapid Application Development Made Easy');
 $packagexml->setDescription('PHP port of Ruby on Rails');
 $packagexml->setNotes('We\'ve implemented many new and exciting features');
 $packagexml->setChannel('pear.phpontrax.com');
-$packagexml->setReleaseVersion('0.14.0');
-$packagexml->setAPIVersion('0.14.0');
+$packagexml->setReleaseVersion($trax_version);
+$packagexml->setAPIVersion($trax_version);
 $packagexml->setReleaseStability('stable');
 $packagexml->setAPIStability('stable');
 $packagexml->setLicense('MIT License', 'http://www.opensource.org/licenses/mit-license.php');
