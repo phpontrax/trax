@@ -498,10 +498,16 @@ class ActionController {
                     $this->action = strtolower($this->url_path[@array_search(":action", $route_path)]);
                 }
                 //error_log('action='.$this->action);
+
                 //  FIXME: RoR uses :name as a keyword parameter, id
                 //  is not treated as a special case.
                 //  Do we want to do the same?
-                if(@in_array(":id",$route_path)
+				if(is_array($route_params)
+                   && array_key_exists(":id",$route_params)) {
+
+                    //  ':id' in route params overrides URL
+                    $this->id = $route_params[':id'];
+                } elseif(@in_array(":id",$route_path)
                    && array_key_exists(@array_search(":id", $route_path),
                                        $this->url_path)) {
                     $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
@@ -510,12 +516,14 @@ class ActionController {
                     if($this->id != "") {
                         $this->action_params['id'] = $this->id;
                     }
-                    //  For historical reasons, continue to pass id
-                    //  in $_REQUEST
-                    if($this->id != "") {
-                        $_REQUEST['id'] = $this->id;
-                    }
                 }
+                //  For historical reasons, continue to pass id
+                //  in $_REQUEST
+                if($this->id != "") {
+                    $_REQUEST['id'] = $this->id;
+                }
+                //error_log('id='.$this->id);
+
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
                 $this->controller_class = Inflector::camelize($this->controller) . "Controller";
