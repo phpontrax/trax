@@ -504,10 +504,12 @@ class ActiveRecord {
                 case "has_one":
                     $parameters = is_array($this->has_one) ? $this->has_one[$key] : null;
                     $this->$key = $this->find_one_has_one($key, $parameters);
+					if(is_null($this->$key)) unset($this->$key); 					
                     break;
                 case "belongs_to":
                     $parameters = is_array($this->belongs_to) ? $this->belongs_to[$key] : null;
                     $this->$key = $this->find_one_belongs_to($key, $parameters);
+					if(is_null($this->$key)) unset($this->$key); 					
                     break;
                 case "has_and_belongs_to_many":  
                     $parameters = is_array($this->has_and_belongs_to_many) ? $this->has_and_belongs_to_many[$key] : null;
