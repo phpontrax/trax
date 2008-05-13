@@ -124,6 +124,7 @@ class Trax {
             # Load databse settings 
             ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true);
         }
+		ActiveRecord::$environment = TRAX_ENV;
 
     }
 

@@ -153,7 +153,12 @@ class ActiveRecord {
      *  different models.
      *  @var string
      */    
-    public $connection_name = TRAX_ENV;
+    public $connection_name = null;
+
+	/**
+	 * What environment to run in.
+	 */
+	public static $environment = 'development';
 
 	/**
 	 * Stores the database settings
@@ -2502,6 +2507,7 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function establish_connection() {
+		$this->set_connection_name();
         $connection =& self::$active_connections[$this->connection_name];
         if(!is_object($connection) || $this->force_reconnect) {
             $connection_settings = array();
@@ -2515,11 +2521,11 @@ class ActiveRecord {
                     $connection_settings = self::$database_settings[$this->connection_name];
                 }
             } else {
-                # Just use the current TRAX_ENV's environment db settings
-                # $this->connection_name's default value is TRAX_ENV so
-                # if should never really get here unless override $this->connection_name
+                # Just use the current environment's db settings
+                # $this->connection_name's default value is 'development' so
+                # if should never really get here unless you override $this->connection_name
                 # and you define a custom db section in database.ini and it can't find it.
-                $connection_settings = self::$database_settings[TRAX_ENV];
+                $connection_settings = self::$database_settings[$this->connection_name];
             }
             # Override database name if param is set
             if($this->database_name) {
@@ -2550,6 +2556,19 @@ class ActiveRecord {
             $this->raise($connection->getMessage());
         }      
         return self::$db;
+    }
+
+    /**
+     *  Set the name of the database connection to use.	
+     */    
+    function set_connection_name() {
+   		$connection_name = null;
+   		if(!is_null($this->connection_name)) {
+   			$connection_name = $this->connection_name;		
+   		} else {
+   			$connection_name = self::$environment ? self::$environment : 'development';
+   		}  
+   		$this->connection_name = $connection_name;
     }
 
     /**
@@ -3222,8 +3241,8 @@ class ActiveRecord {
      *  If running in development mode, log the query to self::$query_log
      *  @param string SQL to be logged
      */
-    function log_query($query) {
-        if(TRAX_ENV == "development" && $query) {
+    function log_query($query) {   	
+        if(self::$environment == 'development' && $query) {
             self::$query_log[] = $query;       
         }    
     }
