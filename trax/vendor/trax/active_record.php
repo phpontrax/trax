@@ -970,13 +970,11 @@ class ActiveRecord {
             extract($parameters[1]);   
         } elseif(!is_null($parameters)) {
             $conditions = $parameters[1];
-            $order = $parameters[2];
-            $joins = $parameters[3];
+            $joins = $parameters[2];
         }
 
         if(!empty($joins)) $sql .= " $joins ";
         if(!empty($conditions)) $sql .= " WHERE $conditions ";
-        if(!empty($order)) $sql .= " ORDER BY $order ";
 
         # echo "$aggregate_type sql:$sql<br>";
         if($this->is_error($rs = $this->query($sql))) {
