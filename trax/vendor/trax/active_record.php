@@ -962,7 +962,8 @@ class ActiveRecord {
      */
     private function aggregate_all($aggregate_type, $parameters = null) {
         $aggregate_type = strtoupper(substr($aggregate_type, 0, -4));
-        ($parameters[0]) ? $field = $parameters[0] : $field = "*";
+        #($parameters[0]) ? $field = $parameters[0] : $field = "*";
+        $field = ($parameters[0] ? $parameters[0] : "{$this->table_prefix}{$this->table_name}.".$this->primary_keys[0]);
         $sql = "SELECT {$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";
         
         # Use any passed-in parameters
