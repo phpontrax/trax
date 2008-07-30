@@ -294,6 +294,12 @@ class ActionController {
      */
     public $keep_flash = false;
 
+	/**
+	 *  Keeps track of open blocks when calling content_for()
+	 *  @var array
+	 */
+	public $content_for_open_blocks = array();
+
     /**
      *  Build a Router object and load routes from config/route.php
      *  @uses load_router()
@@ -1257,6 +1263,44 @@ class ActionController {
   
         exit;            
     }
+
+    /**
+     *  Sets content passed in or echoed after calling this function and sets it 
+     *  to a variable named $content_for_"$name" to be used in the layout.
+     *  Example:
+	 *  View:
+	 *  <? $this->content_for("navigation") ?>
+	 *		<li><?= link_to('Login', array(":action" => 'login')) ?></li>
+	 *  <? $this->end_content_for() ?>
+	 *  Layout:
+     *  <?= $content_for_navigation ?>
+     *
+     *  @param string $name variable name to be set for use in layout
+     *  @param string $content (optional) content for the variable to be set
+     */
+	function content_for($name, $content = null) {
+		array_push($this->content_for_open_blocks, $name);
+		ob_start();
+		if($content) {
+			echo $content;
+		}
+	}
+
+    /**
+     *  Ends an open block call by content_for() and sets the content of the buffer
+     *  to the variable $content_for_"name"
+     */	
+	function end_content_for() {	
+		if(count($this->content_for_open_blocks)) {		
+			if($name = array_pop($this->content_for_open_blocks)) {
+		    	$content = ob_get_contents();
+		    	ob_end_clean();
+		    	$this->{"content_for_".$name} = $content;
+			} else {
+			    ob_end_clean();
+			}
+		} 
+	}
 
     /**
      *  Raise an ActionControllerError exception
