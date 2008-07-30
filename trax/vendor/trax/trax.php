@@ -52,6 +52,7 @@ class Trax {
         $log_path = null,
         $vendor_path = null,
         $public_path = null,
+		$tmp_path = null,
         $url_prefix = null,
         $views_extension = 'phtml',
         $path_seperator = ":", # default is Unix
@@ -59,6 +60,12 @@ class Trax {
         $current_controller_name = null,
         $current_action_name = null,
         $current_controller_object = null,
+		$session_store = "file_store",
+		$session_class_name = "ActiveRecordStore",
+		$session_save_path = "",
+		$session_name = "TRAXSESSID",
+		$session_lifetime = "0",
+		$session_maxlifetime_minutes = "20",
         $version = null;
 
     function initialize() {
@@ -82,7 +89,8 @@ class Trax {
         self::$app_path          = TRAX_ROOT."/app";
         self::$log_path          = TRAX_ROOT."/log";
         self::$vendor_path       = TRAX_ROOT."/vendor";
-        self::$public_path       = TRAX_ROOT."/public"; 
+        self::$public_path       = TRAX_ROOT."/public";
+		self::$tmp_path			 = TRAX_ROOT."/tmp";
 
         # Set which file to log php errors to for this application
         # As well in your application you can do error_log("whatever") and it will go to this log file.

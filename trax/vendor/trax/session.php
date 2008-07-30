@@ -82,6 +82,51 @@ class Session {
      *  @var string
      */
     public static $id = null;
+
+    /**
+     *  Setup basic session information
+     *
+     *  Fetch the contents from a specified element of
+     *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}
+     *  @uses Trax::$session_name
+     *  @uses Trax::$session_lifetime
+	 *  @uses Trax::$session_maxlifetime_minutes
+     */
+	function init() {
+        Trax::$session_name = Trax::$session_name ? Trax::$session_name : self::TRAX_SESSION_NAME;
+        Trax::$session_lifetime = Trax::$session_lifetime ? Trax::$session_lifetime : self::TRAX_SESSION_LIFETIME;
+        Trax::$session_maxlifetime_minutes = Trax::$session_maxlifetime_minutes ? Trax::$session_maxlifetime_minutes : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
+        
+        # set the session default for this app
+        ini_set('session.name', Trax::$session_name);
+		ini_set('session.use_cookies', 1);
+        ini_set('session.cookie_lifetime', Trax::$session_lifetime);
+        ini_set('session.gc_probability', 1);
+        ini_set('session.gc_maxlifetime', Trax::$session_maxlifetime_minutes * 60);
+		ini_set('session.use_trans_sid', 0);
+		ini_set('session.auto_start', 0);
+
+		if(Trax::$session_store == 'active_record_store') {
+			ini_set('session.save_handler', 'user');
+			include_once("session/active_record_store.php");
+			$session_class_name = Trax::$session_class_name ? Trax::$session_class_name : 'ActiveRecordStore';	
+			$ar_session = new $session_class_name;			
+			session_set_save_handler(				
+	            array(&$ar_session, 'open'),
+	            array(&$ar_session, 'close'),
+	            array(&$ar_session, 'read'),
+	            array(&$ar_session, 'write'),
+	            array(&$ar_session, 'destroy'),
+	            array(&$ar_session, 'gc')					
+			);				
+		} else {
+			# file store
+			ini_set('session.save_handler', 'files');
+			if(Trax::$session_save_path) {
+				ini_set('session.save_path', Trax::$session_save_path);
+			}				
+		}		
+	}
     
     /**
      *  Get a session variable
@@ -181,6 +226,15 @@ class Session {
         return md5($key);
     }
 
+	/**
+	 *  Alias to Session::start()
+	 *
+	 *  @uses start()
+	 */
+    function start() {
+		self::start_session();
+    }
+
     /**
      *  Start or continue a session
      *
@@ -191,19 +245,12 @@ class Session {
      *  @uses session_start()
      *  @uses $user_agent
      */
-    function start() {
-        
+	function start_session() {
+			
         if(!self::$started) {
-            $session_name = defined("TRAX_SESSION_NAME") ? TRAX_SESSION_NAME : self::TRAX_SESSION_NAME;
-            $session_lifetime = defined("TRAX_SESSION_LIFETIME") ? TRAX_SESSION_LIFETIME : self::TRAX_SESSION_LIFETIME;
-            $session_maxlifetime_minutes = defined("TRAX_SESSION_MAXLIFETIME_MINUTES") ? TRAX_SESSION_MAXLIFETIME_MINUTES : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
-            
-            # set the session default for this app
-            ini_set('session.name', $session_name);
-            ini_set('session.cookie_lifetime', $session_lifetime);
-            ini_set('session.gc_probability', 1);
-            ini_set('session.gc_maxlifetime', $session_maxlifetime_minutes * 60);
-    
+	
+			self::init();
+
             header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
     
             self::$ip = $_SERVER['REMOTE_ADDR'];
@@ -217,7 +264,16 @@ class Session {
             session_start();
             self::$id = session_id();
             self::$started = true;
-        }
+        }				
+	}
+
+	/**
+	 *  Alias to Session::destroy_session()
+	 *
+	 *  @uses destroy_session()
+	 */
+    function destroy() {
+		return self::destroy_session();
     }
 
     /**
@@ -227,8 +283,9 @@ class Session {
      *
      *  @uses session_destroy()
      */
-    function destory_session() {
+    function destroy_session() {
         session_destroy();
+		#self::init();
     }
 
     /**
@@ -238,7 +295,7 @@ class Session {
      *  @uses session_unset()
      */
     function unset_session() {
-        session_unset($_SESSION[self::get_hash()]);
+        unset($_SESSION[self::get_hash()]);
     }
 
     /**
