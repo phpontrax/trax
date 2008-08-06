@@ -1283,6 +1283,7 @@ class ActionController {
 		ob_start();
 		if($content) {
 			echo $content;
+			$this->end_content_for();
 		}
 	}
 

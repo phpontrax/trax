@@ -73,7 +73,7 @@ class ActiveRecordStore extends ActiveRecord {
 		$session = $this->find($sess_id);
 		$session = ($session instanceof ActiveRecordStore) ? $session : $this;
 		$session->id = $sess_id;
-		$session->data = $this->escape($data);
+		$session->data = $data;
 		$session->client_ip = $this->escape($_SERVER['REMOTE_ADDR']);
 		$session->http_user_agent = $this->escape($_SERVER['HTTP_USER_AGENT']);
 		# Write the serialized session data ($data) to the session table

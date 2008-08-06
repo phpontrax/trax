@@ -264,6 +264,10 @@ class Session {
             session_start();
             self::$id = session_id();
             self::$started = true;
+			$hash = self::get_hash();
+			if(!isset($_SESSION[$hash])) {
+				$_SESSION[self::get_hash()] = array();
+			}
         }				
 	}
 
@@ -295,7 +299,7 @@ class Session {
      *  @uses session_unset()
      */
     function unset_session() {
-        unset($_SESSION[self::get_hash()]);
+        $_SESSION[self::get_hash()] = array();
     }
 
     /**
@@ -336,7 +340,7 @@ class Session {
      */
     function isset_var($key) {
         if(self::is_valid_host()) {
-            if($_SESSION[self::get_hash()][$key]) {
+            if(isset($_SESSION[self::get_hash()][$key])) {
                 return true;    
             }
         }
@@ -362,12 +366,15 @@ class Session {
      */
     function isset_flash($key) {
         if(self::is_valid_host()) {
-            if(array_key_exists(self::get_hash(), $_SESSION)
-               && array_key_exists('flash',$_SESSION[self::get_hash()])
-               && array_key_exists($key,
-                                   $_SESSION[self::get_hash()]['flash'])) {
-                return true;    
-            }
+			$hash = self::get_hash();
+			if(isset($_SESSION[$hash]['flash'][$key])) {
+				return true;
+			}
+			#if(array_key_exists($hash, $_SESSION)
+            #   && array_key_exists('flash', $_SESSION[$hash])
+            #   && array_key_exists($key, $_SESSION[$hash]['flash'])) {
+            #    return true;    
+            #}
         }
         return false;
     }
@@ -392,15 +399,31 @@ class Session {
      */
     function flash($key, $value = null) {
         if(self::is_valid_host()) {
+			$hash = self::get_hash();
             if($value) {
-                $_SESSION[self::get_hash()]['flash'][$key] = $value;
+                $_SESSION[$hash]['flash'][$key] = $value;
             } else {
-                $value = $_SESSION[self::get_hash()]['flash'][$key];
-                unset($_SESSION[self::get_hash()]['flash'][$key]);
+                $value = $_SESSION[$hash]['flash'][$key];
+                unset($_SESSION[$hash]['flash'][$key]);
                 return $value;
             }
         }
     }
+
+    /**
+     *  Debugging function to see what's in the session
+     *
+     *  Does a dump of the session to log file and optionally to screen
+     *
+     *  @param boolean $screen Display dump to screen
+     */
+	function debug($screen = false) {
+		$msg = "Session::debug() => ".print_r($_SESSION, true);
+		error_log($msg);
+		if($screen) {
+			echo "<p><pre>".$msg."</pre></p>";
+		}
+	}
 }
 
 // -- set Emacs parameters --
