@@ -29,7 +29,7 @@
  */
 
 
-include_once(TRAX_LIB_ROOT . "/inflections.php");
+include_once("inflections.php");
 
 /**
  *  Implement the Trax naming convention

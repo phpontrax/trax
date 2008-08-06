@@ -25,6 +25,16 @@ The controller and view is handled by the Action Controller
 * Apache 1.3.x or 2.x 
 * FreeBSD, Unix, Linux, MacOSX, Windows
 
+== Building & Installing PHPonTrax PEAR Module
+From the commandline run the following command:
+php makepkg.php
+After that runs it will make a build folder with the PEAR module called:
+PHPonTrax-<version>.tgz 
+To install this newly generated PEAR module run the following command:
+pear install -a PHPonTrax-<version>.tgz
+If you have a previously installed version exists first run:
+pear uninstall PHPonTrax
+
 == Getting Started
 http://wiki.phpontrax.com/How_do_I_install/upgrade_Trax%3F
 http://wiki.phpontrax.com/How_do_I_create_a_Trax_application%3F

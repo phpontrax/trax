@@ -36,8 +36,8 @@ class Trax {
 
     const
         MAJOR = 0,
-        MINOR = 14,
-        TINY = 1;
+        MINOR = 15,
+        TINY = 0;
     
     public static 
         $models_path = null,

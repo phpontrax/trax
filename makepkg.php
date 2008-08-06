@@ -44,6 +44,9 @@
  *  @version $Id$
  */
 
+
+chdir("./trax/");
+
 require_once('PEAR/PackageFileManager2.php');
 require_once('PEAR/Packager.php');
 require_once('./vendor/trax/inflector.php');
@@ -147,6 +150,14 @@ $e = $packager->package();
 if(PEAR::isError($e)) {
     die($e->getMessage());
 }
+
+// Move files into a build folder and clean up files
+chdir("..");
+if(!is_dir("build")) {
+	mkdir("build");
+}
+rename("./trax/PHPonTrax-".$trax_version.".tgz", "build/PHPonTrax-".$trax_version.".tgz");
+unlink("./trax/package.xml");
 
 // -- set Emacs parameters --
 // Local variables:
