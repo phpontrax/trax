@@ -20,6 +20,10 @@ include_once(dirname(__FILE__)."/boot.php");
 # Settings in config/environments/* take precedence those specified here
 # Trax::$path_seperator = ":";
 # Trax::$url_prefix = "~username";
+# Use database or cookie-based (default) sessions. (active_record_store,file_store)
+# Trax::$session_store = "active_record_store";
+# Where should Trax write session files to? (only if using file_store)
+# Trax::$session_save_path = Trax::$tmp_path."/sessions";
 
 # Include the application environment specific config file
 Trax::include_env_config();
