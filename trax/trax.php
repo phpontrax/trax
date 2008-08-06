@@ -47,22 +47,38 @@ $replace = array(
 
 function trax() {
 
-    global $search, $replace;
+    global $search, $replace, $quiet;
 
     //  Get command line argument, if any
-    if (!array_key_exists('argc',$GLOBALS)
-        || ($GLOBALS['argc'] < 2)) {
-        usage();                // print Usage message and exit
+    if (!array_key_exists('argc',$GLOBALS) || ($GLOBALS['argc'] < 2)) {
+        usage(); // print Usage message and exit
     }
 
+	$first_param_is_option = (substr($GLOBALS['argv'][1], 0, 1) == "-") ? true : false;
+
     //  Check for excess arguments
-    if ($GLOBALS['argc'] > 2) {
+    if ($GLOBALS['argc'] > 3 && !$first_param_is_option) {
         echo "unrecognized command argument ".$GLOBALS['argv'][2]."\n";
         usage();
     }
 
-    //  Destination directory on command line
-    $dstdir = $GLOBALS['argv'][1];
+	if($first_param_is_option) {
+		foreach($GLOBALS['argv'] as $arg) {
+			if($arg == '-v' || $arg == '--version') {
+				include(dirname(__FILE__)."/vendor/trax/trax.php");
+				echo "Trax ".Trax::version()."\n";
+				exit;
+			} elseif($arg == '-h' || $arg == '--help') {
+				usage();
+			}
+		}		
+	} else {
+	    //  Destination directory on command line
+	    $dstdir = $GLOBALS['argv'][1];	
+		if($GLOBALS['argv'][2] == '-q' || $GLOBALS['argv'][2] == '--quiet') {
+			$quiet = true;			
+		}
+	}
 
     //  Guarantee it ends with DIRECTORY_SEPARATOR
     if (substr($dstdir,-1,1) != DIRECTORY_SEPARATOR) {
@@ -80,7 +96,7 @@ function trax() {
 
     $srcdir = SOURCE_DIR;
     //  copy source directory to destination directory
-    copy_dir($srcdir,$dstdir);
+    copy_dir($srcdir, $dstdir);
 }
 
 /**
@@ -92,7 +108,9 @@ function trax() {
  *  @param string $dst_path  Path to destination directory
  *  @return boolean true=>success, false=>failure.
  */
-function copy_dir($src_path,$dst_path) {
+function copy_dir($src_path, $dst_path) {
+	
+	global $quiet;
 
     //  Make sure we have directories as arguments
     if (!is_dir($src_path)) {
@@ -134,7 +152,7 @@ function copy_dir($src_path,$dst_path) {
                     $dst_content = file_get_contents($dst_path . $src_file);
                     if ($src_content == $dst_content) {
                         //  Source and destination are identical
-                        echo "$dst_path$src_file exists\n";
+                        if(!$quiet) echo "\texists $dst_path$src_file\n";
                         continue;
                     }
                 }
@@ -146,7 +164,7 @@ function copy_dir($src_path,$dst_path) {
                     echo "unable to rename $dst_path$src_file to $new_name\n";
                     return false;
                 }
-                echo "renamed $dst_path$src_file to $new_name\n";
+                if(!$quiet) echo "\trenamed $src_file to ".($src_file.'.'.$stat[9])."\n";
             }
 
             //  Destination file does not exist.  Create it
@@ -164,13 +182,14 @@ function copy_dir($src_path,$dst_path) {
                 chmod($dst_path . $src_file, 0754);
             }           
 
-            echo  "$dst_path$src_file created\n";
+            if(!$quiet) echo "\tcreate $dst_path$src_file\n";
         } else {
 
             //  This is a directory.  Ignore '.' and '..'
             if ( ($src_file == '.') || ($src_file == '..') ) {
                 continue;
             }
+
             //  This directory needs to be copied.
             if (!create_dir( $dst_path . $src_file )) {
                 return false;
@@ -185,14 +204,17 @@ function copy_dir($src_path,$dst_path) {
     }
     closedir($src_handle);
     return true;
-}                               // function copy_dir()
+}
 
 /**
  *  Create a directory if it doesn't exist
  *  @param string $dst_dir  Path of directory to create
+ *  @param string $perms Chmod permissions (0775)
  *  @return boolean  true=>success, false=>failed
  */
 function create_dir($dst_dir) {
+	
+	global $quiet;
 
     //  Does a directory of this name exist?
     if (file_exists( $dst_dir )) {
@@ -201,7 +223,7 @@ function create_dir($dst_dir) {
         if (is_dir( $dst_dir )) {
 
             //  A destination directory with this name exists.
-            echo "$dst_dir".DIRECTORY_SEPARATOR." exists\n";
+            if(!$quiet) echo "\texists $dst_dir\n";
             return true;
         }
 
@@ -210,18 +232,18 @@ function create_dir($dst_dir) {
         //  Save the old file.
         $stat = stat($dst_dir);
         $new_name = $dst_dir.'.'.$stat[9];
-        if (!rename($dst_dir,$new_name)) {
+        if (!rename($dst_dir, $new_name)) {
             echo "unable to rename $dst_dir to $new_name\n";
             return false;
         }
-        echo "renamed $dst_dir to $new_name\n";
+        if(!$quiet) echo "\trenamed $dst_dir to $new_name\n";
     }
 
     //  Destination directory does not exist.  Create it
-    if (!mkdir($dst_dir,0775,true)) {
+    if (!mkdir($dst_dir, 0775, true)) {
         return false;
     }
-    echo "$dst_dir".DIRECTORY_SEPARATOR." created\n";
+    if(!$quiet) echo "\tcreate ".$dst_dir."\n";
     return true;
 }
 
@@ -255,7 +277,12 @@ function copy_file($src_path, $dst_path) {
 function usage() {
     echo "Usage: @BIN-DIR@".DIRECTORY_SEPARATOR."trax"
         ." ".DIRECTORY_SEPARATOR."path".DIRECTORY_SEPARATOR."to"
-        .DIRECTORY_SEPARATOR."your".DIRECTORY_SEPARATOR."app
+        .DIRECTORY_SEPARATOR."your".DIRECTORY_SEPARATOR."app [options]
+
+Options:
+	-q, --quiet			Suppress normal output.
+	-v, --version			Show the Trax version number and quit.
+	-h, --help			Show this help message and quit.
 
 Description:
     The 'trax' command creates a new Trax application with a default

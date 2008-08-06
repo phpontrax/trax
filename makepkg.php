@@ -60,6 +60,7 @@ $e = $packagexml->setOptions(array(
     'baseinstalldir' => 'PHPonTrax',
     'packagedirectory' => '.',
     'filelistgenerator' => 'svn', // generate from svn or file
+	'simpleoutput' => true,
 	'dir_roles' => array(
 		'doc' => 'doc',
 		'test' => 'test',
