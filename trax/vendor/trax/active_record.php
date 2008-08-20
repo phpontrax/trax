@@ -1385,9 +1385,13 @@ class ActiveRecord {
                 $object->$field = $value;
                 if($field == $this->index_on) {
                     $objects_key = $value;
-                }
+                } 
             }
-            $objects[$objects_key] = $object;
+			if(is_null($objects_key)) {
+            	$objects[] = $object;
+			} else {
+            	$objects[$objects_key] = $object;
+			}
             # If callback is defined in model run it.
             # this will probably hurt performance...
             if(method_exists($object, 'after_find')) {
