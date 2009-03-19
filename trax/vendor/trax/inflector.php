@@ -40,6 +40,11 @@ include_once("inflections.php");
  *  @tutorial PHPonTrax/Inflector.cls
  */
 class Inflector {
+	
+	private static $cache = array(
+		'plural' => array(), 
+		'singular' => array()
+	);
 
     /**
      *  Pluralize a word according to English rules
@@ -47,48 +52,52 @@ class Inflector {
      *  Convert a lower-case singular word to plural form.
      *  If $count > 0 then prefixes $word with the $count
      *
-     *  @param  string $word  Word to be pluralized
+     *  @param  string $singular_word  Word to be pluralized
      *  @param  int $count How many of these $words are there
-     *  @return string  Plural of $word
+     *  @return string  Plural of $singular_word
      */
-    function pluralize($word, $count = 0) {
-        if($count == 0 || $count > 1) {          
-            if(!in_array($word, Inflections::$uncountables)) { 
-                $original = $word;   
-                foreach(Inflections::$plurals as $plural_rule) {
-                    $word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $word);
-                    if($original != $word) break;
-                }
-            }
-        }
-        return ($count >= 1 ? "{$count} {$word}" : $word);
+    function pluralize($singular_word, $count = 0, $plural_word = null) {
+		if($count != 1) {
+			if(is_null($plural_word)) {	
+				$plural_word = $singular_word;	
+				if(isset(self::$cache['plural'][$singular_word])) {
+					$plural_word = self::$cache['plural'][$singular_word];
+		        } elseif(!in_array($singular_word, Inflections::$uncountables)) {   
+					foreach(Inflections::$plurals as $plural_rule) {
+						if(preg_match($plural_rule['rule'], $singular_word)) {
+							$plural_word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $plural_word);
+							self::$cache['plural'][$singular_word] = $plural_word;
+							break;
+						}	
+					}
+		        } 
+			}
+        } else {
+			$plural_word = self::singularize($singular_word);
+		}
+		return $plural_word;
     }
 
     /**
      *  Singularize a word according to English rules 
      *
-     *  @param  string $word  Word to be singularized
-     *  @return string  Singular of $word
+     *  @param  string $plural_word  Word to be singularized
+     *  @return string  Singular of $plural_word
      */
-    function singularize($word) {
-        if(!in_array($word, Inflections::$uncountables)) { 
-            $original = $word;   
+    function singularize($plural_word) {
+		$singular_word = $plural_word;  
+        if(isset(self::$cache['singular'][$plural_word])) {
+			$singular_word = self::$cache['singular'][$plural_word];
+		} elseif(!in_array($plural_word, Inflections::$uncountables)) {              
             foreach(Inflections::$singulars as $singular_rule) {
-                $word = preg_replace($singular_rule['rule'], $singular_rule['replacement'], $word);
-                if($original != $word) break;
+				if(preg_match($singular_rule['rule'], $plural_word)) {
+					$singular_word = preg_replace($singular_rule['rule'], $singular_rule['replacement'], $singular_word);
+					self::$cache['singular'][$plural_word] = $singular_word;
+					break;
+				}	
             }
         }
-        return $word;
-    }
-
-    /**
-     *  Capitalize a word making it all lower case with first letter uppercase 
-     *
-     *  @param  string $word  Word to be capitalized
-     *  @return string Capitalized $word
-     */
-    function capitalize($word) {
-        return ucfirst(strtolower($word));     
+        return $singular_word;
     }
 
     /**
@@ -104,15 +113,42 @@ class Inflector {
     }
 
     /**
+     *  Convert a word or phrase into a title format "Welcome To My Site"
+     *
+     *  @param string $word  A word or phrase
+     *  @return string A string that has all words capitalized and splits on existing caps.
+     */    
+    function titleize($word) {
+		return ucwords(self::humanize(self::underscore($word)));
+    }
+
+    /**
      *  Convert a phrase from the camel case form to the lower case
      *  and underscored form
      *
+     *  Changes '::' to '/' to convert namespaces to paths. (php 5.3)
+     * 
+     *  Examples:
+     *    Inflector::underscore("ActiveRecord") => "active_record"
+     *    Inflector::underscore("ActiveRecord::Errors") => active_record/errors
+     * 
      *  @param string $camel_cased_word  Phrase to convert
      *  @return string Lower case and underscored form of the phrase
      */
     function underscore($camel_cased_word) {
+		$camel_cased_word = str_replace('::','/',$camel_cased_word);
         $camel_cased_word = preg_replace('/([A-Z]+)([A-Z])/','\1_\2',$camel_cased_word);
-        return strtolower(preg_replace('/([a-z])([A-Z])/','\1_\2',$camel_cased_word));
+        return strtolower(preg_replace('/([a-z\d])([A-Z])/','\1_\2',$camel_cased_word));
+    }
+
+    /**
+     *  Convert a word's underscores into dashes
+     *
+     *  @param string $underscored_word  Word to convert
+     *  @return string All underscores converted to dashes
+     */    
+    function dasherize($underscored_word) {
+        return str_replace('_', '-', self::underscore($underscored_word));
     }
 
     /**
@@ -124,27 +160,26 @@ class Inflector {
      *  blanks and the first letter of each word capitalized
      */
     function humanize($lower_case_and_underscored_word) {
-        return ucwords(str_replace("_"," ",$lower_case_and_underscored_word));
-    }
-    
-    /**
-     *  Convert a word or phrase into a title format "Welcome To My Site"
-     *
-     *  @param string $word  A word or phrase
-     *  @return string A string that has all words capitalized and splits on existing caps.
-     */    
-    function titleize($word) {
-        return preg_replace('/\b([a-z])/', self::capitalize('$1'), self::humanize(self::underscore($word)));
+		if(count(Inflections::$humans) > 0) {
+	        $original = $lower_case_and_underscored_word;   
+	        foreach(Inflections::$humans as $human_rule) {
+	            $lower_case_and_underscored_word = preg_replace($human_rule['rule'], $human_rule['replacement'], $word);
+	            if($original != $lower_case_and_underscored_word) break;
+	        }	
+		}
+        return self::capitalize(str_replace(array("_","_id"),array(" ",""),$lower_case_and_underscored_word));
     }
 
-    /**
-     *  Convert a word's underscores into dashes
-     *
-     *  @param string $underscored_word  Word to convert
-     *  @return string All underscores converted to dashes
-     */    
-    function dasherize($underscored_word) {
-        return str_replace('_', '-', self::underscore($underscored_word));
+    /** 
+     *  Removes the module part from the expression in the string. (php 5.3)
+     * 
+     *  Examples:
+     *		Inflector::demodulize("ActiveRecord::CoreExtensions::String::Inflections") => "Inflections"
+     *  	Inflector::demodulize("Inflections") => "Inflections"
+     * 
+	 */
+	function demodulize($class_name_in_module) {
+		return preg_replace("/^.*::/", '', $class_name_in_module);
     }
 
     /**
@@ -171,30 +206,38 @@ class Inflector {
     }
 
     /**
+     *  Capitalize a word making it all lower case with first letter uppercase 
+     *
+     *  @param  string $word  Word to be capitalized
+     *  @return string Capitalized $word
+     */
+    function capitalize($word) {
+    	return ucfirst(strtolower($word));     
+    }
+    
+    /**
      *  Get foreign key column corresponding to a table name
      *
-     *  @param string $table_name Name of table referenced by foreign
-     *    key
+     *  @param string $table_name Name of table referenced by foreign key
      *  @return string Column name of the foreign key column
      */
     function foreign_key($class_name) {
-        return self::underscore($class_name) . "_id";
+        return self::underscore(self::demodulize($class_name)) . "_id";
     }
 
 
     /**
      *  Add to a number st, nd, rd, th
      *
-     *  @param integer $number Number to append to
-     *    key
+     *  @param integer $number Number to append to key
      *  @return string Number formatted with correct st, nd, rd, or th
      */    
     function ordinalize($number) {
-        $test = (intval($number) % 100);
-        if($test >= 11 && $test <= 13) {
+        $number = intval($number);
+		if(in_array(($number % 100), range(11, 13))) {
             $number = "{$number}th";
         } else {
-            switch((intval($number) % 10)) {
+            switch(($number % 10)) {
                 case 1:
                     $number = "{$number}st";
                     break;
@@ -210,6 +253,19 @@ class Inflector {
         }
         return $number;
     }
+
+    /**
+     *  Clears the cached words for pluralize and singularize
+     *
+     *  @param none
+     *  @return nothing
+     */
+	function clear_cache() {
+		self::$cache = array(
+			'plural' => array(), 
+			'singular' => array()
+		);		
+	}
     
 }
 

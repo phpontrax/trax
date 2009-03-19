@@ -44,12 +44,12 @@
 <p><pre><?php echo $error_message ?></pre></p>
 
 <?php if($trace): ?>
-<a href="#" onclick="expandContract('framework_trace')">Show framework trace</a>
+<a href="#" onclick="expandContract('framework_trace');return false;">Show framework trace</a>
 <pre id="framework_trace" style="display:none"><code><?php echo $trace ?></code></pre>
 <?php endif; ?>
 
 <?php if(count(ActiveRecord::$query_log)): ?>
-<p><a href="#" onclick="expandContract('sql_trace')">Show SQL trace</a>
+<p><a href="#" onclick="expandContract('sql_trace');return false;">Show SQL trace</a>
 <pre id="sql_trace" style="display:none">
 <code style="word-wrap: break-word;">
 <?php $i = 0 ?>    
@@ -60,27 +60,27 @@
 </pre>
 <?php endif; ?>
 
-<p><a href="#" onclick="expandContract('session_dump')">Show $_SESSION dump</a></p>
+<p><a href="#" onclick="expandContract('session_dump');return false;">Show $_SESSION dump</a></p>
 <div id="session_dump" style="display:none"><pre class='debug_dump'>
 <?php echo print_r($_SESSION, true) ?>
 </pre></div>
 
-<p><a href="#" onclick="expandContract('get_dump')">Show $_GET dump</a></p>
+<p><a href="#" onclick="expandContract('get_dump');return false;">Show $_GET dump</a></p>
 <div id="get_dump" style="display:none"><pre class='debug_dump'>
 <?php echo print_r($_GET, true) ?>
 </pre></div>
 
-<p><a href="#" onclick="expandContract('post_dump')">Show $_POST dump</a></p>
+<p><a href="#" onclick="expandContract('post_dump');return false;">Show $_POST dump</a></p>
 <div id="post_dump" style="display:none"><pre class='debug_dump'>
 <?php echo print_r($_POST, true) ?>
 </pre></div>
 
-<p><a href="#" onclick="expandContract('cookie_dump')">Show $_COOKIE dump</a></p>
+<p><a href="#" onclick="expandContract('cookie_dump');return false;">Show $_COOKIE dump</a></p>
 <div id="cookie_dump" style="display:none"><pre class='debug_dump'>
 <?php echo print_r($_COOKIE, true) ?>
 </pre></div>
 
-<p><a href="#" onclick="expandContract('file_dump')">Show $_FILES dump</a></p>
+<p><a href="#" onclick="expandContract('file_dump');return false;">Show $_FILES dump</a></p>
 <div id="file_dump" style="display:none"><pre class='debug_dump'>
 <?php echo print_r($_FILES, true) ?>
 </pre></div>

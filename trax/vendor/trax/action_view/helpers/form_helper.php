@@ -130,12 +130,12 @@ class FormHelper extends Helpers {
      *  @uses tag_name_with_index()
      */
     function add_default_name_and_id($options) {  
-        $name_option_exists = array_key_exists('name', $options);	
-       	if(array_key_exists("index", $options)) {
+        $name_option_exists = array_key_exists('name', (array)$options);	
+       	if(array_key_exists("index", (array)$options)) {
             $options['name'] = $name_option_exists
                 ? $options['name']
                 : $this->tag_name_with_index($options['index']);
-            $options['id'] = array_key_exists('id', $options)
+            $options['id'] = array_key_exists('id', (array)$options)
                 ? $options['id']
                 : $this->tag_id_with_index($options['index']);
             unset($options['index']);
@@ -143,18 +143,18 @@ class FormHelper extends Helpers {
             $options['name'] = $name_option_exists
                 ? $options['name']
                 : $this->tag_name_with_index($this->auto_index);
-            $options['id'] = array_key_exists('id', $options)
+            $options['id'] = array_key_exists('id', (array)$options)
                 ? $options['id']
                 : $this->tag_id_with_index($this->auto_index);
         } else {
             $options['name'] = $name_option_exists
                 ? $options['name']
                 : $this->tag_name();
-            $options['id'] = array_key_exists('id', $options)
+            $options['id'] = array_key_exists('id', (array)$options)
                 ? $options['id']
                 : $this->tag_id();
         }
-        if(array_key_exists('multiple', $options) && !$name_option_exists) {
+        if(array_key_exists('multiple', (array)$options) && !$name_option_exists) {
             $options['name'] .= "[]";           
         }
         return $options;
@@ -180,24 +180,24 @@ class FormHelper extends Helpers {
      *  @uses value()
      */
     function to_input_field_tag($field_type, $options = array()) {
-        $default_size = array_key_exists("maxlength", $options)
+        $default_size = array_key_exists("maxlength", (array)$options)
             ? $options["maxlength"] : $this->default_field_options['size'];
-        $options["size"] = array_key_exists("size", $options)
+        $options["size"] = array_key_exists("size", (array)$options)
             ? $options["size"]: $default_size;
-        $options = array_merge($this->default_field_options, $options);
+        $options = array_merge($this->default_field_options, (array)$options);
         if($field_type == "hidden") {
             unset($options["size"]);
         }
         $options["type"] = $field_type;
         if($field_type != "file") {
-            $options["value"] = array_key_exists("value", $options)
+            $options["value"] = array_key_exists("value", (array)$options)
                 ? $options["value"] : $this->value();
         }
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping(
                      $this->tag("input", $options),
                      @array_key_exists($this->attribute_name,
-                                      $this->object()->errors)
+                                      (array)$this->object()->errors)
                      ? true : false);
     }
 
@@ -225,19 +225,19 @@ class FormHelper extends Helpers {
      *  @uses add_default_name_and_id()
      */
     function to_text_area_tag($options = array()) {
-        if (array_key_exists("size", $options)) {
+        if (array_key_exists("size", (array)$options)) {
             $size = explode('x', $options["size"]);
             $options["cols"] = reset($size);
             $options["rows"] = end($size);
             unset($options["size"]);
         }
-        $options = array_merge($this->default_text_area_options, $options);
+        $options = array_merge($this->default_text_area_options, (array)$options);
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping(
            $this->content_tag("textarea",
                               htmlspecialchars($this->value(), ENT_COMPAT),
                               $options),
-           array_key_exists($this->attribute_name,$this->object()->errors)
+           array_key_exists($this->attribute_name, (array)$this->object()->errors)
            ? $this->object()->errors[$this->attribute_name] : false);
     }
 

@@ -225,7 +225,7 @@ class FormOptionsHelper extends FormHelper {
                                       $attribute_text, $options,
                                       $html_options) {
         $html_options = $this->add_default_name_and_id($html_options);
-        $value = $this->value();
+		$value = isset($options['selected']) ? $options['selected'] : $this->value();
         return $this->error_wrapping(
             $this->content_tag(
                 "select",

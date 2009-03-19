@@ -80,6 +80,7 @@ Inflections::irregular('man', 'men');
 Inflections::irregular('child', 'children'); 
 Inflections::irregular('sex', 'sexes'); 
 Inflections::irregular('move', 'moves'); 
+Inflections::irregular('cow', 'kine'); 
 
 Inflections::uncountable('equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep');
 
@@ -93,11 +94,11 @@ Inflections::uncountable('equipment', 'information', 'rice', 'money', 'species',
  */
 class Inflections {
 
-    public static $plurals = array();
-
-    public static $singulars = array();
-
-    public static $uncountables = array();
+    public static 
+		$plurals = array(),
+		$singulars = array(),
+		$uncountables = array(),
+		$humans = array();
 
     # Specifies a new pluralization rule and its replacement. The rule can either be a string or a regular expression. 
     # The replacement should always be a string that may include references to the matched data from the rule.
@@ -129,13 +130,24 @@ class Inflections {
     #   Inflections::uncountable("money", "information")
     #   Inflections::uncountable(array("money", "information", "rice"))
     function uncountable() {
-        $args = func_get_args();
+		$args = func_get_args();
         if(is_array($args[0])) {
             $args = $args[0];    
         }
         foreach($args as $word) {
             self::$uncountables[] = $word;    
         }     
+    }
+
+    # Specifies a humanized form of a string by a regular expression rule or by a string mapping.
+    # When using a regular expression based replacement, the normal humanize formatting is called after the replacement.
+    # When a string is used, the human form should be specified as desired (example: 'The name', not 'the_name')
+    #
+    # Examples:
+    # 	Inflections::human("/_cnt$/i", "\1_count")
+    # 	Inflections::human("legacy_col_person_name", "Name")
+    function human($rule, $replacement) {
+		array_unshift(self::$humans, array("rule" => $rule, "replacement" => $replacement));
     }
     
     # Clears the loaded inflections within a given scope (functionault is :all). Give the scope as a symbol of the inflection type,
@@ -146,7 +158,7 @@ class Inflections {
     #   Inflections::clear("plurals")
     function clear($scope = "all") {
         if($scope == "all") {
-            self::$plurals = self::$singulars = self::$uncountables = array();
+            self::$plurals = self::$singulars = self::$uncountables = self::$humans = array();
         } else {
             self::$$scope = array();
         }

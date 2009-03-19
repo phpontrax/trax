@@ -55,7 +55,7 @@ class ActionController {
      *  controller.
      *  @var string
      */
-    private $controller;
+    protected $controller;
 
     /**
      *  Name of the action method in the controller class
@@ -63,15 +63,7 @@ class ActionController {
      *  Set by {@link recognize_route()}
      *  @var string
      */
-    private $action;
-
-    /**
-     *  Value of :id parsed from URL then forced to lower case
-     *
-     *  Set by {@link recognize_route()}
-     *  @var string
-     */
-    private $id;
+    protected $action;
 
     /**
      *  Path to add to other filesystem paths
@@ -80,15 +72,6 @@ class ActionController {
      *  @var string
      */
     private $added_path = '';
-     
-    /**
-     *  Parameters for the action routine
-     *
-     *  Set by {@link recognize_route()}, passed as arguments to the
-     *  controller's action routine.
-     *  @var string[]
-     */
-    private $action_params = array();
 
     /**
      *  Filesystem path to ../app/controllers/ directory
@@ -200,7 +183,9 @@ class ActionController {
      *  Set by {@link add_before_filters()
      *  @var string[]
      */
-    private $before_filters = array();
+    public $before_filters = array();
+
+	public $before_filter_options = array();
 
     /**
      *  List of filters to execute after calling action method
@@ -209,6 +194,8 @@ class ActionController {
      *  @var string[]
      */
     private $after_filters = array();     
+
+	private $after_filter_options = array();
 
     /**
      *  @todo Document this attribute
@@ -223,12 +210,12 @@ class ActionController {
     /**
      *  @todo Document this attribute
      */
-    protected $before_filter = null;
+    #protected $before_filter = null;
 
     /**
      *  @todo Document this attribute
      */
-    protected $after_filter = null;
+    #protected $after_filter = null;
 
     /**
      *  Filesystem path to the PHP program file for this controller
@@ -317,9 +304,12 @@ class ActionController {
      *  @uses add_helper()
      */
     function __set($key, $value) {
-        //error_log("__set($key, $value)");
+		#if(is_string($value) || is_array($value)) {
+			#error_log("__set($key, $value)");
+		#}
         if($key == "before_filter") {
             $this->add_before_filter($value);
+			unset($this->$key);
         } elseif($key == "after_filter") {
             $this->add_after_filter($value);
         } elseif($key == "helper") {
@@ -395,7 +385,6 @@ class ActionController {
      *
      *  @uses load_router()
      *  @uses $action
-     *  @uses $action_params
      *  @uses $application_controller_file
      *  @uses $controller
      *  @uses $controller_class
@@ -512,23 +501,25 @@ class ActionController {
                    && array_key_exists(":id",$route_params)) {
 
                     //  ':id' in route params overrides URL
-                    $this->id = $route_params[':id'];
-                } elseif(@in_array(":id",$route_path)
-                   && array_key_exists(@array_search(":id", $route_path),
-                                       $this->url_path)) {
-                    $this->id = strtolower($this->url_path[@array_search(":id", $route_path)]);
-                    //  Parameters for the action routine.
-                    //  FIXME: make more general than just id
-                    if($this->id != "") {
-                        $this->action_params['id'] = $this->id;
-                    }
+                    $id = $route_params[':id'];
+                } elseif(@in_array(":id",$route_path)) {
+                    #print_r($this->url_path);
+					#print_r($route_path);
+					if(count($this->extra_path)) {
+						foreach(array_reverse($this->extra_path) as $extra_path) {
+							#array_unshift($this->url_path, $extra_path);
+						}
+					}
+					#print_r($this->url_path);
+
+					$id = strtolower($this->url_path[@array_search(":id", $route_path)]);
                 }
                 //  For historical reasons, continue to pass id
                 //  in $_REQUEST
-                if($this->id != "") {
-                    $_REQUEST['id'] = $this->id;
+                if($id != "") {
+                    $_REQUEST['id'] = $id;
                 }
-                //error_log('id='.$this->id);
+                //error_log('id='.$id);
 
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
@@ -550,7 +541,6 @@ class ActionController {
      *  Parse URL, extract controller and action and execute them
      *
      *  @uses $action
-     *  @uses $action_params
      *  @uses $application_controller_file
      *  @uses $application_helper_file
      *  @uses $controller
@@ -583,7 +573,7 @@ class ActionController {
             }
         }
         //error_log('process_route(): controller="'.$this->controller
-        //          .'"  action="'.$this->action.'"  id="'.$this->id.'"');
+        //          .'"  action="'.$this->action.'"');
 
         # Include main application controller file
         if(file_exists($this->application_controller_file)) {
@@ -661,28 +651,41 @@ class ActionController {
                 
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
-                    $controller_layout = null;
+                	$controller_layout = null;
                     if(isset($this->controller_object->layout)) {
                         $controller_layout = $this->controller_object->layout;       
                     }
-                    if(method_exists($this->controller_object, $this->action)) {
-                        //error_log('method '.$this->action.' exists, calling it');
-                        $action = $this->action;
-                        //error_log('calling action routine '
-                        //          . get_class($this->controller_object)
-                        //          .'::'.$action.'() with params '
-                        //          .var_export($this->action_params,true));
-                        $this->controller_object->$action($this->action_params);
+
+					#Get PUBLIC methods from controller object
+					$all_methods = get_class_methods($this->controller_object); 
+
+					# Get Inherited methods from active_controller 
+					$inherited_methods = array_merge(
+						get_class_methods(__CLASS__),
+						$this->controller_object->before_filters,
+						$this->controller_object->after_filters
+					);
+
+					# Get non-inherited methods 
+					$action_methods = array_diff($all_methods, $inherited_methods);
+					#error_log("available methods:".print_r($action_methods, true));
+
+					if(in_array($this->action, $action_methods)) {
+                        #error_log('method '.$this->action.' exists, calling it');
+                        $action = $this->controller_object->called_action = $this->action;
+                        #error_log('calling action routine '
+                        #          . get_class($this->controller_object)
+                        #          .'::'.$action.'()');
+                        $this->controller_object->$action();
                     } elseif(file_exists($this->views_path . "/" . $this->action . "." . Trax::$views_extension)) {
-                        //error_log('views file "'.$this->action.'"');
-                        $action = $this->action;
+                        #error_log('views file "'.$this->action.'"');
+                        $action = $this->controller_object->called_action = $this->action;
                     } elseif(method_exists($this->controller_object, "index")) {
-                        //error_log('calling action routine '
-                        //          . get_class($this->controller_object)
-                        //          .'::index() with params '
-                        //          .var_export($this->action_params,true));
-                        $action = "index";
-                        $this->controller_object->index($this->action_params);
+                        #error_log('calling action routine '
+                        #          . get_class($this->controller_object)
+                        #          .'::index()');
+                        $action = $this->controller_object->called_action = "index";
+                        $this->controller_object->index();
                     } else {
                         //error_log('no action');
                         $this->raise("No action responded to ".$this->action, "Unknown action", "404");
@@ -798,6 +801,7 @@ class ActionController {
                 }
             }
             if(isset($extra_path) && is_array($extra_path)) {
+				$this->extra_path = $extra_path;
                 $extra_path = implode("/", $extra_path);
                 $this->added_path = $extra_path;
                 $this->controllers_path .= "/$extra_path";
@@ -817,9 +821,32 @@ class ActionController {
      *  @uses $before_filters
      */
     function execute_before_filters() {
+	
+		#if(isset($this->before_filter)) {
+			#$this->add_before_filter($this->before_filter);
+		#}
+		#error_log("before_filters:".print_r($this->before_filters, true));
+		#error_log("before_filter_options:".print_r($this->before_filter_options, true));		
         $return = true;
         if(count($this->before_filters) > 0) { 
+			$action = $this->action ? $this->action : "index";
             foreach($this->before_filters as $filter_function) {
+				if(array_key_exists($filter_function, $this->before_filter_options)) {
+					if(is_array($options = $this->before_filter_options[$filter_function])) {
+						if(array_key_exists('except', $options)) {
+				            if(preg_match("/\b$action\b/", $options['except'])) {
+								#error_log("before filter except match: action:{$action} == ".$options['except']);
+				                continue;      
+				            }						
+						}
+						if(array_key_exists('only', $options)) {
+				            if(!preg_match("/\b$action\b/", $options['only'])) {
+								#error_log("before filter only non match: action:{$action} == ".$options['only']);
+				                continue;      
+				            }						
+						}						
+					}
+				}
                 if(method_exists($this, $filter_function)) {
                     if(false === $this->$filter_function()) {
                         //error_log("execute_before_filters(): returning false");
@@ -839,35 +866,88 @@ class ActionController {
      *  several filter functions.
      *  @uses $before_filters
      */
-    function add_before_filter($filter_function_name) {
+    function add_before_filter($filter_function_name, $options = array(), $prepend = false) {
         //error_log("adding before filter: $filter_function_name");
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
             if(!in_array($filter_function_name, $this->before_filters)) {
-                $this->before_filters[] = $filter_function_name;
+                if($prepend) {
+					array_unshift($this->before_filters, $filter_function_name);
+				} else {
+					array_push($this->before_filters, $filter_function_name);
+				}
+				if(count($options)) {
+		            if(count($this->before_filter_options[$filter_function_name])) {
+		                $this->before_filter_options[$filter_function_name] = array_merge($this->before_filter_options[$filter_function_name], $options);
+		            } else {
+		                $this->before_filter_options[$filter_function_name] = $options;
+		            }										
+				}
             }                        
         } elseif(is_array($filter_function_name)) {
-            if(count($this->before_filters) > 0) {
-                $this->before_filters = array_merge($this->before_filters, $filter_function_name);
-            } else {
-                $this->before_filters = $filter_function_name;
-            }
+			foreach($filter_function_name as $filter_name => $options) {
+	            if(!in_array($filter_name, $this->before_filters)) {
+	                if($prepend) {
+						array_unshift($this->before_filters, $filter_name);
+					} else {
+						array_push($this->before_filters, $filter_name);
+					}	
+					if(count($options)) {
+			            if(count($this->before_filter_options[$filter_name])) {
+			                $this->before_filter_options[$filter_name] = array_merge($this->before_filter_options[$filter_name], $options);
+			            } else {
+			                $this->before_filter_options[$filter_name] = $options;
+			            }										
+					}
+	            }				
+			}
         }
     }
+
+	function prepend_before_filter($filter_function_name, $options = array()) {
+		$this->add_before_filter($filter_function_name, $options, true);
+	}
 
     /**
      *  Execute the after filters
      *  @uses $after_filters
      */
     function execute_after_filters() {
-        if(count($this->after_filters) > 0) {
+	
+		#if(isset($this->after_filter)) {
+			#$this->add_after_filter($this->after_filter);
+		#}
+		#error_log("after_filters:".print_r($this->after_filters, true));
+		#error_log("after_filter_options:".print_r($this->after_filter_options, true));		
+        $return = true;
+        if(count($this->after_filters) > 0) { 
+			$action = $this->action ? $this->action : "index";
             foreach($this->after_filters as $filter_function) {
+				if(array_key_exists($filter_function, $this->after_filter_options)) {
+					if(is_array($options = $this->after_filter_options[$filter_function])) {
+						if(array_key_exists('except', $options)) {
+				            if(preg_match("/\b$action\b/", $options['except'])) {
+								#error_log("after filter except match: action:{$action} == ".$options['except']);
+				                continue;      
+				            }						
+						}
+						if(array_key_exists('only', $options)) {
+				            if(!preg_match("/\b$action\b/", $options['only'])) {
+								#error_log("after filter only non match: action:{$action} == ".$options['only']);
+				                continue;      
+				            }						
+						}						
+					}
+				}
                 if(method_exists($this, $filter_function)) {
-                    $this->$filter_function();
+                    if(false === $this->$filter_function()) {
+                        //error_log("execute_after_filters(): returning false");
+                        $return = false;    
+                    }
                 }
             }
         }
+        return $return;
     }
-
 
     /**
      *  Append an after filter to the filter chain
@@ -877,19 +957,46 @@ class ActionController {
      *  several filter functions.
      *  @uses $after_filters
      */
-    function add_after_filter($filter_function_name) {
+    function add_after_filter($filter_function_name, $options = array(), $prepend = false) {
+        //error_log("adding after filter: $filter_function_name");
         if(is_string($filter_function_name) && !empty($filter_function_name)) {
             if(!in_array($filter_function_name, $this->after_filters)) {
-                $this->after_filters[] = $filter_function_name;
-            }
+                if($prepend) {
+					array_unshift($this->after_filters, $filter_function_name);
+				} else {
+					array_push($this->after_filters, $filter_function_name);
+				}
+				if(count($options)) {
+		            if(count($this->after_filter_options[$filter_function_name])) {
+		                $this->after_filter_options[$filter_function_name] = array_merge($this->after_filter_options[$filter_function_name], $options);
+		            } else {
+		                $this->after_filter_options[$filter_function_name] = $options;
+		            }										
+				}
+            }                        
         } elseif(is_array($filter_function_name)) {
-            if(count($this->after_filters) > 0) {
-                $this->after_filters = array_merge($this->after_filters, $filter_function_name);
-            } else {
-                $this->after_filters = $filter_function_name;
-            }
+			foreach($filter_function_name as $filter_name => $options) {
+	            if(!in_array($filter_name, $this->after_filters)) {
+	                if($prepend) {
+						array_unshift($this->after_filters, $filter_name);
+					} else {
+						array_push($this->after_filters, $filter_name);
+					}	
+					if(count($options)) {
+			            if(count($this->after_filter_options[$filter_name])) {
+			                $this->after_filter_options[$filter_name] = array_merge($this->after_filter_options[$filter_name], $options);
+			            } else {
+			                $this->after_filter_options[$filter_name] = $options;
+			            }										
+					}
+	            }				
+			}
         }
     }
+
+	function prepend_after_filter($filter_function_name, $options = array()) {
+		$this->add_after_filter($filter_function_name, $options, true);
+	}
 
     /**
      *  Add a helper to the list of helpers used by a controller

@@ -137,8 +137,8 @@ class ActiveRecordHelper extends Helpers {
     function error_message_on($object_name, $attribute_name, $prepend_text = "", $append_text = "", $css_class = "formError") {
         $this->object_name = $object_name;
         $this->attribute_name = $attribute_name;
-        $object = $this->controller_object->$object_name;
-        if($errors = $object->errors[$attribute_name]) {
+        $object = $this->object($object_name);
+        if(is_object($object) && $errors = $object->errors_on($attribute_name)) {
             return $this->content_tag("div", $prepend_text . (is_array($errors) ? current($errors) : $errors) . $append_text, array('class' => $css_class));
         }
     }
@@ -163,8 +163,8 @@ class ActiveRecordHelper extends Helpers {
             //echo "object name:".$object_name;
         }
         $this->object_name = $object_name;
-        $object = $this->controller_object->$object_name;
-        if(!empty($object->errors)) {
+        $object = $this->object($object_name);
+        if(is_object($object) && $errors = $object->errors_full_messages()) {
             $id = isset($options['id']) ? $options['id'] : "ErrorExplanation";
             $class = isset($options['class']) ? $options['class'] : "ErrorExplanation";
             $header_tag = isset($options['header_tag']) ? $options['header_tag'] : "h2";
@@ -172,14 +172,14 @@ class ActiveRecordHelper extends Helpers {
                 $options['header_message'] : "%s prohibited this %s from being saved";
             $header_sub_message = isset($options['header_sub_message']) ?
                 $options['header_sub_message'] : "There were problems with the following fields:";
-               
+        		
             return $this->content_tag("div",
                 $this->content_tag(
                     $header_tag,
-                    sprintf($header_message, Inflector::pluralize("error", count($object->errors)), Inflector::humanize($object_name))
+                    sprintf($header_message, Inflector::pluralize("error", count($errors)), Inflector::humanize($object_name))
                 ) .
                 $this->content_tag("p", $header_sub_message) .
-                $this->content_tag("ul", array_reduce($object->errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
+                $this->content_tag("ul", array_reduce($errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
                 array("id" => $id, "class" => $class)
             );
         }
@@ -481,7 +481,7 @@ class ActiveRecordHelper extends Helpers {
      * Paging html functions
      *  @todo Document this API
      */
-    function pagination_limit_select($object_name_or_object, $default_text = "per page:") {
+    function pagination_limit_select($object_name_or_object, $options = array()) {
 
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
@@ -494,8 +494,21 @@ class ActiveRecordHelper extends Helpers {
         }
 
         if($object->pages > 0) {
+            $base_url = isset($options['base_url']) ? $options['base_url'] : '';
+            $update = isset($options['update']) ? $options['update'] : '';
+    		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] : 
+    		    ($object->paging_extra_params ? "&".$object->paging_extra_params : '');
+            $default_text = isset($options['default_text']) ? $options['default_text'] : "per page:";
+            if($update && $base_url) {
+                $on_change = remote_function(array(
+                    "update" => $update, 
+                    "url" => "{$base_url}?per_page=' + this.options[this.selectedIndex].value + '".escape_javascript($extra_params)."'"
+                ));
+            } else {
+                $on_change = "document.location = '{$base_url}?per_page=' + this.options[this.selectedIndex].value + '".escape_javascript($extra_params)."'";                
+            }           
             $html .= "
-                <select name=\"per_page\" onChange=\"document.location = '?".escape_javascript($object->paging_extra_params)."&per_page=' + this.options[this.selectedIndex].value;\">
+                <select name=\"per_page\" onChange=\"{$on_change}\">
                     <option value=\"$object->rows_per_page\" selected>$default_text</option>
                     <option value=10>10</option>
                     <option value=20>20</option>
@@ -518,7 +531,7 @@ class ActiveRecordHelper extends Helpers {
      *  @uses $paging_extra_params
      *  @uses rows_per_page
      */
-    function pagination_links($object_name_or_object) {
+    function pagination_links($object_name_or_object, $options = array()) {
         
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
@@ -529,26 +542,83 @@ class ActiveRecordHelper extends Helpers {
         if(!is_object($object)) {
             return null;    
         }
+
+		$first_text = isset($options['first_text']) ? $options['first_text'] : "<<";
+		$last_text = isset($options['last_text']) ? $options['last_text'] : ">>";
+		$prev_text = isset($options['prev_text']) ? $options['prev_text'] : "<";
+		$next_text = isset($options['next_text']) ? $options['next_text'] : ">";
+		$link_class = isset($options['link_class']) ? $options['link_class'] : "pagingLink";
+		$selected_class = isset($options['selected_class']) ? $options['selected_class'] : "pagingSelected";
+		$base_url = isset($options['base_url']) ? $options['base_url'] : '';
+		$update = isset($options['update']) ? $options['update'] : '';
+		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] : 
+		    ($object->paging_extra_params ? "&".$object->paging_extra_params : ''); 
+		
+		$first_width = "width:".(isset($options['first_width']) ? $options['first_width'] : '20')."px;"; # size in pixels
+		$first_width = ( 
+			(  isset($options['first_text']) &&  isset($options['first_width']) ) || 
+			( !isset($options['first_text']) && !isset($options['first_width']) )  
+		) ? $first_width : '';
+		$last_width = "width:".(isset($options['last_width']) ? $options['last_width'] : '20')."px;"; # size in pixels
+		$last_width = ( 
+			(  isset($options['last_text']) &&  isset($options['last_width']) ) || 
+			( !isset($options['last_text']) && !isset($options['last_width']) )  
+		) ? $last_width : '';
+		$prev_width = "width:".(isset($options['prev_width']) ? $options['prev_width'] : '10')."px;"; # size in pixels
+		$prev_width = ( 
+			(  isset($options['prev_text']) &&  isset($options['prev_width']) ) || 
+			( !isset($options['prev_text']) && !isset($options['prev_width']) )  
+		) ? $prev_width : '';
+		$next_width = "width:".(isset($options['next_width']) ? $options['next_width'] : '10')."px;"; # size in pixels
+		$next_width = ( 
+			(  isset($options['next_text']) &&  isset($options['next_width']) ) || 
+			( !isset($options['next_text']) && !isset($options['next_width']) )  
+		) ? $next_width : '';
+		$pages_width = isset($options['fixed_pages']) ? "width:".$options['fixed_pages']."px;" : ''; # size in pixels
            
-        //$html  = "<pre>".print_r($object,1);
+
+		$html .= "<div class=\"pagingContaniner\" style=\"display:inline\">";
+		$html .= "<div class=\"pagingFirst\" style=\"{$first_width}text-align:left;display:inline;float:left\">";
         /* Print the first and previous page links if necessary */
-        if(($object->page != 1) && ($object->page)) {
-            $html .= link_to("<<", 
-                                  "?$object->paging_extra_params&page=1&per_page=$object->rows_per_page",
-                                  array(
-                                    "class" => "pageList",
-                                    "title" => "First page"
-                                  ))." ";
-        }
-        if(($object->page-1) > 0) {
-            $html .= link_to("<", 
-                                  "?$object->paging_extra_params&page=".($object->page-1)."&per_page=$object->rows_per_page",
-                                  array(
-                                    "class" => "pageList",
-                                    "title" => "Previous Page"                                    
-                                  ));
-        }
-        
+        if(($object->page != 1) && ($object->page) && $first_text) {
+            if($update && $base_url) {
+                $html .= link_to_remote($first_text, array(
+                    "update" => $update, 
+                    "url" => "{$base_url}?page=1&per_page={$object->rows_per_page}{$extra_params}"
+                ), array(
+    	            "class" => $link_class,
+    	            "title" => "First page"                
+                ))." ";
+            } else {
+                $html .= link_to($first_text, "{$base_url}?page=1&per_page={$object->rows_per_page}{$extra_params}", array(
+    	            "class" => $link_class,
+    	            "title" => "First page"
+            	))." ";                
+            }
+        } else {
+			$html .= "&nbsp;";
+		}
+		$html .= "</div>";
+		$html .= "<div class=\"pagingPrev\" style=\"{$prev_width}text-align:left;display:inline;float:left\">";
+        if(($object->page-1) > 0 && $prev_text) {
+            if($update && $base_url) {
+                $html .= link_to_remote($prev_text, array(
+                    "update" => $update, 
+                    "url" => "{$base_url}?page=".($object->page-1)."&per_page={$object->rows_per_page}{$extra_params}"
+                ), array(
+    	            "class" => $link_class,
+    	            "title" => "Previous page"                    
+                ));
+            } else {
+                $html .= link_to($prev_text, "{$base_url}?page=".($object->page-1)."&per_page={$object->rows_per_page}{$extra_params}", array(
+    	            "class" => $link_class,
+    	            "title" => "Previous page"
+            	));                
+            }            
+        } else {
+			$html .= "&nbsp;";
+		}
+        $html .= "</div>";
         if($object->pages < $object->display) {
             $object->display = $object->pages;
         }
@@ -573,42 +643,76 @@ class ActiveRecordHelper extends Helpers {
         if($end >= $object->pages) {
             $end = $object->pages;
         }
-                
-        /* Print the numeric page list; make the current page unlinked and bold */
+        
+        $html .= "<div class=\"pagingPages\" style=\"{$pages_width}text-align:center;display:inline;float:left;padding:0px 5px\">";
+        # Print the numeric page list; make the current page unlinked and bold
         if($end != 1) {
+			$selected_class = $selected_class ? $link_class." ".$selected_class : $selected_class;
             for($i=$start; $i<=$end; $i++) {
                 if($i == $object->page) {
-                    $html .= "<span class=\"pageList\"><b>".$i."</b></span>";
+                    $html .= "<span class=\"{$selected_class}\">".$i."</span>";
                 } else {
-                    $html .= link_to($i,
-                                          "?$object->paging_extra_params&page=$i&per_page=$object->rows_per_page",
-                                          array(
-                                            "class" => "pageList",
-                                            "title" => "Page $i"                                           
-                                          ));
+                    if($update && $base_url) {
+                        $html .= link_to_remote($i, array(
+                            "update" => $update, 
+                            "url" => "{$base_url}?page={$i}&per_page={$object->rows_per_page}{$extra_params}"
+                        ), array(
+            	            "class" => $link_class,
+            	            "title" => "Page $i"                    
+                        ));
+                    } else {
+                        $html .= link_to($i, "{$base_url}?page={$i}&per_page={$object->rows_per_page}{$extra_params}", array(
+            	            "class" => $link_class,
+            	            "title" => "Page $i"
+                    	));                
+                    }                    
                 }
                 $html .= " ";
             }
         }
-
-        /* Print the Next and Last page links if necessary */
-        if(($object->page+1) <= $object->pages) {
-            $html .= link_to(">",
-                                  "?$object->paging_extra_params&page=".($object->page+1)."&per_page=$object->rows_per_page",
-                                  array(
-                                    "class" => "pageList",
-                                    "title" => "Next Page"                                    
-                                  ));
-        }
-        if(($object->page != $object->pages) && ($object->pages != 0)) {
-            $html .= link_to(">>",
-                                  "?$object->paging_extra_params&page=".$object->pages."&per_page=$object->rows_per_page",
-                                  array(
-                                    "class" => "pageList",
-                                    "title" => "Last Page"                                    
-                                  ));
-        }
-        $html .= "\n";
+		$html .= "</div>";
+		$html .= "<div class=\"pagingNext\" style=\"{$next_width}text-align:right;display:inline;float:left\">";
+        # Print the Next and Last page links if necessary
+        if(($object->page+1) <= $object->pages && $next_text) {
+            if($update && $base_url) {
+                $html .= link_to_remote($next_text, array(
+                    "update" => $update, 
+                    "url" => "{$base_url}?page=".($object->page+1)."&per_page={$object->rows_per_page}{$extra_params}"
+                ), array(
+    	            "class" => $link_class,
+    	            "title" => "Next Page"                    
+                ));
+            } else {
+    			$html .= link_to($next_text, "{$base_url}?page=".($object->page+1)."&per_page={$object->rows_per_page}{$extra_params}", array(
+    			  	"class" => $link_class,
+    			  	"title" => "Next Page"                                    
+    			));          
+            }            		
+        } else {
+			$html .= "&nbsp;";
+		}
+		$html .= "</div>";
+		$html .= "<div class=\"pagingLast\" style=\"{$last_width}text-align:right;display:inline;float:left\">";
+        if(($object->page != $object->pages) && ($object->pages != 0) && $last_text) {
+            if($update && $base_url) {
+                $html .= link_to_remote($last_text, array(
+                    "update" => $update, 
+                    "url" => "{$base_url}?page=".$object->pages."&per_page={$object->rows_per_page}{$extra_params}"
+                ), array(
+    	            "class" => $link_class,
+    	            "title" => "Last Page"                    
+                ));
+            } else {
+                $html .= link_to($last_text, "{$base_url}?page=".$object->pages."&per_page={$object->rows_per_page}{$extra_params}", array(
+    				"class" => $link_class,
+    			  	"title" => "Last Page"                                    
+    			));    
+            }            
+        } else {
+			$html .= "&nbsp;";
+		}
+		$html .= "</div>";
+        $html .= "</div>\n";
 
         return $html;
     }    

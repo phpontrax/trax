@@ -133,12 +133,11 @@ class Helpers {
      *  @uses ActiveRecord::send()
      */
     protected function value() {
-        if (array_key_exists($this->object_name, $_REQUEST)
+        if (array_key_exists($this->object_name, (array)$_REQUEST)
             && array_key_exists($this->attribute_name,
-                                 $_REQUEST[$this->object_name])) {
+                                 (array)$_REQUEST[$this->object_name])) {
             $value = $_REQUEST[$this->object_name][$this->attribute_name];
         } else {
-
             //  Attribute value not found in $_REQUEST.  Find the
             //  ActiveRecord subclass instance and query it.
             $object = $this->object();

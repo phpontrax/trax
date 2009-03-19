@@ -515,8 +515,8 @@ class JavaScriptHelper extends Helpers {
         if(!$options['with']) {
             $options['with'] = "Sortable.serialize('{$element_id}')";
         }
-        if(!$options['onUpdate']) {
-            $options['onUpdate'] = "function(){" . $this->remote_function($options) . "}";
+        if(!$options['onDrop']) {
+            $options['onDrop'] = "function(){" . $this->remote_function($options) . "}";
         }
         $options = $this->remove_ajax_options($options);
         foreach(array('tag', 'overlap', 'constraint', 'handle') as $option) {
