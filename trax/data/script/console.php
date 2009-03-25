@@ -51,9 +51,6 @@ $_SERVER['TRAX_ENV'] = !is_null($environment) ? $environment : 'development';
  */
 require_once(dirname(dirname(__FILE__)) . "/config/environment.php");
 
-// Make sure the TRAX_ENV index is set
-ActiveRecord::$active_connections[TRAX_ENV] = null;
-
 echo "Loading Trax ".TRAX_ENV." environment.\n";
 include("php_shell.php");
 
