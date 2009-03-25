@@ -49,9 +49,9 @@ require_once("php_shell/shell.php");
 */
 function __shell_default_error_handler($errno, $errstr, $errfile, $errline, $errctx) {
     ## ... what is this errno again ?
-    if ($errno == 2048) return;
-  
-    throw new Exception(sprintf("%s:%d\r\n%s", $errfile, $errline, $errstr));
+    if(in_array($errno, array(8,2048))) return;
+    print sprintf("\r\nError No:%d - %s", $errno, $errstr);
+    #throw new Exception(sprintf("%s:%d\r\n%s", $errfile, $errline, $errstr));
 }
 
 set_error_handler("__shell_default_error_handler");
@@ -98,7 +98,11 @@ while($__shell->input()) {
                 if (function_exists("__shell_print_var")) {
                     __shell_print_var($__shell_retval, $__shell->getVerbose());
                 } else {
-                    var_export($__shell_retval);
+                    if(is_object($__shell_retval) && get_parent_class($__shell_retval) == 'ActiveRecord') {
+                        print $__shell_retval;
+                    } else {
+                        var_export($__shell_retval);                        
+                    }
                 }
             }
             ## cleanup the variable namespace
