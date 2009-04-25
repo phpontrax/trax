@@ -692,6 +692,10 @@ class ActiveRecord {
                 //echo "calling method: $method_name<br>";
                 $result = $this->aggregate_all($method_name, $parameters);
             }
+            # check for the named scopes being called as a function
+            elseif(array_key_exists($method_name, $this->named_scope) && is_array($this->named_scope[$method_name])) {
+                $result = $this->find_all(array_merge($this->named_scope[$method_name], (array)$parameters));
+            }            
             # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
                 //echo "calling method: $method_name<br>";
@@ -868,7 +872,10 @@ class ActiveRecord {
 			}
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
-            }             
+            }    
+            if(@array_key_exists("primary_key", $parameters)) {
+                $this_primary_key = $parameters['primary_key'];
+            }                     
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }  
@@ -891,8 +898,10 @@ class ActiveRecord {
             $conditions = $finder_sql;  
         } else {          
             # This class primary key
-            $this_primary_key = $this->primary_keys[0];
-    
+            if(!$this_primary_key) {
+                $this_primary_key = $this->primary_keys[0];
+            }
+                
             if(!$foreign_key) {
                 # this should end up being like user_id or account_id but if you specified
                 # a primaray key other than 'id' it will be like user_field
@@ -942,7 +951,10 @@ class ActiveRecord {
             }
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
-            }         
+            }
+            if(@array_key_exists("primary_key", $parameters)) {
+                $this_primary_key = $parameters['primary_key'];
+            }                     
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }  
@@ -954,7 +966,9 @@ class ActiveRecord {
         $other_class_object = new $other_class_name();
 
         # This class primary key
-        $this_primary_key = $this->primary_keys[0];
+        if(!$this_primary_key) {
+            $this_primary_key = $this->primary_keys[0];
+        }
         
         if(!$foreign_key) {
             $foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
@@ -1062,10 +1076,10 @@ class ActiveRecord {
      */
     private function aggregate_all($aggregate_type, $parameters = null) {
         $aggregate_type = strtoupper(substr($aggregate_type, 0, -4));
+        $distinct = strtolower($aggregate_type) == 'count' ? 'DISTINCT ' : '';
         #($parameters[0]) ? $field = $parameters[0] : $field = "*";
-        $field = (stristr($parameters[0], ".") ? $parameters[0] : "{$this->table_prefix}{$this->table_name}.".$this->primary_keys[0]);
-        $sql = "SELECT {$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";
-        
+        $field = (stristr($parameters[0], ".") ? $parameters[0] : "{$this->table_prefix}{$this->table_name}.".$parameters[0]);
+        $sql = "SELECT {$aggregate_type}({$distinct}{$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";        
         # Use any passed-in parameters
         if(is_array($parameters[1])) {
             extract($parameters[1]);   
@@ -1073,20 +1087,15 @@ class ActiveRecord {
             $conditions = $parameters[1];
             $joins = $parameters[2];
         }
-
         if(!empty($joins)) $sql .= " $joins ";
         if(!empty($conditions)) $sql .= " WHERE $conditions ";
-
         # echo "$aggregate_type sql:$sql<br>";
         //print_r($parameters[0]);
         //echo $sql;
-        if($this->is_error($rs = $this->query($sql, true))) {
-            $this->raise($rs->getMessage());
-        } else {
-            $row = $rs->fetchRow();
-            if($row["agg_result"]) {
-                return $row["agg_result"];    
-            }
+        $rs = $this->query($sql, true);
+        $row = $rs->fetchRow();
+        if($row["agg_result"]) {
+            return $row["agg_result"];    
         }
         return 0;
     }
@@ -1181,7 +1190,7 @@ class ActiveRecord {
             # Run the query to grab a specific columns value.
             $sql = "SELECT {$column} FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions} LIMIT 1";
             $this->log_query($sql);
-            $db = $this->get_connection(true);
+            $db =& $this->get_connection(true);
             $result = $db->queryOne($sql);
             if($this->is_error($result)) {
                 $this->raise($result->getMessage());
@@ -1196,7 +1205,7 @@ class ActiveRecord {
      *  @uses $db
      *  @todo Document this API
      */
-    function begin($save_point = null) {
+    function begin() {
         # check if transaction are supported by this driver
         if(self::$db->supports('transactions')) {        
             $rs = self::$db->beginTransaction();
@@ -1280,7 +1289,7 @@ class ActiveRecord {
     function query($sql, $read_only = false) {
         # Run the query
         $this->log_query($sql);
-        $db = $this->get_connection($read_only);
+        $db =& $this->get_connection($read_only);
         $rs =& $db->query($sql);
         if ($this->is_error($rs)) {
             if(self::$auto_rollback && self::$in_transaction) {
@@ -1321,6 +1330,7 @@ class ActiveRecord {
         $method_name = substr(strtolower($method_name), $explode_len);
 	    $method_parts = explode("|", str_replace("_and_", "|AND|", $method_name));
         if(count($method_parts)) {
+            $conditions = null;
             $options = array();
             $create_fields = array();
             $param_index = 0;
@@ -1338,7 +1348,8 @@ class ActiveRecord {
             }
             # If last param exists and is a string set it as the ORDER BY clause            
             # or if the last param is an array set it as the $options
-            if($last_param = $parameters[++$param_index]) {
+            ++$param_index;
+            if(isset($parameters[$param_index]) && ($last_param = $parameters[$param_index])) {
                 if(is_string($last_param)) {
                     $options['order'] = $last_param;        
                 } elseif(is_array($last_param)) {
@@ -1346,7 +1357,7 @@ class ActiveRecord {
                 }
             }  
             # Set the conditions
-            if($options['conditions'] && $conditions) {
+            if(isset($options['conditions']) && $conditions) {
                 $options['conditions'] = "(".$options['conditions'].") AND (".$conditions.")";    
             } else {
                 $options['conditions'] = $conditions;    
@@ -1437,6 +1448,16 @@ class ActiveRecord {
             } elseif(array_key_exists('conditions', $this->default_scope) 
                      && !is_null($this->default_scope['conditions'])) {
                 $sql .= "WHERE ".$this->default_scope['conditions']." ";
+            }
+            
+            # If GROUP BY was specified
+            if(!is_null($group)) {
+                $sql .= "GROUP BY {$group} ";
+            }
+            
+            # If HAVING clause is specified
+            if(!is_null($having)) {
+                $sql .= "HAVING {$having} ";
             }
 
             # If ordering specified, include it
@@ -1559,10 +1580,8 @@ class ActiveRecord {
         # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         # echo "query: $sql\n";
         # error_log("ActiveRecord::find_all -> $sql");
-        if($this->is_error($rs = $this->query($sql, true))) {
-            $this->raise($rs->getMessage());
-        }
-
+        $rs = $this->query($sql, true);
+        
         $objects = array();
 		$class_name = $this->get_class_name();
         while($row = $rs->fetchRow()) {    
@@ -1779,12 +1798,8 @@ class ActiveRecord {
      */
     function update_all($updates, $conditions = null) {
         $sql = "UPDATE {$this->table_prefix}{$this->table_name} SET {$updates} WHERE {$conditions}";
-        $result = $this->query($sql);
-        if ($this->is_error($result)) {
-            $this->raise($result->getMessage());
-        } else {
-            return true;
-        }
+        $this->query($sql);
+        return true;
     }
 
     /**
@@ -1895,27 +1910,22 @@ class ActiveRecord {
         $sql = "INSERT INTO {$this->table_prefix}{$this->table_name} ({$fields}) VALUES ({$values})";
         //echo "add_record: SQL: $sql<br>";
         //error_log("add_record: SQL: $sql");
-        $result = $this->query($sql);
-        
-        if($this->is_error($result)) {
-            $this->raise($result->getMessage());
-        } else {
-            $habtm_result = true;
-            $primary_key = $this->primary_keys[0];
-            # $id is now equivalent to the value in the id field that was inserted
-            $primary_key_value = self::$db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
-            if($this->is_error($primary_key_value)) {
-                $this->raise($primary_key_value->getMessage());
-            }            
-            $this->$primary_key = $primary_key_value;
-            if($primary_key_value != '') {
-                if($this->auto_save_habtm) {
-                    $habtm_result = $this->add_habtm_records($primary_key_value);
-                }
-                $this->save_associations();
-            }          
-            return ($result && $habtm_result);
-        }
+        $result = $this->query($sql);  
+        $habtm_result = true;
+        $primary_key = $this->primary_keys[0];
+        # $id is now equivalent to the value in the id field that was inserted
+        $primary_key_value = self::$db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
+        if($this->is_error($primary_key_value)) {
+            $this->raise($primary_key_value->getMessage());
+        }            
+        $this->$primary_key = $primary_key_value;
+        if($primary_key_value != '') {
+            if($this->auto_save_habtm) {
+                $habtm_result = $this->add_habtm_records($primary_key_value);
+            }
+            $this->save_associations();
+        }          
+        return ($result && $habtm_result);
     }
 
     /**
@@ -1948,20 +1958,16 @@ class ActiveRecord {
         //echo "update_record:$sql<br>";
         //error_log("update_record: SQL: $sql");
         $result = $this->query($sql);
-        if($this->is_error($result)) {
-            $this->raise($result->getMessage());
-        } else {
-            $habtm_result = true;
-            $primary_key = $this->primary_keys[0];
-            $primary_key_value = $this->$primary_key;
-            if($primary_key_value > 0) { 
-                if($this->auto_save_habtm) {
-                    $habtm_result = $this->update_habtm_records($primary_key_value);
-                }
-                $this->save_associations();
-            }         
-            return ($result && $habtm_result);
-        }
+        $habtm_result = true;
+        $primary_key = $this->primary_keys[0];
+        $primary_key_value = $this->$primary_key;
+        if($primary_key_value > 0) { 
+            if($this->auto_save_habtm) {
+                $habtm_result = $this->update_habtm_records($primary_key_value);
+            }
+            $this->save_associations();
+        }         
+        return ($result && $habtm_result);
     }
 
     /**
@@ -2181,12 +2187,9 @@ class ActiveRecord {
             $this->add_error("No conditions specified to delete on.");
             return false;
         }
-
         # Delete the record(s)
-        if($this->is_error($rs = $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions}"))) {
-            $this->raise($rs->getMessage());
-        }
-        
+        $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions}");
+        # reset this to a new record    
         $this->new_record = true;
         return true;
     }
@@ -2254,10 +2257,7 @@ class ActiveRecord {
                         $values = @implode(', ', array_values($attributes));
                         $sql = "INSERT INTO $table_name ($fields) VALUES ($values)";
                         error_log("add_habtm_records: SQL: $sql");
-                        $result = $this->query($sql);
-                        if ($this->is_error($result)) {
-                            $this->raise($result->getMessage());
-                        }
+                        $this->query($sql);
                     }
                 }
             }
@@ -2288,10 +2288,7 @@ class ActiveRecord {
             $this_foreign_key = Inflector::singularize($this->table_name)."_id";
             $sql = "DELETE FROM {$habtm_table_name} WHERE {$this_foreign_key} = {$this_foreign_value}";
             //echo "delete_all_habtm_records: SQL: $sql<br>";
-            $result = $this->query($sql);
-            if($this->is_error($result)) {
-                $this->raise($result->getMessage());
-            }            
+            $this->query($sql);           
         }
     }
 
@@ -2793,6 +2790,7 @@ class ActiveRecord {
    		}
    		return $connection_name; 
     }
+
     /**
      *  Gets the database connection whether its read only or read/write	
      */    
@@ -2809,6 +2807,14 @@ class ActiveRecord {
             #error_log("get_connection($read_only) - using read/write default:".$this->connection_name);
         }
         return $db;
+    }
+
+    /**
+     *  Clears all database connections
+     */    
+    function clear_all_connections() {
+        self::$connection_pool = array();
+        self::$connection_pool_read_only = array();
     }
 
     /**
@@ -3514,6 +3520,15 @@ class ActiveRecord {
         if(self::$environment == 'development' && $query) {
             self::$query_log[] = $query;       
         }    
+    }
+
+    /**
+     *  For debugging to see what the attributes for this object are.
+     *
+     *  echo User => Array([id] => 1, [name] => John)
+     */    
+    function __toString() {
+        return print_r($this->get_attributes(), true);
     }
 
 }

@@ -195,10 +195,10 @@ class FormHelper extends Helpers {
         }
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping(
-                     $this->tag("input", $options),
-                     @array_key_exists($this->attribute_name,
-                                      (array)$this->object()->errors)
-                     ? true : false);
+            $this->tag("input", $options),
+            @array_key_exists($this->attribute_name, (array)$this->object()->errors) 
+                ? true : false
+        );
     }
 
     /**

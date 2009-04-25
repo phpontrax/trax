@@ -146,7 +146,7 @@ class Helpers {
                 $value = $object->{$this->attribute_name};
             }
         }
-        return $value;
+        return stripslashes($value);
     }
 
     /**

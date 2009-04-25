@@ -332,6 +332,7 @@ class ActionController {
      */
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
+            #error_log("calling method:{$method_name} - params:".print_r($parameters, true));
             # If the method exists, just call it
             $result = call_user_func_array(array($this, $method_name), $parameters);
         } else {        
@@ -586,11 +587,10 @@ class ActionController {
             include_once($this->controller_file);            
             if(class_exists($this->controller_class, false)) {                
                 $class = $this->controller_class;
-                $this->controller_object = new $class();                
+                $this->controller_object = new $class();               
             }
 			
             if(is_object($this->controller_object)) {
-                
                 $this->controller_object->controller = $this->controller;
                 $this->controller_object->action = $this->action;
                 $this->controller_object->controller_path = "$this->added_path/$this->controller";
@@ -647,7 +647,7 @@ class ActionController {
 
                 # Suppress output
                 ob_start();
-                //error_log('started capturing HTML');
+                #error_log('started capturing HTML');
                 
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
@@ -1430,8 +1430,7 @@ class ActionController {
         $error_heading = $exception->error_heading;
         $error_message = $exception->error_message;
         $trace = $exception->getTraceAsString();
-        header('HTTP/1.0 {$error_code} {$error_heading}');
-        header('status: {$error_code} {$error_heading}'); 
+        header("HTTP/1.0 {$error_code} {$error_heading}");
         # check for user's layout for errors
         if(TRAX_ENV == "development" && file_exists(Trax::$layouts_path."/trax_error.".Trax::$views_extension)) {
             include(Trax::$layouts_path."/trax_error.".Trax::$views_extension);
