@@ -468,7 +468,10 @@ class ActionController {
                    && array_key_exists(":controller",$route_params)) {
 
                     //  ':controller' in route params overrides URL
-                    $this->controller = $route_params[":controller"];
+                    $this->controller = $route_params[":controller"];  
+                    if(stristr($route_params[":controller"], "/")) {
+                        
+                    }
                 } elseif(is_array($route_path)
                          && in_array(":controller",$route_path)
                          && (count($this->url_path)>0)) {
@@ -506,11 +509,11 @@ class ActionController {
                 } elseif(@in_array(":id",$route_path)) {
                     #print_r($this->url_path);
 					#print_r($route_path);
-					if(count($this->extra_path)) {
-						foreach(array_reverse($this->extra_path) as $extra_path) {
+					#if(count($this->extra_path)) {
+						#foreach(array_reverse($this->extra_path) as $extra_path) {
 							#array_unshift($this->url_path, $extra_path);
-						}
-					}
+						#}
+					#}
 					#print_r($this->url_path);
 
 					$id = strtolower($this->url_path[@array_search(":id", $route_path)]);
@@ -524,12 +527,13 @@ class ActionController {
 
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
-                $this->controller_class = Inflector::camelize($this->controller) . "Controller";
-                $this->helper_file = $this->helpers_path . "/" .  $this->controller . "_helper.php";
+                $this->controller_class = Inflector::camelize(Inflector::demodulize($this->controller)) . "Controller";
+                $this->helper_file = $this->helpers_path . "/" .  $this->controller . "_helper.php";  
+                #error_log("controller:{$this->controller} - controller_file:{$this->controller_file} - controller_class:{$this->controller_class} - views_path:{$this->views_path}");
             }
         }
 
-        if(file_exists($this->controller_file)) {
+        if(is_file($this->controller_file)) {
             $this->loaded = true;
             return true;
         } else {
@@ -687,8 +691,12 @@ class ActionController {
                         $action = $this->controller_object->called_action = "index";
                         $this->controller_object->index();
                     } else {
-                        //error_log('no action');
-                        $this->raise("No action responded to ".$this->action, "Unknown action", "404");
+                        //error_log('no action');   
+                        $methods_size = count($action_methods);       
+                        if($methods_size > 1) {
+                            $last_method = ($methods_size > 2 ? "," : '')." and ".array_pop($action_methods);
+                        }
+                        $this->raise("No action responded to ".$this->action.". Actions:".implode(", ",$action_methods).$last_method, "Unknown action", "404");
                     }
                     
                     if(isset($this->controller_object->layout)) {
@@ -725,7 +733,7 @@ class ActionController {
                     # Render the action / view                      
                     if(!$this->controller_object->render_action($action,
                           isset($render_options) ? $render_options : null )) {
-                        $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404");
+                        $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404"); 
                     }
                     # Grab all the html from the view to put into the layout
                     $content_for_layout = ob_get_contents();
@@ -784,23 +792,35 @@ class ActionController {
      *  @uses $layouts_path
      *  @uses $views_path
      *  @uses $url_path
-     *  @todo <b>FIXME:</b> Creating a file or directory in
-     *        app/controllers with the same name as a controller, action or
-     *        other URL element will hijack the browser!
      */
     function set_paths() {
-        if(is_array($this->url_path)) {
-            $test_path = null;
-            foreach($this->url_path as $path) {
-                $test_path = (is_null($test_path) ? $path : "$test_path/$path");
-                if(is_dir($this->controllers_path . "/$test_path")) {
-                    $extra_path[] = $path;
-                } else {
-                    $test_path = null;
-                    $new_path[] = $path;
+        if(is_array($this->url_path)) {                     
+            $path_size = count($this->url_path) - 1;
+            $test_path = $this->controllers_path;  
+            $url_path = $this->url_path;          
+            foreach($url_path as $position => $path) {         
+                $test_path .= "/$path";  
+                $test_file = $test_path."_controller.php";                 
+                if(is_file($test_file)) {      
+                    $next = isset($url_path[$position+1]) ? 
+                        $test_path ."/".$url_path[$position+1] :
+                        null;     
+                    if(!is_null($next)) {
+                        if(is_file($next."_controller.php") || is_dir($next)) {
+                            $extra_path[] = $path;   
+                            array_shift($this->url_path);                            
+                        }
+                    } else {
+                        #error_log("found controller path:$path");                    
+                        break;                        
+                    }              
+                } elseif(is_dir($test_path)) {     
+                    $extra_path[] = $path;   
+                    array_shift($this->url_path);
                 }
             }
-            if(isset($extra_path) && is_array($extra_path)) {
+            if(isset($extra_path) && is_array($extra_path)) {  
+                #error_log("extra_path:".print_r($extra_path, true));
 				$this->extra_path = $extra_path;
                 $extra_path = implode("/", $extra_path);
                 $this->added_path = $extra_path;
@@ -808,10 +828,6 @@ class ActionController {
                 $this->helpers_path .= "/$extra_path";
                 $this->views_path .= "/$extra_path";
                 $this->layouts_path .= "/$extra_path";
-            }
-            if(isset($new_path)
-               && is_array($new_path)) {
-                $this->url_path = $new_path;
             }
         }
     }
