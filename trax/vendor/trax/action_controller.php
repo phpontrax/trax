@@ -529,7 +529,7 @@ class ActionController {
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
                 $this->controller_class = Inflector::camelize(Inflector::demodulize($this->controller)) . "Controller";
                 $this->helper_file = $this->helpers_path . "/" .  $this->controller . "_helper.php";  
-                #error_log("controller:{$this->controller} - controller_file:{$this->controller_file} - controller_class:{$this->controller_class} - views_path:{$this->views_path}");
+                # error_log("controller:{$this->controller} - controller_file:{$this->controller_file} - controller_class:{$this->controller_class} - views_path:{$this->views_path}");
             }
         }
 
@@ -744,7 +744,7 @@ class ActionController {
                        && $this->controller_object->layout_file) {
                         $locals['content_for_layout'] = $content_for_layout;
                         # render the layout
-                        //error_log("rendering layout: ".$this->controller_object->layout_file);
+                        #error_log("rendering layout: ".$this->controller_object->layout_file);
                         if(!$this->controller_object->render_file($this->controller_object->layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
                             //echo "HERE";
@@ -1070,7 +1070,8 @@ class ActionController {
 
         if($return_as_string) {
             $result = ob_get_contents();
-            ob_end_clean();
+            ob_end_clean();  
+            $this->render_performed = false;
             return $result;
         }         
     }
@@ -1434,7 +1435,7 @@ class ActionController {
      *  @param string $error_code    Error code
      *  @throws ActionControllerError
      */
-    function raise($error_message, $error_heading, $error_code = "404") {
+    function raise($error_message, $error_heading, $error_code = "404") { 
         throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);
     }
 
@@ -1465,10 +1466,15 @@ class ActionController {
                 echo "</font>\n";                
             }
         } else {
-            echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
-            echo "<h2>Application Error</h2>Trax application failed to start properly";
-            echo "</font>\n";            
-        }
+            if($error_code == "404") {
+                echo "<h2>404 Error - File not found.</h2>";
+            } else {
+                echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
+                echo "<h2>Application Error</h2>Trax application failed to start properly";
+                echo "</font>\n";                
+            }           
+        } 
+      
     }
 
 }
