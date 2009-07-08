@@ -220,7 +220,7 @@ class ActionMailer {
         $this->template = $this->template ? $this->template : $method_name;        
         $this->headers = $this->headers ? $this->headers : array();
         $this->body = $this->body ? $this->body : array();
-        $this->default_from = "nobody@".$_SERVER['HTTP_HOST'];
+        $this->default_from = "nobody@".($_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : 'domain.com');
         $this->head_charset = $this->head_charset ? $this->head_charset : $this->default_charset;
         $this->html_charset = $this->html_charset ? $this->html_charset : $this->default_charset;
         $this->text_charset = $this->text_charset ? $this->text_charset : $this->default_charset;        

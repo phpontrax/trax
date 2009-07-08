@@ -666,22 +666,22 @@ class ActiveRecord {
             $association_type = $this->get_association_type($method_name);
             switch($association_type) {
                 case "has_many":
-					$parameters = is_array($this->has_many) && @array_key_exists($method_name, $this->has_many) ? 
+					$parameters = is_array($this->has_many) && @array_key_exists($method_name, $this->has_many) && !is_null($this->has_many[$method_name]) ? 
 						array_merge($this->has_many[$method_name], $parameters) : $parameters;
                     $result = $this->find_all_has_many($method_name, $parameters);
                     break;
                 case "has_one":
-					$parameters = is_array($this->has_one) && @array_key_exists($method_name, $this->has_one) ? 
+					$parameters = is_array($this->has_one) && @array_key_exists($method_name, $this->has_one) && !is_null($this->has_one[$method_name]) ? 
 						array_merge($this->has_one[$method_name], $parameters) : $parameters;
                     $result = $this->find_one_has_one($method_name, $parameters);
                     break;
                 case "belongs_to":
-					$parameters = is_array($this->belongs_to) && @array_key_exists($method_name, $this->belongs_to) ? 
+					$parameters = is_array($this->belongs_to) && @array_key_exists($method_name, $this->belongs_to) && !is_null($this->belongs_to[$method_name]) ? 
 						array_merge($this->belongs_to[$method_name], $parameters) : $parameters;
                     $result = $this->find_one_belongs_to($method_name, $parameters);
                     break;
                 case "has_and_belongs_to_many":  
-					$parameters = is_array($this->has_and_belongs_to_many) && @array_key_exists($method_name, $this->has_and_belongs_to_many) ? 
+					$parameters = is_array($this->has_and_belongs_to_many) && @array_key_exists($method_name, $this->has_and_belongs_to_many) && !is_null($this->has_and_belongs_to_many[$method_name]) ? 
 						array_merge($this->has_and_belongs_to_many[$method_name], $parameters) : $parameters;
                     $result = $this->find_all_habtm($method_name, $parameters); 
                     break;            
@@ -759,6 +759,12 @@ class ActiveRecord {
 			if(@array_key_exists("per_page", $parameters)) {
 				$options['per_page'] = $parameters['per_page'];
 			}
+			if(@array_key_exists("group", $parameters)) {
+				$options['group'] = $parameters['group'];
+			}
+			if(@array_key_exists("having", $parameters)) {
+				$options['having'] = $parameters['having'];
+			}						
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }            
@@ -2247,7 +2253,12 @@ class ActiveRecord {
                     foreach($other_foreign_values as $other_foreign_value) {
                         unset($attributes);
                         $attributes[$this_foreign_key] = $this_foreign_value;
-                        $attributes[$other_foreign_key] = $other_foreign_value;
+                        $attributes[$other_foreign_key] = $other_foreign_value;   
+                        #error_log("HABTM - this_foreign_value:$this_foreign_value other_foreign_value:$other_foreign_value");
+                        if(in_array('', array($this_foreign_value, $other_foreign_value))) {
+                            # this will cause an error so don't insert
+                            continue;
+                        }                         
 						if($sort_field) {
 							$attributes[$sort_field] = $sort_value;
 							$sort_value++;

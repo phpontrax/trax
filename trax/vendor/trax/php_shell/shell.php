@@ -211,7 +211,9 @@ class PHP_Shell {
     * @var array
     * @see registerColourScheme
     */
-    protected $colour_scheme;
+    protected $colour_scheme;     
+    
+    protected $virtual_methods = array('find_by', 'find_all_by', 'count_all', 'sum_all', 'avg_all');
 
     # shell colours
     const C_RESET = "\033[0m";
@@ -293,6 +295,13 @@ class PHP_Shell {
             'command' => $cmd,
             'description' => $help
         );
+    }  
+    
+    public function classMethodExists($object, $method) {
+        if(preg_grep("/^(find|find_all)_by.*$/", $this->virtual_methods) || method_exists($object, $method)) {
+            return true;
+        }               
+        return false;
     }
     
     /**
@@ -458,7 +467,7 @@ class PHP_Shell {
 
                         /* obj */
                         
-                        if (!method_exists($object, $method)) {
+                        if (!$this->classMethodExists($object, $method)) {
                             throw new Exception(sprintf("Variable %s (Class '%s') doesn't have a method named '%s'", 
                                 $objname, get_class($object), $method));
                         }
@@ -490,7 +499,7 @@ class PHP_Shell {
 
                         /* obj */
                         
-                        if (!method_exists($object, $method)) {
+                        if (!in_array($method, $this->virtual_methods) && !method_exists($object, $method)) {
                             throw new Exception(sprintf("Variable %s (Class '%s') doesn't have a method named '%s'", 
                                 $objname, get_class($object), $method));
                         }
@@ -533,7 +542,7 @@ class PHP_Shell {
 
                         /* obj */
                         
-                        if (!method_exists($object, $method)) {
+                        if (!in_array($method, $this->virtual_methods) && !method_exists($object, $method)) {
                             throw new Exception(sprintf("Variable %s (Class '%s') doesn't have a method named '%s'", 
                                 $objname, get_class($object), $method));
                         }
@@ -554,7 +563,7 @@ class PHP_Shell {
                         
                         $method = $ts[$last - 1]['value'];
 
-                        if (!in_array($method, get_class_methods($classname))) {
+                        if (!in_array($method, $this->virtual_methods) && !in_array($method, get_class_methods($classname))) {
                             throw new Exception(sprintf("Class '%s' doesn't have a method named '%s'", 
                                 $classname, $method));
                         }
@@ -579,7 +588,7 @@ class PHP_Shell {
                         }
                         $method = $GLOBALS[ltrim($methodname, '$')];
 
-                        if (!in_array($method, get_class_methods($classname))) {
+                        if (!in_array($method, $this->virtual_methods) && !in_array($method, get_class_methods($classname))) {
                             throw new Exception(sprintf("Class '%s' doesn't have a method named '%s'", 
                                 $classname, $method));
                         }
@@ -811,8 +820,9 @@ class PHP_Shell {
                 if (false === ($this->stdin = fopen("php://stdin", "r"))) {
                     return false;
                 }
-            }
-            $l = fgets($this->stdin);
+            }  
+                                 
+            $l = fgets($this->stdin); 
         }
         return $l;
     }
