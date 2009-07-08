@@ -66,7 +66,8 @@ class Trax {
 		$session_name = "TRAXSESSID",
 		$session_lifetime = "0",
 		$session_maxlifetime_minutes = "20",
-        $version = null;
+        $version = null,
+        $show_trax_errors = false;
 
     function initialize() {
 

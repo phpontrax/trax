@@ -1447,25 +1447,27 @@ class ActionController {
         $error_message = $exception->error_message;
         $trace = $exception->getTraceAsString();
         header("HTTP/1.0 {$error_code} {$error_heading}");
-        # check for user's layout for errors
-        if(TRAX_ENV == "development" && file_exists(Trax::$layouts_path."/trax_error.".Trax::$views_extension)) {
-            include(Trax::$layouts_path."/trax_error.".Trax::$views_extension);
-        } elseif(TRAX_ENV == "development" && file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
-            # use default layout for errors
-            include(TRAX_LIB_ROOT."/templates/error.phtml");
-        } elseif(TRAX_ENV == "development") {
-            echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
-            echo "<h1>$error_heading</h1>\n";
-            echo "<p>$error_message</p>\n";
-            if($trace) {
-                echo "<pre style=\"background-color: #eee;padding:10px;font-size: 11px;\">";
-                echo "<code>$trace</code></pre>\n";
+        # check for user's layout for errors 
+        if(TRAX_ENV == "development" || Trax::$show_trax_errors) {
+            if(file_exists(Trax::$layouts_path."/trax_error.".Trax::$views_extension)) {
+                include(Trax::$layouts_path."/trax_error.".Trax::$views_extension);
+            } elseif(file_exists(TRAX_LIB_ROOT."/templates/error.phtml")) {
+                # use default layout for errors
+                include(TRAX_LIB_ROOT."/templates/error.phtml");
+            } else {
+                echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
+                echo "<h1>$error_heading</h1>\n";
+                echo "<p>$error_message</p>\n";
+                if($trace) {
+                    echo "<pre style=\"background-color: #eee;padding:10px;font-size: 11px;\">";
+                    echo "<code>$trace</code></pre>\n";
+                }
+                echo "</font>\n";                
             }
-            echo "</font>\n";
         } else {
             echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
             echo "<h2>Application Error</h2>Trax application failed to start properly";
-            echo "</font>\n";
+            echo "</font>\n";            
         }
     }
 
