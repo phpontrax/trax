@@ -176,7 +176,7 @@ class ActiveRecord {
 	/**
 	 * What environment to run in.
 	 */
-	public static $environment = 'development';
+	public static $environment = 'production';
 
 	/**
 	 * Stores the database settings
@@ -501,6 +501,11 @@ class ActiveRecord {
      *  Keep a log of queries executed if in development env
      */    
     public static $query_log = array();
+                                   
+    /**
+     *  Log all queries to the query_log array even not in development mode
+     */
+    public static $log_all = false;
 
     /**
      *  Construct an ActiveRecord object
@@ -770,7 +775,10 @@ class ActiveRecord {
             }            
             if(@array_key_exists("join_table", $parameters)) {
                 $join_table = $parameters['join_table'];
-            } 
+            }
+            if(@array_key_exists("index_on", $parameters)) {
+                $index_on = $parameters['index_on'];
+            }             
             if(@array_key_exists("foreign_key", $parameters)) {
                 $this_foreign_key = $parameters['foreign_key'];
             }
@@ -791,6 +799,9 @@ class ActiveRecord {
         
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
+        if(!is_null($index_on)) {
+            $other_class_object->index_on = $index_on;
+        }
 
         # If finder_sql is specified just use it instead of determining the joins/sql
         if(!is_null($finder_sql)) {
@@ -875,7 +886,10 @@ class ActiveRecord {
 			}
 			if(@array_key_exists("per_page", $parameters)) {
 				$options['per_page'] = $parameters['per_page'];
-			}
+			}      
+            if(@array_key_exists("index_on", $parameters)) {
+                $index_on = $parameters['index_on'];
+            }			
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
             }    
@@ -897,7 +911,10 @@ class ActiveRecord {
         }
 
         # Instantiate an object to access find_all
-        $other_class_object = new $other_class_name();
+        $other_class_object = new $other_class_name(); 
+        if(!is_null($index_on)) {
+            $other_class_object->index_on = $index_on;
+        }        
         
         # If finder_sql is specified just use it instead of determining the association
         if(!is_null($finder_sql)) {
@@ -1085,7 +1102,7 @@ class ActiveRecord {
         $distinct = strtolower($aggregate_type) == 'count' ? 'DISTINCT ' : '';
         #($parameters[0]) ? $field = $parameters[0] : $field = "*";
         $field = (stristr($parameters[0], ".") ? $parameters[0] : "{$this->table_prefix}{$this->table_name}.".$parameters[0]);
-        $sql = "SELECT {$aggregate_type}({$distinct}{$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";        
+        $sql = "SELECT {$distinct}{$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";        
         # Use any passed-in parameters
         if(is_array($parameters[1])) {
             extract($parameters[1]);   
@@ -1094,8 +1111,11 @@ class ActiveRecord {
             $joins = $parameters[2];
         }
         if(!empty($joins)) $sql .= " $joins ";
-        if(!empty($conditions)) $sql .= " WHERE $conditions ";
-        # echo "$aggregate_type sql:$sql<br>";
+        if(!empty($conditions)) $sql .= " WHERE $conditions ";  
+        if(!empty($group)) $sql .= " GROUP BY {$group} ";
+        if(!empty($having)) $sql .= " HAVING {$having} ";       
+        
+        #echo "$aggregate_type sql:$sql<br>";
         //print_r($parameters[0]);
         //echo $sql;
         $rs = $this->query($sql, true);
@@ -1212,9 +1232,10 @@ class ActiveRecord {
      *  @todo Document this API
      */
     function begin() {
-        # check if transaction are supported by this driver
-        if(self::$db->supports('transactions')) {        
-            $rs = self::$db->beginTransaction();
+        # check if transaction are supported by this driver    
+        $db =& $this->get_connection();
+        if($db->supports('transactions')) {        
+            $rs = $db->beginTransaction();
             if($this->is_error($rs)) {
                 $this->raise($rs->getMessage());
             }      
@@ -1229,13 +1250,14 @@ class ActiveRecord {
      *  @todo Document this API
      */    
     function save_point($save_point) {
-        if(!is_null($save_point)) {
+        if(!is_null($save_point)) {          
+            $db =& $this->get_connection();
             # check if transaction are supported by this driver
-            if(self::$db->supports('transactions')) {            
+            if($db->supports('transactions')) {            
                 # check if we are inside a transaction and if savepoints are supported
-                if(self::$db->inTransaction() && self::$db->supports('savepoints')) {
+                if($db->inTransaction() && $db->supports('savepoints')) {
                     # Set a savepoint
-                    $rs = self::$db->beginTransaction($save_point); 
+                    $rs = $db->beginTransaction($save_point); 
                     if($this->is_error($rs)) {
                         $this->raise($rs->getMessage());
                     }                
@@ -1250,12 +1272,13 @@ class ActiveRecord {
      *  @uses $db
      *  @todo Document this API
      */
-    function commit() {      
+    function commit() {          
+        $db =& $this->get_connection();
         # check if transaction are supported by this driver
-        if(self::$db->supports('transactions')) {
+        if($db->supports('transactions')) {
             # check if we are inside a transaction
-            if(self::$db->inTransaction()) {
-                $rs = self::$db->commit(); 
+            if($db->inTransaction()) {
+                $rs = $db->commit(); 
                 if($this->is_error($rs)) {
                     $this->raise($rs->getMessage());
                 }        
@@ -1270,10 +1293,11 @@ class ActiveRecord {
      *  @uses $db
      *  @todo Document this API
      */    
-    function rollback() {
+    function rollback() {     
+        $db =& $this->get_connection(true);
         # check if transaction are supported by this driver
-        if(self::$db->supports('transactions')) {
-            $rs = self::$db->rollback(); 
+        if($db->supports('transactions')) {
+            $rs = $db->rollback(); 
             if($this->is_error($rs)) {
                 $this->raise($rs->getMessage());
             }
@@ -1297,7 +1321,7 @@ class ActiveRecord {
         $this->log_query($sql);
         $db =& $this->get_connection($read_only);
         $rs =& $db->query($sql);
-        if ($this->is_error($rs)) {
+        if($this->is_error($rs)) {
             if(self::$auto_rollback && self::$in_transaction) {
                 $this->rollback();
             }
@@ -1344,10 +1368,12 @@ class ActiveRecord {
                 if($part == "AND") {
                     $conditions .= " AND ";
                     $param_index++;
-                } else {
-                    $value = $this->attribute_is_string($part) ? 
-                        "'".$parameters[$param_index]."'" : 
-                        $parameters[$param_index];                    
+                } else {    
+                    $value = $this->quote_attribute($part, $parameters[$param_index]);
+                    #$value = $this->attribute_is_string($part) ? 
+                    #    "'".$parameters[$param_index]."'" : 
+                    #    $parameters[$param_index]; 
+                    #error_log("find_by: $part = $value") ;                 
                     $create_fields[$part] = $parameters[$param_index];  
                     $conditions .= "{$part} = {$value}";
                 } 
@@ -1408,7 +1434,9 @@ class ActiveRecord {
 		$page = null;
         $per_page = null;
         $select = null;
-		$paginate = false;
+		$paginate = false; 
+		$group = null;
+		$having = null;
 
         # this is if they passed in an associative array to emulate
         # named parameters.
@@ -1425,11 +1453,12 @@ class ActiveRecord {
             }  
         }
 
-        # Test source of SQL for query
-        if(stristr($conditions, "SELECT")) {
+        # Test source of SQL for query 
+        if(stristr($conditions, "SELECT ")) {
             # SQL completely specified in argument so use it as is
             $sql = $conditions;
-        } else {
+        } 
+        else {
 
             # If select fields not specified just do a SELECT *
             if(is_null($select)) {
@@ -1653,7 +1682,7 @@ class ActiveRecord {
     function find($id, $order = null, $limit = null, $joins = null) {
         $find_all = false;
         if(is_array($id)) {
-            if($id[0]) {
+            if(isset($id[0])) {
                 # passed in array of numbers array(1,2,4,23)
                 $primary_key = $this->primary_keys[0];
                 $primary_key_values = $this->attribute_is_string($primary_key) ? 
@@ -1902,10 +1931,11 @@ class ActiveRecord {
      *          </ul>
      *  @throws {@link ActiveRecordError}
      */
-    private function add_record() {
-        self::$db->loadModule('Extended', null, true);                
+    private function add_record() { 
+        $db =& $this->get_connection();
+        $db->loadModule('Extended', null, true);                
         # $primary_key_value may either be a quoted integer or php null
-        $primary_key_value = self::$db->getBeforeID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
+        $primary_key_value = $db->getBeforeID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }
@@ -1919,8 +1949,8 @@ class ActiveRecord {
         $result = $this->query($sql);  
         $habtm_result = true;
         $primary_key = $this->primary_keys[0];
-        # $id is now equivalent to the value in the id field that was inserted
-        $primary_key_value = self::$db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
+        # $primary_key_value is now equivalent to the value in the id field that was inserted
+        $primary_key_value = $db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }            
@@ -2188,13 +2218,16 @@ class ActiveRecord {
      *  @uses query()
      *  @throws {@link ActiveRecordError}
      */
-    function delete_all($conditions = null) {
+    function delete_all($conditions = null, $limit = null) {
         if(is_null($conditions)) {
             $this->add_error("No conditions specified to delete on.");
             return false;
+        } 
+        if(!is_null($limit)) {
+            $limit = "LIMIT {$limit}";
         }
         # Delete the record(s)
-        $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions}");
+        $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions} {$limit}");
         # reset this to a new record    
         $this->new_record = true;
         return true;
@@ -2267,7 +2300,7 @@ class ActiveRecord {
                         $fields = @implode(', ', array_keys($attributes));
                         $values = @implode(', ', array_values($attributes));
                         $sql = "INSERT INTO $table_name ($fields) VALUES ($values)";
-                        error_log("add_habtm_records: SQL: $sql");
+                        #error_log("add_habtm_records: SQL: $sql");
                         $this->query($sql);
                     }
                 }
@@ -2666,9 +2699,10 @@ class ActiveRecord {
         }
         if(isset(self::$table_info[$table_name])) {
             $this->content_columns = self::$table_info[$table_name];  
-        } else {
-            self::$db->loadModule('Reverse', null, true);
-            $this->content_columns = self::$db->reverse->tableInfo($table_name);
+        } else {       
+            $db =& $this->get_connection(true);                                      
+            $db->loadModule('Reverse', null, true);
+            $this->content_columns = $db->reverse->tableInfo($table_name);
             if($this->is_error($this->content_columns)) {
                 $this->raise($this->content_columns->getMessage());        
             }
@@ -2691,9 +2725,10 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function get_insert_id() {
-        // fetch the last inserted id via autoincrement or current value of a sequence
-        if(self::$db->supports('auto_increment') === true) {
-            $id = self::$db->lastInsertID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);   
+        // fetch the last inserted id via autoincrement or current value of a sequence 
+        $db =& $this->get_connection();
+        if($db->supports('auto_increment') === true) {
+            $id = $db->lastInsertID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);   
             if($this->is_error($id)) {
                 $this->raise($id->getMessage());
             } 
@@ -2727,8 +2762,10 @@ class ActiveRecord {
      *  @uses is_error()
      *  @throws {@link ActiveRecordError}
      */
-    function establish_connection($connection_name = null, $read_only = false) {
-		$connection_name = $this->get_connection_name($connection_name);
+    function establish_connection($connection_name = null, $read_only = false) { 
+        #error_log("trying connection name:$connection_name");
+		$connection_name = $this->get_connection_name($connection_name); 
+		#error_log("got connection name:$connection_name read only:".($read_only ? 'true' : 'false')); 
 		if($read_only) { 
 		    $connection =& self::$connection_pool_read_only[$connection_name];
 		} else {
@@ -2772,17 +2809,35 @@ class ActiveRecord {
                     $connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
                 }
             } 
-        }
+        } 
         if(!$this->is_error($connection)) {
             $connection->setFetchMode($this->fetch_mode);
             if($read_only) {
-                self::$connection_pool_read_only[$connection_name] =& $connection;
+                self::$connection_pool_read_only[$connection_name] =& $connection; 
+                $pool_size = count(self::$connection_pool_read_only);
                 $this->read_only_connection_name = $connection_name;
             } else {
-                self::$connection_pool[$connection_name] =& $connection;
+                self::$connection_pool[$connection_name] =& $connection;  
+                $pool_size = count(self::$connection_pool);
                 $this->connection_name = $connection_name;
-            }
-        } else {
+            }  
+            
+            if($pool_size > 1 || $this->database_name != '') {
+                $dsn = $connection->getDSN('array', true);     
+                #error_log("dsn:".print_r($dsn, true));
+                if($this->database_name != '') { 
+                    #$type = "database defined"; 
+                    $database_name = $this->database_name; 
+                } elseif($dsn['database'] != '') {  
+                    #$type = "dsn";
+                    $database_name = $dsn['database'];
+                }
+                if($database_name) {
+                    #error_log("connect $type switch database to {$database_name}");
+                    $connection->setDatabase($database_name);            
+                }
+            }                                    
+        } else {   
             $this->raise($connection->getMessage());
         }      
         return $connection;
@@ -2805,27 +2860,61 @@ class ActiveRecord {
     /**
      *  Gets the database connection whether its read only or read/write	
      */    
-    function get_connection($read_only = false) {
+    function get_connection($read_only = false) { 
         if($read_only && $this->read_only_connection_name && 
            array_key_exists($this->read_only_connection_name, self::$connection_pool_read_only)) {
-            $db =& self::$connection_pool_read_only[$this->read_only_connection_name];
-            #error_log("get_connection($read_only) - using read only:".$this->read_only_connection_name);
+            $db =& self::$connection_pool_read_only[$this->read_only_connection_name]; 
+            $pool_size = count(self::$connection_pool_read_only);
+            #error_log("get_connection pool:$pool_size - using read only:".$this->read_only_connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
         } elseif(array_key_exists($this->connection_name, self::$connection_pool)) {
-            $db =& self::$connection_pool[$this->connection_name];
-            #error_log("get_connection($read_only) - using read/write from pool:".$this->connection_name);
+            $db =& self::$connection_pool[$this->connection_name];   
+            $pool_size = count(self::$connection_pool);
+            #error_log("get_connection pool:$pool_size - using read/write from pool:".$this->connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
         } else {
-            $db =& self::$db;
-            #error_log("get_connection($read_only) - using read/write default:".$this->connection_name);
+            $db =& self::$db;   
+            $pool_size = 1;
+            #error_log("get_connection pool:1 - using read/write default:".$this->connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
+        }  
+            
+        if($pool_size > 1 || $this->database_name != '') {
+            $dsn = $db->getDSN('array', true);     
+            #error_log("dsn:".print_r($dsn, true));
+            if($this->database_name != '') { 
+                $type = "database defined"; 
+                $database_name = $this->database_name; 
+            } elseif($dsn['database'] != '') {  
+                $type = "dsn";
+                $database_name = $dsn['database'];
+            }
+            if($database_name) {
+                #error_log("get_connection $type switch database to {$database_name} table:".$this->table_name);
+                $db->setDatabase($database_name);            
+            }
         }
+                    
         return $db;
-    }
+    }   
 
     /**
      *  Clears all database connections
      */    
     function clear_all_connections() {
         self::$connection_pool = array();
-        self::$connection_pool_read_only = array();
+        self::$connection_pool_read_only = array();  
+    }  
+
+    /**
+     *  Select a different database   
+     *
+     * @param   string  name of the database that should be selected
+     * @return  string  name of the database previously connected to
+     * @access  public     
+     */    
+    function set_database($database_name) {    
+        $db =& $this->get_connection(true);
+        if($database_name && is_object($db)) {
+            return $db->setDatabase($database_name);
+        }
     }
 
     /**
@@ -2904,7 +2993,6 @@ class ActiveRecord {
             $this->validate_builtin();
             $this->after_validation();
             $this->validate_on_update();
-            $this->validate_on_update_builtin();
             $this->after_validation_on_update();
         }
 
@@ -3446,8 +3534,14 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function raise($message) {
-        $error_message  = "Model Class: ".$this->get_class_name()."<br>";
-        $error_message .= "Error Message: ".$message;
+        $error_message  = "Model Class: ".$this->get_class_name()."<br>Error Message:";
+        if(is_object(self::$db)) {        
+            list(,$error_code_db, $error_msg_db) = self::$db->errorInfo(); 
+            $error_message .= " ({$error_code_db}) {$error_msg_db}";
+        }   
+        if(!$error_code_db) {
+            $error_message .= " ".$message;
+        }
         throw new ActiveRecordError($error_message, "ActiveRecord Error", "500");
     }
 
@@ -3528,7 +3622,7 @@ class ActiveRecord {
      *  @param string SQL to be logged
      */
     function log_query($query) {   	
-        if(self::$environment == 'development' && $query) {
+        if((self::$environment != 'production' || self::$log_all) && $query) {
             self::$query_log[] = $query;       
         }    
     }
