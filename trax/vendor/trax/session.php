@@ -201,7 +201,7 @@ class Session {
      *          </ul>
      */
     function is_aol_host() {
-        if(ereg("proxy\.aol\.com$", gethostbyaddr($_SERVER['REMOTE_ADDR'])) ||
+        if(isset($_SERVER['REMOTE_ADDR']) && ereg("proxy\.aol\.com$", gethostbyaddr($_SERVER['REMOTE_ADDR'])) ||
            stristr($_SERVER['HTTP_USER_AGENT'], "AOL")) {
             return true;
         }

@@ -1590,6 +1590,23 @@ function time_select($object, $attribute, $options = array()) {
 function expiration_date_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
     return $date_helper->expiration_date_select($options);        
+} 
+
+/**
+ *  Make a new DateHelper object and call its select_year() method
+ *
+ *  Generate HTML/XML for year selector pull-down menu using only
+ *  explicit month specification.<br />
+ *  <b>NB:</b>  An attempt to get value of an attribute will always
+ *  fail because there is no way to set
+ *  {@link DateHelper::object_name} and
+ *  {@link DateHelper::attribute_name}.
+ *  @uses DateHelper::select_year()
+ */
+function select_year() {
+    $date_helper = new DateHelper();
+    $args = func_get_args();
+    return call_user_func_array(array($date_helper, 'select_year'), $args);    
 }
 
 /**

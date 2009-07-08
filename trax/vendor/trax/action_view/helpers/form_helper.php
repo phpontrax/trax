@@ -366,13 +366,13 @@ function text_area($object, $field, $options = array()) {
  * array with $options. The $checked_value defaults to 1 while the default $unchecked_value
  * is set to 0 which is convenient for boolean values. Usually unchecked checkboxes don't post anything.
  * We work around this problem by adding a hidden value with the same name as the checkbox.
-#
+ *
  * Example: Imagine that $post->validated is 1:
  *   check_box("post", "validated");
  * Result:
  *   <input type="checkbox" id="post_validate" name="post[validated] value="1" checked="checked" />
  *   <input name="post[validated]" type="hidden" value="0" />
-#
+ *
  * Example: Imagine that $puppy->gooddog is no:
  *   check_box("puppy", "gooddog", array(), "yes", "no");
  * Result:

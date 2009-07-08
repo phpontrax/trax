@@ -97,7 +97,7 @@ class Trax {
         # As well in your application you can do error_log("whatever") and it will go to this log file.
         ini_set("log_errors", "On");
         ini_set("error_log", self::$log_path."/".TRAX_ENV.".log");
-
+         
         if(TRAX_ENV == "development") {
             # Display errors to browser if in development mode for debugging
             ini_set("display_errors", "On");
@@ -127,14 +127,20 @@ class Trax {
         include_once("dispatcher.php");
         include_once("router.php");
 
-        # Make sure database settings are cleared out
-        ActiveRecord::$database_settings = array();
+        self::load_active_record_connections_config();
+
+    }  
+    
+    function load_active_record_connections_config() {
+        # Make sure database settings are cleared out 
+        ActiveRecord::$database_settings = array();   
+        ActiveRecord::clear_all_connections();
         if(file_exists(self::$config_path."/database.ini")) {
             # Load databse settings 
-            ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true);
+            ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true); 
+            #error_log("db settings:".print_r(ActiveRecord::$database_settings, true));
         }
-		ActiveRecord::$environment = TRAX_ENV;
-
+		ActiveRecord::$environment = TRAX_ENV;        
     }
 
     function include_env_config() {

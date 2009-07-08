@@ -172,7 +172,7 @@ class ActiveRecordHelper extends Helpers {
                 $options['header_message'] : "%s prohibited this %s from being saved";
             $header_sub_message = isset($options['header_sub_message']) ?
                 $options['header_sub_message'] : "There were problems with the following fields:";
-        		
+
             return $this->content_tag("div",
                 $this->content_tag(
                     $header_tag,
