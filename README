@@ -27,7 +27,7 @@ The controller and view is handled by the Action Controller
 
 == Building & Installing PHPonTrax PEAR Module
 From the commandline run the following command:
-php makepkg.php
+php make-pkg.php
 (Disregard any warning messages that say "not prefixed with package name "PHPonTrax"")
 After that runs it will make a build folder with the PEAR module called:
 PHPonTrax-<version>.tgz 
