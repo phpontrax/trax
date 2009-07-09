@@ -37,7 +37,7 @@ exec("trax ".dirname(__FILE__)."/trax-standalone");
 echo "fetching README\n";
 exec("wget http://www.phpontrax.com/downloads/README-standalone.txt");
 rename("README-standalone.txt", "README");
-
+ 
 chdir("vendor");
 echo "fetching PEAR files\n";
 exec("wget http://www.phpontrax.com/downloads/PEAR.tar.gz");
