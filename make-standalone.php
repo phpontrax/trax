@@ -16,7 +16,7 @@
  *  Required to use this is Unix-type system (I think), wget, tar, svn, PHPonTrax already installed.
  *
  *  @package PHPonTrax
- *  @version $Id:$
+ *  @version $Id$
  */
 
 echo "cleaning up old builds of trax-standalone\n";
