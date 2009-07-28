@@ -67,7 +67,9 @@ class Trax {
 		$session_lifetime = "0",
 		$session_maxlifetime_minutes = "20",
         $version = null,
-        $show_trax_errors = false;
+        $show_trax_errors = false,
+        $server_default_include_path = null,
+        $include_paths = array();
 
     function initialize() {
 
@@ -106,14 +108,10 @@ class Trax {
             ini_set("display_errors", "Off");
         }
 
-        # Set the include_path
-        ini_set("include_path",
-            ".".self::$path_seperator.              # current directory
-            TRAX_LIB_ROOT.self::$path_seperator.    # trax libs (vendor/trax or server trax libs)
-            PHP_LIB_ROOT.self::$path_seperator.     # php libs dir (ex: /usr/local/lib/php)
-            self::$lib_path.self::$path_seperator.  # app specific libs extra libs to include
-            ini_get("include_path")                 # tack on the old include_path to the end
-        );
+        # Get the include_path so we know what the original path was    
+        self::$server_default_include_path = ini_get("include_path");
+        # Set the include_paths
+        self::set_default_include_paths();
 
         # Include Trax library files.
         include_once("session.php");
@@ -129,7 +127,46 @@ class Trax {
 
         self::load_active_record_connections_config();
 
+    }
+    
+    function add_include_path($path, $prepend = false, $use_trax_root = false) { 
+        if(is_array($path)) {
+            foreach($path as $new_path) {
+                if(!in_array($new_path, self::$include_paths)) {
+                    $new_paths[] = $use_trax_root ? TRAX_ROOT."/".$new_path : $new_path;  
+                }
+            }
+        } elseif(!in_array($path, self::$include_paths)) {
+            $new_paths[] = $use_trax_root ? TRAX_ROOT."/".$path : $path; 
+        }                        
+        if(is_array($new_paths) && is_array(self::$include_paths)) {    
+            foreach($new_paths as $path) {
+                if($prepend) {
+                    array_unshift(self::$include_paths, $path);
+                } else {
+                    array_push(self::$include_paths, $path);
+                }
+            }
+            ini_set("include_path", implode(self::$path_seperator, self::$include_paths));            
+        }
+    } 
+    
+    function set_default_include_paths() {
+        # first clear out all the current paths  
+        self::$include_paths = array();        
+        # now add the default paths 
+        self::add_include_path(array(
+            ".",                                # current directory
+            TRAX_LIB_ROOT,                      # trax libs (vendor/trax or server trax libs)
+            PHP_LIB_ROOT,                       # php libs dir (ex: /usr/local/lib/php)
+            self::$lib_path,                    # app specific libs extra libs to include
+            self::$server_default_include_path  # tack on the old include_path to the end            
+        ));
     }  
+    
+    function include_path_exists($path) {
+        return in_array($path, self::$include_paths) ? true : false;       
+    }
     
     function load_active_record_connections_config() {
         # Make sure database settings are cleared out 
@@ -175,6 +212,12 @@ function __autoload($class_name) {
     } elseif(file_exists(Trax::$lib_path."/$file_org")) {
         # Include users application libs
         include_once(Trax::$lib_path."/$file_org");
+    }  
+          
+    # add to the __autoload function from Trax
+    # just define _autoload()
+    if(function_exists('_autoload')) {
+        call_user_func('_autoload', $class_name);
     }
 }
 
