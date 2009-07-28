@@ -160,6 +160,7 @@ class Trax {
             TRAX_LIB_ROOT,                      # trax libs (vendor/trax or server trax libs)
             PHP_LIB_ROOT,                       # php libs dir (ex: /usr/local/lib/php)
             self::$lib_path,                    # app specific libs extra libs to include
+			self::$vendor_path,                 # 3rd party libs to include in vendor (vendor/third_party)
             self::$server_default_include_path  # tack on the old include_path to the end            
         ));
     }  
