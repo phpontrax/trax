@@ -164,10 +164,6 @@ class Trax {
         ));
     }  
     
-    function include_path_exists($path) {
-        return in_array($path, self::$include_paths) ? true : false;       
-    }
-    
     function load_active_record_connections_config() {
         # Make sure database settings are cleared out 
         ActiveRecord::$database_settings = array();   
