@@ -113,7 +113,7 @@ class ActionMailer {
     private function set_headers() {
         if(!is_null($this->recipients)) {
             $recipients = $this->format_emails($this->recipients, "To");
-            $this->set_header_line("To", $recipients);            
+            $this->set_header_line("To", $recipients); 
         }
         
         if(!is_null($this->cc)) {
@@ -256,7 +256,7 @@ class ActionMailer {
         }
            
         $this->body = $this->mail_mime->get($this->mime_params);      
-        $this->headers = $this->mail_mime->headers($this->headers);  
+        $this->headers = $this->mail_mime->headers($this->headers, true);  
 
         if($this->delivery_method == "sendmail") {
             $this->mail =& Mail::factory("sendmail", $this->sendmail_settings);
@@ -331,7 +331,7 @@ class ActionMailer {
      *  @todo Document this API
      */    
     function deliver($mail = null) {
-        if(is_null($mail)) {
+        if(is_null($mail)) {  
             $mail =& $this;               
         } 
         if($this->perform_deliveries) {
@@ -339,7 +339,8 @@ class ActionMailer {
                 $this->deliveries[] = $mail->encoded();
                 return true;    
             }
-            if(!count($this->errors)) { 
+            if(!count($this->errors)) {  
+				#error_log("delivering message to:".$mail->headers['To']);
                 $result = $mail->mail->send($mail->headers['To'], $mail->headers, $mail->body);
                 if(is_object($result)) { 
                     $this->errors[] = $result->getMessage();
