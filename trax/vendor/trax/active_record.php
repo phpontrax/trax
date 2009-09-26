@@ -1040,7 +1040,10 @@ class ActiveRecord {
             }
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
-            }         
+            }  
+            if(@array_key_exists("primary_key", $parameters)) {
+                $other_primary_key = $parameters['primary_key'];
+            }       
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
             }  
@@ -1051,8 +1054,10 @@ class ActiveRecord {
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
 
-        # This class primary key
-        $other_primary_key = $other_class_object->primary_keys[0];
+        # This class primary key   
+        if(!$other_primary_key) {
+            $other_primary_key = $other_class_object->primary_keys[0];
+        }        
 
         if(!$foreign_key) {
             $foreign_key = $other_object_name."_".$other_primary_key;
@@ -1117,7 +1122,8 @@ class ActiveRecord {
         
         #echo "$aggregate_type sql:$sql<br>";
         //print_r($parameters[0]);
-        //echo $sql;
+        //echo $sql; 
+		#error_log("$aggregate_type:$sql");
         $rs = $this->query($sql, true);
         $row = $rs->fetchRow();
         if($row["agg_result"]) {
@@ -1454,11 +1460,10 @@ class ActiveRecord {
         }
 
         # Test source of SQL for query 
-        if(stristr($conditions, "SELECT ")) {
-            # SQL completely specified in argument so use it as is
-            $sql = $conditions;
-        } 
-        else {
+        if(stristr($conditions, "SELECT ")) {        
+    		# SQL completely specified in argument so use it as is
+            $sql = $conditions;      
+		} else {
 
             # If select fields not specified just do a SELECT *
             if(is_null($select)) {
@@ -1482,7 +1487,8 @@ class ActiveRecord {
                 $sql .= "WHERE $conditions ";
             } elseif(array_key_exists('conditions', $this->default_scope) 
                      && !is_null($this->default_scope['conditions'])) {
-                $sql .= "WHERE ".$this->default_scope['conditions']." ";
+				$conditions = $this->default_scope['conditions'];
+                $sql .= "WHERE {$conditions} ";
             }
             
             # If GROUP BY was specified
@@ -1541,19 +1547,37 @@ class ActiveRecord {
                     $offset = ($this->page - 1) * $this->rows_per_page;
                 }
 
-                $sql .= "LIMIT {$this->rows_per_page} OFFSET {$offset}";
-                # $sql .= "LIMIT $offset, $this->rows_per_page";
-				
-				if($paginate) {
-					#error_log("I am going to paginate.");
-					# Set number of total pages in result set
-					if($count = $this->count_all($this->primary_keys[0], $conditions, $joins)) {
+				if($paginate) {		 
+					#error_log("pagination sql:$sql");   		 				
+					$pagination_rs = $this->query($sql); 
+					if($count = $pagination_rs->numRows()) {
 						$this->pagination_count = $count;
 						$this->pages = (($count % $this->rows_per_page) == 0)
 							? $count / $this->rows_per_page
 							: floor($count / $this->rows_per_page) + 1; 
-					}
-				}
+					} 
+					/*   				
+					#error_log("I am going to paginate.");
+					# Set number of total pages in result set          
+					$count_all_params = array(
+						'conditions' => $conditions,
+						'joins' => $joins,
+						'group' => $group,
+						'having' => $having
+					);   
+					
+					if($count = $this->count_all($this->primary_keys[0], $count_all_params)) {
+						$this->pagination_count = $count;
+						$this->pages = (($count % $this->rows_per_page) == 0)
+							? $count / $this->rows_per_page
+							: floor($count / $this->rows_per_page) + 1; 
+					}  
+					*/
+				}  
+				
+                $sql .= "LIMIT {$this->rows_per_page} OFFSET {$offset}";
+                # $sql .= "LIMIT $offset, $this->rows_per_page";				
+				
             }
         }
 		
@@ -1635,10 +1659,12 @@ class ActiveRecord {
 				$objects[$objects_key] = $object;	
 			}
             # If callback is defined in model run it.
-            # this will probably hurt performance...
-            if(method_exists($object, 'after_find')) {
+            # this will probably hurt performance...  
+            if(method_exists($object, 'after_find')) { 
                 $object->after_find();    
-            }
+            } elseif(isset($this->after_find) && method_exists($object, $this->after_find)) {   
+	        	$object->{$this->after_find}();
+			}
             unset($object);
         }
         return $objects;
@@ -1954,7 +1980,8 @@ class ActiveRecord {
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }            
-        $this->$primary_key = $primary_key_value;
+        $this->$primary_key = $primary_key_value;  
+		$this->new_record = false;
         if($primary_key_value != '') {
             if($this->auto_save_habtm) {
                 $habtm_result = $this->add_habtm_records($primary_key_value);

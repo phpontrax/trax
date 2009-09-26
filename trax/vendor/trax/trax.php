@@ -64,6 +64,7 @@ class Trax {
 		$session_class_name = "ActiveRecordStore",
 		$session_save_path = "",
 		$session_name = "TRAXSESSID",
+		$session_cookie_domain = null,
 		$session_lifetime = "0",
 		$session_maxlifetime_minutes = "20",
         $version = null,

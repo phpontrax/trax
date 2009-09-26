@@ -218,8 +218,10 @@ class ActionMailer {
         $this->template_root = Trax::$views_path;
         $this->template_path = "{$this->template_root}/".Inflector::underscore(get_class($this));
         $this->template = $this->template ? $this->template : $method_name;        
-        $this->headers = $this->headers ? $this->headers : array();
-        $this->body = $this->body ? $this->body : array();
+        #$this->headers = $this->headers ? $this->headers : array();
+		$this->headers = array();
+        #$this->body = $this->body ? $this->body : array();    
+		$this->body = null;
         $this->default_from = "nobody@".($_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : 'domain.com');
         $this->head_charset = $this->head_charset ? $this->head_charset : $this->default_charset;
         $this->html_charset = $this->html_charset ? $this->html_charset : $this->default_charset;

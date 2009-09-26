@@ -97,9 +97,12 @@ class Session {
         Trax::$session_lifetime = Trax::$session_lifetime ? Trax::$session_lifetime : self::TRAX_SESSION_LIFETIME;
         Trax::$session_maxlifetime_minutes = Trax::$session_maxlifetime_minutes ? Trax::$session_maxlifetime_minutes : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
         
-        # set the session default for this app
+        # set the session default for this app 
         ini_set('session.name', Trax::$session_name);
-		ini_set('session.use_cookies', 1);
+		ini_set('session.use_cookies', 1);     
+   		if(Trax::$session_cookie_domain) {
+			ini_set('session.cookie_domain',  Trax::$session_cookie_domain); 
+		}		
         ini_set('session.cookie_lifetime', Trax::$session_lifetime);
         ini_set('session.gc_probability', 1);
         ini_set('session.gc_maxlifetime', Trax::$session_maxlifetime_minutes * 60);

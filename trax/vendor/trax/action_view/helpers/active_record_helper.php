@@ -728,10 +728,10 @@ class ActiveRecordHelper extends Helpers {
             return null;
         }
         $end = $object->rows_per_page * $object->page;
-        $start = $end - ($object->rows_per_page - 1);
+        $start = $end - ($object->rows_per_page - 1);  
         if($end >= $object->pagination_count) {
             $end = $object->pagination_count;
-        }
+        } 
 
         return $object->pagination_count ? sprintf($format, $start, $end, $object->pagination_count) : null;
     }    
