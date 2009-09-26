@@ -176,7 +176,7 @@ class ActiveRecord {
 	/**
 	 * What environment to run in.
 	 */
-	public static $environment = 'production';
+	public static $environment = 'development';
 
 	/**
 	 * Stores the database settings
