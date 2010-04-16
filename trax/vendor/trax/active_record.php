@@ -93,12 +93,44 @@ class ActiveRecord {
      *  columns are primary keys is <b>not used</b>.  Instead, the
      *  primary keys in the table are listed in {@link $primary_keys},
      *  which is maintained independently.</p>
-     *  @var string[]
+     *  @var array
      *  @see $primary_keys
      *  @see quoted_attributes()
      *  @see __set()
      */
-    public $content_columns = null; # info about each column in the table
+    public $content_columns = array(); # info about each column in the table
+
+    /**
+     *  Table columns key => values array
+     *
+     *  Array to hold all the column names and values.  
+     *  @var array
+	 *  @see __get()
+     *  @see __set()
+     */	
+	private $attributes = array();
+
+    /**
+     *  Array to hold all the changed columns and what changed. Indexed on column name.
+	 *
+	 *	<p>calling $user->changes => Array( 'first_name' => array('original' => 'John', 'modified' => 'Matt') )</p>
+	 *	<p>calling $user->changed => Array( 'first_name' )</p>
+	 *	<p>calling $user->first_name_change => array('original' => 'John', 'modified' => 'Matt')</p>
+	 *	<p>calling $user->first_name_changed => true</p>
+	 * 
+	 *  @var array
+	 *  @see __get()
+     *  @see __set()	
+     */	
+	private $changed_attributes = array();
+	
+    /**
+     *  Whether or not to use partial updates meaning only 
+	 *	update fields that have changed in UPDATE sql calls
+     *
+     *  @var boolean
+     */	
+	public $partial_updates = true;
 
     /**
      *  Table Info
@@ -521,6 +553,7 @@ class ActiveRecord {
      *  @uses set_content_columns()
      *  @uses $table_name
      *  @uses set_table_name_using_class_name()
+	 *	@uses reset_attributes()
      *  @uses update_attributes()
      */
     function __construct($attributes = null) { 
@@ -543,6 +576,9 @@ class ActiveRecord {
         if($this->table_name) {
             $this->set_content_columns($this->table_name);
         }
+
+		# initialize the internal attributes array to all nulls
+		$this->reset_attributes();
 
         # If $attributes array is passed in update the class with its contents
         if(!is_null($attributes)) {
@@ -569,10 +605,13 @@ class ActiveRecord {
      *  @uses find_all_habtm()
      *  @uses find_one_belongs_to()
      *  @uses find_one_has_one()
-     */
-    function __get($key) {
-        if($association_type = $this->get_association_type($key)) {
-            //error_log("association_type:$association_type");
+     */	
+    function __get($key) {        
+		if(array_key_exists($key, $this->attributes)) {
+			#error_log("getting: {$key} = ".$this->attributes[$key]);
+	    	return $this->attributes[$key];
+		} elseif($association_type = $this->get_association_type($key)) {
+            error_log("get key:$key association_type:$association_type");
             switch($association_type) {
                 case "has_many":
                     $parameters = is_array($this->has_many) ? $this->has_many[$key] : null;
@@ -600,7 +639,21 @@ class ActiveRecord {
             if(is_object($composite_object)) {
                 $this->$key = $composite_object;    
             }                                
-        } 
+        } elseif($key == "changes") {
+			return $this->changed_attributes;
+		} elseif($key == "changed") {
+			return array_keys($this->changed_attributes);
+		} elseif(substr($key, -7) == "_change") {
+			$changes = array();
+			$attribute = substr($key, 0, -7);
+			if(array_key_exists($attribute, $this->changed_attributes)) {
+				$changes = $this->changed_attributes[$attribute];
+			}
+			return $changes;
+		} elseif(substr($key, -8) == "_changed") {
+			$attribute = substr($key, 0, -8);
+			return array_key_exists($attribute, $this->changed_attributes) ? true : false;
+		} 
         //echo "<pre>getting: $key = ".$this->$key."<br></pre>";
         return $this->$key;
     }
@@ -620,7 +673,24 @@ class ActiveRecord {
      */
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
-        if($key == "table_name") {
+        if(array_key_exists($key, (array)$this->content_columns)) {
+			if(array_key_exists($key, $this->attributes)) {
+				if(array_key_exists($key, $this->changed_attributes)) {
+					if($this->changed_attributes[$key]['original'] != $value) {
+						$this->changed_attributes[$key]['modified'] = $value;
+					} else {
+						unset($this->changed_attributes[$key]);
+					}	
+				} else {
+					$this->changed_attributes[$key] = array(
+						'original' => $this->attributes[$key], 
+						'modified' => $value
+					);
+				}				
+			}
+			$this->attributes[$key] = $value;
+			return;
+		} elseif($key == "table_name") {
             $this->set_content_columns($value);           
           # this elseif checks if first its an object if its parent is ActiveRecord
         } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
@@ -637,8 +707,8 @@ class ActiveRecord {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
             }
-        }       
-        
+        }     
+        #error_log("setting $key = $value");
 	    //  Assignment to something else, do it
         $this->$key = $value;
     }
@@ -1162,14 +1232,8 @@ class ActiveRecord {
     *  @todo Document this API
     */
     function column_for_attribute($attribute) {
-        if(is_array($this->content_columns)) {
-            foreach($this->content_columns as $column) {
-                if($column['name'] == $attribute) {
-                    return $column;
-                }
-            }
-        }
-        return null;
+		return array_key_exists($attribute, (array)$this->content_columns) ? 
+			$this->content_columns[$attribute] : null;
     }
 
    /**
@@ -1195,15 +1259,17 @@ class ActiveRecord {
      *  @uses content_columns
      */
     function column_attribute_exists($attribute) {
-        if(is_array($this->content_columns)) {
-            foreach($this->content_columns as $column) {
-                if($column['name'] == $attribute) {
-                    return true;
-                }
-            }
-        } 
-        return false;     
+		return array_key_exists($attribute, (array)$this->content_columns) ? true : false;    
     }
+
+    /**
+     *  Resets the changed_attributes array back to empty
+     *
+     *  @uses changed_attributes
+     */
+	private function clear_changed_attributes() {
+		$this->changed_attributes = array();
+	}
 
     /**
      *  Get contents of one column of record selected by id and table
@@ -1645,7 +1711,7 @@ class ActiveRecord {
 		$class_name = $this->get_class_name();
         while($row = $rs->fetchRow()) {    
             $object = new $class_name();
-            $object->new_record = false;
+            $object->new_record = false;			
             $objects_key = null;
             foreach($row as $field => $value) {
                 $object->$field = $value;
@@ -1653,6 +1719,7 @@ class ActiveRecord {
                     $objects_key = $value;
                 }
             }
+			$object->clear_changed_attributes();
             if(is_null($objects_key)) {
 				$objects[] = $object;
 			} else {
@@ -1804,6 +1871,7 @@ class ActiveRecord {
             foreach($object as $key => $value) {
                 $this->$key = $value;
             }
+			$this->clear_changed_attributes();
             return true;
         }
         return false;
@@ -1893,10 +1961,12 @@ class ActiveRecord {
         //          . var_export($attributes,true));
         $this->update_attributes($attributes);
         if($dont_validate || $this->valid()) {
-            return $this->add_record_or_update_record();
-        } else {
-            return false;
-        }
+            if($this->add_record_or_update_record()) {
+				$this->clear_changed_attributes();
+				return true;
+			}
+        } 
+		return false;
     }
 
     /**
@@ -1959,9 +2029,10 @@ class ActiveRecord {
      */
     private function add_record() { 
         $db =& $this->get_connection();
-        $db->loadModule('Extended', null, true);                
+        $db->loadModule('Extended', null, true);   
+		$primary_key = $this->primary_keys[0];             
         # $primary_key_value may either be a quoted integer or php null
-        $primary_key_value = $db->getBeforeID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
+        $primary_key_value = $db->getBeforeID("{$this->table_prefix}{$this->table_name}", $primary_key);
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }
@@ -1971,12 +2042,12 @@ class ActiveRecord {
         $values = @implode(', ', array_values($attributes));
         $sql = "INSERT INTO {$this->table_prefix}{$this->table_name} ({$fields}) VALUES ({$values})";
         //echo "add_record: SQL: $sql<br>";
-        //error_log("add_record: SQL: $sql");
+        #error_log("add_record: SQL: $sql");
         $result = $this->query($sql);  
         $habtm_result = true;
-        $primary_key = $this->primary_keys[0];
+        
         # $primary_key_value is now equivalent to the value in the id field that was inserted
-        $primary_key_value = $db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
+        $primary_key_value = $db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $primary_key);
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
         }            
@@ -2014,22 +2085,28 @@ class ActiveRecord {
      */
     private function update_record() {
         //error_log('update_record()');
+		if($this->partial_updates && !$this->changed) {
+			#error_log("update_record: nothing has changed skipping update call to database. returning true");
+			return true;
+		}
         $this->update_composite_attributes();
         $updates = $this->get_updates_sql();
         $conditions = $this->get_primary_key_conditions();
         $sql = "UPDATE {$this->table_prefix}{$this->table_name} SET {$updates} WHERE {$conditions}";
         //echo "update_record:$sql<br>";
-        //error_log("update_record: SQL: $sql");
-        $result = $this->query($sql);
-        $habtm_result = true;
-        $primary_key = $this->primary_keys[0];
-        $primary_key_value = $this->$primary_key;
-        if($primary_key_value > 0) { 
-            if($this->auto_save_habtm) {
-                $habtm_result = $this->update_habtm_records($primary_key_value);
-            }
-            $this->save_associations();
-        }         
+        #error_log("update_record: SQL: $sql");
+        if($updates && $conditions) { 
+			$result = $this->query($sql);
+	        $habtm_result = true;
+	        $primary_key = $this->primary_keys[0];
+	        $primary_key_value = $this->$primary_key;
+	        if($primary_key_value > 0) { 
+	            if($this->auto_save_habtm) {
+	                $habtm_result = $this->update_habtm_records($primary_key_value);
+	            }
+	            $this->save_associations();
+	        }         
+		}
         return ($result && $habtm_result);
     }
 
@@ -2158,18 +2235,20 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function save_association($object, $type) {
-        if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
-            //echo get_class($object)." - type:$type<br>";
-            switch($type) {
-                case "has_many":
-                case "has_one":
-                    $primary_key = $this->primary_keys[0];
-                    $foreign_key = Inflector::singularize($this->table_name)."_".$primary_key;
-                    $object->$foreign_key = $this->$primary_key; 
-                    //echo "fk:$foreign_key = ".$this->$primary_key."<br>";
-                    break;
-            }
-            $object->save();        
+        if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {		
+            if($object->changed) {
+				//echo get_class($object)." - type:$type<br>";
+	            switch($type) {
+	                case "has_many":
+	                case "has_one":
+	                    $primary_key = $this->primary_keys[0];
+	                    $foreign_key = Inflector::singularize($this->table_name)."_".$primary_key;
+	                    $object->$foreign_key = $this->$primary_key; 
+	                    //echo "fk:$foreign_key = ".$this->$primary_key."<br>";
+	                    break;
+	            }
+	            $object->save();   
+			}     
         }            
     }
 
@@ -2384,27 +2463,27 @@ class ActiveRecord {
      *  @return mixed Current date and time or $value
      */
     private function check_datetime($field, $value) {
-        if($this->auto_timestamps) {
-            if(is_array($this->content_columns)) {
-                foreach($this->content_columns as $field_info) {
-                    if(($field_info['name'] == $field) && stristr($field_info['type'], "date")) {
-                        $format = ($field_info['type'] == "date") ? $this->date_format : "{$this->date_format} {$this->time_format}";
-                        if($this->new_record) {
-                            if(in_array($field, $this->auto_create_timestamps)) {
-                                return date($format);
-                            } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
-                                return null;    
-                            }
-                        } elseif(!$this->new_record) {
-                            if(in_array($field, $this->auto_update_timestamps)) {
-                                return date($format);
-                            } elseif($this->preserve_null_dates && is_null($value) && !stristr($field_info['flags'], "not_null")) {
-                                return null;    
-                            }
+        if($this->auto_timestamps) {	
+			if(array_key_exists($field, (array)$this->content_columns)) {
+                if(stristr($this->content_columns[$field]['type'], "date")) {
+                    $format = ($this->content_columns[$field]['type'] == "date") ? $this->date_format : "{$this->date_format} {$this->time_format}";
+                    if($this->new_record) {
+                        if(in_array($field, $this->auto_create_timestamps) || in_array($field, $this->auto_update_timestamps)) {
+                            $date = date($format);
+							$this->$field = $date;
+							return $date;
+                        } elseif($this->preserve_null_dates && is_null($value) && !stristr($this->content_columns[$field]['flags'], "not_null")) {
+                            return null;    
                         }
-                    }  
-                }
-            }
+                    } elseif(!$this->new_record) {
+                        if(in_array($field, $this->auto_update_timestamps)) {
+                            return date($format);
+                        } elseif($this->preserve_null_dates && is_null($value) && !stristr($this->content_columns[$field]['flags'], "not_null")) {
+                            return null;    
+                        }
+                    }
+                }				
+			}
         }
         return $value;
     }
@@ -2477,7 +2556,7 @@ class ActiveRecord {
 					elseif($attributes[$datetime_field."(1i)"]
 	                       	 && $attributes[$datetime_field."(2i)"]) {
 						$datetime_value = $attributes[$datetime_field."(1i)"]
-						. "-" . $attributes[$datetime_field."(2i)"];	
+						. "-" . $attributes[$datetime_field."(2i)"]."-01";	
 						$datetime_format = $this->date_format;					
 					}
                     $datetime_value .= " ";
@@ -2534,9 +2613,9 @@ class ActiveRecord {
     function get_attributes() {
         $attributes = array();
         if(is_array($this->content_columns)) {
-            foreach($this->content_columns as $column) {
+            foreach(array_keys($this->content_columns) as $column_name) {
                 //echo "attribute: $info[name] -> {$this->$info[name]}<br>";
-                $attributes[$column['name']] = $this->$column['name'];
+                $attributes[$column_name] = $this->$column_name;
             }
         }
         return $attributes;
@@ -2601,26 +2680,6 @@ class ActiveRecord {
     }    
 
     /**
-     *  Return column values for SQL insert statement
-     *
-     *  Return an array containing the column names and values of this
-     *  object, filtering out the primary keys, which are not set.
-     *
-     *  @uses $primary_keys
-     *  @uses quoted_attributes()
-     */
-    function get_inserts() {
-        $attributes = $this->quoted_attributes();
-    	$inserts = array();
-    	foreach($attributes as $key => $value) {
-    		if(!in_array($key, $this->primary_keys) || ($value != "''" && isset($value))) {
-    			$inserts[$key] = $value;
-    		}
-    	}
-        return $inserts;
-    }
-
-    /**
      *  Return argument for a "WHERE" clause specifying this row
      *
      *  Returns a string which specifies the column(s) and value(s)
@@ -2653,6 +2712,26 @@ class ActiveRecord {
     }
 
     /**
+     *  Return column values for SQL insert statement
+     *
+     *  Return an array containing the column names and values of this
+     *  object, filtering out the primary keys, which are not set.
+     *
+     *  @uses $primary_keys
+     *  @uses quoted_attributes()
+     */
+    function get_inserts() {
+        $attributes = $this->quoted_attributes();
+    	$inserts = array();
+    	foreach($attributes as $key => $value) {
+    		if(!in_array($key, $this->primary_keys) || ($value != "''" && isset($value))) {
+    			$inserts[$key] = $value;
+    		}
+    	}
+        return $inserts;
+    }
+
+    /**
      *  Return column values of object formatted for SQL update statement
      *
      *  Return a string containing the column names and values of this
@@ -2664,7 +2743,21 @@ class ActiveRecord {
      */
     function get_updates_sql() {
         $updates = null;
-        $attributes = $this->quoted_attributes();
+		$attributes = null;
+		if($this->partial_updates && $this->changed) {
+			foreach($this->changed_attributes as $key => $changes) {
+				$attributes[$key] = $changes['modified'];
+			}
+			#error_log("modified attributes:".print_r($attributes, true));
+			# make sure the auto timestamps are in there 
+			foreach($this->content_columns as $column_name => $column) {
+				if(stristr($column['type'], "date") && in_array($column_name, $this->auto_update_timestamps) && !array_key_exists($column_name, $attributes)) {
+					$attributes[$column_name] = $this->$column_name;
+				}
+			}
+			#error_log("modified attributes with dates:".print_r($attributes, true));						 
+		}
+        $attributes = $this->quoted_attributes($attributes);
         if(count($attributes) > 0) {
             $updates = array();
             # run through our fields and join them with their values
@@ -2725,23 +2818,42 @@ class ActiveRecord {
             $table_name = $this->table_prefix.$table_name;
         }
         if(isset(self::$table_info[$table_name])) {
-            $this->content_columns = self::$table_info[$table_name];  
+            $this->content_columns = self::$table_info[$table_name];
+  			#error_log("using cached content_columns");
         } else {       
             $db =& $this->get_connection(true);                                      
             $db->loadModule('Reverse', null, true);
-            $this->content_columns = $db->reverse->tableInfo($table_name);
-            if($this->is_error($this->content_columns)) {
-                $this->raise($this->content_columns->getMessage());        
+            $content_columns = $db->reverse->tableInfo($table_name);
+            if($this->is_error($content_columns)) {
+                $this->raise($content_columns->getMessage());        
             }
-            if(is_array($this->content_columns)) {
-                $i = 0;
-                foreach($this->content_columns as $column) {
-                    $this->content_columns[$i++]['human_name'] = $this->human_attribute_name($column['name']);
-                }                
+            if(is_array($content_columns)) {
+				$this->content_columns = array();
+                foreach($content_columns as $column) {
+					$column['human_name'] = $this->human_attribute_name($column['name']);
+                    $this->content_columns[$column['name']] = $column;
+                }        
                 self::$table_info[$table_name] = $this->content_columns;
             }
         }
     }
+
+    /**
+     *  Resets the attributes array to keys of the columns from the database
+	 *	and sets all the values to null
+     *
+     *  @uses $content_columns
+     *  @uses $attributes
+     */
+	function reset_attributes() {
+		if(is_array($this->content_columns)) {
+			$this->attributes = array();
+			#error_log("resetting attributes to null");
+			foreach($this->content_columns as $column_name => $column) {
+				$this->attributes[$column_name] = null;
+			}
+		}		
+	}
 
     /**
      *  Returns the autogenerated id from the last insert query
