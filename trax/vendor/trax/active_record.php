@@ -737,7 +737,7 @@ class ActiveRecord {
 			return isset($this->attributes[$key]);
 		} else {
 			return isset($this->$key);
-		} 
+		}
     }
 
     /**
