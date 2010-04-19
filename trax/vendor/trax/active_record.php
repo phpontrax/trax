@@ -669,6 +669,8 @@ class ActiveRecord {
      *  @uses $auto_save_associations
      *  @uses get_association_type()
      *  @uses set_content_columns()
+	 *  @uses set_content_columns()
+	 *  @uses set_content_columns()
      */
     function __set($key, $value) {
         //echo "setting: $key = $value<br>";
@@ -735,7 +737,7 @@ class ActiveRecord {
 			return isset($this->attributes[$key]);
 		} else {
 			return isset($this->$key);
-		}
+		} 
     }
 
     /**
