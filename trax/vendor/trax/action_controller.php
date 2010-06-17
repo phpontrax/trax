@@ -1466,13 +1466,15 @@ class ActionController {
                 echo "</font>\n";                
             }
         } else {
-            if($error_code == "404") {
+			if(file_exists(Trax::$public_path."/{$error_code}.html")) {
+            	include(Trax::$public_path."/{$error_code}.html");
+			} elseif($error_code == "404") {
                 echo "<h2>404 Error - File not found.</h2>";
             } else {
                 echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
                 echo "<h2>Application Error</h2>Trax application failed to start properly";
                 echo "</font>\n";                
-            }           
+            }        
         } 
       
     }
