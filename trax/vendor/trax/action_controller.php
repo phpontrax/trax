@@ -420,6 +420,11 @@ class ActionController {
                 substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?")) :
                 $_SERVER['REQUEST_URI'];
         }
+        
+        # for seo to be able to put dashes in the url
+        if(!is_null(Trax::$url_word_seperator)) {
+            $browser_url = str_replace(Trax::$url_word_seperator, "_", $browser_url);
+        }        
 
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any

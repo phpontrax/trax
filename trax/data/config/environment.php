@@ -24,6 +24,9 @@ include_once(dirname(__FILE__)."/boot.php");
 # Trax::$session_store = "active_record_store";
 # Where should Trax write session files to? (only if using file_store)
 # Trax::$session_save_path = Trax::$tmp_path."/sessions";
+# SEO naming of urls such as ecommerce-shopping-cart which will be changed on
+# incoming requests to underscores. default is null.
+# Trax::$url_word_seperator = "-"; 
 
 # Include the application environment specific config file
 Trax::include_env_config();

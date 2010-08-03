@@ -54,6 +54,7 @@ class Trax {
         $public_path = null,
 		$tmp_path = null,
         $url_prefix = null,
+        $url_word_seperator = null, # used to put dashes in the url for seo
         $views_extension = 'phtml',
         $path_seperator = ":", # default is Unix
         $current_controller_path = null,

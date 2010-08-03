@@ -254,6 +254,9 @@ class UrlHelper extends Helpers {
             //  Get controller from $options or $controller_path
             if(array_key_exists(":controller", $options)) {
                 if($controller = $options[":controller"]) {
+                    if(!is_null(Trax::$url_word_seperator)) {
+                        $controller = str_replace("_", Trax::$url_word_seperator, $controller);
+                    }                    
                     $url[] = $controller; 
                 }
             } else {
@@ -262,6 +265,9 @@ class UrlHelper extends Helpers {
                     # remove the beginning slash
                     $controller = substr($controller, 1);        
                 }
+                if(!is_null(Trax::$url_word_seperator)) {
+                    $controller = str_replace("_", Trax::$url_word_seperator, $controller);
+                }                
                 $url[] = $controller;
             }
 
@@ -269,6 +275,9 @@ class UrlHelper extends Helpers {
             if(count($url)) {
                 if(array_key_exists(":action", $options)) {
                     if($action = $options[":action"]) {
+                        if(!is_null(Trax::$url_word_seperator)) {
+                            $action = str_replace("_", Trax::$url_word_seperator, $action);
+                        }                        
                         $url[] = $action;
                     }
                 } 
@@ -279,10 +288,16 @@ class UrlHelper extends Helpers {
                 if(array_key_exists(":id", $options)) {
                     if(is_object($options[":id"])) {
                         if($id = $options[":id"]->id) {
+                            if(!is_numeric($id) && !is_null(Trax::$url_word_seperator)) {
+                                $id = str_replace("_", Trax::$url_word_seperator, $id);
+                            }                            
                             $url[] = $id;
                         }
                     } else {
                         if($id = $options[":id"]) {
+                            if(!is_numeric($id) && !is_null(Trax::$url_word_seperator)) {
+                                $id = str_replace("_", Trax::$url_word_seperator, $id);
+                            }                            
                             $url[] = $id;
                         }
                     }
