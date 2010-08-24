@@ -889,13 +889,14 @@ class ActiveRecord {
         
         if(!is_null($other_object_name)) {
             $other_class_name = Inflector::camelize($other_object_name);    
-            $other_table_name = Inflector::tableize($other_object_name);    
+            #$other_table_name = Inflector::tableize($other_object_name);    
         } else {
             $other_class_name = Inflector::classify($other_table_name);
         }
         
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
+        $other_table_name = $other_class_object->table_prefix.$other_class_object->table_name;
         if(!is_null($index_on)) {
             $other_class_object->index_on = $index_on;
         }
