@@ -152,8 +152,8 @@ class UrlHelper extends Helpers {
      */
     function link_image_to($src, $options = array(),
                            $html_options = array()) { 
-        $image_options = array("src" => (ereg("/", $src) ? $src : "/images/$src"));
-        if (!ereg(".", $image_options["src"])) $image_options["src"] .= ".png";
+        $image_options = array("src" => (strstr($src, "/") ? $src : "/images/$src"));
+        if (!strstr($image_options["src"], ".")) $image_options["src"] .= ".png";
 
         if (isset($html_options["alt"])) {
             $image_options["alt"] = $html_options["alt"];

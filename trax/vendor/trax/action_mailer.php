@@ -138,7 +138,7 @@ class ActionMailer {
         $this->set_header_line("From", $from);
         
         if(!is_null($this->subject))  {
-            $this->set_header_line("Subject", ereg_replace("[\n\r]", "", $this->subject));
+            $this->set_header_line("Subject", str_replace(array("\r","\n"), '', $this->subject));
         } else {
             $this->set_header_line("Subject", "");
         }
@@ -376,8 +376,8 @@ class ActionMailer {
      *    </ul>
      */
     function validate_email($email) {
-        if(eregi("^[a-zA-Z0-9._-]+@([a-zA-Z0-9._-]+\.)+([a-zA-Z0-9_-]){2,4}$", $email) ||
-           eregi("^([ '_a-zA-Z0-9]\w*)+<[a-zA-Z0-9._-]+@([a-zA-Z0-9._-]+\.)+([a-zA-Z0-9_-]){2,4}>$", $email)) {
+        if(preg_match("/^[a-zA-Z0-9._-]+@([a-zA-Z0-9._-]+\.)+([a-zA-Z0-9_-]){2,4}$/", $email) ||
+           preg_match("/^([ '_a-zA-Z0-9]\w*)+<[a-zA-Z0-9._-]+@([a-zA-Z0-9._-]+\.)+([a-zA-Z0-9_-]){2,4}>$/", $email)) {
             return true;
         }
         return false;

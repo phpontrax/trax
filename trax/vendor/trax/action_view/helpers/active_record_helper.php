@@ -244,7 +244,7 @@ class ActiveRecordHelper extends Helpers {
         case 'string':
         case 'varchar':
         case 'varchar2':
-            $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
+            $field_type = (preg_match("/password/i", $this->attribute_name) ? "password" : "text");
             $results = $form->to_input_field_tag($field_type, $options);
             break;
 
@@ -299,7 +299,7 @@ class ActiveRecordHelper extends Helpers {
         case 'string':
         case 'varchar':
         case 'varchar2':
-            $field_type = (eregi("password", $this->attribute_name) ? "password" : "text");
+            $field_type = (preg_match("/password/i", $this->attribute_name) ? "password" : "text");
             $results = $field_type."_field(\"$object_name\", \"$attribute_name\")";
             break;
 

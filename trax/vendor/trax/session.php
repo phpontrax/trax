@@ -204,7 +204,7 @@ class Session {
      *          </ul>
      */
     function is_aol_host() {
-        if(isset($_SERVER['REMOTE_ADDR']) && ereg("proxy\.aol\.com$", gethostbyaddr($_SERVER['REMOTE_ADDR'])) ||
+        if(isset($_SERVER['REMOTE_ADDR']) && preg_match("/proxy\.aol\.com$/", gethostbyaddr($_SERVER['REMOTE_ADDR'])) ||
            stristr($_SERVER['HTTP_USER_AGENT'], "AOL")) {
             return true;
         }
@@ -406,7 +406,7 @@ class Session {
             if($value) {
                 $_SESSION[$hash]['flash'][$key] = $value;
             } else {
-                $value = $_SESSION[$hash]['flash'][$key];
+                $value = @$_SESSION[$hash]['flash'][$key];
                 unset($_SESSION[$hash]['flash'][$key]);
                 return $value;
             }

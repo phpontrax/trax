@@ -315,7 +315,7 @@ class Helpers {
      *  @return string
      */
     function error_wrapping($html_tag, $has_error) {
-        return ($has_error ? '<span class="fieldWithErrors">' . eregi_replace("[\n\r]", '', $html_tag) . '</span>' : $html_tag);
+        return ($has_error ? '<span class="fieldWithErrors">' . str_replace(array("\n","\r"), '', $html_tag) . '</span>' : $html_tag);
     }         
 
 }
