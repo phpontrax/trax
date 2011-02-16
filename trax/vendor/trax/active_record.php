@@ -2196,42 +2196,44 @@ class ActiveRecord {
      */
     function get_association_type($association_name) {
         $type = null;
-        if(is_string($this->has_many)) {
-            if(preg_match("/\b$association_name\b/", $this->has_many)) {
-                $type = "has_many";    
+        if($association_name != '') {
+            if(is_string($this->has_many)) {
+                if(preg_match("/\b$association_name\b/", $this->has_many)) {
+                    $type = "has_many";    
+                }
+            } elseif(is_array($this->has_many)) {
+                if(array_key_exists($association_name, $this->has_many)) {
+                    $type = "has_many";     
+                }
             }
-        } elseif(is_array($this->has_many)) {
-            if(array_key_exists($association_name, $this->has_many)) {
-                $type = "has_many";     
+            if(is_string($this->has_one)) {
+                if(preg_match("/\b$association_name\b/", $this->has_one)) {
+                    $type = "has_one";     
+                }
+            } elseif(is_array($this->has_one)) {
+                if(array_key_exists($association_name, $this->has_one)) {
+                    $type = "has_one";     
+                }
             }
-        }
-        if(is_string($this->has_one)) {
-            if(preg_match("/\b$association_name\b/", $this->has_one)) {
-                $type = "has_one";     
+            if(is_string($this->belongs_to)) { 
+                if(preg_match("/\b$association_name\b/", $this->belongs_to)) {
+                    $type = "belongs_to";      
+                }
+            } elseif(is_array($this->belongs_to)) {
+                if(array_key_exists($association_name, $this->belongs_to)) {
+                    $type = "belongs_to";      
+                }
             }
-        } elseif(is_array($this->has_one)) {
-            if(array_key_exists($association_name, $this->has_one)) {
-                $type = "has_one";     
-            }
-        }
-        if(is_string($this->belongs_to)) { 
-            if(preg_match("/\b$association_name\b/", $this->belongs_to)) {
-                $type = "belongs_to";      
-            }
-        } elseif(is_array($this->belongs_to)) {
-            if(array_key_exists($association_name, $this->belongs_to)) {
-                $type = "belongs_to";      
-            }
-        }
-        if(is_string($this->has_and_belongs_to_many)) {
-            if(preg_match("/\b$association_name\b/", $this->has_and_belongs_to_many)) {
-                $type = "has_and_belongs_to_many";      
-            }
-        } elseif(is_array($this->has_and_belongs_to_many)) {
-            if(array_key_exists($association_name, $this->has_and_belongs_to_many)) {
-                $type = "has_and_belongs_to_many";      
-            }
-        }   
+            if(is_string($this->has_and_belongs_to_many)) {
+                if(preg_match("/\b$association_name\b/", $this->has_and_belongs_to_many)) {
+                    $type = "has_and_belongs_to_many";      
+                }
+            } elseif(is_array($this->has_and_belongs_to_many)) {
+                if(array_key_exists($association_name, $this->has_and_belongs_to_many)) {
+                    $type = "has_and_belongs_to_many";      
+                }
+            }            
+        }  
         return $type;   
     }
     

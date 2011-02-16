@@ -712,7 +712,7 @@ class ActionController {
                         }       
                     }
                     
-                    $this->controller_object->execute_after_filters();
+                    #$this->controller_object->execute_after_filters();
                     
                     $this->controller_object->action_called = true;
                     
@@ -741,6 +741,9 @@ class ActionController {
                           isset($render_options) ? $render_options : null )) {
                         $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404"); 
                     }
+                    
+                    $this->controller_object->execute_after_filters();
+                    
                     # Grab all the html from the view to put into the layout
                     $content_for_layout = ob_get_contents();
                     ob_end_clean();

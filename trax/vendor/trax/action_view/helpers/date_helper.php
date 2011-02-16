@@ -226,13 +226,18 @@ class DateHelper extends Helpers {
     private function select_html($type, $options, $prefix = null,
                                  $include_blank = false,
                                  $discard_type = false) {
-        $select_html  = "<select name=\"$prefix";       
+        $select_html  = "<select name=\"";
+        $name = $prefix;       
         if(!$discard_type) {
-            if($prefix) $select_html .= "["; 
-            $select_html .= $type;
-            if($prefix) $select_html .= "]"; 
+            if($prefix) $name .= "["; 
+            $name .= $type;
+            if($prefix) $name .= "]"; 
         }
-        $select_html .= "\">\n";
+        $id = str_replace(array("][","[","]"), "_", $name);
+        if(substr($id, -1) == "_") {
+            $id = substr($id, 0, -1);
+        }
+        $select_html .= "{$name}\" id=\"{$id}\">\n";
         if($include_blank) $select_html .= "<option value=\"\"></option>\n";
         $select_html .= $options;
         $select_html .= "</select>\n";
