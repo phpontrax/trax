@@ -60,13 +60,13 @@ class ActionMailer {
         ),
         $delivery_method = "mail", # mail | sendmail | smtp | test
         $perform_deliveries = true, # true will attempt to deliver mail | false will not deliver mail
-        $default_charset = "utf-8", # default charset for email (utf-8, iso-8859-1, etc).
+        $default_charset = "iso-8859-1", # default charset for email (utf-8, iso-8859-1, etc).
         $head_charset = null, # charset for email headers.
         $html_charset = null, # charset for html email body.
         $text_charset = null, # charset for text email body.
-		$head_encoding = null, # encoding to use for the headers: quoted-printable, base64
-		$text_encoding = null, # encoding to use for plain text: 7bit, 8bit, base64, quoted-printable
-		$html_encoding = null, # encoding to use for html: 7bit, 8bit, base64, quoted-printable        
+		$head_encoding = "quoted-printable", # encoding to use for the headers: quoted-printable, base64
+		$text_encoding = "7bit", # encoding to use for plain text: 7bit, 8bit, base64, quoted-printable
+		$html_encoding = "quoted-printable", # encoding to use for html: 7bit, 8bit, base64, quoted-printable        
         $template = null, # view file to use for body of email.
         $template_root = null, # template_root determines the base from which template references will be made.
         $deliveries = array(), # if delivery_method is "test" it will not deliver but store emails in this array.
