@@ -45,8 +45,12 @@ echo "untarring PEAR files\n";
 exec("tar zxvf PEAR.tar.gz");
 echo "removing PEAR tar file.\n";
 unlink("PEAR.tar.gz");
-echo "checking out edge Trax from svn\n";
-exec("svn co svn://svn.phpontrax.com/trax/trunk/trax/vendor/trax trax");
+echo "creating vendor/trax folder\n";
+mkdir("trax");
+echo "copying Trax files to vendor folder\n";
+exec("cp -Rp ../../trax/vendor/trax/* trax");
+#echo "checking out edge Trax from svn\n";
+#exec("svn co svn://svn.phpontrax.com/trax/trunk/trax/vendor/trax trax");
 
 chdir("../");
 echo "updating config files\n";
