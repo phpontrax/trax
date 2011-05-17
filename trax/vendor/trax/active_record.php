@@ -3798,6 +3798,14 @@ class ActiveRecord {
         return print_r($this->get_attributes(), true);
     }
 
+	function to_array() {
+	    return $this->get_attributes();
+	}
+	
+	function to_json() {
+	    return json_encode($this->get_attributes());
+	}
+
 }
 
 
