@@ -72,7 +72,7 @@ class Trax {
         $show_trax_errors = false,
         $server_default_include_path = null,
         $include_paths = array(),
-        $autoload_prepend = true;
+        $autoload_function = null;
 
     function initialize() {
 
@@ -196,8 +196,7 @@ class Trax {
 ###################################################################
 # Auto include model / controller / other app specific libs files
 ###################################################################
-spl_autoload_register('trax_autoload', false, Trax::$autoload_prepend);
-function trax_autoload($class_name) {
+function __autoload($class_name) {
     $file = Inflector::underscore($class_name).".php";
     $file_org = $class_name.".php";
 
@@ -213,8 +212,12 @@ function trax_autoload($class_name) {
     } elseif(file_exists(Trax::$lib_path."/$file_org")) {
         # Include users application libs
         include_once(Trax::$lib_path."/$file_org");
-    }  
+    }
+	# add to the __autoload function from Trax
+   	# just define _autoload()
+	if(function_exists(Trax::$autoload_function) && Trax::$autoload_function != '__autoload') {
+	    call_user_func(Trax::$autoload_function, $class_name);
+	}  
 }
-
 
 ?>
