@@ -36,7 +36,7 @@ class Trax {
 
     const
         MAJOR = 0,
-        MINOR = 16,
+        MINOR = 17,
         TINY = 0;
     
     public static 
@@ -52,7 +52,7 @@ class Trax {
         $log_path = null,
         $vendor_path = null,
         $public_path = null,
-	$tmp_path = null,
+	    $tmp_path = null,
         $url_prefix = null,
         $url_word_seperator = null, # used to put dashes in the url for seo
         $views_extension = 'phtml',
@@ -61,17 +61,18 @@ class Trax {
         $current_controller_name = null,
         $current_action_name = null,
         $current_controller_object = null,
-	$session_store = "file_store",
-	$session_class_name = "ActiveRecordStore",
-	$session_save_path = "",
-	$session_name = "TRAXSESSID",
-	$session_cookie_domain = null,
-	$session_lifetime = "0",
-	$session_maxlifetime_minutes = "20",
+	    $session_store = "file_store",
+	    $session_class_name = "ActiveRecordStore",
+        $session_save_path = "",
+        $session_name = "TRAXSESSID",
+        $session_cookie_domain = null,
+        $session_lifetime = "0",
+	    $session_maxlifetime_minutes = "20",
         $version = null,
         $show_trax_errors = false,
         $server_default_include_path = null,
-        $include_paths = array();
+        $include_paths = array(),
+        $autoload_function = null;
 
     function initialize() {
 
@@ -95,7 +96,7 @@ class Trax {
         self::$log_path          = TRAX_ROOT."/log";
         self::$vendor_path       = TRAX_ROOT."/vendor";
         self::$public_path       = TRAX_ROOT."/public";
-	self::$tmp_path		 = TRAX_ROOT."/tmp";
+	    self::$tmp_path		     = TRAX_ROOT."/tmp";
 
         # Set which file to log php errors to for this application
         # As well in your application you can do error_log("whatever") and it will go to this log file.
@@ -162,7 +163,7 @@ class Trax {
             TRAX_LIB_ROOT,                      # trax libs (vendor/trax or server trax libs)
             PHP_LIB_ROOT,                       # php libs dir (ex: /usr/local/lib/php)
             self::$lib_path,                    # app specific libs extra libs to include
-	    self::$vendor_path,                 # 3rd party libs to include in vendor (vendor/third_party)
+	        self::$vendor_path,                 # 3rd party libs to include in vendor (vendor/third_party)
             self::$server_default_include_path  # tack on the old include_path to the end            
         ));
     }  
@@ -176,7 +177,7 @@ class Trax {
             ActiveRecord::$database_settings = parse_ini_file(self::$config_path."/database.ini", true); 
             #error_log("db settings:".print_r(ActiveRecord::$database_settings, true));
         }
-	ActiveRecord::$environment = TRAX_ENV;        
+	    ActiveRecord::$environment = TRAX_ENV;        
     }
 
     function include_env_config() {
@@ -211,14 +212,12 @@ function __autoload($class_name) {
     } elseif(file_exists(Trax::$lib_path."/$file_org")) {
         # Include users application libs
         include_once(Trax::$lib_path."/$file_org");
-    }  
-          
-    # add to the __autoload function from Trax
-    # just define _autoload()
-    if(function_exists('_autoload')) {
-        call_user_func('_autoload', $class_name);
     }
+	# add to the __autoload function from Trax
+   	# just define _autoload()
+	if(function_exists(Trax::$autoload_function) && Trax::$autoload_function != '__autoload') {
+	    call_user_func(Trax::$autoload_function, $class_name);
+	}  
 }
-
 
 ?>

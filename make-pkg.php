@@ -59,7 +59,7 @@ $packagexml = new PEAR_PackageFileManager2;
 $e = $packagexml->setOptions(array(
     'baseinstalldir' => 'PHPonTrax',
     'packagedirectory' => '.',
-    'filelistgenerator' => 'svn', // generate from svn or file
+    'filelistgenerator' => 'file', // generate from git or file
 	'simpleoutput' => true,
 	'dir_roles' => array(
 		'doc' => 'doc',
@@ -104,7 +104,7 @@ $packagexml->setLicense('MIT License', 'http://www.opensource.org/licenses/mit-l
 $packagexml->setPackageType('php'); // this is a PEAR-style php script package
 
 // Depends on PHP 5
-$packagexml->setPhpDep('5.0.3');
+$packagexml->setPhpDep('5.1.2');
 
 // Depends on Pear 1.4.0 or greater
 $packagexml->setPearinstallerDep('1.4.0');
@@ -115,7 +115,7 @@ $packagexml->addPackageDepWithChannel('required', 'Mail', 'pear.php.net', '1.0')
 $packagexml->addPackageDepWithChannel('required', 'Mail_Mime', 'pear.php.net', '1.0');
 
 // Who maintains this package
-$packagexml->addMaintainer('lead', 'john', 'John Peterson', 'john@mytechsupport.com');
+$packagexml->addMaintainer('lead', 'john', 'John Peterson', 'johnpipi@gmail.com');
 $packagexml->addMaintainer('developer', 'haas', 'Walt Haas', 'haas@xmission.com');
 
 // Substitute local configuration values for these symbols
