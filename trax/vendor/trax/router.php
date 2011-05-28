@@ -132,17 +132,17 @@ class Router {
             unset($route_regexp);
             unset($reg_exp);
             $route_regexp = $this->build_route_regexp($route['path']);
-            //error_log("route regexp=/$route_regexp/");
+            #error_log("url:$url route regexp=/$route_regexp/");
             if($url == "" && $route_regexp == "") {
-                //error_log('selected');
+                #error_log('root route selected');
                 $this->selected_route = $route;
                 break;
-            } elseif(preg_match("/$route_regexp/",$url) && $route_regexp != "") {
-                //error_log('selected');
+            } elseif(preg_match("/".$route_regexp."/",$url) && $route_regexp != "") {
+                #error_log("selected route => $url");
                 $this->selected_route = $route;
                 break;
             } elseif($route['path'] == $this->default_route_path) {
-                //error_log('defaulted');
+                #error_log('defaulted route selected');
                 $this->selected_route = $route;
                 break;
             }
