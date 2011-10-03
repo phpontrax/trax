@@ -113,7 +113,7 @@ class Session {
 			ini_set('session.save_handler', 'user');
 			include_once("session/active_record_store.php");
 			$session_class_name = Trax::$session_class_name ? Trax::$session_class_name : 'ActiveRecordStore';	
-			$ar_session = new $session_class_name;			
+			$ar_session = new $session_class_name;
 			session_set_save_handler(				
 	            array(&$ar_session, 'open'),
 	            array(&$ar_session, 'close'),
@@ -121,7 +121,7 @@ class Session {
 	            array(&$ar_session, 'write'),
 	            array(&$ar_session, 'destroy'),
 	            array(&$ar_session, 'gc')					
-			);				
+			);
 		} else {
 			# file store
 			ini_set('session.save_handler', 'files');

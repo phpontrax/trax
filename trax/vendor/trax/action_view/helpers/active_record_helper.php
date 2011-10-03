@@ -483,6 +483,8 @@ class ActiveRecordHelper extends Helpers {
      */
     function pagination_limit_select($object_name_or_object, $options = array()) {
 
+        $html = "";
+
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
@@ -514,6 +516,7 @@ class ActiveRecordHelper extends Helpers {
                     <option value=20>20</option>
                     <option value=50>50</option>
                     <option value=100>100</option>
+                    <option value=200>200</option>
                     <option value=999999999>ALL</option>
                 </select>
             ";
@@ -533,6 +536,8 @@ class ActiveRecordHelper extends Helpers {
      */
     function pagination_links($object_name_or_object, $options = array()) {
         
+        $html = "";
+
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
@@ -727,6 +732,7 @@ class ActiveRecordHelper extends Helpers {
         if(!is_object($object)) {
             return null;
         }
+
         $end = $object->rows_per_page * $object->page;
         $start = $end - ($object->rows_per_page - 1);  
         if($end >= $object->pagination_count) {

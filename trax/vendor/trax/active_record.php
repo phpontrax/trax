@@ -654,7 +654,11 @@ class ActiveRecord {
             return array_key_exists($attribute, $this->changed_attributes) ? true : false;
         } 
         //echo "<pre>getting: $key = ".$this->$key."<br></pre>";
-        return $this->$key;
+
+        if(property_exists($this, $key))
+            return $this->$key;
+        else 
+            return null;
     }
 
     /**
@@ -682,8 +686,10 @@ class ActiveRecord {
                     unset($this->changed_attributes[$key]);
                 }   
             } else {
+                $original = isset($this->attributes[$key]) ? $this->attributes[$key] : null;
+
                 $this->changed_attributes[$key] = array(
-                    'original' => $this->attributes[$key], 
+                    'original' => $original, 
                     'modified' => $value
                 );
             }               
@@ -762,7 +768,7 @@ class ActiveRecord {
             # special Trax methods ...
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. public $has_many = "movies" ) ...
-            if(is_array($parameters[0])) {
+            if(isset($parameters[0]) && is_array($parameters[0])) {
                 $parameters = $parameters[0];    
             }
             $association_type = $this->get_association_type($method_name);
@@ -813,7 +819,9 @@ class ActiveRecord {
                 $result = $this->find_by($method_name, $parameters, "find_or_create");        
             }
         }
-        return $result;
+
+
+        return isset($result) ? $result : null;
     }
     
     /**
@@ -1211,7 +1219,7 @@ class ActiveRecord {
             extract($parameters[1]);   
         } elseif(!is_null($parameters)) {
             $conditions = $parameters[1];
-            $joins = $parameters[2];
+            $joins = isset($parameters[2]) ? $parameters[2] : null;
         }
         if(!empty($joins)) $sql .= " $joins ";
         if(!empty($conditions)) $sql .= " WHERE $conditions ";  
@@ -1827,7 +1835,6 @@ class ActiveRecord {
         if(!is_null($order)) $options['order'] = $order; 
         if(!is_null($limit)) $options['limit'] = $limit;
         if(!is_null($joins)) $options['joins'] = $joins;
-
 
         if($find_all) {
             return $this->find_all($options);
