@@ -4,13 +4,13 @@
 </head>
 <body>
 
-<?php if(Session::isset_flash('error')): ?>									    
-    <font color="red"><?php echo Session::flash('error') ?></font>   
-<?php elseif(Session::isset_flash('notice')): ?>    
-    <font color="green"><?php echo Session::flash('notice') ?></font>   
-<?php endif; ?> 
+<?php if(Session::isset_flash('error')): ?>
+    <font color="red"><?php echo Session::flash('error') ?></font>
+<?php elseif(Session::isset_flash('notice')): ?>
+    <font color="green"><?php echo Session::flash('notice') ?></font>
+<?php endif; ?>
 
 <?php echo $content_for_layout ?>
-		
+
 </body>
 </html>

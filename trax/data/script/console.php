@@ -27,13 +27,13 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  *
- * The console gives you access to your Trax Environments|Environment 
- * where you can interact with the domain model. Here you¡¦ll have all 
- * parts of the application configured, just like it is when the application 
- * is running. You can inspect domain models, change values, and save to 
+ * The console gives you access to your Trax Environments|Environment
+ * where you can interact with the domain model. Here you¡¦ll have all
+ * parts of the application configured, just like it is when the application
+ * is running. You can inspect domain models, change values, and save to
  * the database.
- * 
- * 
+ *
+ *
  */
 
 // If command line arguments exist, parse them

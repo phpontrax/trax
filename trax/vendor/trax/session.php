@@ -37,7 +37,7 @@
  *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}
  *  which is automatically restored from an area of the server's hard disk
  *  indicated by the contents of a cookie stored on the client's computer.
- *  This class is a static class with convenience methods for accessing the 
+ *  This class is a static class with convenience methods for accessing the
  *  contents of $_SESSION.
  *   @tutorial PHPonTrax/Session.cls
  */
@@ -75,7 +75,7 @@ class Session {
      *  Session started
      *  @var boolean
      */
-    private static $started = false;  
+    private static $started = false;
 
     /**
      *  Session ID
@@ -96,13 +96,13 @@ class Session {
         Trax::$session_name = Trax::$session_name ? Trax::$session_name : self::TRAX_SESSION_NAME;
         Trax::$session_lifetime = Trax::$session_lifetime ? Trax::$session_lifetime : self::TRAX_SESSION_LIFETIME;
         Trax::$session_maxlifetime_minutes = Trax::$session_maxlifetime_minutes ? Trax::$session_maxlifetime_minutes : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
-        
-        # set the session default for this app 
+
+        # set the session default for this app
         ini_set('session.name', Trax::$session_name);
-		ini_set('session.use_cookies', 1);     
+		ini_set('session.use_cookies', 1);
    		if(Trax::$session_cookie_domain) {
-			ini_set('session.cookie_domain',  Trax::$session_cookie_domain); 
-		}		
+			ini_set('session.cookie_domain',  Trax::$session_cookie_domain);
+		}
         ini_set('session.cookie_lifetime', Trax::$session_lifetime);
         ini_set('session.gc_probability', 1);
         ini_set('session.gc_maxlifetime', Trax::$session_maxlifetime_minutes * 60);
@@ -112,25 +112,25 @@ class Session {
 		if(Trax::$session_store == 'active_record_store') {
 			ini_set('session.save_handler', 'user');
 			include_once("session/active_record_store.php");
-			$session_class_name = Trax::$session_class_name ? Trax::$session_class_name : 'ActiveRecordStore';	
-			$ar_session = new $session_class_name;			
-			session_set_save_handler(				
+			$session_class_name = Trax::$session_class_name ? Trax::$session_class_name : 'ActiveRecordStore';
+			$ar_session = new $session_class_name;
+			session_set_save_handler(
 	            array(&$ar_session, 'open'),
 	            array(&$ar_session, 'close'),
 	            array(&$ar_session, 'read'),
 	            array(&$ar_session, 'write'),
 	            array(&$ar_session, 'destroy'),
-	            array(&$ar_session, 'gc')					
-			);				
+	            array(&$ar_session, 'gc')
+			);
 		} else {
 			# file store
 			ini_set('session.save_handler', 'files');
 			if(Trax::$session_save_path) {
 				ini_set('session.save_path', Trax::$session_save_path);
-			}				
-		}		
+			}
+		}
 	}
-    
+
     /**
      *  Get a session variable
      *
@@ -158,10 +158,10 @@ class Session {
      *  @param mixed $key Key to identify one particular session variable
      *                    of potentially many for this session
      *  @param string $value Value to store in the session variable
-     *                       identified by $key  
+     *                       identified by $key
      *  @uses get_hash()
      *  @uses is_valid_host()
-     *  
+     *
      */
     function set($key, $value) {
         if(self::is_valid_host()) {
@@ -172,7 +172,7 @@ class Session {
     /**
      *  Test whether the user host is as expected for this session
      *
-     *  Compare the REMOTE_ADDR and HTTP_USER_AGENT elements of 
+     *  Compare the REMOTE_ADDR and HTTP_USER_AGENT elements of
      *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.server $_SERVER}
      *  to the expected values for this session.
      *  @uses $ip
@@ -249,20 +249,20 @@ class Session {
      *  @uses $user_agent
      */
 	function start_session() {
-			
+
         if(!self::$started) {
-	
+
 			self::init();
 
             header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
-    
+
             self::$ip = $_SERVER['REMOTE_ADDR'];
             self::$user_agent = $_SERVER['HTTP_USER_AGENT'];
-    
+
             if(self::is_valid_host() && array_key_exists('sess_id',$_REQUEST)) {
                 session_id($_REQUEST['sess_id']);
             }
-    
+
             session_cache_limiter("must-revalidate");
             session_start();
             self::$id = session_id();
@@ -271,7 +271,7 @@ class Session {
 			if(!isset($_SESSION[$hash])) {
 				$_SESSION[self::get_hash()] = array();
 			}
-        }				
+        }
 	}
 
 	/**
@@ -308,7 +308,7 @@ class Session {
     /**
      *  Unset a session variable
      *
-     *  Unset the variable in 
+     *  Unset the variable in
      *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}
      *  identified by key $key
      *  @uses get_hash()
@@ -326,7 +326,7 @@ class Session {
     /**
      *  Test whether a session variable is defined in $_SESSION
      *
-     *  Check the 
+     *  Check the
      *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}
      *  array for the existance of a variable identified by $key
      *  @param mixed $key Key to identify one particular session variable
@@ -344,7 +344,7 @@ class Session {
     function isset_var($key) {
         if(self::is_valid_host()) {
             if(isset($_SESSION[self::get_hash()][$key])) {
-                return true;    
+                return true;
             }
         }
         return false;
@@ -376,7 +376,7 @@ class Session {
 			#if(array_key_exists($hash, $_SESSION)
             #   && array_key_exists('flash', $_SESSION[$hash])
             #   && array_key_exists($key, $_SESSION[$hash]['flash'])) {
-            #    return true;    
+            #    return true;
             #}
         }
         return false;
@@ -387,7 +387,7 @@ class Session {
      *
      *  A flash message is a message that will appear prominently on
      *  the next screen to be sent to the user. Flash
-     *  messages are intended to be shown to the user once then erased. 
+     *  messages are intended to be shown to the user once then erased.
      *  They are stored in the
      *  {@link http://www.php.net/manual/en/reserved.variables.php#reserved.variables.session $_SESSION}
      *  array for the user's session.

@@ -7,7 +7,7 @@
  *  @package PHPonTrax
  *  @version $Id$
  *  @copyright (c) 2005 John Peterson
- *  
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -159,7 +159,7 @@ class Router {
      *  for a PHP variable name? '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
      *  @param string $route_path  A route path.
      *  @return string Regular expression that matches the route in
-     *                $route_path 
+     *                $route_path
      */
     function build_route_regexp($route_path) {
         //        echo "entering build_route_regexp(), \$route_path is '$route_path'\n";

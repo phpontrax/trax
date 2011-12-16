@@ -23,17 +23,17 @@
   </style>
   <script language="javascript">
     <!-- Activating cloaking device
-    
+
     function expandContract(divName) {
         var div = document.getElementById(divName);
         if(div.style.display == 'block') {
-            div.style.display = 'none';        
+            div.style.display = 'none';
         } else {
-            div.style.display = 'block';        
-        }  
-        return false;   
+            div.style.display = 'block';
+        }
+        return false;
     }
-    
+
     // Deactivating cloaking device -->
   </script>
 </head>
@@ -52,10 +52,10 @@
 <p><a href="#" onclick="expandContract('sql_trace');return false;">Show SQL trace</a>
 <pre id="sql_trace" style="display:none">
 <code style="word-wrap: break-word;">
-<?php $i = 0 ?>    
+<?php $i = 0 ?>
 <?php foreach(array_reverse(ActiveRecord::$query_log) as $query): ?>
 #<?php echo $i++ ?> <?php echo $query."\n" ?>
-<?php endforeach; ?>        
+<?php endforeach; ?>
 </code>
 </pre>
 <?php endif; ?>

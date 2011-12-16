@@ -99,27 +99,27 @@ class Helpers {
             $auto_index = false;
         }
     	$this->auto_index = false;
-        $this->object_name = str_replace("[]", "", $object_name);     
-        $this->attribute_name = $attribute_name;        
+        $this->object_name = str_replace("[]", "", $object_name);
+        $this->attribute_name = $attribute_name;
 
         //  Copy controller information from $GLOBALS
         $this->controller_name =
-            !is_null(Trax::$current_controller_name)           
+            !is_null(Trax::$current_controller_name)
             ? Trax::$current_controller_name : null;
         $this->controller_path =
             !is_null(Trax::$current_controller_path)
             ? Trax::$current_controller_path : null;
         $this->controller_object =
-            (!is_null(Trax::$current_controller_object) 
+            (!is_null(Trax::$current_controller_object)
             && is_object(Trax::$current_controller_object))
             ? Trax::$current_controller_object : null;
     	if($auto_index) {
         	$object = $this->object();
             if(is_object($object)) {
                 $index = $object->index_on; # should be primary key (usually id field)
-                $this->auto_index = $object->$index;  	
-           	}  
-        }         
+                $this->auto_index = $object->$index;
+           	}
+        }
     }
 
     /**
@@ -172,12 +172,12 @@ class Helpers {
             return $this->controller_object->$object_name;
         }
         return null;
-    }   
-    
+    }
+
     /**
      *  Convert array of tag attribute names and values to string
      *
-     *  @param string[] $options 
+     *  @param string[] $options
      *  @return string
      */
     protected function tag_options($options) {
@@ -224,21 +224,21 @@ class Helpers {
             unset($options[$attribute]);
         }
     }
-    
+
     /**
      *  Wrap CDATA begin and end tags around argument
      *
      *  Returns a CDATA section for the given content.  CDATA sections
      *  are used to escape blocks of text containing characters which would
      *  otherwise be recognized as markup. CDATA sections begin with the string
-     *  <samp><![CDATA[</samp> and end with (and may not contain) the string 
-     *  <samp>]]></samp>. 
+     *  <samp><![CDATA[</samp> and end with (and may not contain) the string
+     *  <samp>]]></samp>.
      *  @param string $content  Content to wrap
      *  @return string          Wrapped argument
      */
     function cdata_section($content) {
         return "<![CDATA[".$content."]]>";
-    }    
+    }
 
     /**
      *  Generate an HTML or XML tag with optional attributes and self-ending
@@ -251,7 +251,7 @@ class Helpers {
      *  </ul>
      *  @param string $name      Tag name
      *  @param string[] $options Tag attributes to apply, specified as
-     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...) 
+     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...)
      *  @param boolean $open
      *  <ul>
      *    <li>true =>  make opening tag (end with '>')</li>
@@ -284,7 +284,7 @@ class Helpers {
      *  @param string $name    Tag to wrap around $content
      *  @param string $content Text to put between tags
      *  @param string[] $options Tag attributes to apply, specified as
-     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...) 
+     *                  array('attr1' => 'value1'[, 'attr2' => 'value2']...)
      *  @return string Text wrapped with tag and attributes,
      *                 followed by "\n"
      */
@@ -292,21 +292,21 @@ class Helpers {
         $html = "<$name ";
         $html .= $this->tag_options($options);
         if(isset($options['strip_slashes'])) {
-            $content = stripslashes($content);    
+            $content = stripslashes($content);
         }
         $html .= ">$content</$name>";
         return $html."\n";
     }
-    
+
     /**
      *
      *  @uses content_tag()
      *  @uses value()
-     */    
+     */
     function to_content_tag($tag_name, $options = array()) {
         return $this->content_tag($tag_name, $this->value(), $options);
-    } 
-    
+    }
+
     /**
      *  If this tag has an error, wrap it with a visual indicator
      *
@@ -316,7 +316,7 @@ class Helpers {
      */
     function error_wrapping($html_tag, $has_error) {
         return ($has_error ? '<span class="fieldWithErrors">' . str_replace(array("\n","\r"), '', $html_tag) . '</span>' : $html_tag);
-    }         
+    }
 
 }
 

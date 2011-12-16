@@ -30,7 +30,7 @@
  *  @todo Check FIXMEs
  */
 class InputFilter {
-    
+
     /**
      *  User-provided list of tags to either accept or reject
      *
@@ -39,7 +39,7 @@ class InputFilter {
      *  @var string[]
      */
 	protected static $tagsArray = array();	// default = empty array
-    
+
     /**
      *  User-provided list of attributes to either accept or reject
      *
@@ -48,7 +48,7 @@ class InputFilter {
      *  @var string[]
      */
 	protected static $attrArray = array();	// default = empty array
-    
+
     /**
      *  How to apply user-provided tags list
      *
@@ -60,13 +60,13 @@ class InputFilter {
      *               those tags which are permitted.  Default false.
      *  <ul>
      *    <li>true =>  Remove  those tags which are in
-     *                 {@link $tagsArray}.</li> 
+     *                 {@link $tagsArray}.</li>
      *    <li>false => Allow only those tags which are listed in
-     *                 {@link $tagsArray}.</li> 
+     *                 {@link $tagsArray}.</li>
      *  </ul>
      */
 	protected static $tagsMethod = true;
-    
+
     /**
      *  How to apply user-provided attribute list
      *
@@ -78,14 +78,14 @@ class InputFilter {
      *               those tags which are permitted.  Default false.
      *  <ul>
      *    <li>true =>  Remove  those tags which are in
-     *                 {@link $attrArray}.</li> 
+     *                 {@link $attrArray}.</li>
      *    <li>false => Allow only those tags which are listed in
-     *                 {@link $attrArray}.</li> 
+     *                 {@link $attrArray}.</li>
      *  </ul>
      */
 	protected static $attrMethod = true;
 
-    
+
     /**
      *  Whether to remove blacklisted tags and attributes
      *
@@ -99,7 +99,7 @@ class InputFilter {
      *                and attributes.</li>
      *    <li>false => Remove potentially suspect tags and attributes
      *      without consulting{@link $tagBlacklist} or
-     *      {@link $attrBlacklist}.</li> 
+     *      {@link $attrBlacklist}.</li>
      *  </ul>
      */
 	protected static $xssAuto = true;
@@ -108,9 +108,9 @@ class InputFilter {
      *  Fields to ignore that you want html and other banned stuff in.
      *
      *  @var array
-     */	
+     */
 	protected static $exception_fields = array();
-    
+
     /**
      *  List of tags to be removed
      *
@@ -122,7 +122,7 @@ class InputFilter {
               'frame', 'frameset', 'head', 'html', 'id', 'iframe',
               'ilayer', 'layer', 'link', 'meta', 'name', 'object',
               'script', 'style', 'title', 'xml');
-    
+
     /**
      *  List of attributes to be removed
      *
@@ -130,9 +130,9 @@ class InputFilter {
      *  @var string[]
      */
 	protected static $attrBlacklist =
-        array('action', 'background', 'codebase', 'dynsrc', 'lowsrc'); 
-		
-	/** 
+        array('action', 'background', 'codebase', 'dynsrc', 'lowsrc');
+
+	/**
      *  Initializer for InputFilter class.
      *
      *  @param string[] $tagsArray  User-provided list of tags to
@@ -142,17 +142,17 @@ class InputFilter {
      *  @param boolean $tagsMethod How to apply the list of tags in $tagsArray:
      *  <ul>
      *    <li>true =>  Remove  those tags which are listed in
-     *                 $tagsArray.</li>  
+     *                 $tagsArray.</li>
      *    <li>false => Allow only those tags which are listed in
-     *                 $tagsArray.</li>  
+     *                 $tagsArray.</li>
      *  </ul>
      *  Default: false
      *  @param boolean $attrMethod How to apply the list of attributess in $attrArray:
      *  <ul>
      *    <li>true =>  Remove  those attributes which are listed in
-     *                 $attrArray.</li>  
+     *                 $attrArray.</li>
      *    <li>false => Allow only those attributes which are listed in
-     *                 $attrArray.</li>  
+     *                 $attrArray.</li>
      *  </ul>
      *  Default: false
      *  @param boolean $xssAuto Behavior of {@link filterTags()}:
@@ -163,7 +163,7 @@ class InputFilter {
      *                and attributes.</li>
      *    <li>false => Remove potentially suspect tags and attributes
      *      without consulting{@link $tagBlacklist} or
-     *      {@link $attrBlacklist}.</li> 
+     *      {@link $attrBlacklist}.</li>
      *  </ul>
      *  Default: true
      *  @uses $attrArray
@@ -173,8 +173,8 @@ class InputFilter {
      */
 	public function init($tagsArray = array(), $attrArray = array(),
                                 $tagsMethod = true, $attrMethod = true,
-                                $xssAuto = true) { 
-                                    
+                                $xssAuto = true) {
+
 		// make sure user defined arrays are in lowercase
 		for ($i = 0; $i < count($tagsArray); $i++) $tagsArray[$i] = strtolower($tagsArray[$i]);
 		for ($i = 0; $i < count($attrArray); $i++) $attrArray[$i] = strtolower($attrArray[$i]);
@@ -189,20 +189,20 @@ class InputFilter {
     /**
      *  Adds a field to exclude from filtering
      *
-     */	
+     */
 	public function add_field_exception($field) {
 	    if($field) {
-	        self::$exception_fields[] = $field;   
+	        self::$exception_fields[] = $field;
 	    }
 	}
 
     /**
      *  Clears all previous field exceptions
      *
-     */		
+     */
 	public function clear_field_exceptions() {
-	    self::$exception_fields = array();        
-	} 
+	    self::$exception_fields = array();
+	}
 
     /**
      *  Remove forbidden tags and attributes from user input
@@ -221,17 +221,17 @@ class InputFilter {
      *  @param boolean $tagsMethod How to apply the list of tags in $tagsArray:
      *  <ul>
      *    <li>true =>  Remove  those tags which are listed in
-     *                 $tagsArray.</li>  
+     *                 $tagsArray.</li>
      *    <li>false => Allow only those tags which are listed in
-     *                 $tagsArray.</li>  
+     *                 $tagsArray.</li>
      *  </ul>
      *  Default: false
      *  @param boolean $attrMethod How to apply the list of attributess in $attrArray:
      *  <ul>
      *    <li>true =>  Remove  those attributes which are listed in
-     *                 $attrArray.</li>  
+     *                 $attrArray.</li>
      *    <li>false => Allow only those attributes which are listed in
-     *                 $attrArray.</li>  
+     *                 $attrArray.</li>
      *  </ul>
      *  Default: false
      *  @param boolean $xssAuto Behavior of {@link filterTags()}:
@@ -242,7 +242,7 @@ class InputFilter {
      *                and attributes.</li>
      *    <li>false => Remove potentially suspect tags and attributes
      *      without consulting{@link $tagBlacklist} or
-     *      {@link $attrBlacklist}.</li> 
+     *      {@link $attrBlacklist}.</li>
      *  </ul>
      *  Default: true
      *  @author John Peterson
@@ -265,8 +265,8 @@ class InputFilter {
             $_REQUEST = self::process($_REQUEST);
         }
     }
-	
-	/** 
+
+	/**
      *  Remove forbidden tags and attributes from array of strings
      *
      *  Accept a string or array of strings.  For each string in the
@@ -294,11 +294,11 @@ class InputFilter {
 			return self::remove(self::decode($source));
 		// return parameter as given
 		} else {
-		    return $source;	
+		    return $source;
 	    }
 	}
 
-	/** 
+	/**
      *  Remove forbidden tags and attributes from a string iteratively
      *
      *  Call {@link filterTags()} repeatedly until no change in the
@@ -313,9 +313,9 @@ class InputFilter {
 			$source = self::filterTags($source);
 		}
 		return $source;
-	}	
-	
-	/** 
+	}
+
+	/**
      *  Remove forbidden tags and attributes from a string
      *
      *  Inspect the input for tags "<tagname ...>" and check the tag
@@ -326,7 +326,7 @@ class InputFilter {
      *  {@link $tagsMethod}.
      *
      *  If the tag name is OK, then call {@link filterAttr()} to check
-     *  all attributes of the tag and delete forbidden attributes. 
+     *  all attributes of the tag and delete forbidden attributes.
      *  @param string $source Input string to be 'cleaned'
      *  @return string Cleaned version of input parameter
      *  @uses filterAttr()
@@ -357,13 +357,13 @@ class InputFilter {
 				$postTag = substr($postTag, ($tagOpen_nested+1));
 				$tagOpen_start = strpos($postTag, '<');
 				continue;
-			} 
+			}
 			$tagOpen_nested = (strpos($fromTagOpen, '<') + $tagOpen_start + 1);
 			$currentTag = substr($fromTagOpen, 0, $tagOpen_end);
 			$tagLength = strlen($currentTag);
 			if (!$tagOpen_end) {
 				$preTag .= $postTag;
-				$tagOpen_start = strpos($postTag, '<');			
+				$tagOpen_start = strpos($postTag, '<');
 			}
 			// iterate through tag finding attribute pairs - setup
 			$tagLeft = $currentTag;
@@ -378,7 +378,7 @@ class InputFilter {
 			} else {
 				$isCloseTag = false;
 				list($tagName) = explode(' ', $currentTag);
-			}		
+			}
 			// excludes all "non-regular" tagnames OR no tagname OR remove if xssauto is on and tag is blacklisted
 			if ((!preg_match("/^[a-z][a-z0-9]*$/i",$tagName)) || (!$tagName) || ((in_array(strtolower($tagName), self::$tagBlacklist)) && (self::$xssAuto))) {
 				$postTag = substr($postTag, ($tagLength + 2));
@@ -427,27 +427,27 @@ class InputFilter {
 			}
 			// find next tag's start
 			$postTag = substr($postTag, ($tagLength + 2));
-			$tagOpen_start = strpos($postTag, '<');			
+			$tagOpen_start = strpos($postTag, '<');
 		}
 		// append any code after end of tags
 		$preTag .= $postTag;
 		return $preTag;
 	}
 
-	/** 
+	/**
      *  Internal method to strip a tag of certain attributes
      *
      *  Remove potentially dangerous attributes from a set of
      *  "attr=value" strings.  Attributes considered dangerous are:
      *  <ul>
      *    <li>Any attribute name containing any non-alphabetic
-     *      character</li> 
+     *      character</li>
      *    <li>Any attribute name beginning "on..."</li>
      *    <li>If {@link $xssAuto} is true, any attribute name in
      *      {@link $attrBlacklist}</li>
      *    <li>Any attribute with a value containing the strings
      *      'javascript:', 'behaviour:', 'vbscript:', 'mocha:',
-     *      'livescript:'</li> 
+     *      'livescript:'</li>
      *    <li>Any attribute whose name contains 'style' and whose
      *      value contains 'expression'.</li>
      *    <li>If there is a user-provided list of attributes in
@@ -463,7 +463,7 @@ class InputFilter {
      *  @uses $attrMethod
      *  @uses $xssAuto
      */
-	protected function filterAttr($attrSet) {	
+	protected function filterAttr($attrSet) {
 		$newSet = array();
 		// process attributes
 		for ($i = 0; $i <count($attrSet); $i++) {
@@ -490,13 +490,13 @@ class InputFilter {
 				$attrSubSet[1] = stripslashes($attrSubSet[1]);
 			}
 			// auto strip attr's with "javascript:
-			if (((strpos(strtolower($attrSubSet[1]), 'expression') !== false) && 
+			if (((strpos(strtolower($attrSubSet[1]), 'expression') !== false) &&
 			    (strtolower($attrSubSet[0]) == 'style')) ||
 				(strpos(strtolower($attrSubSet[1]), 'javascript:') !== false) ||
 				(strpos(strtolower($attrSubSet[1]), 'behaviour:') !== false) ||
 				(strpos(strtolower($attrSubSet[1]), 'vbscript:') !== false) ||
 				(strpos(strtolower($attrSubSet[1]), 'mocha:') !== false) ||
-				(strpos(strtolower($attrSubSet[1]), 'livescript:') !== false) 
+				(strpos(strtolower($attrSubSet[1]), 'livescript:') !== false)
 			) { continue; }
 
 			// if matches user defined array
@@ -509,18 +509,18 @@ class InputFilter {
 				if($attrSubSet[1]) {
 				    $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[1] . '"';
 				// attr has decimal zero as value
-			    } elseif ($attrSubSet[1] == "0") { 
+			    } elseif ($attrSubSet[1] == "0") {
 			        $newSet[] = $attrSubSet[0] . '="0"';
 				// reformat single attributes to XHTML
 			    } else {
 			        $newSet[] = $attrSubSet[0] . '="' . $attrSubSet[0] . '"';
 			    }
-			}	
+			}
 		}
 		return $newSet;
 	}
-	
-	/** 
+
+	/**
      *  Convert HTML entities to characters
      *
      *  Convert input string containing HTML entities to the

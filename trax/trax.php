@@ -18,7 +18,7 @@
  *  the <b>pear install</b> command.  If you are prevented from using
  *  <b>pear install</b>, change "@DATA-DIR@/PHPonTrax" by hand to the
  *  full filesystem path of the location where you installed the Trax
- *  distribution 
+ *  distribution
  */
 define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
 
@@ -71,12 +71,12 @@ function trax() {
 			} elseif($arg == '-h' || $arg == '--help') {
 				usage();
 			}
-		}		
+		}
 	} else {
 	    //  Destination directory on command line
-	    $dstdir = $GLOBALS['argv'][1];	
+	    $dstdir = $GLOBALS['argv'][1];
 		if($GLOBALS['argv'][2] == '-q' || $GLOBALS['argv'][2] == '--quiet') {
-			$quiet = true;			
+			$quiet = true;
 		}
 	}
 
@@ -109,7 +109,7 @@ function trax() {
  *  @return boolean true=>success, false=>failure.
  */
 function copy_dir($src_path, $dst_path) {
-	
+
 	global $quiet;
 
     //  Make sure we have directories as arguments
@@ -177,10 +177,10 @@ function copy_dir($src_path, $dst_path) {
                 chmod($dst_path . $src_file, 0666);
             }
 
-            // Generator & Console needs to be executable 
+            // Generator & Console needs to be executable
             if ($src_file == 'generate.php' || $src_file == 'console.php') {
                 chmod($dst_path . $src_file, 0754);
-            }           
+            }
 
             if(!$quiet) echo "\tcreate $dst_path$src_file\n";
         } else {
@@ -213,7 +213,7 @@ function copy_dir($src_path, $dst_path) {
  *  @return boolean  true=>success, false=>failed
  */
 function create_dir($dst_dir) {
-	
+
 	global $quiet;
 
     //  Does a directory of this name exist?
@@ -228,7 +228,7 @@ function create_dir($dst_dir) {
         }
 
         //  There is an old destination file with the same
-        //  name as the new destination directory. 
+        //  name as the new destination directory.
         //  Save the old file.
         $stat = stat($dst_dir);
         $new_name = $dst_dir.'.'.$stat[9];

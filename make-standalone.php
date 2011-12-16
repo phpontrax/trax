@@ -1,7 +1,7 @@
 #! /usr/local/bin/php
 <?php
 /**
- *  Make a standalone ready to go PHPonTrax application 
+ *  Make a standalone ready to go PHPonTrax application
  *
  *  (PHP 5)
  *
@@ -11,7 +11,7 @@
  *  the "trax ." command and generated a fresh app.
  *
  *  This script is mainly for me to make the standalone version easily, but included
- *  it for anyone that wants to play with it. 
+ *  it for anyone that wants to play with it.
  *
  *  Required to use this is Unix-type system (I think), wget, tar, svn, PHPonTrax already installed.
  *
@@ -37,7 +37,7 @@ exec("trax ".dirname(__FILE__)."/trax-standalone");
 echo "fetching README\n";
 exec("wget http://www.phpontrax.com/downloads/README-standalone.txt");
 rename("README-standalone.txt", "README");
- 
+
 chdir("vendor");
 echo "fetching PEAR files\n";
 exec("wget http://www.phpontrax.com/downloads/PEAR.tar.gz");

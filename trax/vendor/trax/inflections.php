@@ -51,36 +51,36 @@ Inflections::plural('/^(ox)$/i', '\1en');
 Inflections::plural('/(quiz)$/i', '\1zes');
 
 Inflections::singular('/s$/i', '');
-Inflections::singular('/(n)ews$/i', '\1ews'); 
-Inflections::singular('/([ti])a$/i', '\1um'); 
-Inflections::singular('/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i', '\1\2sis'); 
-Inflections::singular('/(^analy)ses$/i', '\1sis'); 
-Inflections::singular('/([^f])ves$/i', '\1fe'); 
-Inflections::singular('/(hive)s$/i', '\1'); 
-Inflections::singular('/(tive)s$/i', '\1'); 
-Inflections::singular('/([lr])ves$/i', '\1f'); 
-Inflections::singular('/([^aeiouy]|qu)ies$/i', '\1y'); 
-Inflections::singular('/(s)eries$/i', '\1eries'); 
-Inflections::singular('/(m)ovies$/i', '\1ovie'); 
-Inflections::singular('/(x|ch|ss|sh)es$/i', '\1'); 
-Inflections::singular('/([m|l])ice$/i', '\1ouse'); 
-Inflections::singular('/(bus)es$/i', '\1'); 
-Inflections::singular('/(o)es$/i', '\1'); 
-Inflections::singular('/(shoe)s$/i', '\1'); 
-Inflections::singular('/(cris|ax|test)es$/i', '\1is'); 
-Inflections::singular('/([octop|vir])i$/i', '\1us'); 
-Inflections::singular('/(alias|status)es$/i', '\1'); 
-Inflections::singular('/^(ox)en/i', '\1'); 
-Inflections::singular('/(vert|ind)ices$/i', '\1ex'); 
-Inflections::singular('/(matr)ices$/i', '\1ix'); 
-Inflections::singular('/(quiz)zes$/i', '\1'); 
- 
-Inflections::irregular('person', 'people'); 
-Inflections::irregular('man', 'men'); 
-Inflections::irregular('child', 'children'); 
-Inflections::irregular('sex', 'sexes'); 
-Inflections::irregular('move', 'moves'); 
-Inflections::irregular('cow', 'kine'); 
+Inflections::singular('/(n)ews$/i', '\1ews');
+Inflections::singular('/([ti])a$/i', '\1um');
+Inflections::singular('/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i', '\1\2sis');
+Inflections::singular('/(^analy)ses$/i', '\1sis');
+Inflections::singular('/([^f])ves$/i', '\1fe');
+Inflections::singular('/(hive)s$/i', '\1');
+Inflections::singular('/(tive)s$/i', '\1');
+Inflections::singular('/([lr])ves$/i', '\1f');
+Inflections::singular('/([^aeiouy]|qu)ies$/i', '\1y');
+Inflections::singular('/(s)eries$/i', '\1eries');
+Inflections::singular('/(m)ovies$/i', '\1ovie');
+Inflections::singular('/(x|ch|ss|sh)es$/i', '\1');
+Inflections::singular('/([m|l])ice$/i', '\1ouse');
+Inflections::singular('/(bus)es$/i', '\1');
+Inflections::singular('/(o)es$/i', '\1');
+Inflections::singular('/(shoe)s$/i', '\1');
+Inflections::singular('/(cris|ax|test)es$/i', '\1is');
+Inflections::singular('/([octop|vir])i$/i', '\1us');
+Inflections::singular('/(alias|status)es$/i', '\1');
+Inflections::singular('/^(ox)en/i', '\1');
+Inflections::singular('/(vert|ind)ices$/i', '\1ex');
+Inflections::singular('/(matr)ices$/i', '\1ix');
+Inflections::singular('/(quiz)zes$/i', '\1');
+
+Inflections::irregular('person', 'people');
+Inflections::irregular('man', 'men');
+Inflections::irregular('child', 'children');
+Inflections::irregular('sex', 'sexes');
+Inflections::irregular('move', 'moves');
+Inflections::irregular('cow', 'kine');
 
 Inflections::uncountable('equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep');
 
@@ -94,27 +94,27 @@ Inflections::uncountable('equipment', 'information', 'rice', 'money', 'species',
  */
 class Inflections {
 
-    public static 
+    public static
 		$plurals = array(),
 		$singulars = array(),
 		$uncountables = array(),
 		$humans = array();
 
-    # Specifies a new pluralization rule and its replacement. The rule can either be a string or a regular expression. 
+    # Specifies a new pluralization rule and its replacement. The rule can either be a string or a regular expression.
     # The replacement should always be a string that may include references to the matched data from the rule.
     function plural($rule, $replacement) {
         array_unshift(self::$plurals, array("rule" => $rule, "replacement" => $replacement));
     }
-    
-    # Specifies a new singularization rule and its replacement. The rule can either be a string or a regular expression. 
+
+    # Specifies a new singularization rule and its replacement. The rule can either be a string or a regular expression.
     # The replacement should always be a string that may include references to the matched data from the rule.
     function singular($rule, $replacement) {
         array_unshift(self::$singulars, array("rule" => $rule, "replacement" => $replacement));
     }
-    
+
     # Specifies a new irregular that applies to both pluralization and singularization at the same time. This can only be used
     # for strings, not regular expressions. You simply pass the irregular in singular and plural form.
-    # 
+    #
     # Examples:
     #   Inflections::irregular('octopus', 'octopi')
     #   Inflections::irregular('person', 'people')
@@ -122,9 +122,9 @@ class Inflections {
         self::plural('/('.preg_quote(substr($singular,0,1)).')'.preg_quote(substr($singular,1)).'$/i', '\1'.preg_quote(substr($plural,1)));
         self::singular('/('.preg_quote(substr($plural,0,1)).')'.preg_quote(substr($plural,1)).'$/i', '\1'.preg_quote(substr($singular,1)));
     }
-    
+
     # Add uncountable words that shouldn't be attempted inflected.
-    # 
+    #
     # Examples:
     #   Inflections::uncountable("money")
     #   Inflections::uncountable("money", "information")
@@ -132,11 +132,11 @@ class Inflections {
     function uncountable() {
 		$args = func_get_args();
         if(is_array($args[0])) {
-            $args = $args[0];    
+            $args = $args[0];
         }
         foreach($args as $word) {
-            self::$uncountables[] = $word;    
-        }     
+            self::$uncountables[] = $word;
+        }
     }
 
     # Specifies a humanized form of a string by a regular expression rule or by a string mapping.
@@ -149,7 +149,7 @@ class Inflections {
     function human($rule, $replacement) {
 		array_unshift(self::$humans, array("rule" => $rule, "replacement" => $replacement));
     }
-    
+
     # Clears the loaded inflections within a given scope (functionault is :all). Give the scope as a symbol of the inflection type,
     # the options are: "plurals", "singulars", "uncountables"
     #

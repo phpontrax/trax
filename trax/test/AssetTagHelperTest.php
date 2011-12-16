@@ -85,11 +85,11 @@ class AssetTagHelperTest extends PHPUnit2_Framework_TestCase {
      *  Test the {@link AssetTagHelper::__construct()} method
      */
     public function test__construct() {
-        $ath = new AssetTagHelper;        
+        $ath = new AssetTagHelper;
         $this->assertTrue(is_object($ath));
         $this->assertEquals('AssetTagHelper', get_class($ath));
         $this->assertEquals(array('this','that'),
-                            $ath->javascript_default_sources);        
+                            $ath->javascript_default_sources);
     }
 
     /**
