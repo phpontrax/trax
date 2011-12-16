@@ -13,7 +13,7 @@ Product, Show Post) by manipulating the model and directing data to the view.
 In Trax, the model is handled by what's called a object-relational mapping
 layer entitled Active Record. This layer allows you to present the data from
 database rows as objects and embellish these data objects with business logic
-methods. 
+methods.
 
 The controller and view is handled by the Action Controller
 
@@ -22,7 +22,7 @@ The controller and view is handled by the Action Controller
 * Database (MySQL, PostgreSQL, etc) (uses Pear::MDB2)
 * PHP 5.x
 * PEAR::MDB2, PEAR::Mail, PEAR::Mail_mime
-* Apache 1.3.x or 2.x 
+* Apache 1.3.x or 2.x
 * FreeBSD, Unix, Linux, MacOSX, Windows
 
 == Building & Installing PHPonTrax PEAR Module
@@ -30,7 +30,7 @@ From the commandline run the following command:
 php make-pkg.php
 (Disregard any warning messages that say "not prefixed with package name "PHPonTrax"")
 After that runs it will make a build folder with the PEAR module called:
-PHPonTrax-<version>.tgz 
+PHPonTrax-<version>.tgz
 To install this newly generated PEAR module run the following command:
 pear install -a PHPonTrax-<version>.tgz
 If you have a previously installed version exists first run:

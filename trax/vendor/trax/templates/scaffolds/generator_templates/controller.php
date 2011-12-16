@@ -5,19 +5,19 @@ class <?php echo $controller_class_name ?>Controller extends ApplicationControll
 <?php foreach($non_scaffolded_actions as $action): ?>
     function <?php echo $action ?>() {
     }
-   
+
 <?php endforeach; ?>
     function index() {
     	$<?php echo $singular_model_name ?> = new <?php echo $model_class_name ?>();
     	$this-><?php echo $plural_model_name ?> = $<?php echo $singular_model_name ?>->find_all();
     	$this->content_columns = $<?php echo $singular_model_name ?>->content_columns;
     }
-    
+
     function show() {
     	$<?php echo $singular_model_name ?> = new <?php echo $model_class_name ?>();
     	$this-><?php echo $singular_model_name ?> = $<?php echo $singular_model_name ?>->find($_REQUEST['id']);
     }
-    
+
     function add() {
       $this-><?php echo $singular_model_name ?> = new <?php echo $model_class_name ?>(array_key_exists('<?php echo $singular_model_name ?>',$_REQUEST) ? $_REQUEST['<?php echo $singular_model_name ?>'] : null );
         if($_POST) {
@@ -29,10 +29,10 @@ class <?php echo $controller_class_name ?>Controller extends ApplicationControll
             }
         }
     }
-    
+
     function edit() {
         $<?php echo $singular_model_name ?> = new <?php echo $model_class_name ?>();
-        $this-><?php echo $singular_model_name ?> = $<?php echo $singular_model_name ?>->find($_REQUEST['id']);	
+        $this-><?php echo $singular_model_name ?> = $<?php echo $singular_model_name ?>->find($_REQUEST['id']);
         if($_POST) {
             if($this-><?php echo $singular_model_name ?>->save($_POST['<?php echo $singular_model_name ?>'])) {
             	Session::flash('notice', "<?php echo $human_model_name ?> was successfully updated.");
@@ -42,7 +42,7 @@ class <?php echo $controller_class_name ?>Controller extends ApplicationControll
             }
         }
     }
-    
+
     function delete() {
         if($_REQUEST['id'] > 0) {
             $<?php echo $singular_model_name ?> = new <?php echo $model_class_name ?>();

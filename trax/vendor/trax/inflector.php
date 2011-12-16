@@ -40,9 +40,9 @@ include_once("inflections.php");
  *  @tutorial PHPonTrax/Inflector.cls
  */
 class Inflector {
-	
+
 	private static $cache = array(
-		'plural' => array(), 
+		'plural' => array(),
 		'singular' => array()
 	);
 
@@ -58,19 +58,19 @@ class Inflector {
      */
     function pluralize($singular_word, $count = 0, $plural_word = null) {
 		if($count != 1) {
-			if(is_null($plural_word)) {	
-				$plural_word = $singular_word;	
+			if(is_null($plural_word)) {
+				$plural_word = $singular_word;
 				if(isset(self::$cache['plural'][$singular_word])) {
 					$plural_word = self::$cache['plural'][$singular_word];
-		        } elseif(!in_array($singular_word, Inflections::$uncountables)) {   
+		        } elseif(!in_array($singular_word, Inflections::$uncountables)) {
 					foreach(Inflections::$plurals as $plural_rule) {
 						if(preg_match($plural_rule['rule'], $singular_word)) {
 							$plural_word = preg_replace($plural_rule['rule'], $plural_rule['replacement'], $plural_word);
 							self::$cache['plural'][$singular_word] = $plural_word;
 							break;
-						}	
+						}
 					}
-		        } 
+		        }
 			}
         } else {
 			$plural_word = self::singularize($singular_word);
@@ -79,22 +79,22 @@ class Inflector {
     }
 
     /**
-     *  Singularize a word according to English rules 
+     *  Singularize a word according to English rules
      *
      *  @param  string $plural_word  Word to be singularized
      *  @return string  Singular of $plural_word
      */
     function singularize($plural_word) {
-		$singular_word = $plural_word;  
+		$singular_word = $plural_word;
         if(isset(self::$cache['singular'][$plural_word])) {
 			$singular_word = self::$cache['singular'][$plural_word];
-		} elseif(!in_array($plural_word, Inflections::$uncountables)) {              
+		} elseif(!in_array($plural_word, Inflections::$uncountables)) {
             foreach(Inflections::$singulars as $singular_rule) {
 				if(preg_match($singular_rule['rule'], $plural_word)) {
 					$singular_word = preg_replace($singular_rule['rule'], $singular_rule['replacement'], $singular_word);
 					self::$cache['singular'][$plural_word] = $singular_word;
 					break;
-				}	
+				}
             }
         }
         return $singular_word;
@@ -117,7 +117,7 @@ class Inflector {
      *
      *  @param string $word  A word or phrase
      *  @return string A string that has all words capitalized and splits on existing caps.
-     */    
+     */
     function titleize($word) {
 		return ucwords(self::humanize(self::underscore($word)));
     }
@@ -127,11 +127,11 @@ class Inflector {
      *  and underscored form
      *
      *  Changes '::' to '/' to convert namespaces to paths. (php 5.3)
-     * 
+     *
      *  Examples:
      *    Inflector::underscore("ActiveRecord") => "active_record"
      *    Inflector::underscore("ActiveRecord::Errors") => active_record/errors
-     * 
+     *
      *  @param string $camel_cased_word  Phrase to convert
      *  @return string Lower case and underscored form of the phrase
      */
@@ -146,7 +146,7 @@ class Inflector {
      *
      *  @param string $underscored_word  Word to convert
      *  @return string All underscores converted to dashes
-     */    
+     */
     function dasherize($underscored_word) {
         return str_replace('_', '-', self::underscore($underscored_word));
     }
@@ -161,22 +161,22 @@ class Inflector {
      */
     function humanize($lower_case_and_underscored_word) {
 		if(count(Inflections::$humans) > 0) {
-	        $original = $lower_case_and_underscored_word;   
+	        $original = $lower_case_and_underscored_word;
 	        foreach(Inflections::$humans as $human_rule) {
 	            $lower_case_and_underscored_word = preg_replace($human_rule['rule'], $human_rule['replacement'], $word);
 	            if($original != $lower_case_and_underscored_word) break;
-	        }	
+	        }
 		}
         return self::capitalize(str_replace(array("_","_id"),array(" ",""),$lower_case_and_underscored_word));
     }
 
-    /** 
+    /**
      *  Removes the module part from the expression in the string. (php 5.3)
-     * 
+     *
      *  Examples:
      *		Inflector::demodulize("ActiveRecord::CoreExtensions::String::Inflections") => "Inflections"
      *  	Inflector::demodulize("Inflections") => "Inflections"
-     * 
+     *
 	 */
 	function demodulize($class_name_in_module) {
 		return preg_replace("/^.*::/", '', $class_name_in_module);
@@ -206,15 +206,15 @@ class Inflector {
     }
 
     /**
-     *  Capitalize a word making it all lower case with first letter uppercase 
+     *  Capitalize a word making it all lower case with first letter uppercase
      *
      *  @param  string $word  Word to be capitalized
      *  @return string Capitalized $word
      */
     function capitalize($word) {
-    	return ucfirst(strtolower($word));     
+    	return ucfirst(strtolower($word));
     }
-    
+
     /**
      *  Get foreign key column corresponding to a table name
      *
@@ -231,7 +231,7 @@ class Inflector {
      *
      *  @param integer $number Number to append to key
      *  @return string Number formatted with correct st, nd, rd, or th
-     */    
+     */
     function ordinalize($number) {
         $number = intval($number);
 		if(in_array(($number % 100), range(11, 13))) {
@@ -248,8 +248,8 @@ class Inflector {
                     $number = "{$number}rd";
                     break;
                 default:
-                    $number = "{$number}th"; 
-            }    
+                    $number = "{$number}th";
+            }
         }
         return $number;
     }
@@ -262,11 +262,11 @@ class Inflector {
      */
 	function clear_cache() {
 		self::$cache = array(
-			'plural' => array(), 
+			'plural' => array(),
 			'singular' => array()
-		);		
+		);
 	}
-    
+
 }
 
 

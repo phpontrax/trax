@@ -34,7 +34,7 @@
  *  @todo Document this class
  */
 class ActiveRecordHelper extends Helpers {
-    
+
     /**
      *  Whether to generate scaffolding HTML
      *
@@ -52,15 +52,15 @@ class ActiveRecordHelper extends Helpers {
      *  @uses to_tag()
      */
     function input($object_name, $attribute_name, $options = array()) {
-        return $this->to_tag($object_name, $attribute_name, $options);        
+        return $this->to_tag($object_name, $attribute_name, $options);
     }
-    
+
     /**
      *  @todo Document this method
      *  @uses to_scaffold_tag()
      */
     function input_scaffolding($object_name, $attribute_name, $options = array()) {
-        return $this->to_scaffold_tag($object_name, $attribute_name, $options);        
+        return $this->to_scaffold_tag($object_name, $attribute_name, $options);
     }
 
     /**
@@ -84,7 +84,7 @@ class ActiveRecordHelper extends Helpers {
      *  It's possible to specialize the form builder by using a different action name and by supplying another
      *  block renderer. Example (entry is a new record that has a message attribute using VARCHAR):
      *
-     *   form("entry", array('action' => "sign", 'input_block' => 
+     *   form("entry", array('action' => "sign", 'input_block' =>
      *        'foreach($record->content_columns() as $column_name => $column) $contents .= Inflector::humanize($column_name) . ": " . input($record, $column) . "<br />"')) =>
      *
      *     <form action='/post/sign' method='post'>
@@ -168,7 +168,7 @@ class ActiveRecordHelper extends Helpers {
             $id = isset($options['id']) ? $options['id'] : "ErrorExplanation";
             $class = isset($options['class']) ? $options['class'] : "ErrorExplanation";
             $header_tag = isset($options['header_tag']) ? $options['header_tag'] : "h2";
-            $header_message = isset($options['header_message']) ? 
+            $header_message = isset($options['header_message']) ?
                 $options['header_message'] : "%s prohibited this %s from being saved";
             $header_sub_message = isset($options['header_sub_message']) ?
                 $options['header_sub_message'] : "There were problems with the following fields:";
@@ -199,10 +199,10 @@ class ActiveRecordHelper extends Helpers {
                 //$contents .= Inflector::humanize($column['name']) . ":</label><br />";
                 //$contents .= input($record_name, $column['name']) . "</p>\n";
                 if(!in_array($column['name'], $record->primary_keys)) {
-                    eval($input_block) . "\n";    
-                }         
+                    eval($input_block) . "\n";
+                }
             }
-        } 
+        }
         return $contents;
     }
 
@@ -218,7 +218,7 @@ class ActiveRecordHelper extends Helpers {
             return '$contents .= "<p><label for=\"{$record_name}_{$column[\'name\']}\">" . Inflector::humanize($column[\'name\']) . ":</label><br/>\n" . input($record_name, $column[\'name\']) . "</p>\n";';
         }
     }
-    
+
     /**
      *  @todo Document this method
      *
@@ -280,7 +280,7 @@ class ActiveRecordHelper extends Helpers {
         if(count($this->object()->errors)) {
             $results = $this->error_wrapping($results, $this->object()->errors[$this->attribute_name]);
         }
-        return $results;      
+        return $results;
     }
 
     /**
@@ -342,7 +342,7 @@ class ActiveRecordHelper extends Helpers {
             echo "No case statement for ".$this->column_type()."\n";
         }
         if(count($this->object()->errors)) {
-            $results = $this->error_wrapping($results, 
+            $results = $this->error_wrapping($results,
                               $this->object()->errors[$this->attribute_name]);
         }
         return $results;
@@ -476,7 +476,7 @@ class ActiveRecordHelper extends Helpers {
     function column_type() {
         return $this->object()->column_type($this->attribute_name);
     }
-    
+
     /**
      * Paging html functions
      *  @todo Document this API
@@ -486,27 +486,27 @@ class ActiveRecordHelper extends Helpers {
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
-            $object = $this->object($object_name_or_object);  
+            $object = $this->object($object_name_or_object);
         }
 
         if(!is_object($object)) {
-            return null;    
+            return null;
         }
 
         if($object->pages > 0) {
             $base_url = isset($options['base_url']) ? $options['base_url'] : '';
             $update = isset($options['update']) ? $options['update'] : '';
-    		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] : 
+    		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] :
     		    ($object->paging_extra_params ? "&".$object->paging_extra_params : '');
             $default_text = isset($options['default_text']) ? $options['default_text'] : "per page:";
             if($update && $base_url) {
                 $on_change = remote_function(array(
-                    "update" => $update, 
+                    "update" => $update,
                     "url" => "{$base_url}?per_page=' + this.options[this.selectedIndex].value + '".escape_javascript($extra_params)."'"
                 ));
             } else {
-                $on_change = "document.location = '{$base_url}?per_page=' + this.options[this.selectedIndex].value + '".escape_javascript($extra_params)."'";                
-            }           
+                $on_change = "document.location = '{$base_url}?per_page=' + this.options[this.selectedIndex].value + '".escape_javascript($extra_params)."'";
+            }
             $html .= "
                 <select name=\"per_page\" onChange=\"{$on_change}\">
                     <option value=\"$object->rows_per_page\" selected>$default_text</option>
@@ -532,15 +532,15 @@ class ActiveRecordHelper extends Helpers {
      *  @uses rows_per_page
      */
     function pagination_links($object_name_or_object, $options = array()) {
-        
+
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
         } else {
-            $object = $this->object($object_name_or_object);  
+            $object = $this->object($object_name_or_object);
         }
 
         if(!is_object($object)) {
-            return null;    
+            return null;
         }
 
 		$first_text = isset($options['first_text']) ? $options['first_text'] : "<<";
@@ -551,31 +551,31 @@ class ActiveRecordHelper extends Helpers {
 		$selected_class = isset($options['selected_class']) ? $options['selected_class'] : "pagingSelected";
 		$base_url = isset($options['base_url']) ? $options['base_url'] : '';
 		$update = isset($options['update']) ? $options['update'] : '';
-		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] : 
-		    ($object->paging_extra_params ? "&".$object->paging_extra_params : ''); 
-		
+		$extra_params = isset($options['extra_params']) ? "&".$options['extra_params'] :
+		    ($object->paging_extra_params ? "&".$object->paging_extra_params : '');
+
 		$first_width = "width:".(isset($options['first_width']) ? $options['first_width'] : '20')."px;"; # size in pixels
-		$first_width = ( 
-			(  isset($options['first_text']) &&  isset($options['first_width']) ) || 
-			( !isset($options['first_text']) && !isset($options['first_width']) )  
+		$first_width = (
+			(  isset($options['first_text']) &&  isset($options['first_width']) ) ||
+			( !isset($options['first_text']) && !isset($options['first_width']) )
 		) ? $first_width : '';
 		$last_width = "width:".(isset($options['last_width']) ? $options['last_width'] : '20')."px;"; # size in pixels
-		$last_width = ( 
-			(  isset($options['last_text']) &&  isset($options['last_width']) ) || 
-			( !isset($options['last_text']) && !isset($options['last_width']) )  
+		$last_width = (
+			(  isset($options['last_text']) &&  isset($options['last_width']) ) ||
+			( !isset($options['last_text']) && !isset($options['last_width']) )
 		) ? $last_width : '';
 		$prev_width = "width:".(isset($options['prev_width']) ? $options['prev_width'] : '10')."px;"; # size in pixels
-		$prev_width = ( 
-			(  isset($options['prev_text']) &&  isset($options['prev_width']) ) || 
-			( !isset($options['prev_text']) && !isset($options['prev_width']) )  
+		$prev_width = (
+			(  isset($options['prev_text']) &&  isset($options['prev_width']) ) ||
+			( !isset($options['prev_text']) && !isset($options['prev_width']) )
 		) ? $prev_width : '';
 		$next_width = "width:".(isset($options['next_width']) ? $options['next_width'] : '10')."px;"; # size in pixels
-		$next_width = ( 
-			(  isset($options['next_text']) &&  isset($options['next_width']) ) || 
-			( !isset($options['next_text']) && !isset($options['next_width']) )  
+		$next_width = (
+			(  isset($options['next_text']) &&  isset($options['next_width']) ) ||
+			( !isset($options['next_text']) && !isset($options['next_width']) )
 		) ? $next_width : '';
 		$pages_width = isset($options['fixed_pages']) ? "width:".$options['fixed_pages']."px;" : ''; # size in pixels
-           
+
 
 		$html .= "<div class=\"pagingContaniner\" style=\"display:inline\">";
 		$html .= "<div class=\"pagingFirst\" style=\"{$first_width}text-align:left;display:inline;float:left\">";
@@ -583,17 +583,17 @@ class ActiveRecordHelper extends Helpers {
         if(($object->page != 1) && ($object->page) && $first_text) {
             if($update && $base_url) {
                 $html .= link_to_remote($first_text, array(
-                    "update" => $update, 
+                    "update" => $update,
                     "url" => "{$base_url}?page=1&per_page={$object->rows_per_page}{$extra_params}"
                 ), array(
     	            "class" => $link_class,
-    	            "title" => "First page"                
+    	            "title" => "First page"
                 ))." ";
             } else {
                 $html .= link_to($first_text, "{$base_url}?page=1&per_page={$object->rows_per_page}{$extra_params}", array(
     	            "class" => $link_class,
     	            "title" => "First page"
-            	))." ";                
+            	))." ";
             }
         } else {
 			$html .= "&nbsp;";
@@ -603,18 +603,18 @@ class ActiveRecordHelper extends Helpers {
         if(($object->page-1) > 0 && $prev_text) {
             if($update && $base_url) {
                 $html .= link_to_remote($prev_text, array(
-                    "update" => $update, 
+                    "update" => $update,
                     "url" => "{$base_url}?page=".($object->page-1)."&per_page={$object->rows_per_page}{$extra_params}"
                 ), array(
     	            "class" => $link_class,
-    	            "title" => "Previous page"                    
+    	            "title" => "Previous page"
                 ));
             } else {
                 $html .= link_to($prev_text, "{$base_url}?page=".($object->page-1)."&per_page={$object->rows_per_page}{$extra_params}", array(
     	            "class" => $link_class,
     	            "title" => "Previous page"
-            	));                
-            }            
+            	));
+            }
         } else {
 			$html .= "&nbsp;";
 		}
@@ -622,7 +622,7 @@ class ActiveRecordHelper extends Helpers {
         if($object->pages < $object->display) {
             $object->display = $object->pages;
         }
-        
+
         if($object->page == $object->pages) {
             if(($object->pages - $object->display) == 0) {
                 $start = 1;
@@ -643,7 +643,7 @@ class ActiveRecordHelper extends Helpers {
         if($end >= $object->pages) {
             $end = $object->pages;
         }
-        
+
         $html .= "<div class=\"pagingPages\" style=\"{$pages_width}text-align:center;display:inline;float:left;padding:0px 5px\">";
         # Print the numeric page list; make the current page unlinked and bold
         if($end != 1) {
@@ -654,18 +654,18 @@ class ActiveRecordHelper extends Helpers {
                 } else {
                     if($update && $base_url) {
                         $html .= link_to_remote($i, array(
-                            "update" => $update, 
+                            "update" => $update,
                             "url" => "{$base_url}?page={$i}&per_page={$object->rows_per_page}{$extra_params}"
                         ), array(
             	            "class" => $link_class,
-            	            "title" => "Page $i"                    
+            	            "title" => "Page $i"
                         ));
                     } else {
                         $html .= link_to($i, "{$base_url}?page={$i}&per_page={$object->rows_per_page}{$extra_params}", array(
             	            "class" => $link_class,
             	            "title" => "Page $i"
-                    	));                
-                    }                    
+                    	));
+                    }
                 }
                 $html .= " ";
             }
@@ -676,18 +676,18 @@ class ActiveRecordHelper extends Helpers {
         if(($object->page+1) <= $object->pages && $next_text) {
             if($update && $base_url) {
                 $html .= link_to_remote($next_text, array(
-                    "update" => $update, 
+                    "update" => $update,
                     "url" => "{$base_url}?page=".($object->page+1)."&per_page={$object->rows_per_page}{$extra_params}"
                 ), array(
     	            "class" => $link_class,
-    	            "title" => "Next Page"                    
+    	            "title" => "Next Page"
                 ));
             } else {
     			$html .= link_to($next_text, "{$base_url}?page=".($object->page+1)."&per_page={$object->rows_per_page}{$extra_params}", array(
     			  	"class" => $link_class,
-    			  	"title" => "Next Page"                                    
-    			));          
-            }            		
+    			  	"title" => "Next Page"
+    			));
+            }
         } else {
 			$html .= "&nbsp;";
 		}
@@ -696,18 +696,18 @@ class ActiveRecordHelper extends Helpers {
         if(($object->page != $object->pages) && ($object->pages != 0) && $last_text) {
             if($update && $base_url) {
                 $html .= link_to_remote($last_text, array(
-                    "update" => $update, 
+                    "update" => $update,
                     "url" => "{$base_url}?page=".$object->pages."&per_page={$object->rows_per_page}{$extra_params}"
                 ), array(
     	            "class" => $link_class,
-    	            "title" => "Last Page"                    
+    	            "title" => "Last Page"
                 ));
             } else {
                 $html .= link_to($last_text, "{$base_url}?page=".$object->pages."&per_page={$object->rows_per_page}{$extra_params}", array(
     				"class" => $link_class,
-    			  	"title" => "Last Page"                                    
-    			));    
-            }            
+    			  	"title" => "Last Page"
+    			));
+            }
         } else {
 			$html .= "&nbsp;";
 		}
@@ -715,8 +715,8 @@ class ActiveRecordHelper extends Helpers {
         $html .= "</div>\n";
 
         return $html;
-    }    
-        
+    }
+
     function pagination_range_text($object_name_or_object, $format = "Showing %d - %d of %d items.") {
         if(is_object($object_name_or_object)) {
             $object = $object_name_or_object;
@@ -728,13 +728,13 @@ class ActiveRecordHelper extends Helpers {
             return null;
         }
         $end = $object->rows_per_page * $object->page;
-        $start = $end - ($object->rows_per_page - 1);  
+        $start = $end - ($object->rows_per_page - 1);
         if($end >= $object->pagination_count) {
             $end = $object->pagination_count;
-        } 
+        }
 
         return $object->pagination_count ? sprintf($format, $start, $end, $object->pagination_count) : null;
-    }    
+    }
 
 }
 

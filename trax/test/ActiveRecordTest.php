@@ -143,7 +143,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         $this->assertEquals(count($p->content_columns),6);
         //  There are a lot of notice level error messages in normal
         //  operation.  We know about them and don't want to confuse
-        //  testing with them. 
+        //  testing with them.
         error_reporting(E_USER_WARNING);
 
         $p = new PersonName(array('id' => '17', 'first_name' => 'Boris',
@@ -161,7 +161,7 @@ class ActiveRecordTest extends PHPUnit2_Framework_TestCase {
         //  Constructor initializes all attributes to null
         //  There are a lot of notice level error messages in normal
         //  operation.  We know about them and don't want to confuse
-        //  testing with them. 
+        //  testing with them.
         error_reporting(E_USER_WARNING);
         $attrs = $p->get_attributes();
         $this->assertEquals($attrs,array('id'         => null,

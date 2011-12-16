@@ -68,7 +68,7 @@ class FormHelper extends Helpers {
         parent::__construct($object_name, $attribute_name);
 
         //  Set default attributes for input fields
-        $this->default_field_options = 
+        $this->default_field_options =
             array_key_exists('DEFAULT_FIELD_OPTIONS',$GLOBALS)
             ? $GLOBALS['DEFAULT_FIELD_OPTIONS']
             : array("size" => 30);
@@ -129,8 +129,8 @@ class FormHelper extends Helpers {
      *  @uses tag_id_with_index()
      *  @uses tag_name_with_index()
      */
-    function add_default_name_and_id($options) {  
-        $name_option_exists = array_key_exists('name', (array)$options);	
+    function add_default_name_and_id($options) {
+        $name_option_exists = array_key_exists('name', (array)$options);
        	if(array_key_exists("index", (array)$options)) {
             $options['name'] = $name_option_exists
                 ? $options['name']
@@ -155,7 +155,7 @@ class FormHelper extends Helpers {
                 : $this->tag_id();
         }
         if(array_key_exists('multiple', (array)$options) && !$name_option_exists) {
-            $options['name'] .= "[]";           
+            $options['name'] .= "[]";
         }
         return $options;
     }
@@ -196,7 +196,7 @@ class FormHelper extends Helpers {
         $options = $this->add_default_name_and_id($options);
         return $this->error_wrapping(
             $this->tag("input", $options),
-            @array_key_exists($this->attribute_name, (array)$this->object()->errors) 
+            @array_key_exists($this->attribute_name, (array)$this->object()->errors)
                 ? true : false
         );
     }
@@ -297,7 +297,7 @@ class FormHelper extends Helpers {
         $tag_text .= "</select>\n";
         return $this->error_wrapping($tag_text,$this->object()->errors[$this->attribute_name]);
     }
-    
+
 }
 
 
@@ -409,7 +409,7 @@ function radio_button($object, $field, $tag_value, $options = array()) {
  */
 function boolean_select($object, $field, $options = array()) {
     $form = new FormHelper($object, $field);
-    return $form->to_boolean_select_tag($options);        
+    return $form->to_boolean_select_tag($options);
 }
 
 // -- set Emacs parameters --

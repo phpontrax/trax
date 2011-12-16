@@ -306,16 +306,16 @@
  <a href="../PHPonTrax/tutorial_simpleapp.pkg.html#simpleapp">simple application build procedure</a>:
  <ol><li>Move the files in <code>/var/www/trax/public/</code> to
    <code>/var/www/html/my/app/</code> (instead of
-   <code>/var/www/html/</code>).</li>  
+   <code>/var/www/html/</code>).</li>
   <li>Edit file
    <code>/var/www/html/my/app/.htaccess</code> to change
    <code>dispatch.php</code> to
-   <code>/my/app/dispatch.php</code>.</li> 
+   <code>/my/app/dispatch.php</code>.</li>
   <li>Edit file
    <code>/var/www/trax/config/environment.php</code> to change
    the line <code>define(&quot;TRAX_URL_PREFIX&quot;,&nbsp;null);</code> to
    <code>define(&quot;TRAX_URL_PREFIX&quot;,&nbsp;&quot;/my/app&quot;);</code> and change
-   the line <code>define(&quot;TRAX_PUBLIC&quot;,&nbsp;dirname(dirname(dirname(__FILE__))).&quot;/public&quot;);</code> to 
+   the line <code>define(&quot;TRAX_PUBLIC&quot;,&nbsp;dirname(dirname(dirname(__FILE__))).&quot;/public&quot;);</code> to
    <code>define(&quot;TRAX_PUBLIC&quot;,&nbsp;&quot;/var/www/html/my/app&quot;);</code></li></ol></p><hr /></span>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>

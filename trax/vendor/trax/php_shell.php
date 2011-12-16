@@ -25,13 +25,13 @@
  *  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
- 
+
 @ob_end_clean();
 error_reporting(E_ALL ^ E_NOTICE);
 set_time_limit(0);
 
 require_once("php_shell/shell.php");
-    
+
 /**
 * default error-handler
 *
@@ -49,7 +49,7 @@ require_once("php_shell/shell.php");
 */
 function __shell_default_error_handler($errno, $errstr, $errfile, $errline, $errctx) {
     ## ... what is this errno again ?
-    if ($errno == 2048 || $errno == 8) return;  
+    if ($errno == 2048 || $errno == 8) return;
     throw new Exception(sprintf("%s:%d\r\n%s", $errfile, $errline, $errstr));
 }
 
@@ -58,11 +58,11 @@ set_error_handler("__shell_default_error_handler");
 $__shell = new PHP_Shell();
 
 $f = <<<EOF
->> use '?' to open the inline help 
+>> use '?' to open the inline help
 EOF;
 
-printf($f, 
-    $__shell->getVersion(), 
+printf($f,
+    $__shell->getVersion(),
     $__shell->hasReadline() ? ', with readline() support' : '');
 unset($f);
 
@@ -81,7 +81,7 @@ while($__shell->input()) {
                 *
                 * you can set your own autoloader by defining __autoload() before including
                 * this file
-                * 
+                *
                 * @param string $classname name of the class
                 */
 
@@ -90,17 +90,17 @@ while($__shell->input()) {
                 }
             }
 
-            $__shell_retval = eval($__shell->getCode());        
+            $__shell_retval = eval($__shell->getCode());
             if (isset($__shell_retval)) {
                 print $__shell->getColour("value");
 
                 if (function_exists("__shell_print_var")) {
                     __shell_print_var($__shell_retval, $__shell->getVerbose());
-                } else {   
+                } else {
                     if(is_object($__shell_retval) && method_exists($__shell_retval, '__toString')) {
                         echo "Class:".get_class($__shell_retval)."\n".$__shell_retval->__toString();
                     } else {
-                        var_export($__shell_retval);                        
+                        var_export($__shell_retval);
                     }
                 }
             }
@@ -111,7 +111,7 @@ while($__shell->input()) {
     } catch(Exception $__shell_exception) {
         print $__shell->getColour("exception");
         print $__shell_exception->getMessage();
-        
+
         $__shell->resetCode();
 
         ## cleanup the variable namespace
@@ -121,5 +121,5 @@ while($__shell->input()) {
 }
 
 print $__shell->getColour("reset");
- 
+
 ?>

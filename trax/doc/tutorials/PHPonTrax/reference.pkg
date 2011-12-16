@@ -53,7 +53,7 @@
      application that comes after the domain name and before the
      controller.  Usually empty.  In the case of a Trax application in
      the home directory of user <literal>username</literal>,
-     <command>TRAX_URL_PREFIX</command> would be set to 
+     <command>TRAX_URL_PREFIX</command> would be set to
      '<literal>~username</literal>'.
      </cmdsynopsis>
     </listitem>
@@ -73,7 +73,7 @@
      <cmdsynopsis>Database connection resource for the currently open
      database connection, or {@link http://pear.php.net PEAR} or
      {@link http://pear.php.net/package/DB DB} error if
-     the connection attempt failed.  Set in 
+     the connection attempt failed.  Set in
     {@link ActiveRecord::establish_connection()}.
      </cmdsynopsis>
     </listitem>
@@ -156,7 +156,7 @@
      <cmdsynopsis>
      Array with keys 'test', 'development' and 'production' specifying
      the database connection parameters for each of the three modes of
-     operation. 
+     operation.
      Set in file {@link environment.php config/environment.php}
      from values parsed from file database.ini.
      Used when opening a connection to the database.

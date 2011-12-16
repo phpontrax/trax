@@ -15,16 +15,16 @@
  <orderedlist>
   <listitem>Move the files in <literal>/var/www/trax/public/</literal> to
    <literal>/var/www/html/my/app/</literal> (instead of
-   <literal>/var/www/html/</literal>).</listitem>  
+   <literal>/var/www/html/</literal>).</listitem>
   <listitem>Edit file
    <literal>/var/www/html/my/app/.htaccess</literal> to change
    <literal>dispatch.php</literal> to
-   <literal>/my/app/dispatch.php</literal>.</listitem> 
+   <literal>/my/app/dispatch.php</literal>.</listitem>
   <listitem>Edit file
    <literal>/var/www/trax/config/environment.php</literal> to change
    the line <literal>define("TRAX_URL_PREFIX",<entity>&nbsp;</entity>null);</literal> to
    <literal>define("TRAX_URL_PREFIX",<entity>&nbsp;</entity>"/my/app");</literal> and change
-   the line <literal>define("TRAX_PUBLIC",<entity>&nbsp;</entity>dirname(dirname(dirname(__FILE__)))."/public");</literal> to 
+   the line <literal>define("TRAX_PUBLIC",<entity>&nbsp;</entity>dirname(dirname(dirname(__FILE__)))."/public");</literal> to
    <literal>define("TRAX_PUBLIC",<entity>&nbsp;</entity>"/var/www/html/my/app");</literal>
   </listitem>
  </orderedlist>

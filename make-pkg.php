@@ -12,14 +12,14 @@
  *  maintained by {@link http://subversion.tigris.org Subversion} in
  *  the various .svn directories that identifies which files are part
  *  of the distribution.
- *  
+ *
  *  Requires Pear package
  *  {@link http://pear.php.net/package/PEAR_PackageFileManager PEAR_PackageFileManager} .
  *  The Subversion plugin uses
  *  {@link http://pear.php.net/package/XML_Tree XML_Tree} .
  *  Unfortunately XML_Tree has a couple of methods named
  *  {@link http://www.php.net/manual/en/language.oop5.cloning.php clone}
- *  which is a reserved word in PHP 5.  The fix is 
+ *  which is a reserved word in PHP 5.  The fix is
  *  easy, just edit XML_Tree to change every use of 'clone' to 'clone4'.
  *
  *  PackageFileManager has several undocumented limitations that
@@ -30,7 +30,7 @@
  *      directory that is to go into a package.</li>
  *    <li>The Pear Installer will not install an empty file. Therefore
  *      you need to put at least one character into any file to be
- *      installed as part of a package.</li> 
+ *      installed as part of a package.</li>
  *    <li>The PackageFileManager options 'include' and 'ignore' use a
  *      regular expression match to identify the files and directories
  *      that they affect.  For each file and directory managed by

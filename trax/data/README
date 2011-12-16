@@ -13,7 +13,7 @@ Product, Show Post) by manipulating the model and directing data to the view.
 In Trax, the model is handled by what's called a object-relational mapping
 layer entitled Active Record. This layer allows you to present the data from
 database rows as objects and embellish these data objects with business logic
-methods. 
+methods.
 
 The controller and view is handled by the Action Controller
 
@@ -22,7 +22,7 @@ The controller and view is handled by the Action Controller
 * Database (MySQL, PostgreSQL, etc) (uses Pear::MDB2)
 * PHP 5.x
 * PEAR::MDB2, PEAR::Mail, PEAR::Mail_mime
-* Apache 1.3.x or 2.x 
+* Apache 1.3.x or 2.x
 * FreeBSD, Unix, Linux, MacOSX, Windows
 
 == Getting Started

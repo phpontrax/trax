@@ -87,7 +87,7 @@ class ScaffoldController extends ActionController {
     		}
 		}
 	}
-	
+
     /**
      *
      *  @todo Document this method
@@ -95,7 +95,7 @@ class ScaffoldController extends ActionController {
 	function edit() {
 		$model_class = $this->model_class;
 		$model = new $model_class();
-		$this->{$this->model_object_name} = $model->find($_REQUEST['id']);	
+		$this->{$this->model_object_name} = $model->find($_REQUEST['id']);
 		if($_POST) {
     		if($this->{$this->model_object_name}->save($_POST[$this->model_object_name])) {
       			Session::flash('notice', $this->model_name_human." was successfully updated.");
@@ -105,7 +105,7 @@ class ScaffoldController extends ActionController {
     		}
 		}
 	}
-	
+
     /**
      *
      *  @todo Document this method

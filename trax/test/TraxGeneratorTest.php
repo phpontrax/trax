@@ -135,7 +135,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $dir_h = opendir($dir);
 
         if (!$dir_h) {
-            return;             // 
+            return;             //
         }
 
         //  Delete everything in the directory
@@ -210,7 +210,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
      *  {@link TraxGenerator::create_controller() create_controller()},
      *  {@link TraxGenerator::create_helper() create_helper()}
      *  and {@link TraxGenerator::create_view() create_view()} in
-     *  isolation before we test 
+     *  isolation before we test
      *  {@link TraxGenerator::generate_controller() generate_controller()}
      *  but that's impossible because they depend on private variables
      *  which are set only in generate_controller().
@@ -242,7 +242,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $this->assertContains('exists', $output);
         $this->assertTrue(file_exists(TRAX_ROOT
                                       . '/controllers/mumble_controller.php'));
-        
+
         //  Generate a controller with one view file
         $tg = new TraxGenerator;
         ob_start();
@@ -261,7 +261,7 @@ class TraxGeneratorTest extends PHPUnit2_Framework_TestCase {
         $view = file_get_contents(TRAX_ROOT . '/views/store/manager.phtml');
         $this->assertContains('Store->manager',$view);
         $this->assertContains('store/manager.phtml',$view);
-        
+
         //  Generate a controller with two view files
         $tg = new TraxGenerator;
         ob_start();

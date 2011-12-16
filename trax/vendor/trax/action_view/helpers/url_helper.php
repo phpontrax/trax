@@ -35,21 +35,21 @@ class UrlHelper extends Helpers {
 
     /**
      * Creates a link tag of the given +name+ using an URL created by
-     * the set of +options+. 
+     * the set of +options+.
      * It's also possible to pass a string instead of an options hash
      * to get a link tag that just points without consideration. If
      * null is passed as a name, the link itself will become the
-     * name. 
+     * name.
      * The $html_options have a special feature for creating
      * javascript confirm alerts where if you pass ":confirm" => 'Are
-     * you sure?', 
+     * you sure?',
      * the link will be guarded with a JS popup asking that
      * question. If the user accepts, the link is processed, otherwise
-     * not. 
+     * not.
      *
      * Example:
      *   link_to("Delete this page", array(":action" => "delete",
-     * ":id" => $page->id), array(":confirm" => "Are you sure?")) 
+     * ":id" => $page->id), array(":confirm" => "Are you sure?"))
      *  @return string
      *  @uses content_tag()
      *  @uses convert_confirm_option_to_javascript()
@@ -145,13 +145,13 @@ class UrlHelper extends Helpers {
 
     /**
      * This tag is deprecated. Combine the link_to and
-     * AssetTagHelper::image_tag yourself instead, like: 
+     * AssetTagHelper::image_tag yourself instead, like:
      *   link_to(image_tag("rss", array("size" => "30x45"),
-     * array("border" => 0)), "http://www.example.com") 
+     * array("border" => 0)), "http://www.example.com")
      *  @todo Document this method
      */
     function link_image_to($src, $options = array(),
-                           $html_options = array()) { 
+                           $html_options = array()) {
         $image_options = array("src" => (strstr($src, "/") ? $src : "/images/$src"));
         if (!strstr($image_options["src"], ".")) $image_options["src"] .= ".png";
 
@@ -169,18 +169,18 @@ class UrlHelper extends Helpers {
         } else {
             if(isset($html_options["width"])) {
                 $image_options["width"] = $html_options["width"];
-                unset($html_options["width"]);            
+                unset($html_options["width"]);
             } elseif(isset($html_options["height"])) {
                 $image_options["height"] = $html_options["height"];
-                unset($html_options["height"]);            
+                unset($html_options["height"]);
             }
-        } 
-        
+        }
+
         if (isset($html_options["border"])) {
             $image_options["border"] = $html_options["border"];
             unset($html_options["border"]);
         } else {
-            $image_options["border"] = 0;        
+            $image_options["border"] = 0;
         }
 
         if (isset($html_options["align"])) {
@@ -196,7 +196,7 @@ class UrlHelper extends Helpers {
      *
      *  Output a URL with controller and optional action and id.
      *  The output URL has the same method, host and
-     *  <samp>TRAX_URL_PREFIX</samp> as 
+     *  <samp>TRAX_URL_PREFIX</samp> as
      *  the current URL.  Controller is either the current controller
      *  or a controller specified in $options.  Action and ID are
      *  optionally specified in $options, or omitted.  The
@@ -234,7 +234,7 @@ class UrlHelper extends Helpers {
             if(substr($url_base, -1) == "/") {
                 # remove the ending slash
                 $url_base = substr($url_base, 0, -1);
-            }           
+            }
 
             //  Method is same as was used by the current URL
             if($_SERVER['SERVER_PORT'] == 443) {
@@ -250,24 +250,24 @@ class UrlHelper extends Helpers {
                 }
                 $url_base .= $prefix;
             }
-            
+
             //  Get controller from $options or $controller_path
             if(array_key_exists(":controller", $options)) {
                 if($controller = $options[":controller"]) {
                     if(!is_null(Trax::$url_word_seperator)) {
                         $controller = str_replace("_", Trax::$url_word_seperator, $controller);
-                    }                    
-                    $url[] = $controller; 
+                    }
+                    $url[] = $controller;
                 }
             } else {
                 $controller = $this->controller_path;
                 if(substr($controller, 0, 1) == "/") {
                     # remove the beginning slash
-                    $controller = substr($controller, 1);        
+                    $controller = substr($controller, 1);
                 }
                 if(!is_null(Trax::$url_word_seperator)) {
                     $controller = str_replace("_", Trax::$url_word_seperator, $controller);
-                }                
+                }
                 $url[] = $controller;
             }
 
@@ -277,10 +277,10 @@ class UrlHelper extends Helpers {
                     if($action = $options[":action"]) {
                         if(!is_null(Trax::$url_word_seperator)) {
                             $action = str_replace("_", Trax::$url_word_seperator, $action);
-                        }                        
+                        }
                         $url[] = $action;
                     }
-                } 
+                }
             }
 
             //  If controller and action found, get id from $actions
@@ -290,36 +290,36 @@ class UrlHelper extends Helpers {
                         if($id = $options[":id"]->id) {
                             if(!is_numeric($id) && !is_null(Trax::$url_word_seperator)) {
                                 $id = str_replace("_", Trax::$url_word_seperator, $id);
-                            }                            
+                            }
                             $url[] = $id;
                         }
                     } else {
                         if($id = $options[":id"]) {
                             if(!is_numeric($id) && !is_null(Trax::$url_word_seperator)) {
                                 $id = str_replace("_", Trax::$url_word_seperator, $id);
-                            }                            
+                            }
                             $url[] = $id;
                         }
                     }
                 }
             }
-            
+
             if(count($options)) {
                 foreach($options as $key => $value) {
                     if(!strstr($key, ":")) {
-                        $extra_params[$key] = $value; 
-                    }       
-                }    
+                        $extra_params[$key] = $value;
+                    }
+                }
             }
         }
-        
+
         if(count($url) && substr($url_base,-1) != "/") {
-            $url_base .= "/";    
-        } 
+            $url_base .= "/";
+        }
         return $url_base . implode("/", $url)
             . (count($extra_params)
                ? "?".http_build_query($extra_params) : null);
-    }    
+    }
 
 }
 
@@ -338,7 +338,7 @@ function link_to($name, $options = array(), $html_options = array()) {
  */
 function link_image_to($src, $options = array(), $html_options = array()) {
     $url_helper = new UrlHelper();
-    return $url_helper->link_image_to($src, $options, $html_options);        
+    return $url_helper->link_image_to($src, $options, $html_options);
 }
 
 /**
@@ -347,7 +347,7 @@ function link_image_to($src, $options = array(), $html_options = array()) {
  */
 function button_to($name, $options = array(), $html_options = null) {
     $url_helper = new UrlHelper();
-    return $url_helper->button_to($name, $options, $html_options);    
+    return $url_helper->button_to($name, $options, $html_options);
 }
 
 /**

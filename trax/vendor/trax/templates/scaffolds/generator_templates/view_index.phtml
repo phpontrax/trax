@@ -1,13 +1,13 @@
 <h1>Listing <?php echo $plural_model_name ?></h1>
 
 <table border="0" cellpadding="2" cellspacing="2">
-< ?php if(count($<?php echo $plural_model_name ?>)): ? > 
-	<tr> 
+< ?php if(count($<?php echo $plural_model_name ?>)): ? >
+	<tr>
 	    < ?php foreach($content_columns as $column): ? >
 	        <th>< ?php echo $column['human_name'] ? ></th>
         < ?php endforeach; ? >
 	</tr>
-  
+
 	< ?php foreach($<?php echo $plural_model_name ?> as $<?php echo $singular_model_name ?>): ? >
 	    <tr>
 		    < ?php foreach($<?php echo $singular_model_name ?>->content_columns as $column): ? >
