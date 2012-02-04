@@ -521,7 +521,12 @@ class ActionController {
                     #}
                     #print_r($this->url_path);
 
-                    $id = strtolower($this->url_path[@array_search(":id", $route_path)]);
+                    $idPathKey = @array_search(":id", $route_path);
+                    
+                    if(isset($this->url_path[$idPathKey]))
+                        $id = strtolower($this->url_path[$idPathKey]);
+                    else 
+                        $id = null;
                 }
                 //  For historical reasons, continue to pass id
                 //  in $_REQUEST
