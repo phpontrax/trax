@@ -69,7 +69,8 @@ class ActiveRecordStore extends ActiveRecord {
 	}
 
 	function write($sess_id, $data) {
-	    # Select the data belonging to session $sess_id from the session table
+		
+		# Select the data belonging to session $sess_id from the session table
 		$session = $this->find($sess_id);
 		$session = ($session instanceof ActiveRecordStore) ? $session : $this;
 		$session->id = $sess_id;
@@ -77,7 +78,8 @@ class ActiveRecordStore extends ActiveRecord {
 		$session->client_ip = $this->escape($_SERVER['REMOTE_ADDR']);
 		$session->http_user_agent = $this->escape($_SERVER['HTTP_USER_AGENT']);
 		# Write the serialized session data ($data) to the session table
-		return $session->save() ? true : false;	
+
+		return $session->save() ? true : false;
 	}
 
 	function destroy($sess_id) {
@@ -94,6 +96,3 @@ class ActiveRecordStore extends ActiveRecord {
 	}
 		
 }
-
-
-?>
