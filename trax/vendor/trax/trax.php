@@ -190,8 +190,20 @@ class Trax {
     function version() {
         return implode('.', array(self::MAJOR, self::MINOR, self::TINY));    
     }
+    
+    function log($message, $filename = '') {
+        $date = date("[d-M-Y H:i:s]");
+        $message = "$date $message\n";
+        $log_file = self::$log_path.'/'.($filename != '' ? $filename : TRAX_ENV).'.log'; 
+        if(file_exists($log_file)) {
+            error_log($message, 3, $log_file);
+        } else {
+            exec("touch {$log_file}");
+            error_log($message, 3, $log_file);
+        }        
+    }
+    
 }
-
 
 ###################################################################
 # Auto include model / controller / other app specific libs files
