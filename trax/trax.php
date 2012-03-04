@@ -21,6 +21,7 @@
  *  distribution 
  */
 define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
+define("TRAX_SOURCE_DIR", "@PHP-DIR@/PHPonTrax/vendor/trax/");
 
 /**
  *  Symbol substitution tables
@@ -94,9 +95,16 @@ function trax() {
                                 // Trax config/ directory in the
                                 // user's work area
 
-    $srcdir = SOURCE_DIR;
     //  copy source directory to destination directory
-    copy_dir($srcdir, $dstdir);
+    copy_dir(SOURCE_DIR, $dstdir);
+    
+    $dstdir .= 'vendor/trax/';
+    if (!create_dir($dstdir)) {
+        return;
+    }
+    
+    // copy trax core code to vendor folder of project
+    copy_dir(TRAX_SOURCE_DIR, $dstdir);
 }
 
 /**
@@ -109,7 +117,7 @@ function trax() {
  *  @return boolean true=>success, false=>failure.
  */
 function copy_dir($src_path, $dst_path) {
-	
+
 	global $quiet;
 
     //  Make sure we have directories as arguments
@@ -168,7 +176,7 @@ function copy_dir($src_path, $dst_path) {
             }
 
             //  Destination file does not exist.  Create it
-            if (!copy_file($src_path . $src_file, $dst_path . $src_file)) {
+            if (!copy_file($src_path . $src_file, $dst_path . $src_file)) {          
                 return false;
             }
 
@@ -191,13 +199,13 @@ function copy_dir($src_path, $dst_path) {
             }
 
             //  This directory needs to be copied.
-            if (!create_dir( $dst_path . $src_file )) {
+            if (!create_dir( $dst_path . $src_file )) {                
                 return false;
             }
 
             //  Recursive call to copy directory
             if (!copy_dir($src_path . $src_file . DIRECTORY_SEPARATOR,
-                          $dst_path . $src_file . DIRECTORY_SEPARATOR)) {
+                          $dst_path . $src_file . DIRECTORY_SEPARATOR)) {                
                 return false;
             }
         }
