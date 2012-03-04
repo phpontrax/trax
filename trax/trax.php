@@ -102,6 +102,7 @@ function trax() {
     if (!create_dir($dstdir)) {
         return;
     }
+    
     // copy trax core code to vendor folder of project
     copy_dir(TRAX_SOURCE_DIR, $dstdir);
 }
