@@ -36,7 +36,7 @@ class Trax {
 
     const
         MAJOR = 0,
-        MINOR = 17,
+        MINOR = 18,
         TINY = 0;
     
     public static 
