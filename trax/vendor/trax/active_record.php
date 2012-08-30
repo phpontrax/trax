@@ -687,7 +687,6 @@ class ActiveRecord {
                 }   
             } else {
                 $original = isset($this->attributes[$key]) ? $this->attributes[$key] : null;
-
                 $this->changed_attributes[$key] = array(
                     'original' => $original, 
                     'modified' => $value
@@ -702,8 +701,12 @@ class ActiveRecord {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
                 if($association_type == "belongs_to") {
-                    $primary_key = $value->primary_keys[0];
-                    $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                    $primary_key = $value->primary_keys[0];                    
+                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) { 
+                        $foreign_key = $this->belongs_to[$key]['foreign_key']; 
+                    } else { 
+                        $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                    }
                     $this->$foreign_key = $value->$primary_key; 
                 }
             }
@@ -2557,8 +2560,12 @@ class ActiveRecord {
                     if($association_type = $this->get_association_type($field)) {
                         $this->save_associations[$association_type][] = $value;
                         if($association_type == "belongs_to") {
-                            $primary_key = $value->primary_keys[0];
-                            $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                            $primary_key = $value->primary_keys[0];                                
+                            if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) { 
+                                $foreign_key = $this->belongs_to[$key]['foreign_key']; 
+                            } else { 
+                                $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
+                            }                            
                             $this->$foreign_key = $value->$primary_key; 
                         }
                     }
