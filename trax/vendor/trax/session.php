@@ -243,11 +243,11 @@ class Session {
             session_start();
             self::$id = session_id();
             self::$started = true;
-			$hash = self::get_hash();
-			if(!isset($_SESSION[$hash])) {
-				$_SESSION[self::get_hash()] = array();
-			}
         }
+        $hash = self::get_hash();
+        if(!isset($_SESSION[$hash])) {
+            $_SESSION[$hash] = array();
+        }        
 	}
 
 	/**
