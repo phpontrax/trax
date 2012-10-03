@@ -270,16 +270,16 @@ class FormOptionsHelper extends FormHelper {
      *  @param array
      */
     private function add_options($option_tags, $options) {
-        if(array_key_exists("include_blank", $options)
+        if(array_key_exists("include_blank", (array)$options)
            && $options["include_blank"] == true) {
             $option_tags = "<option value=\"\"></option>\n" . $option_tags;
         } 
-        if(array_key_exists('prompt', $options)) {
+        if(array_key_exists('prompt', (array)$options)) {
             $text = $options['prompt'] ? $options['prompt'] : "Please select";
             return ("<option value=\"\">$text</option>\n" . $option_tags);
         } else {
             return $option_tags;
-        }        
+        }    
     }
 }
 
