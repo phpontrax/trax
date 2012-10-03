@@ -1385,14 +1385,16 @@ class ActionController {
      *  @param mixed $options array or string url  
      *  @todo <b>FIXME:</b> Make header configurable
      */    
-    function redirect_to($options = null) {
+    function redirect_to($options = null, $post = false) {
         if($options == "back") {
             $url = $_SERVER["HTTP_REFERER"];
         } else {
             $url = url_for($options);     
         }
-        
-        if(headers_sent()) {
+
+        if($post) {
+            echo "<form id=\"trax_redirect\" method=\"post\" action=\"{$url}\"></form><script>document.getElementById('trax_redirect').submit();</script>";
+        } elseif(headers_sent()) {
             echo "<html><head><META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=".$url."\"></head></html>";
         } else {
             header("Location: ".$url);

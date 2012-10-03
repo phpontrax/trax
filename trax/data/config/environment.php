@@ -4,8 +4,8 @@
  */
 # Trax should be able to figure the following 2 settings out
 # automatically, but if you have trouble you can set them manually
-# define("PHP_LIB_ROOT",    "/usr/local/lib/php");
-# define("TRAX_ROOT",       dirname(dirname(__FILE__)));
+define("PHP_LIB_ROOT",    dirname(dirname(__FILE__))."/vendor/PEAR");
+define("TRAX_ROOT",       dirname(dirname(__FILE__)));
 
 # Uncomment below to force Trax into production mode when 
 # you don't control web/app server and can't set it the proper way

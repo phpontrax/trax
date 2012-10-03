@@ -61,6 +61,7 @@ $e = $packagexml->setOptions(array(
     'packagedirectory' => '.',
     'filelistgenerator' => 'file', // generate from git or file
 	'simpleoutput' => true,
+	'addhiddenfiles' => true,
 	'dir_roles' => array(
 		'doc' => 'doc',
 		'test' => 'test',
@@ -110,9 +111,10 @@ $packagexml->setPhpDep('5.1.2');
 $packagexml->setPearinstallerDep('1.4.0');
 
 // Depends on these PEAR packages
-$packagexml->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.0');
-$packagexml->addPackageDepWithChannel('required', 'Mail', 'pear.php.net', '1.0');
-$packagexml->addPackageDepWithChannel('required', 'Mail_Mime', 'pear.php.net', '1.0');
+# added these to when you create a new app into the vendor folder
+#$packagexml->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.0');
+#$packagexml->addPackageDepWithChannel('required', 'Mail', 'pear.php.net', '1.0');
+#$packagexml->addPackageDepWithChannel('required', 'Mail_Mime', 'pear.php.net', '1.0');
 
 // Who maintains this package
 $packagexml->addMaintainer('lead', 'john', 'John Peterson', 'johnpipi@gmail.com');
