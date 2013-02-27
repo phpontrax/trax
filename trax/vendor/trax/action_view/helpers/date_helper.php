@@ -375,7 +375,7 @@ class DateHelper extends Helpers {
         $options['month_before_year'] = true;      
         $options['use_month_numbers'] = true;   
         $options['start_year'] = date("Y");
-        $options['end_year'] = date("Y") + 7;
+        $options['end_year'] = date("Y") + 10;
         $options['field_separator'] = " / ";        
 
         //  Find name and initial value of year field,
