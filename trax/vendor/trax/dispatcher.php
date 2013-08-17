@@ -65,8 +65,7 @@ class Dispatcher {
             $ac = new ActionController();
             $ac->process_route();
         } catch(Exception $e) {
-            $ac = new ActionController();
-            $ac->process_with_exception($e);
+            ActionController::process_with_exception($e);
         }
     }
 
