@@ -157,6 +157,14 @@ class ActionController {
     private $loaded = false;
 
     /**
+     *  Loaded plugin
+     *
+     *  Set by {@link recognize_route()}
+     *  @var string
+     */
+    public $plugin = null;
+
+    /**
      *  Whether a Router object was loaded
      *
      *  @var boolean
@@ -364,9 +372,14 @@ class ActionController {
     function load_router() {
         $this->router_loaded = false;
         $router = new Router();
-
         // Load the routes.
         require(Trax::$config_path."/routes.php");
+        // Load any plugins routes
+        if(count(Trax::$plugins)) {
+            foreach(Trax::$plugins as $plugin) {
+                require(Trax::$plugins_path."/{$plugin}/config/routes.php");
+            }
+        }
         $this->router = $router;
         if(is_object($this->router)) {
             $this->router_loaded = true;
@@ -456,13 +469,22 @@ class ActionController {
             $this->views_path = Trax::$views_path;
 
             $route = $this->router->find_route($browser_url);
-
+            #echo "browser_url:$browser_url Found Route:".print_r($route, true)."<br>";
             //  find_route() returns an array if it finds a path that
             //  matches the URL, null if no match found
             if(is_array($route)) {
 
                 //  Matching route found.  Try to get
                 //  controller and action from route and URL
+                #print_r($this->router);
+                #echo "<br>";
+                if($route['plugin']) {  
+                    $this->plugin = $route['plugin'];                   
+                    $this->controllers_path = Trax::$plugins_path."/{$route['plugin']}/controllers";
+                    $this->helpers_path = $this->helpers_base_path = Trax::$plugins_path."/{$route['plugin']}/helpers";
+                    $this->layouts_path = Trax::$plugins_path."/{$route['plugin']}/views/layouts";
+                    $this->views_path = Trax::$plugins_path."/{$route['plugin']}/views";
+                }
                 $this->set_paths();
                 $route_path = explode("/",$route['path']);
                 $route_params = $route['params'];
@@ -610,6 +632,7 @@ class ActionController {
                 $this->controller_object->controller_path = "$this->added_path/$this->controller";
                 $this->controller_object->views_path = $this->views_path;
                 $this->controller_object->layouts_path = $this->layouts_path;
+                $this->controller_object->plugin = $this->plugin;
                 Trax::$current_controller_path = "$this->added_path/$this->controller";
                 Trax::$current_controller_name = $this->controller;
                 Trax::$current_action_name = $this->action;
@@ -1327,7 +1350,6 @@ class ActionController {
 
         # Default settings
         $layouts_base_path = Trax::$layouts_path;
-        $default_layout_file = $layouts_base_path . "/application." . Trax::$views_extension;
         
         if(!$full_path && $layout) {
             return $layout;       
@@ -1337,6 +1359,8 @@ class ActionController {
                 $file = substr(strrchr($layout, "/"), 1);
                 $path = substr($layout, 0, strripos($layout, "/"));
                 $layout = $layouts_base_path."/".$path."/".$file.".".Trax::$views_extension;
+            } elseif($this->plugin && file_exists(Trax::$plugins_path."/{$this->plugin}/views/layouts/{$layout}.".Trax::$views_extension)) {
+                $layout = Trax::$plugins_path."/{$this->plugin}/views/layouts/{$layout}.".Trax::$views_extension;
             } elseif(file_exists($this->layouts_path."/".$layout.".".Trax::$views_extension)) {
                 # Is there a layout for the current controller
                 $layout = $this->layouts_path."/".$layout.".".Trax::$views_extension;
@@ -1351,7 +1375,11 @@ class ActionController {
         # No defined layout found so just use the default layout
         # app/views/layouts/application.phtml 
         if(!isset($layout_file)) {
-            $layout_file = $default_layout_file;
+            if($this->plugin && file_exists(Trax::$plugins_path."/{$this->plugin}/views/layouts/application.".Trax::$views_extension)) {
+                $layout_file = Trax::$plugins_path."/{$this->plugin}/views/layouts/application.".Trax::$views_extension;    
+            } else {
+                $layout_file = $layouts_base_path . "/application." . Trax::$views_extension;    
+            }
         }
         $this->layout_file = $layout_file;
         return $layout_file;

@@ -50,6 +50,7 @@ class Trax {
         $lib_path = null,
         $app_path = null,
         $log_path = null,
+        $plugins_path = null,
         $vendor_path = null,
         $public_path = null,
 	    $tmp_path = null,
@@ -72,7 +73,8 @@ class Trax {
         $show_trax_errors = false,
         $server_default_include_path = null,
         $include_paths = array(),
-        $autoload_function = null;
+        $autoload_function = null,
+        $plugins = array();
 
     function initialize() {
 
@@ -95,6 +97,7 @@ class Trax {
         self::$app_path          = TRAX_ROOT."/app";
         self::$log_path          = TRAX_ROOT."/log";
         self::$vendor_path       = TRAX_ROOT."/vendor";
+        self::$plugins_path      = TRAX_ROOT."/vendor/plugins";
         self::$public_path       = TRAX_ROOT."/public";
 	    self::$tmp_path		     = TRAX_ROOT."/tmp";
 
@@ -163,7 +166,8 @@ class Trax {
             TRAX_LIB_ROOT,                      # trax libs (vendor/trax or server trax libs)
             PHP_LIB_ROOT,                       # php libs dir (ex: /usr/local/lib/php)
             self::$lib_path,                    # app specific libs extra libs to include
-	        self::$vendor_path,                 # 3rd party libs to include in vendor (vendor/third_party)
+	        self::$plugins_path,                # plugins / engines
+            self::$vendor_path,                 # 3rd party libs to include in vendor (vendor/third_party)
             self::$server_default_include_path  # tack on the old include_path to the end            
         ));
     }  
@@ -185,6 +189,17 @@ class Trax {
         if(file_exists(self::$environments_path."/".TRAX_ENV.".php")) {
             include_once(self::$environments_path."/".TRAX_ENV.".php");
         }
+    }
+
+    function load_plugins($plugins = array()) {
+        $plugins = count($plugins) ? $plugins : Trax::$plugins;
+        foreach((array)$plugins as $plugin) {
+            if(file_exists(self::$plugins_path."/{$plugin}/init.php")) {
+                include_once(self::$plugins_path."/{$plugin}/init.php"); 
+                $loaded_plugins[] = $plugin; 
+            }
+        }
+        Trax::$plugins = (array)$loaded_plugins;
     }
 
     function version() {

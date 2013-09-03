@@ -88,11 +88,26 @@ class Router {
      *  @uses $routes
      *  @uses $routes_count
      */
-    function connect($path, $params = null) {
+    function connect($path, $params = null, $plugin = null) {
         if(!is_array($params)) $params = null;
+        if($plugin) $this->routes[$this->routes_count]['plugin'] = $plugin;
         $this->routes[$this->routes_count]['path'] = $path;
         $this->routes[$this->routes_count]['params'] = $params;
         $this->routes_count = count($this->routes);
+    }
+
+    /**
+     *  Accessor method to add a plugin route to the route table
+     *
+     *  The route is added to the end of
+     *  {@link $routes the route table}. If $params is not an array,
+     *  NULL is stored in the route parameter area.
+     *  @param string $plugin
+     *  @param string $path
+     *  @param mixed[] $params
+     */
+    function plugin_connect($plugin, $path, $params = null) {
+        $this->connect($path, $params, $plugin);
     }
 
     /**
@@ -122,9 +137,9 @@ class Router {
     function find_route($url) {
         //error_log('url='.$url);
         // ensure at least one route (the default route) exists
-        if($this->routes_count == 0) {
+        #if($this->routes_count == 0) {
             $this->connect($this->default_route_path);
-        }
+        #}
 
         $this->selected_route = null;
 
@@ -133,6 +148,7 @@ class Router {
             unset($reg_exp);
             $route_regexp = $this->build_route_regexp($route['path']);
             #error_log("url:$url route regexp=/$route_regexp/");
+            #echo "url:$url route:".print_r($route, true)." regexp=/$route_regexp/<br>";
             if($url == "" && $route_regexp == "") {
                 #error_log('root route selected');
                 $this->selected_route = $route;
@@ -147,6 +163,7 @@ class Router {
                 break;
             }
         }
+
         //error_log('selected route='.var_export($this->selected_route,true));
         return $this->selected_route;
     }                                 // function find_route($url)
@@ -162,14 +179,13 @@ class Router {
      *                $route_path 
      */
     function build_route_regexp($route_path) {
-        //        echo "entering build_route_regexp(), \$route_path is '$route_path'\n";
-
+        #echo "entering build_route_regexp(), \$route_path is '$route_path'\n<br>";
         $route_regexp = null;
-
         if(!is_array($route_path)) {
             $route_path = explode("/",$route_path);
         }
-        //error_log("route path:\n".var_export($route_path,true));
+        #error_log("route path:\n".var_export($route_path,true));
+        #echo "route path:\n".var_export($route_path,true)."<br>";
         if(count($route_path) > 0) {
             foreach($route_path as $path_element) {
                 if(preg_match('/:[a-z0-9_\-]+/',$path_element)) {
