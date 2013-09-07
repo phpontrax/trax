@@ -30,6 +30,9 @@ include_once(dirname(__FILE__)."/boot.php");
 
 # Include the application environment specific config file
 Trax::include_env_config();
+
+# uncomment to load plugins located in vendor/plugins
+# Trax::load_plugins(array('myplugin','myotherplugin'));
         
 # Add new inflection rules using the following format 
 # (all these examples are active by default):
