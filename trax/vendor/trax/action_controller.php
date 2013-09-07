@@ -480,10 +480,10 @@ class ActionController {
                 #echo "<br>";
                 if($route['plugin']) {  
                     $this->plugin = $route['plugin'];                   
-                    $this->controllers_path = Trax::$plugins_path."/{$route['plugin']}/controllers";
-                    $this->helpers_path = $this->helpers_base_path = Trax::$plugins_path."/{$route['plugin']}/helpers";
-                    $this->layouts_path = Trax::$plugins_path."/{$route['plugin']}/views/layouts";
-                    $this->views_path = Trax::$plugins_path."/{$route['plugin']}/views";
+                    $this->controllers_path = Trax::$plugins_path."/{$route['plugin']}/app/controllers";
+                    $this->helpers_path = $this->helpers_base_path = Trax::$plugins_path."/{$route['plugin']}/app/helpers";
+                    $this->layouts_path = Trax::$plugins_path."/{$route['plugin']}/app/views/layouts";
+                    $this->views_path = Trax::$plugins_path."/{$route['plugin']}/app/views";
                 }
                 $this->set_paths();
                 $route_path = explode("/",$route['path']);
