@@ -240,6 +240,28 @@ function __autoload($class_name) {
         # Include users application libs
         include_once(Trax::$lib_path."/$file_org");
     }
+
+    if(count(Trax::$plugins)) {
+        foreach(Trax::$plugins as $plugin) {
+            $model_path = Trax::$plugins_path."/$plugin/app/models";
+            $controller_path = Trax::$plugins_path."/$plugin/app/controllers";
+            $lib_path = Trax::$plugins_path."/$plugin/lib";
+            if(file_exists("$model_path/$file")) {
+                # Include model classes
+                include_once("$model_path/$file");
+            } elseif(file_exists("$controller_path/$file")) {
+                # Include extra controller classes
+                include_once("$controller_path/$file");
+            } elseif(file_exists("$lib_path/$file")) {
+                # Include users application libs
+                include_once("$lib_path/$file");
+            } elseif(file_exists("$lib_path/$file_org")) {
+                # Include users application libs
+                include_once("$lib_path/$file_org");
+            }
+        }
+    }
+
 	# add to the __autoload function from Trax
    	# just define _autoload()
 	if(function_exists(Trax::$autoload_function) && Trax::$autoload_function != '__autoload') {
