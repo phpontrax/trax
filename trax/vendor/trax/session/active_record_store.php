@@ -33,7 +33,7 @@
  */
 
 /**
- * 
+ *
  * Session Table Schema:
  *
  * CREATE TABLE sessions (
@@ -45,14 +45,14 @@
  *   updated_at datetime default NULL,
  *   PRIMARY KEY (id)
  * )
- * 
+ *
  */
 class ActiveRecordStore extends ActiveRecord {
-	
+
 	public $table_name = 'sessions';
-	
+
     function open($save_path, $session_name) {
-        return true;   
+        return true;
     }
 
 	function close() {
@@ -64,18 +64,18 @@ class ActiveRecordStore extends ActiveRecord {
 	    # Select the data belonging to session $sess_id from the session table
 		if(($session = $this->find($sess_id)) instanceof ActiveRecordStore) {
 			$data = $session->data;
-		}		
+		}
 	    return $data;
 	}
 
 	function write($sess_id, $data) {
-		
+
 		# Select the data belonging to session $sess_id from the session table
 		$session = $this->find($sess_id);
 		$session = ($session instanceof ActiveRecordStore) ? $session : $this;
 		$session->id = $sess_id;
 		$session->data = $data;
-		$session->client_ip = $this->escape($_SERVER['REMOTE_ADDR']);
+		$session->client_ip = $this->escape(Session::get_client_ip());
 		$session->http_user_agent = $this->escape($_SERVER['HTTP_USER_AGENT']);
 		# Write the serialized session data ($data) to the session table
 
@@ -94,5 +94,5 @@ class ActiveRecordStore extends ActiveRecord {
 		$this->delete_all("UNIX_TIMESTAMP(created_at) < {$old}");
 	    return true;
 	}
-		
+
 }
