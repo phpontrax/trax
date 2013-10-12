@@ -22,7 +22,7 @@ class Haml {
                 $this->parser->assign($key, $value);
             }
         }
-        $this->parser->assign("ac", $this->context);
+        $this->parser->assign("this", $this->context);
         #echo $parser->setFile($path);
         echo $this->parser->display($path);
     }
