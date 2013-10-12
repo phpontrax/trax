@@ -184,11 +184,34 @@ class Session {
      *          </ul>
      */
     function is_valid_host() {
-        if($_SERVER['REMOTE_ADDR'] == self::$ip &&
+        if(self::get_client_ip() == self::$ip &&
            $_SERVER['HTTP_USER_AGENT'] == self::$user_agent) {
             return true;
         }
         return false;
+    }
+
+    /**
+     *  Get Client's Real IP
+     *
+     *  @return $ipaddress
+     */
+    function get_client_ip() {
+        $ipaddress = '';
+        if($_SERVER['HTTP_CLIENT_IP']) {
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif($_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif($_SERVER['HTTP_X_FORWARDED']) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif($_SERVER['HTTP_FORWARDED_FOR']) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif($_SERVER['HTTP_FORWARDED']) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif($_SERVER['REMOTE_ADDR']) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ipaddress;
     }
 
     /**
@@ -200,7 +223,7 @@ class Session {
      *  @uses session_id()
      */
     function get_hash() {
-        $key = session_id().$_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'];
+        $key = session_id().$_SERVER['HTTP_USER_AGENT'].self::get_client_ip();
         // error_log('get_hash() returns '.md5($key));
         return md5($key);
     }
@@ -232,7 +255,7 @@ class Session {
 
             header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
 
-            self::$ip = $_SERVER['REMOTE_ADDR'];
+            self::$ip = self::get_client_ip();
             self::$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
             if(self::is_valid_host() && array_key_exists('sess_id',$_REQUEST)) {
@@ -247,7 +270,7 @@ class Session {
         $hash = self::get_hash();
         if(!isset($_SESSION[$hash])) {
             $_SESSION[$hash] = array();
-        }        
+        }
 	}
 
 	/**
