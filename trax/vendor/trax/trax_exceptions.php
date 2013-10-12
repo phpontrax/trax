@@ -39,7 +39,7 @@ class TraxError extends Exception {
         $this->error_heading = $heading;
         $this->error_message = $message;
         $this->error_code = $code;
-    }     
+    }
 }
 
 /**

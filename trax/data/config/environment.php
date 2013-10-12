@@ -7,7 +7,7 @@
 define("PHP_LIB_ROOT",    dirname(dirname(__FILE__))."/vendor/PEAR");
 define("TRAX_ROOT",       dirname(dirname(__FILE__)));
 
-# Uncomment below to force Trax into production mode when 
+# Uncomment below to force Trax into production mode when
 # you don't control web/app server and can't set it the proper way
 # Sets environment from the Apache Vhost (SetEnv TRAX_ENV production)
 # or change the string to manually set it. (development | test | production)
@@ -26,15 +26,18 @@ include_once(dirname(__FILE__)."/boot.php");
 # Trax::$session_save_path = Trax::$tmp_path."/sessions";
 # SEO naming of urls such as ecommerce-shopping-cart which will be changed on
 # incoming requests to underscores. default is null.
-# Trax::$url_word_seperator = "-"; 
+# Trax::$url_word_seperator = "-";
+
+# View file type. (html(default),haml)
+# ViewHandlers::register_extension('haml');
 
 # Include the application environment specific config file
 Trax::include_env_config();
 
 # uncomment to load plugins located in vendor/plugins
 # Trax::load_plugins(array('myplugin','myotherplugin'));
-        
-# Add new inflection rules using the following format 
+
+# Add new inflection rules using the following format
 # (all these examples are active by default):
 # Inflections::plural('/^(ox)$/i', '\1en');
 # Inflections::singular('/^(ox)en/i', '\1');

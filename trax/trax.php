@@ -18,7 +18,7 @@
  *  the <b>pear install</b> command.  If you are prevented from using
  *  <b>pear install</b>, change "@DATA-DIR@/PHPonTrax" by hand to the
  *  full filesystem path of the location where you installed the Trax
- *  distribution 
+ *  distribution
  */
 define("SOURCE_DIR", "@DATA-DIR@/PHPonTrax/data/");
 define("TRAX_SOURCE_DIR", "@PHP-DIR@/PHPonTrax/vendor/trax/");
@@ -72,12 +72,12 @@ function trax() {
 			} elseif($arg == '-h' || $arg == '--help') {
 				usage();
 			}
-		}		
+		}
 	} else {
 	    //  Destination directory on command line
-	    $dstdir = $GLOBALS['argv'][1];	
+	    $dstdir = $GLOBALS['argv'][1];
 		if($GLOBALS['argv'][2] == '-q' || $GLOBALS['argv'][2] == '--quiet') {
-			$quiet = true;			
+			$quiet = true;
 		}
 	}
 
@@ -97,12 +97,12 @@ function trax() {
 
     //  copy source directory to destination directory
     copy_dir(SOURCE_DIR, $dstdir);
-    
+
     $dstdir .= 'vendor/trax/';
     if (!create_dir($dstdir)) {
         return;
     }
-    
+
     // copy trax core code to vendor folder of project
     copy_dir(TRAX_SOURCE_DIR, $dstdir);
 }
@@ -176,7 +176,7 @@ function copy_dir($src_path, $dst_path) {
             }
 
             //  Destination file does not exist.  Create it
-            if (!copy_file($src_path . $src_file, $dst_path . $src_file)) {          
+            if (!copy_file($src_path . $src_file, $dst_path . $src_file)) {
                 return false;
             }
 
@@ -185,10 +185,10 @@ function copy_dir($src_path, $dst_path) {
                 chmod($dst_path . $src_file, 0666);
             }
 
-            // Generator & Console needs to be executable 
+            // Generator & Console needs to be executable
             if ($src_file == 'generate.php' || $src_file == 'console.php') {
                 chmod($dst_path . $src_file, 0754);
-            }           
+            }
 
             if(!$quiet) echo "\tcreate $dst_path$src_file\n";
         } else {
@@ -199,13 +199,13 @@ function copy_dir($src_path, $dst_path) {
             }
 
             //  This directory needs to be copied.
-            if (!create_dir( $dst_path . $src_file )) {                
+            if (!create_dir( $dst_path . $src_file )) {
                 return false;
             }
 
             //  Recursive call to copy directory
             if (!copy_dir($src_path . $src_file . DIRECTORY_SEPARATOR,
-                          $dst_path . $src_file . DIRECTORY_SEPARATOR)) {                
+                          $dst_path . $src_file . DIRECTORY_SEPARATOR)) {
                 return false;
             }
         }
@@ -221,7 +221,7 @@ function copy_dir($src_path, $dst_path) {
  *  @return boolean  true=>success, false=>failed
  */
 function create_dir($dst_dir) {
-	
+
 	global $quiet;
 
     //  Does a directory of this name exist?
@@ -236,7 +236,7 @@ function create_dir($dst_dir) {
         }
 
         //  There is an old destination file with the same
-        //  name as the new destination directory. 
+        //  name as the new destination directory.
         //  Save the old file.
         $stat = stat($dst_dir);
         $new_name = $dst_dir.'.'.$stat[9];

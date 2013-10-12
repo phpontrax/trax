@@ -201,7 +201,7 @@ class ActionController {
      *  Set by {@link add_after_filters()
      *  @var string[]
      */
-    private $after_filters = array();     
+    private $after_filters = array();
 
     private $after_filter_options = array();
 
@@ -282,7 +282,7 @@ class ActionController {
      *  @var boolean
      */
     public $render_layout = true;
-    
+
     /**
      *  Whether to keep flash message after displaying it
      *  @var boolean
@@ -325,10 +325,10 @@ class ActionController {
         } elseif($key == "render_text") {
             $this->render_text($value);
         } elseif($key == "redirect_to") {
-            $this->redirect_to($value);       
+            $this->redirect_to($value);
         } elseif($key == "layout") {
             $this->layout = $value;
-            $this->determine_layout();    
+            $this->determine_layout();
         } else {
             $this->$key = $value;
         }
@@ -343,14 +343,14 @@ class ActionController {
             #error_log("calling method:{$method_name} - params:".print_r($parameters, true));
             # If the method exists, just call it
             $result = call_user_func_array(array($this, $method_name), $parameters);
-        } else {        
+        } else {
             if($method_name == "before_filter") {
                 $result = call_user_func(array($this, 'add_before_filter'), $parameters);
             } elseif($method_name == "after_filter") {
                 $result = call_user_func(array($this, 'add_after_filter'), $parameters);
             } elseif($method_name == "helper") {
                 $result = call_user_func(array($this, 'add_helper'), $parameters);
-            } 
+            }
         }
         return $result;
     }
@@ -432,7 +432,7 @@ class ActionController {
             $browser_url = strstr($_SERVER['REQUEST_URI'], "?") ?
                 substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "?")) :
                 $_SERVER['REQUEST_URI'];
-        }        
+        }
 
         //error_log('browser url='.$browser_url);
         # strip off url prefix, if any
@@ -449,11 +449,11 @@ class ActionController {
         if(substr($browser_url, -1) == "/") {
             $browser_url = substr($browser_url, 0, -1);
         }
-        
+
         if($browser_url) {
-            $this->url_path = explode("/", !is_null(Trax::$url_word_seperator) ? 
+            $this->url_path = explode("/", !is_null(Trax::$url_word_seperator) ?
                 # for seo to be able to put dashes in the url
-                str_replace(Trax::$url_word_seperator, "_", $browser_url) : 
+                str_replace(Trax::$url_word_seperator, "_", $browser_url) :
                 $browser_url
             );
         } else {
@@ -478,8 +478,8 @@ class ActionController {
                 //  controller and action from route and URL
                 #print_r($this->router);
                 #echo "<br>";
-                if($route['plugin']) {  
-                    $this->plugin = $route['plugin'];                   
+                if($route['plugin']) {
+                    $this->plugin = $route['plugin'];
                     $this->controllers_path = Trax::$plugins_path."/{$route['plugin']}/app/controllers";
                     $this->helpers_path = $this->helpers_base_path = Trax::$plugins_path."/{$route['plugin']}/app/helpers";
                     $this->layouts_path = Trax::$plugins_path."/{$route['plugin']}/app/views/layouts";
@@ -494,9 +494,9 @@ class ActionController {
                    && array_key_exists(":controller",$route_params)) {
 
                     //  ':controller' in route params overrides URL
-                    $this->controller = $route_params[":controller"];  
+                    $this->controller = $route_params[":controller"];
                     if(stristr($route_params[":controller"], "/")) {
-                        
+
                     }
                 } elseif(is_array($route_path)
                          && in_array(":controller",$route_path)
@@ -544,10 +544,10 @@ class ActionController {
                     #print_r($this->url_path);
 
                     $idPathKey = @array_search(":id", $route_path);
-                    
+
                     if(isset($this->url_path[$idPathKey]))
                         $id = strtolower($this->url_path[$idPathKey]);
-                    else 
+                    else
                         $id = null;
                 }
                 //  For historical reasons, continue to pass id
@@ -560,7 +560,7 @@ class ActionController {
                 $this->views_path .= "/" . $this->controller;
                 $this->controller_file = $this->controllers_path . "/" .  $this->controller . "_controller.php";
                 $this->controller_class = Inflector::camelize(Inflector::demodulize($this->controller)) . "Controller";
-                $this->helper_file = $this->helpers_path . "/" .  $this->controller . "_helper.php";  
+                $this->helper_file = $this->helpers_path . "/" .  $this->controller . "_helper.php";
                 # error_log("controller:{$this->controller} - controller_file:{$this->controller_file} - controller_class:{$this->controller_class} - views_path:{$this->views_path}");
             }
         }
@@ -600,7 +600,7 @@ class ActionController {
      *  @return boolean true
      */
     function process_route() {
-   
+
         # First try to load the routes and setup the paths to everything
         if(!$this->loaded) {
             if(!$this->recognize_route()) {
@@ -617,15 +617,15 @@ class ActionController {
             include_once($this->application_controller_file);
         }
 
-        # If controller is loaded then start processing           
+        # If controller is loaded then start processing
         if($this->loaded) {
-            
-            include_once($this->controller_file);            
-            if(class_exists($this->controller_class, false)) {                
+
+            include_once($this->controller_file);
+            if(class_exists($this->controller_class, false)) {
                 $class = $this->controller_class;
-                $this->controller_object = new $class();               
+                $this->controller_object = new $class();
             }
-            
+
             if(is_object($this->controller_object)) {
                 $this->controller_object->controller = $this->controller;
                 $this->controller_object->action = $this->action;
@@ -658,11 +658,11 @@ class ActionController {
                 if(file_exists($this->application_helper_file)) {
                     include_once($this->application_helper_file);
                 }
-    
+
                 # Include helper file for this controller
                 if(file_exists($this->helper_file)) {
                     include_once($this->helper_file);
-                }                               
+                }
 
                 # Include any extra helper files defined in this controller
                 if(count($this->controller_object->helpers) > 0) {
@@ -685,25 +685,25 @@ class ActionController {
                 # Suppress output
                 ob_start();
                 #error_log('started capturing HTML');
-                
+
                 # Call the controller method based on the URL
                 if($this->controller_object->execute_before_filters()) {
                     $controller_layout = null;
                     if(isset($this->controller_object->layout)) {
-                        $controller_layout = $this->controller_object->layout;       
+                        $controller_layout = $this->controller_object->layout;
                     }
 
                     #Get PUBLIC methods from controller object
-                    $all_methods = get_class_methods($this->controller_object); 
+                    $all_methods = get_class_methods($this->controller_object);
 
-                    # Get Inherited methods from active_controller 
+                    # Get Inherited methods from active_controller
                     $inherited_methods = array_merge(
                         get_class_methods(__CLASS__),
                         $this->controller_object->before_filters,
                         $this->controller_object->after_filters
                     );
 
-                    # Get non-inherited methods 
+                    # Get non-inherited methods
                     $action_methods = array_diff($all_methods, $inherited_methods);
                     #error_log("available methods:".print_r($action_methods, true));
 
@@ -724,53 +724,53 @@ class ActionController {
                         $action = $this->controller_object->called_action = "index";
                         $this->controller_object->index();
                     } else {
-                        //error_log('no action');   
-                        $methods_size = count($action_methods);       
+                        //error_log('no action');
+                        $methods_size = count($action_methods);
                         if($methods_size > 1) {
                             $last_method = ($methods_size > 2 ? "," : '')." and ".array_pop($action_methods);
                         }
                         $this->raise("No action responded to ".$this->action.". Actions:".implode(", ",$action_methods).$last_method, "Unknown action", "404");
                     }
-                    
+
                     if(isset($this->controller_object->layout)) {
                         if($controller_layout != $this->controller_object->layout) {
                             # layout was set in the action need to redetermine the layout file to use.
                             $this->controller_object->determine_layout();
-                        }       
+                        }
                     }
-                    
+
                     #$this->controller_object->execute_after_filters();
-                    
+
                     $this->controller_object->action_called = true;
-                    
+
                     # Find out if there was a redirect to some other page
                     if(isset($this->controller_object->redirect_to)
                         && $this->controller_object->redirect_to != '') {
                         $this->redirect_to($this->controller_object->redirect_to);
                         # execution will end here redirecting to new page
-                    } 
-                    
-                    # If render_text was defined as a string render it                    
+                    }
+
+                    # If render_text was defined as a string render it
                     if(isset($this->controller_object->render_text)
                        && $this->controller_object->render_text != "") {
                         $this->render_text($this->controller_object->render_text);
                         # execution will end here rendering only the text no layout
-                    } 
-                                    
+                    }
+
                     # If defined string render_action use that instead
                     if(isset($this->controller_object->render_action)
                        && $this->controller_object->render_action != '') {
                         $action = $this->controller_object->render_action;
-                    }  
-                    
-                    # Render the action / view                      
+                    }
+
+                    # Render the action / view
                     if(!$this->controller_object->render_action($action,
                           isset($render_options) ? $render_options : null )) {
-                        $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404"); 
+                        $this->raise("No view file found $action ($this->view_file).", "Unknown view", "404");
                     }
-                    
+
                     $this->controller_object->execute_after_filters();
-                    
+
                     # Grab all the html from the view to put into the layout
                     $content_for_layout = ob_get_contents();
                     ob_end_clean();
@@ -784,16 +784,16 @@ class ActionController {
                         if(!$this->controller_object->render_file($this->controller_object->layout_file, false, $locals)) {
                             # No layout template so just echo out whatever is in $content_for_layout
                             //echo "HERE";
-                            echo $content_for_layout;        
+                            echo $content_for_layout;
                         }
                     } else {
                         # Can't find any layout so throw an exception
-                        # $this->raise("No layout file found.", "Unknown layout", "404"); 
+                        # $this->raise("No layout file found.", "Unknown layout", "404");
                         # No layout template so just echo out whatever is in $content_for_layout
                         //error_log("no layout found: ".$this->controller_object->layout_file);
                         echo $content_for_layout;
                     }
-                }       
+                }
             } else {
                 $this->raise("Failed to instantiate controller object \"".$this->controller."\".", "ActionController Error", "500");
             }
@@ -814,7 +814,7 @@ class ActionController {
     /**
      *  Extend the search path for components
      *
-     *  On entry, $url_path is set according to the browser's URL and 
+     *  On entry, $url_path is set according to the browser's URL and
      *  $controllers_path has been set according to the configuration
      *  in {@link environment.php config/environment.php} .  Examine
      *  the $controllers_path directory for files or directories that
@@ -830,32 +830,32 @@ class ActionController {
      *  @uses $url_path
      */
     function set_paths() {
-        if(is_array($this->url_path)) {                     
+        if(is_array($this->url_path)) {
             $path_size = count($this->url_path) - 1;
-            $test_path = $this->controllers_path;  
-            $url_path = $this->url_path;          
-            foreach($url_path as $position => $path) {         
-                $test_path .= "/$path";  
-                $test_file = $test_path."_controller.php";                 
-                if(is_file($test_file)) {      
-                    $next = isset($url_path[$position+1]) ? 
+            $test_path = $this->controllers_path;
+            $url_path = $this->url_path;
+            foreach($url_path as $position => $path) {
+                $test_path .= "/$path";
+                $test_file = $test_path."_controller.php";
+                if(is_file($test_file)) {
+                    $next = isset($url_path[$position+1]) ?
                         $test_path ."/".$url_path[$position+1] :
-                        null;     
+                        null;
                     if(!is_null($next)) {
                         if(is_file($next."_controller.php") || is_dir($next)) {
-                            $extra_path[] = $path;   
-                            array_shift($this->url_path);                            
+                            $extra_path[] = $path;
+                            array_shift($this->url_path);
                         }
                     } else {
-                        #error_log("found controller path:$path");                    
-                        break;                        
-                    }              
-                } elseif(is_dir($test_path)) {     
-                    $extra_path[] = $path;   
+                        #error_log("found controller path:$path");
+                        break;
+                    }
+                } elseif(is_dir($test_path)) {
+                    $extra_path[] = $path;
                     array_shift($this->url_path);
                 }
             }
-            if(isset($extra_path) && is_array($extra_path)) {  
+            if(isset($extra_path) && is_array($extra_path)) {
                 #error_log("extra_path:".print_r($extra_path, true));
                 $this->extra_path = $extra_path;
                 $extra_path = implode("/", $extra_path);
@@ -873,14 +873,14 @@ class ActionController {
      *  @uses $before_filters
      */
     function execute_before_filters() {
-    
+
         #if(isset($this->before_filter)) {
             #$this->add_before_filter($this->before_filter);
         #}
         #error_log("before_filters:".print_r($this->before_filters, true));
-        #error_log("before_filter_options:".print_r($this->before_filter_options, true));       
+        #error_log("before_filter_options:".print_r($this->before_filter_options, true));
         $return = true;
-        if(count($this->before_filters) > 0) { 
+        if(count($this->before_filters) > 0) {
             $action = $this->action ? $this->action : "index";
             foreach($this->before_filters as $filter_function) {
                 if(array_key_exists($filter_function, $this->before_filter_options)) {
@@ -888,21 +888,21 @@ class ActionController {
                         if(array_key_exists('except', $options)) {
                             if(preg_match("/\b$action\b/", $options['except'])) {
                                 #error_log("before filter except match: action:{$action} == ".$options['except']);
-                                continue;      
-                            }                       
+                                continue;
+                            }
                         }
                         if(array_key_exists('only', $options)) {
                             if(!preg_match("/\b$action\b/", $options['only'])) {
                                 #error_log("before filter only non match: action:{$action} == ".$options['only']);
-                                continue;      
-                            }                       
-                        }                       
+                                continue;
+                            }
+                        }
                     }
                 }
                 if(method_exists($this, $filter_function)) {
                     if(false === $this->$filter_function()) {
                         //error_log("execute_before_filters(): returning false");
-                        $return = false;    
+                        $return = false;
                     }
                 }
             }
@@ -932,9 +932,9 @@ class ActionController {
                         $this->before_filter_options[$filter_function_name] = array_merge($this->before_filter_options[$filter_function_name], $options);
                     } else {
                         $this->before_filter_options[$filter_function_name] = $options;
-                    }                                       
+                    }
                 }
-            }                        
+            }
         } elseif(is_array($filter_function_name)) {
             foreach($filter_function_name as $filter_name => $options) {
                 if(!in_array($filter_name, $this->before_filters)) {
@@ -942,15 +942,15 @@ class ActionController {
                         array_unshift($this->before_filters, $filter_name);
                     } else {
                         array_push($this->before_filters, $filter_name);
-                    }   
+                    }
                     if(count($options)) {
                         if(count($this->before_filter_options[$filter_name])) {
                             $this->before_filter_options[$filter_name] = array_merge($this->before_filter_options[$filter_name], $options);
                         } else {
                             $this->before_filter_options[$filter_name] = $options;
-                        }                                       
+                        }
                     }
-                }               
+                }
             }
         }
     }
@@ -964,14 +964,14 @@ class ActionController {
      *  @uses $after_filters
      */
     function execute_after_filters() {
-    
+
         #if(isset($this->after_filter)) {
             #$this->add_after_filter($this->after_filter);
         #}
         #error_log("after_filters:".print_r($this->after_filters, true));
-        #error_log("after_filter_options:".print_r($this->after_filter_options, true));     
+        #error_log("after_filter_options:".print_r($this->after_filter_options, true));
         $return = true;
-        if(count($this->after_filters) > 0) { 
+        if(count($this->after_filters) > 0) {
             $action = $this->action ? $this->action : "index";
             foreach($this->after_filters as $filter_function) {
                 if(array_key_exists($filter_function, $this->after_filter_options)) {
@@ -979,21 +979,21 @@ class ActionController {
                         if(array_key_exists('except', $options)) {
                             if(preg_match("/\b$action\b/", $options['except'])) {
                                 #error_log("after filter except match: action:{$action} == ".$options['except']);
-                                continue;      
-                            }                       
+                                continue;
+                            }
                         }
                         if(array_key_exists('only', $options)) {
                             if(!preg_match("/\b$action\b/", $options['only'])) {
                                 #error_log("after filter only non match: action:{$action} == ".$options['only']);
-                                continue;      
-                            }                       
-                        }                       
+                                continue;
+                            }
+                        }
                     }
                 }
                 if(method_exists($this, $filter_function)) {
                     if(false === $this->$filter_function()) {
                         //error_log("execute_after_filters(): returning false");
-                        $return = false;    
+                        $return = false;
                     }
                 }
             }
@@ -1023,9 +1023,9 @@ class ActionController {
                         $this->after_filter_options[$filter_function_name] = array_merge($this->after_filter_options[$filter_function_name], $options);
                     } else {
                         $this->after_filter_options[$filter_function_name] = $options;
-                    }                                       
+                    }
                 }
-            }                        
+            }
         } elseif(is_array($filter_function_name)) {
             foreach($filter_function_name as $filter_name => $options) {
                 if(!in_array($filter_name, $this->after_filters)) {
@@ -1033,15 +1033,15 @@ class ActionController {
                         array_unshift($this->after_filters, $filter_name);
                     } else {
                         array_push($this->after_filters, $filter_name);
-                    }   
+                    }
                     if(count($options)) {
                         if(count($this->after_filter_options[$filter_name])) {
                             $this->after_filter_options[$filter_name] = array_merge($this->after_filter_options[$filter_name], $options);
                         } else {
                             $this->after_filter_options[$filter_name] = $options;
-                        }                                       
+                        }
                     }
-                }               
+                }
             }
         }
     }
@@ -1070,175 +1070,160 @@ class ActionController {
      *
      */
     function render($options = array(), $locals = array(), $return_as_string = false) {
-        
+
         if($this->render_performed && !$this->action_called) {
-            return true;    
+            return true;
         }
-        
+
         if($return_as_string) {
             # start to buffer output
-            ob_start();      
+            ob_start();
         }
-     
-        if(is_string($options)) {         
-            $this->render_file($options, true, $locals);       
+
+        if(is_string($options)) {
+            $this->render_file($options, true, $locals);
         } elseif(is_array($options)) {
             $options['locals'] = $options['locals'] ? $options['locals'] : array();
             $options['use_full_path'] = !$options['use_full_path'] ? true : $options['use_full_path'];
-                  
+
             if($options['text']) {
-                $this->render_text($options['text']);        
+                $this->render_text($options['text']);
             } else {
                 if($options['action']) {
-                    $this->render_action($options['action'], $options);        
+                    $this->render_action($options['action'], $options);
                 } elseif($options['file']) {
-                    $this->render_file($options['file'], $options['use_full_path'], $options['locals']);    
+                    $this->render_file($options['file'], $options['use_full_path'], $options['locals']);
                 } elseif($options['partial']) {
-                    $this->render_partial($options['partial'], $options);        
+                    $this->render_partial($options['partial'], $options);
                 } elseif($options['nothing']) {
                     # Safari doesn't pass the headers of the return if the response is zero length
-                    $this->render_text(" "); 
-                }    
+                    $this->render_text(" ");
+                }
             }
-        } 
-        
+        }
+
         $this->render_performed = true;
 
         if($return_as_string) {
             $result = ob_get_contents();
-            ob_end_clean();  
+            ob_end_clean();
             $this->render_performed = false;
             return $result;
-        }         
-    }
-    
-    /**
-     *
-     * Rendering of text is usually used for tests or for rendering prepared content. 
-     * By default, text rendering is not done within the active layout.
-     * 
-     *   # Renders the clear text "hello world"
-     *   render(array("text" => "hello world!"))
-     * 
-     *   # Renders the clear text "Explosion!"
-     *   render(array("text" => "Explosion!"))
-     * 
-     *   # Renders the clear text "Hi there!" within the current active layout (if one exists)
-     *   render(array("text" => "Explosion!", "layout" => true))
-     * 
-     *   # Renders the clear text "Hi there!" within the layout
-     *   # placed in "app/views/layouts/special.phtml"
-     *   render(array("text" => "Explosion!", "layout" => "special"))
-     * 
-     */
-    function render_text($text, $options = array()) {       
-        if($options['layout']) {
-            $locals['content_for_layout'] = $text;         
-            $layout = $this->determine_layout();
-            $this->render_file($layout, false, $locals);  
-        } else {
-            echo $text;    
         }
-        exit;      
     }
 
     /**
      *
-     * Action rendering is the most common form and the type used automatically by 
-     * Action Controller when nothing else is specified. By default, actions are 
+     * Rendering of text is usually used for tests or for rendering prepared content.
+     * By default, text rendering is not done within the active layout.
+     *
+     *   # Renders the clear text "hello world"
+     *   render(array("text" => "hello world!"))
+     *
+     *   # Renders the clear text "Explosion!"
+     *   render(array("text" => "Explosion!"))
+     *
+     *   # Renders the clear text "Hi there!" within the current active layout (if one exists)
+     *   render(array("text" => "Explosion!", "layout" => true))
+     *
+     *   # Renders the clear text "Hi there!" within the layout
+     *   # placed in "app/views/layouts/special.phtml"
+     *   render(array("text" => "Explosion!", "layout" => "special"))
+     *
+     */
+    function render_text($text, $options = array()) {
+        if($options['layout']) {
+            $locals['content_for_layout'] = $text;
+            $layout = $this->determine_layout();
+            $this->render_file($layout, false, $locals);
+        } else {
+            echo $text;
+        }
+        exit;
+    }
+
+    /**
+     *
+     * Action rendering is the most common form and the type used automatically by
+     * Action Controller when nothing else is specified. By default, actions are
      * rendered within the current layout (if one exists).
-     * 
+     *
      *   # Renders the template for the action "goal" within the current controller
      *   render(array("action" => "goal"))
-     * 
+     *
      *   # Renders the template for the action "short_goal" within the current controller,
      *   # but without the current active layout
      *   render(array("action" => "short_goal", "layout" => false))
-     * 
+     *
      *   # Renders the template for the action "long_goal" within the current controller,
      *   # but with a custom layout
      *   render(array("action" => "long_goal", "layout" => "spectacular"))
-     * 
-     */    
+     *
+     */
     function render_action($action, $options = array()) {
         if($this->render_performed) {
-            return true;    
+            return true;
         }
         if($options['layout']) {
-            $this->layout = $options['layout'];    
-        } 
+            $this->layout = $options['layout'];
+        }
         if($options['scaffold']) {
-            $this->view_file = TRAX_LIB_ROOT."/templates/scaffolds/".$action.".phtml";    
-        } else {    
+            $this->view_file = TRAX_LIB_ROOT."/templates/scaffolds/".$action.".phtml";
+        } else {
             $this->view_file = $this->views_path . "/" . $action . "." . Trax::$views_extension;
         }
         //error_log(get_class($this)." - render_action() view_file: $this->view_file");
         return $this->render_file($this->view_file);
     }
-    
+
     /**
      *
-     * Renders according to the same rules as render, but returns the result in a string 
-     * instead of sending it as the response body to the browser. 
-     *    
+     * Renders according to the same rules as render, but returns the result in a string
+     * instead of sending it as the response body to the browser.
+     *
      */
     function render_to_string($options = array(), $locals = array()) {
-        return $this->render($options, $locals, true);    
+        return $this->render($options, $locals, true);
     }
 
     /**
      *
-     * File rendering works just like action rendering except that it takes a filesystem path. 
+     * File rendering works just like action rendering except that it takes a filesystem path.
      * By default, the path is assumed to be absolute, and the current layout is not applied.
-     * 
+     *
      *   # Renders the template located at the absolute filesystem path
      *   render(array("file" => "/path/to/some/template.phtml"))
      *   render(array("file" => "c:/path/to/some/template.phtml"))
-     * 
+     *
      *   # Renders a template within the current layout
      *   render(array("file" => "/path/to/some/template.rhtml", "layout" => true))
      *   render(array("file" => "c:/path/to/some/template.rhtml", "layout" => true))
-     * 
+     *
      *   # Renders a template relative to app/views
      *   render(array("file" => "some/template", "use_full_path" => true))
      */
     function render_file($path, $use_full_path = false, $locals = array()) {
         if($this->render_performed && !$this->action_called) {
-            return true;    
-        }        
-        
+            return true;
+        }
         # Renders a template relative to app/views
         if($use_full_path) {
             $path = $this->views_path."/".$path.".".Trax::$views_extension;
-        } 
-
-        //error_log("render_file() path:$path");
-        if(file_exists($path)) {
-
-            # Pull all the class vars out and turn them from $this->var to $var
-            if(is_object($this)) {
-                $controller_locals = get_object_vars($this);
-            }
-            if(is_array($controller_locals)) {
-                $locals = array_merge($controller_locals, $locals);    
-            }                   
-            if(count($locals)) {
-                foreach($locals as $tmp_key => $tmp_value) {
-                    ${$tmp_key} = $tmp_value;                
-                }    
-                unset($tmp_key);
-                unset($tmp_value);
-            }     
-            include($path);
-            $this->render_performed = true;  
-            return true;      
-        }     
-        return false;      
+        }
+        # Pull all the class vars out and turn them from $this->var to $var
+        if(is_object($this)) {
+            $controller_locals = get_object_vars($this);
+        }
+        if(is_array($controller_locals)) {
+            $locals = array_merge($controller_locals, $locals);
+        }
+        $this->render_performed = ViewHandlers::render($this, $path, $locals);
+        return $this->render_performed;
     }
 
     /**
      *  Rendering partials
-     * 
+     *
      *  <p>Partial rendering is most commonly used together with Ajax
      *  calls that only update one or a few elements on a page without
      *  reloading. Rendering of partials from the controller makes it
@@ -1257,7 +1242,7 @@ class ActionController {
      *       array("locals" => array("name" => "david")));</samp><br>
      *      Renders the same partial but also makes a local variable
      *      available to it</li>
-     *     
+     *
      *    <li><samp>render_partial("win",
      *      array("collection" => array(...)));</samp><br>
      *      Renders a collection of the same partial by making each
@@ -1281,9 +1266,9 @@ class ActionController {
             $file = $path;
             $file_with_path = $this->views_path."/_".$file.".".Trax::$views_extension;
         }
-        
+
         if(file_exists($file_with_path)) {
-            
+
             if(array_key_exists("spacer_template", $options)) {
                 $spacer_path = $options['spacer_template'];
                 if(strstr($spacer_path, "/")) {
@@ -1293,11 +1278,11 @@ class ActionController {
                 } else {
                     $spacer_file = $spacer_path;
                     $spacer_file_with_file = $this->views_path."/_".$spacer_file.".".Trax::$views_extension;
-                }  
-                if(file_exists($spacer_file_with_file)) {
-                    $add_spacer = true;    
                 }
-            }          
+                if(file_exists($spacer_file_with_file)) {
+                    $add_spacer = true;
+                }
+            }
 
             $locals = array_key_exists("locals", $options) ? $options['locals'] : array();
             if(array_key_exists("collection", $options) && is_array($options['collection'])) {
@@ -1305,18 +1290,18 @@ class ActionController {
                     ${$file."_counter"}++;
                     $locals[$file] = $tmp_value;
                     $locals[$file."_counter"] = ${$file."_counter"};
-                    unset($tmp_value); 
+                    unset($tmp_value);
                     $this->render_performed = false;
-                    $this->render_file($file_with_path, false, $locals);   
-                    if($add_spacer && (${$file."_counter"} < count($options['collection']))) { 
+                    $this->render_file($file_with_path, false, $locals);
+                    if($add_spacer && (${$file."_counter"} < count($options['collection']))) {
                         $this->render_performed = false;
-                        $this->render_file($spacer_file_with_file, false, $locals);      
-                    }         
-                } 
-                $this->render_performed = true;   
-            } else {              
-                $this->render_file($file_with_path, false, $locals);        
-            }          
+                        $this->render_file($spacer_file_with_file, false, $locals);
+                    }
+                }
+                $this->render_performed = true;
+            } else {
+                $this->render_file($file_with_path, false, $locals);
+            }
         }
     }
 
@@ -1342,7 +1327,7 @@ class ActionController {
         $layout = (isset($this->layout)
                    && $this->layout != '')
             ? $this->layout : $this->controller;
-    
+
         # Check if a method has been defined to determine the layout at runtime
         if(method_exists($this, $layout)) {
             $layout = $this->$layout();
@@ -1350,9 +1335,9 @@ class ActionController {
 
         # Default settings
         $layouts_base_path = Trax::$layouts_path;
-        
+
         if(!$full_path && $layout) {
-            return $layout;       
+            return $layout;
         } elseif($layout) {
             # Is this layout for from a different controller
             if(strstr($layout, "/")) {
@@ -1371,14 +1356,14 @@ class ActionController {
                 $layout_file = $layout;
             }
         }
-        
+
         # No defined layout found so just use the default layout
-        # app/views/layouts/application.phtml 
+        # app/views/layouts/application.phtml
         if(!isset($layout_file)) {
             if($this->plugin && file_exists(Trax::$plugins_path."/{$this->plugin}/views/layouts/application.".Trax::$views_extension)) {
-                $layout_file = Trax::$plugins_path."/{$this->plugin}/views/layouts/application.".Trax::$views_extension;    
+                $layout_file = Trax::$plugins_path."/{$this->plugin}/views/layouts/application.".Trax::$views_extension;
             } else {
-                $layout_file = $layouts_base_path . "/application." . Trax::$views_extension;    
+                $layout_file = $layouts_base_path . "/application." . Trax::$views_extension;
             }
         }
         $this->layout_file = $layout_file;
@@ -1399,7 +1384,7 @@ class ActionController {
      *      and host is prepended to the string.</li>
      *    <li>back: Back to the page that issued the request. Useful
      *      for forms that are triggered from multiple
-     *      places. Short-hand for redirect_to(request.env["HTTP_REFERER"]) 
+     *      places. Short-hand for redirect_to(request.env["HTTP_REFERER"])
      *   </ul>
      *
      *  Examples:
@@ -1410,14 +1395,14 @@ class ActionController {
      *    <li>redirect_to("back")</li>
      *  </ul>
      *
-     *  @param mixed $options array or string url  
+     *  @param mixed $options array or string url
      *  @todo <b>FIXME:</b> Make header configurable
-     */    
+     */
     function redirect_to($options = null, $post = false) {
         if($options == "back") {
             $url = $_SERVER["HTTP_REFERER"];
         } else {
-            $url = url_for($options);     
+            $url = url_for($options);
         }
 
         if($post) {
@@ -1426,13 +1411,13 @@ class ActionController {
             echo "<html><head><META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=".$url."\"></head></html>";
         } else {
             header("Location: ".$url);
-        }        
-  
-        exit;            
+        }
+
+        exit;
     }
 
     /**
-     *  Sets content passed in or echoed after calling this function and sets it 
+     *  Sets content passed in or echoed after calling this function and sets it
      *  to a variable named $content_for_"$name" to be used in the layout.
      *  Example:
      *  View:
@@ -1457,9 +1442,9 @@ class ActionController {
     /**
      *  Ends an open block call by content_for() and sets the content of the buffer
      *  to the variable $content_for_"name"
-     */ 
-    function end_content_for() {    
-        if(count($this->content_for_open_blocks)) {     
+     */
+    function end_content_for() {
+        if(count($this->content_for_open_blocks)) {
             if($name = array_pop($this->content_for_open_blocks)) {
                 $content = ob_get_contents();
                 ob_end_clean();
@@ -1467,7 +1452,7 @@ class ActionController {
             } else {
                 ob_end_clean();
             }
-        } 
+        }
     }
 
     /**
@@ -1478,7 +1463,7 @@ class ActionController {
      *  @param string $error_code    Error code
      *  @throws ActionControllerError
      */
-    function raise($error_message, $error_heading, $error_code = "404") { 
+    function raise($error_message, $error_heading, $error_code = "404") {
         throw new ActionControllerError("Error Message: ".$error_message, $error_heading, $error_code);
     }
 
@@ -1491,7 +1476,7 @@ class ActionController {
         $error_message = $exception->error_message;
         $trace = $exception->getTraceAsString();
         header("HTTP/1.0 {$error_code} {$error_heading}");
-        # check for user's layout for errors 
+        # check for user's layout for errors
         if(TRAX_ENV == "development" || Trax::$show_trax_errors) {
             if(file_exists(Trax::$layouts_path."/trax_error.".Trax::$views_extension)) {
                 include(Trax::$layouts_path."/trax_error.".Trax::$views_extension);
@@ -1506,7 +1491,7 @@ class ActionController {
                     echo "<pre style=\"background-color: #eee;padding:10px;font-size: 11px;\">";
                     echo "<code>$trace</code></pre>\n";
                 }
-                echo "</font>\n";                
+                echo "</font>\n";
             }
         } else {
             if(file_exists(Trax::$public_path."/{$error_code}.html")) {
@@ -1516,10 +1501,10 @@ class ActionController {
             } else {
                 echo "<font face=\"verdana, arial, helvetica, sans-serif\">\n";
                 echo "<h2>Application Error</h2>Trax application failed to start properly";
-                echo "</font>\n";                
-            }        
-        } 
-      
+                echo "</font>\n";
+            }
+        }
+
     }
 
 }
