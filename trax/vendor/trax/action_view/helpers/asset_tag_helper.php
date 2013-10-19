@@ -48,9 +48,9 @@ class AssetTagHelper extends Helpers {
         $this->javascript_default_sources =
             array_key_exists('JAVASCRIPT_DEFAULT_SOURCES',$GLOBALS)
             ? $GLOBALS['JAVASCRIPT_DEFAULT_SOURCES']
-            : array('prototype', 'effects', 'controls', 'dragdrop');    
+            : array('prototype', 'effects', 'controls', 'dragdrop');
     }
-    
+
     /**
      *  Compute public path to an asset
      *
@@ -65,14 +65,17 @@ class AssetTagHelper extends Helpers {
      *  @uses ActionController::asset_host
      */
     private function compute_public_path($source, $dir, $ext) {
- 
+
         //  Test whether source is a URL, ie. starts something://
         if(!preg_match('/^[-a-z]+:\/\//', $source)) {
 
             //  Source is not a URL.
             //  If path doesn't start with '/', prefix /$dir/
             if($source{0} != '/') {
-                $source = "/{$dir}/{$source}";
+                if(!stristr($source, $dir)) {
+                    $source = "/{$dir}";
+                }
+                $source = "/{$source}";
             }
 
             //  If no '.' in source file name, add '.ext'
@@ -88,7 +91,7 @@ class AssetTagHelper extends Helpers {
                 }
                 $source = $prefix . ((substr($prefix, -1) == "/")
                                      ? substr($source, 1) : $source);
-            }            
+            }
         }
 
         //  If controller defined and has asset_host value
@@ -100,7 +103,7 @@ class AssetTagHelper extends Helpers {
         }
         return $source;
     }
-    
+
     /**
      *  Compute public path to a javascript asset
      *
@@ -116,7 +119,7 @@ class AssetTagHelper extends Helpers {
     function javascript_path($source) {
         return $this->compute_public_path($source, 'javascripts', 'js');
     }
-    
+
     /**
      *  Return script include tag for one or more javascript assets
      *
@@ -131,7 +134,7 @@ class AssetTagHelper extends Helpers {
      *   <script type="text/javascript" src="/javascripts/prototype.js"></script>
      *   <script type="text/javascript" src="/javascripts/effects.js"></script>
      *   <script type="text/javascript" src="/javascripts/controls.js"></script>
-     *   <script type="text/javascript" src="/javascripts/dragdrop.js"></script>   
+     *   <script type="text/javascript" src="/javascripts/dragdrop.js"></script>
      *  @param mixed  The arguments are zero or more strings, followed
      *                by an optional array containing options
      *  @return string
@@ -141,31 +144,40 @@ class AssetTagHelper extends Helpers {
      */
     function javascript_include_tag() {
         if(func_num_args() > 0) {
-            $sources = func_get_args();     
+            $sources = func_get_args();
             $options = (is_array(end($sources))
-                        ? array_pop($sources) : array());          
+                        ? array_pop($sources) : array());
             if(in_array('defaults', $sources)) {
                 if(is_array($this->javascript_default_sources)) {
                     $sources = array_merge($this->javascript_default_sources,
-                                           $sources);    
-                }                  
+                                           $sources);
+                }
                 if(file_exists(Trax::$public_path. "/javascripts/application.js")) {
                     $sources[] = 'application';
                 }
                 # remove defaults from array
-                unset($sources[array_search('defaults', $sources)]);  
+                unset($sources[array_search('defaults', $sources)]);
             }
             $contents = array();
             foreach($sources as $source) {
-                $source = $this->javascript_path($source);
-                $contents[] = $this->content_tag("script", "",
-                     array_merge(array("type" => "text/javascript",
-                                       "src" => $source), $options));
+                $ap = new AssetPipeline;
+                if($source == 'application' && $ap->enabled()) {
+                    $js_files = $ap->get_files_from_manifest(Trax::$assets_path."/javascripts/application.js");
+                } else {
+                    $js_files = array($source);
+                }
+                foreach($js_files as $js_file) {
+                    $source = $this->javascript_path($source);
+                    $contents[] = $this->content_tag("script", "", array_merge(
+                        array("type" => "text/javascript", "src" => $source),
+                        $options
+                    ));
+                }
             }
             return implode("", $contents);
         }
     }
-    
+
     /**
      *  Compute public path to a stylesheet asset
      *
@@ -181,7 +193,7 @@ class AssetTagHelper extends Helpers {
     function stylesheet_path($source) {
         return $this->compute_public_path($source, 'stylesheets', 'css');
     }
-    
+
     /**
      *  Build link tags to one or more stylesheet assets
      *
@@ -207,22 +219,33 @@ class AssetTagHelper extends Helpers {
      */
     function stylesheet_link_tag() {
         if(func_num_args() > 0) {
-            $sources = func_get_args();     
-            $options = (is_array(end($sources))
-                        ? array_pop($sources) : array());
+            $sources = func_get_args();
+            $options = (is_array(end($sources)) ? array_pop($sources) : array());
             $contents = array();
             foreach($sources as $source) {
-                $source = $this->stylesheet_path($source);
-                $contents[] = $this->tag("link",
-                   array_merge(array("rel" => "Stylesheet",
-                                     "type" => "text/css",
-                                     "media" => "screen",
-                                     "href" => $source), $options));
+                $ap = new AssetPipeline;
+                if($source == 'application' && $ap->compile()) {
+                    $css_files = $ap->files_for_stylesheet_link_tag();
+                } else {
+                    $css_files = array($source);
+                }
+                foreach($css_files as $css_file) {
+                    $source = $this->stylesheet_path($css_file);
+                    $contents[] = $this->tag("link", array_merge(
+                        array(
+                            "rel" => "Stylesheet",
+                            "type" => "text/css",
+                            "media" => "screen",
+                            "href" => $source
+                        ),
+                        $options
+                    ));
+                }
             }
-            return implode("", $contents);
+            return implode("  ", $contents);
         }
     }
-    
+
     /**
      *  Compute public path to a image asset
      *
@@ -238,7 +261,7 @@ class AssetTagHelper extends Helpers {
     function image_path($source) {
         return $this->compute_public_path($source, 'images', 'png');
     }
-    
+
     /**
      *  Build image tags to an image asset
      *
@@ -272,36 +295,36 @@ class AssetTagHelper extends Helpers {
             : Inflector::capitalize(reset($file_array =
                              explode('.', basename($options['src']))));
         if(isset($options['size'])) {
-            $size = explode('x', $options["size"]);         
+            $size = explode('x', $options["size"]);
             $options['width'] = reset($size);
             $options['height'] = end($size);
             unset($options['size']);
         }
         return $this->tag("img", $options);
     }
-    
+
     /**
      *  Returns a link tag that browsers and news readers can use to
-     *  auto-detect a RSS or ATOM feed for this page. The $type can 
+     *  auto-detect a RSS or ATOM feed for this page. The $type can
      *  either be <tt>:rss</tt> (default) or <tt>:atom</tt> and the
      *  $options follow the url_for() style of declaring a link
-     *  target. 
+     *  target.
      *
      *  Examples:
      *  auto_discovery_link_tag  =>
      *   <link rel="alternate" type="application/rss+xml" title="RSS"
-     *  href="http://www.curenthost.com/controller/action" /> 
+     *  href="http://www.curenthost.com/controller/action" />
      *  auto_discovery_link_tag(:atom) =>
      *   <link rel="alternate" type="application/atom+xml"
      *  title="ATOM"
-     *  href="http://www.curenthost.com/controller/action" /> 
+     *  href="http://www.curenthost.com/controller/action" />
      *  auto_discovery_link_tag(:rss, {:action => "feed"}) =>
      *   <link rel="alternate" type="application/rss+xml" title="RSS"
-     *  href="http://www.curenthost.com/controller/feed" /> 
+     *  href="http://www.curenthost.com/controller/feed" />
      *  auto_discovery_link_tag(:rss, {:action => "feed"}, {:title =>
-     *  "My RSS"})  => 
+     *  "My RSS"})  =>
      *   <link rel="alternate" type="application/rss+xml" title="My
-     *  RSS" href="http://www.curenthost.com/controller/feed" /> 
+     *  RSS" href="http://www.curenthost.com/controller/feed" />
      *  @uses tag()
      *  @uses url_for()
      */
@@ -320,7 +343,7 @@ class AssetTagHelper extends Helpers {
                         "href" => url_for(array_merge($options,
                                          array('only_path' => false))))
           );
-    }    
+    }
 }
 
 /**

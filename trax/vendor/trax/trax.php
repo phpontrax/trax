@@ -54,6 +54,7 @@ class Trax {
         $vendor_path = null,
         $public_path = null,
 	    $tmp_path = null,
+        $assets_path = null,
         $url_prefix = null,
         $url_word_seperator = null, # used to put dashes in the url for seo
         $views_extension = 'phtml',
@@ -74,7 +75,9 @@ class Trax {
         $server_default_include_path = null,
         $include_paths = array(),
         $autoload_function = null,
-        $plugins = array();
+        $plugins = array(),
+        $assets_compress = false,
+        $assets_compile = false;
 
     function initialize() {
 
@@ -91,6 +94,7 @@ class Trax {
         self::$controllers_path  = TRAX_ROOT."/app/controllers";
         self::$helpers_path      = TRAX_ROOT."/app/helpers";
         self::$layouts_path      = TRAX_ROOT."/app/views/layouts";
+        self::$assets_path       = TRAX_ROOT."/app/assets";
         self::$config_path       = TRAX_ROOT."/config";
         self::$environments_path = TRAX_ROOT."/config/environments";
         self::$lib_path          = TRAX_ROOT."/lib";

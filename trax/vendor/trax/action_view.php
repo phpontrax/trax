@@ -30,6 +30,8 @@
 
 include_once(TRAX_LIB_ROOT . "/action_view/view_handlers.php");
 
+include_once(TRAX_LIB_ROOT . "/action_view/asset_pipeline.php");
+
 /**
  * Include the base helper class
  */
