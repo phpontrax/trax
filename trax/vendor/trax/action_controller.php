@@ -1267,7 +1267,7 @@ class ActionController {
             $file_with_path = $this->views_path."/_".$file.".".Trax::$views_extension;
         }
 
-        if(file_exists($file_with_path)) {
+        #if(file_exists($file_with_path)) {
 
             if(array_key_exists("spacer_template", $options)) {
                 $spacer_path = $options['spacer_template'];
@@ -1302,7 +1302,7 @@ class ActionController {
             } else {
                 $this->render_file($file_with_path, false, $locals);
             }
-        }
+        #}
     }
 
     /**
