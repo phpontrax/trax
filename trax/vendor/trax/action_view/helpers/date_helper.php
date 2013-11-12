@@ -114,7 +114,7 @@ class DateHelper extends Helpers {
     function __construct($object_name = null, $attribute_name = null) {
         parent::__construct($object_name, $attribute_name);
     }
-    
+
     /**
      *  Check whether $_REQUEST holds value for this attribute
      *
@@ -191,7 +191,7 @@ class DateHelper extends Helpers {
             $this->request_hours[$this->attribute_name] =
                 $_REQUEST[$this->object_name][$this->attribute_name."(4i)"];
             $found = true;
-        }   
+        }
 
         //    Check for minute component
         if (array_key_exists($this->attribute_name."(5i)",
@@ -199,7 +199,7 @@ class DateHelper extends Helpers {
             $this->request_minutes[$this->attribute_name] =
                 $_REQUEST[$this->object_name][$this->attribute_name."(5i)"];
             $found = true;
-        }              
+        }
 
         //    Check for second component
         if (array_key_exists($this->attribute_name."(6i)",
@@ -207,7 +207,7 @@ class DateHelper extends Helpers {
             $this->request_seconds[$this->attribute_name] =
                 $_REQUEST[$this->object_name][$this->attribute_name."(6i)"];
             $found = true;
-        }                                                                   
+        }
         return $found;
     }
 
@@ -219,7 +219,7 @@ class DateHelper extends Helpers {
      *  @param string   Prefix of name attribute, to be enclosed in
      *                  square brackets
      *  @param boolean  Whether to include a blank in the list of
-     *                  select options  
+     *                  select options
      *  @param boolean  Whether to discard the type
      *  @return string  Generated HTML
      */
@@ -227,11 +227,11 @@ class DateHelper extends Helpers {
                                  $include_blank = false,
                                  $discard_type = false) {
         $select_html  = "<select name=\"";
-        $name = $prefix;       
+        $name = $prefix;
         if(!$discard_type) {
-            if($prefix) $name .= "["; 
+            if($prefix) $name .= "[";
             $name .= $type;
-            if($prefix) $name .= "]"; 
+            if($prefix) $name .= "]";
         }
         $id = str_replace(array("][","[","]"), "_", $name);
         if(substr($id, -1) == "_") {
@@ -291,7 +291,7 @@ class DateHelper extends Helpers {
         }
         return $value;
     }
-    
+
     /**
      *  Call to_expiration_date_select_tag()
      *
@@ -301,9 +301,9 @@ class DateHelper extends Helpers {
      *  @uses to_expiration_date_select_tag()
      */
     function expiration_date_select($options = array()) {
-        return $this->to_expiration_date_select_tag($options);      
+        return $this->to_expiration_date_select_tag($options);
     }
-        
+
     /**
      *  Call to_datetime_select_tag()
      *
@@ -312,10 +312,10 @@ class DateHelper extends Helpers {
      *  @return string Generated HTML
      *  @uses to_datetime_select_tag()
      */
-    function datetime_select($options = array()) {     
+    function datetime_select($options = array()) {
         return $this->to_datetime_select_tag($options);
-    } 
-    
+    }
+
     /**
      *  Call to_date_select_tag()
      *
@@ -324,12 +324,12 @@ class DateHelper extends Helpers {
      *  @return string Generated HTML
      *  @uses to_date_select_tag()
      */
-    function date_select($options = array()) {   
+    function date_select($options = array()) {
         //error_log("date_select() object=$this->object_name"
         //          . "   attribute=$this->attribute_name");
         return $this->to_date_select_tag($options);
-    }  
-    
+    }
+
     /**
      *  Generate HTML/XML for expiration month and year selector
      *  pulldowns
@@ -372,16 +372,16 @@ class DateHelper extends Helpers {
 //        error_log("select_expiration_date('"
 //                  . (is_null($date) ? 'null' : $date)
 //                  ."', " . var_export($options,true));
-        $options['month_before_year'] = true;      
-        $options['use_month_numbers'] = true;   
+        $options['month_before_year'] = true;
+        $options['use_month_numbers'] = true;
         $options['start_year'] = date("Y");
         $options['end_year'] = date("Y") + 10;
-        $options['field_separator'] = " / ";        
+        $options['field_separator'] = " / ";
 
         //  Find name and initial value of year field,
         //  then generate year selector pulldown
         $options['field_name'] = array_key_exists('year_name',$options)
-            ? $options['year_name'] : "expiration_year"; 
+            ? $options['year_name'] : "expiration_year";
         $date = array_key_exists($options['field_name'], $_REQUEST)
             ? date("Y-m-d",
                    strtotime($_REQUEST[$options['field_name']]."-01-01"))
@@ -401,13 +401,13 @@ class DateHelper extends Helpers {
         //  Output month and year selectors in desired order
         if($options['month_before_year']) {
             $select_html =  $month_select . $options['field_separator']
-                .  $year_select;     
+                .  $year_select;
         } else {
             $select_html =  $year_select . $options['field_separator']
                 .  $month_select;
         }
         return $select_html;
-    }               
+    }
 
     /**
      *  Generate HTML/XML for year, month and day selector pull-down menus
@@ -421,11 +421,11 @@ class DateHelper extends Helpers {
      *  <ul>
      *   <li><samp>select_date();</samp><br /> Generates a group of
      *     three pulldown menus in the order year, month and day with
-     *     the current date initially selected.</li> 
+     *     the current date initially selected.</li>
      *   <li>
      *  <samp>select_date('August 4, 1998');</samp><br /> Generates a
      *    group of   three pulldown menus in the order year, month and
-     *    day with the date August 4, 1998 initially selected.</li> 
+     *    day with the date August 4, 1998 initially selected.</li>
      *  </ul>
      *
      *  @param string   Date to display as initially selected if none
@@ -466,12 +466,12 @@ class DateHelper extends Helpers {
      *   <li><samp>select_datetime();</samp><br /> Generates a group of
      *     five pulldown menus in the order year, month, day, hour and
      *     minute with the current date and time initially
-     *    selected.</li> 
+     *    selected.</li>
      *   <li>
      *  <samp>select_datetime('1998-04-08 13:21:17');</samp><br />
      *    Generates a group of five pulldown menus in the order year,
      *    month, day, hour and minute with the date/time
-     *    1998 August 4 13:21 initially selected.</li> 
+     *    1998 August 4 13:21 initially selected.</li>
      *  </ul>
      *
      *  @param string   Date/time to display as initially selected.
@@ -482,7 +482,7 @@ class DateHelper extends Helpers {
      *  @param mixed[] Output format options are all of the options of
      *    {@link select_year()}, {@link select_month()},
      *    {@link select_day()}, {@link select_hour()} and
-     *    {@link select_minute()}. 
+     *    {@link select_minute()}.
      *  @return string  Generated HTML
      *  @uses select_day()
      *  @uses select_hour()
@@ -511,11 +511,11 @@ class DateHelper extends Helpers {
      *  <ul>
      *   <li><samp>select_time();</samp><br /> Generates two pulldown
      *     menus in the order hour : minute with
-     *     the current time initially selected.</li> 
+     *     the current time initially selected.</li>
      *   <li>
      *  <samp>select_time('August 4, 1998 8:12');</samp><br /> Generates
-     *    two pulldown menus in the order hour : minute with the 
-     *    time 8:12 initially selected.</li> 
+     *    two pulldown menus in the order hour : minute with the
+     *    time 8:12 initially selected.</li>
      *  </ul>
      *
      *  @param string   Time to display as initially selected if none
@@ -596,18 +596,18 @@ class DateHelper extends Helpers {
         //error_log("select_second() \$datetime=$datetime  \$options="
         //          .var_export($options,true));
         $second_options = "";
-        
+
         if($this->request_seconds[$this->attribute_name]) {
-            $datetime_sec = $this->request_seconds[$this->attribute_name];    
+            $datetime_sec = $this->request_seconds[$this->attribute_name];
         } elseif(strlen($datetime) == 2 && is_numeric($datetime)) {
             $datetime_sec = $datetime;
-        } else {                  
+        } else {
             $datetime = $options['value'] ? $options['value'] :
-                ($datetime ? $datetime : date("Y-m-d H:i:s")); 
+                ($datetime ? $datetime : date("Y-m-d H:i:s"));
             $datetime_sec = date("s",strtotime($datetime));
         }
-        
-        for($second = 0; $second <= 59; $second++) {          
+
+        for($second = 0; $second <= 59; $second++) {
             $second_options .= ($datetime && ($datetime_sec == $second)) ?
             "<option value=\"".$this->leading_zero_on_single_digits($second)."\"  selected=\"selected\">".$this->leading_zero_on_single_digits($second)."</option>\n" :
             "<option value=\"".$this->leading_zero_on_single_digits($second)."\">".$this->leading_zero_on_single_digits($second)."</option>\n";
@@ -673,19 +673,19 @@ class DateHelper extends Helpers {
      */
     function select_minute($datetime=null, $options = array()) {
         $minute_options = "";
-        
+
         if($this->request_minutes[$this->attribute_name]) {
-            $datetime_min = $this->request_minutes[$this->attribute_name];    
+            $datetime_min = $this->request_minutes[$this->attribute_name];
         } elseif(strlen($datetime) == 2 && is_numeric($datetime)) {
             $datetime_min = $datetime;
-        } else {                  
-            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+        } else {
+            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s");
             $datetime = $options['value'] ? $options['value'] :
-                ($datetime ? $datetime : date("Y-m-d H:i:s"));            
+                ($datetime ? $datetime : date("Y-m-d H:i:s"));
             $datetime_min = date("i",strtotime($datetime));
         }
-        
-        for($minute = 0; $minute <= 59; $minute++) {        
+
+        for($minute = 0; $minute <= 59; $minute++) {
             $minute_options .= ($datetime && ($datetime_min == $minute)) ?
             "<option value=\"".$this->leading_zero_on_single_digits($minute)."\"  selected=\"selected\">".$this->leading_zero_on_single_digits($minute)."</option>\n" :
             "<option value=\"".$this->leading_zero_on_single_digits($minute)."\">".$this->leading_zero_on_single_digits($minute)."</option>\n";
@@ -753,11 +753,11 @@ class DateHelper extends Helpers {
         //error_log("DateTime::select_hour() \$datetime=$datetime \$options="
         //          .var_export($options,true));
         $hour_options = "";
-        
+
         //  If a value for this attribute was parsed from $_REQUEST,
         //  use it as initially selected and ignore first argument
         if($this->request_hours[$this->attribute_name]) {
-            $datetime_hour = $this->request_hours[$this->attribute_name];    
+            $datetime_hour = $this->request_hours[$this->attribute_name];
         }
 
         //  No value in $_REQUEST so look at the first argument.
@@ -768,11 +768,11 @@ class DateHelper extends Helpers {
 
         //  First argument is missing or invalid,
         //  initially select current hour
-        else {                  
-            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s"); 
+        else {
+            #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s");
             $datetime = $options['value'] ? $options['value'] :
                 ($datetime ? $datetime : date("Y-m-d H:i:s"));
-            $datetime_hour = date("H",strtotime($datetime)); 
+            $datetime_hour = date("H",strtotime($datetime));
         }
 
         //  Generate <option>...</option> HTML for each hour
@@ -847,11 +847,11 @@ class DateHelper extends Helpers {
      */
     function select_day($datetime=null, $options = array()) {
         $day_options = "";
-        
+
         //  If a value for this attribute was parsed from $_REQUEST,
         //  use it as initially selected and ignore first argument
         if($this->request_days[$this->attribute_name]) {
-            $datetime_day = $this->request_days[$this->attribute_name];    
+            $datetime_day = $this->request_days[$this->attribute_name];
         }
 
         //  No value in $_REQUEST so look at the first argument.
@@ -862,15 +862,15 @@ class DateHelper extends Helpers {
 
         //  First argument is missing or invalid,
         //  initially select current day
-        else {                  
+        else {
             #$datetime = $datetime ? $datetime : date("Y-m-d H:i:s");
             $datetime = $options['value'] ? $options['value'] :
                 ($datetime ? $datetime : date("Y-m-d H:i:s"));
-            $datetime_day = date("d",strtotime($datetime));  
+            $datetime_day = date("d",strtotime($datetime));
         }
-        
+
         //  Generate <option>...</option> HTML for each day
-        for($day = 1; $day <= 31; $day++) {        
+        for($day = 1; $day <= 31; $day++) {
             $day_options .= ($datetime && ($datetime_day == $day)) ?
             "<option value=\"".$this->leading_zero_on_single_digits($day)."\"  selected=\"selected\">".$this->leading_zero_on_single_digits($day)."</option>\n" :
             "<option value=\"".$this->leading_zero_on_single_digits($day)."\">".$this->leading_zero_on_single_digits($day)."</option>\n";
@@ -946,11 +946,11 @@ class DateHelper extends Helpers {
      */
     function select_month($date = null, $options = array()) {
         $month_options = "";    // will accumulate <option>s
-        
+
         //  If a value for this attribute was parsed from $_REQUEST,
         //  use it as initially selected and ignore first argument
         if(array_key_exists($this->attribute_name,$this->request_months)) {
-            $date_month = $this->request_months[$this->attribute_name];    
+            $date_month = $this->request_months[$this->attribute_name];
         }
 
         //  No value in $_REQUEST so look at the first argument.
@@ -965,9 +965,9 @@ class DateHelper extends Helpers {
         else {
             $date = $options['value'] ? $options['value'] :
                 ($date ? $date : date("Y-m-d H:i:s"));
-            $date_month = date("m",strtotime($date));  
+            $date_month = date("m",strtotime($date));
         }
-   
+
         //  Generate <option>...</option> HTML for each month
         for($month_number = 1; $month_number <= 12; $month_number++) {
             if(array_key_exists('use_month_numbers',$options)) {
@@ -1007,7 +1007,7 @@ class DateHelper extends Helpers {
      *
      *  Returns <samp><select>...</select></samp> HTML with options
      *  for a number of years.  The first argument, if present,
-     *  specifies the initially selected year.  The second 
+     *  specifies the initially selected year.  The second
      *  argument controls the format of the generated HTML.
      *
      *  Examples:
@@ -1016,12 +1016,12 @@ class DateHelper extends Helpers {
      *     with a range of +/- five years.  If a year is specified in
      *     {@link $request_years}[{@link $attribute_name}] then it is
      *     selected initially, otherwise the current calendar year is
-     *     selected.</li> 
+     *     selected.</li>
      *   <li>
      *  <samp>select_year(null,array('start_year' => '1900));</samp><br />
      *    Generates year options from 1900 to five years after the
      *    initially selected year, which is chosen as in the previous
-     *    example.</li> 
+     *    example.</li>
      *   <li><samp>select_year(null,array('start_year'=>date('Y')+5, 'end_year'=>date('Y')-5);</samp><br />
      *    Generates year options starting five years after the current year,
      *    ending five years before the current year.
@@ -1071,12 +1071,12 @@ class DateHelper extends Helpers {
 
             //  There was a value for this attribute in $_REQUEST
             //  so display it as the initial choice
-            $date_year = $this->request_years[$this->attribute_name];    
+            $date_year = $this->request_years[$this->attribute_name];
         } elseif(strlen($date) == 4 && is_numeric($date)) {
 
             //  The first argument is exactly four decimal digits
             //  so interpret that as a year
-            $date_year = $date;     
+            $date_year = $date;
         } else {
 
             //  If a first argument was specified, assume that it is
@@ -1087,7 +1087,7 @@ class DateHelper extends Helpers {
             $date = $options['value'] ? $options['value'] :
                 ($date ? $date : date("Y-m-d H:i:s"));
             $date_year = date("Y",strtotime($date));
-        } 
+        }
 
         //  Set first year to appear in the option list
         $start_year = array_key_exists('start_year',$options)
@@ -1148,20 +1148,20 @@ class DateHelper extends Helpers {
      *    <li><samp>'discard_month' => true</samp> Don't show a month
      *      or day of the month menu.  If absent or false, month menu
      *      will be output.</li>
-     *    <li><samp>'discard_type' => true</samp> (true is the 
+     *    <li><samp>'discard_type' => true</samp> (true is the
      *      default) Don't show name of individual field, for example
      *      <samp>[year]</samp>, as part of the <samp>name</samp> value
      *      of the generated <samp><select ...></samp>.  The
-     *      information to identify the field is available as a suffix 
+     *      information to identify the field is available as a suffix
      *      <samp>(</samp><i>n</i><samp>i)</samp> of the attribute
-     *      name.</li> 
+     *      name.</li>
      *    <li><samp>'discard_year' => true</samp> Don't show a year
      *      menu.  If absent or false, year menu will be output.</li>
      *    <li><samp>'field_separator' => '</samp><i>string</i><samp>'</samp>
      *      String to insert between the submenus in the output.  If
-     *      absent, one blank will be inserted.</li> 
+     *      absent, one blank will be inserted.</li>
      *    <li><samp>'include_blank' => true</samp> Initially show a blank
-     *      selection in the menu.  If absent or false, the current  
+     *      selection in the menu.  If absent or false, the current
      *      date will be shown as the initial selection.  If a value
      *      was parsed from $_REQUEST, it will be used for the initial
      *      selection regardless of this option.</li>
@@ -1196,11 +1196,14 @@ class DateHelper extends Helpers {
         $options_with_prefix = array();
 
         //  Set the name of each submenu in the form
+        if($this->auto_index) {
+            $index_on = "[{$this->auto_index}]";
+        }
         for($i=1 ; $i <= 3 ; $i++) {
             $options_with_prefix[$i] = array_merge($options, array('prefix' =>
-                  "{$this->object_name}[{$this->attribute_name}({$i}i)]"));
-        }        
-        
+                  "{$this->object_name}{$index_on}[{$this->attribute_name}({$i}i)]"));
+        }
+
         //  Test for output option 'include_blank' == true
         if(array_key_exists('include_blank', $options)
            && $options['include_blank']) {
@@ -1256,14 +1259,14 @@ class DateHelper extends Helpers {
                               $date, $options_with_prefix[$position[$param]]);
             }
         }
-        
+
         //  HTML for each menu is in an element of $date_select[].
         //  Join the pieces of HTML with an optional field separator
         //  (default blank)
         if(count($date_select)) {
             $separator = array_key_exists('field_separator',$options)
                 ? $options['field_separator'] : " ";
-            $date_select = implode($separator, $date_select);            
+            $date_select = implode($separator, $date_select);
         }
 
         return $date_select;
@@ -1283,17 +1286,17 @@ class DateHelper extends Helpers {
      *   <li><samp>to_datetime_select_tag();</samp><br /> Generates a
      *     group of five pulldown menus in the order year, month, day,
      *     hour and minute with the current date and time initially
-     *     selected.</li> 
+     *     selected.</li>
      *   <li>
      *   <li><samp>to_datetime_select_tag(array('discard_second' => false);</samp><br />
      *     Generates a group of six pulldown menus in the order year,
      *     month, day, hour, minute and second with the current date
-     *     and time initially selected.</li> 
+     *     and time initially selected.</li>
      *   <li>
      *  <samp>to_datetime_select_tag('1998-04-08 13:21:17');</samp><br />
      *    Generates a group of five pulldown menus in the order year,
      *    month, day, hour and minute with the date/time
-     *    1998 August 4 13:21 initially selected.</li> 
+     *    1998 August 4 13:21 initially selected.</li>
      *  </ul>
      *
      *  @param string   Date/time to display as initially selected.
@@ -1311,10 +1314,10 @@ class DateHelper extends Helpers {
      *      Output selector for only the year, month and day.</li>
      *    <li><samp>'discard_minute' => true</samp><br />
      *      Output selector for only the year, month, day and
-     *      hour.</li> 
+     *      hour.</li>
      *    <li><samp>'discard_second' => false</samp><br />
      *      Output selector for year, month, day, hour, minute and
-     *      second.</li> 
+     *      second.</li>
      *  </ul>
      *  @return string Generated HTML
      *  @uses request_days
@@ -1351,7 +1354,7 @@ class DateHelper extends Helpers {
             $value = $this->value();
             $datetime = $value ? $value : date("Y-m-d H:i:s");
         }
-    
+
         //  Generate year pulldown
         $datetime_select = $this->select_year($datetime,
                                               $options_with_prefix[1]);
@@ -1395,7 +1398,7 @@ class DateHelper extends Helpers {
         }                  // month
         return $datetime_select;
     }
-    
+
     /**
      *  Generate HTML/XML for expiration month and year pulldown.
      *
@@ -1407,14 +1410,15 @@ class DateHelper extends Helpers {
      *  @uses to_date_select_tag()
      */
     function to_expiration_date_select_tag($options = array()) {
-        $options['discard_day'] = true; 
-        $options['month_before_year'] = true;      
-        $options['use_month_numbers'] = true;   
-        $options['start_year'] = date("Y");
-        $options['end_year'] = date("Y") + 10;
-        $options['field_separator'] = " / ";
-        return $this->to_date_select_tag($options);               
-    }  
+        $default_options['discard_day'] = true;
+        $default_options['month_before_year'] = true;
+        $default_options['use_month_numbers'] = true;
+        $default_options['start_year'] = date("Y");
+        $default_options['end_year'] = $default_options['start_year'] + 10;
+        $default_options['field_separator'] = " / ";
+        $options = array_merge($default_options, (array)$options);
+        return $this->to_date_select_tag($options);
+    }
 
     /**
      *  Generate HTML/XML for time pulldown
@@ -1445,7 +1449,7 @@ class DateHelper extends Helpers {
         }
 
         //  If no value for this attribute found in $_REQUEST
-        //  or the model, show current time initially 
+        //  or the model, show current time initially
         $time = $this->value();
         $time = $time ? $time : date('H:i:s');
 
@@ -1489,7 +1493,7 @@ class DateHelper extends Helpers {
         $options = array_merge($defaults,$options);
 
         //  If no value for this attribute found in $_REQUEST
-        //  or the model, show today's date initially 
+        //  or the model, show today's date initially
         $year = $this->value();
         if (!$year) {
             $year =
@@ -1529,7 +1533,7 @@ function select_datetime() {
 function select_expiration_date() {
     $date_helper = new DateHelper();
     $args = func_get_args();
-    return call_user_func_array(array($date_helper, 'select_expiration_date'), $args);        
+    return call_user_func_array(array($date_helper, 'select_expiration_date'), $args);
 }
 
 /**
@@ -1542,7 +1546,7 @@ function select_expiration_date() {
  */
 function datetime_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
-    return $date_helper->datetime_select($options);    
+    return $date_helper->datetime_select($options);
 }
 
 /**
@@ -1556,7 +1560,7 @@ function datetime_select($object, $attribute, $options = array()) {
  */
 function date_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
-    return $date_helper->date_select($options);    
+    return $date_helper->date_select($options);
 }
 
 /**
@@ -1569,7 +1573,7 @@ function date_select($object, $attribute, $options = array()) {
  */
 function year_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
-    return $date_helper->year_select($options);    
+    return $date_helper->year_select($options);
 }
 
 /**
@@ -1582,7 +1586,7 @@ function year_select($object, $attribute, $options = array()) {
  */
 function time_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
-    return $date_helper->time_select($options);    
+    return $date_helper->time_select($options);
 }
 
 /**
@@ -1594,8 +1598,8 @@ function time_select($object, $attribute, $options = array()) {
  */
 function expiration_date_select($object, $attribute, $options = array()) {
     $date_helper = new DateHelper($object, $attribute);
-    return $date_helper->expiration_date_select($options);        
-} 
+    return $date_helper->expiration_date_select($options);
+}
 
 /**
  *  Make a new DateHelper object and call its select_year() method
@@ -1611,7 +1615,7 @@ function expiration_date_select($object, $attribute, $options = array()) {
 function select_year() {
     $date_helper = new DateHelper();
     $args = func_get_args();
-    return call_user_func_array(array($date_helper, 'select_year'), $args);    
+    return call_user_func_array(array($date_helper, 'select_year'), $args);
 }
 
 /**
@@ -1628,7 +1632,7 @@ function select_year() {
 function select_month() {
     $date_helper = new DateHelper();
     $args = func_get_args();
-    return call_user_func_array(array($date_helper, 'select_month'), $args);    
+    return call_user_func_array(array($date_helper, 'select_month'), $args);
 }
 
 /**
@@ -1638,7 +1642,7 @@ function select_month() {
 function select_day() {
     $date_helper = new DateHelper();
     $args = func_get_args();
-    return call_user_func_array(array($date_helper, 'select_day'), $args);    
+    return call_user_func_array(array($date_helper, 'select_day'), $args);
 }
 
 // -- set Emacs parameters --
