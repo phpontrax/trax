@@ -30,6 +30,14 @@ class Haml {
         return $result;
     }
 
+    function __get($key) {
+        if(property_exists($this, $key)) {
+            return $this->$key;
+        } elseif(property_exists(Trax::$current_controller_object, $key)) {
+            return Trax::$current_controller_object->{$key};
+        }
+    }
+
     function render($path, $locals = array()) {
         if(count($locals)) {
             foreach($locals as $key => $value) {
