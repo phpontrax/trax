@@ -20,6 +20,16 @@ class Haml {
         }
     }
 
+    function __call($method_name, $parameters) {
+        if(method_exists($this, $method_name)) {
+            # If the method exists, just call it
+            $result = call_user_func_array(array($this, $method_name), $parameters);
+        } elseif(method_exists(Trax::$current_controller_object, $method_name)) {
+            $result = call_user_func_array(array(Trax::$current_controller_object, $method_name), $parameters);
+        }
+        return $result;
+    }
+
     function render($path, $locals = array()) {
         if(count($locals)) {
             foreach($locals as $key => $value) {
