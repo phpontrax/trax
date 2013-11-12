@@ -113,6 +113,19 @@ class TraxGenerator {
     private $scaffold_template_path;
 
     /**
+     *  Filesystem path to templates/plugins directory
+     *  @var string
+     */
+    private $plugins_template_dir;
+
+    /**
+     *  Filesystem path to the vendor/plugins/ directory in the
+     *  Trax work area
+     *  @var string
+     */
+    private $plugins_path;
+
+    /**
      *  Filesystem path to the app/views/layouts/ directory in the
      *  Trax work area
      *  @var string
@@ -158,6 +171,7 @@ class TraxGenerator {
         $this->helper_path = Trax::$helpers_path;
         $this->model_path = Trax::$models_path;
         $this->layouts_path = Trax::$layouts_path;
+        $this->plugins_path = Trax::$plugins_path;
         $this->controller_template_file =
                TRAX_LIB_ROOT . "/templates/controller.php";
         $this->helper_template_file =
@@ -172,6 +186,8 @@ class TraxGenerator {
                TRAX_LIB_ROOT . "/templates/mailer_view.phtml";
         $this->mailer_model_template_file =
                TRAX_LIB_ROOT . "/templates/mailer_model.php";
+        $this->plugins_template_dir = 
+                TRAX_LIB_ROOT . "/templates/plugins";
 
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $this->mkdir_cmd = "mkdir";
@@ -277,13 +293,21 @@ class TraxGenerator {
                             $views[] = strtolower($_SERVER["argv"][$i]);
                         }
                     }
-                    $this->generate_scaffold($command_name,
-                                             $controller_name, $views);
-                    break;                    
+                    $this->generate_scaffold($command_name, $controller_name, $views);
+                    break;  
 
-            default:
-                $this->generator_help();
-            }                            // switch($command)
+                case "plugin":
+                    if( empty($command_name) ) {
+                        echo "Error: name of plugin omitted\n";
+                        $this->plugin_help();
+                        break;
+                    }
+                    $this->generate_plugin($command_name);
+                    break;                  
+
+                default:
+                    $this->generator_help();
+            }// switch($command)
         }
         return;
     }
@@ -715,6 +739,22 @@ class TraxGenerator {
         }                   
     }    
 
+    function generate_plugin($plugin_name) {
+        $plugin_path = $this->plugins_path."/$plugin_name";
+        if(!file_exists($layout_file)) {
+            $this->exec("$this->mkdir_cmd $plugin_path");
+            echo "create $plugin_path\n";
+            if (substr(PHP_OS, 0, 3) == 'WIN') {
+                $this->exec("xcopy $this->plugins_template_dir/* $plugin_path /E");
+            } else {
+                $this->exec("cp -r $this->plugins_template_dir/* $plugin_path");
+            }
+            echo "plugin $plugin_name created in $plugin_path\n";
+        } else {
+            echo "exists $plugin_path\n";
+        }
+    }
+
     /**
      *  Create a controller file with optional view methods
      *
@@ -872,8 +912,7 @@ class TraxGenerator {
      *  @return string Edited input string
      */
     function fix_php_brackets($string) {
-        return str_replace("? >", "?>",
-                           str_replace("< ?php", "<?php", $string));
+        return str_replace("? >", "?>", str_replace("< ?php", "<?php", $string));
     }
 
     /**
@@ -969,6 +1008,15 @@ class TraxGenerator {
     }
 
     /**
+     *  Output console help message for "generate scaffold"
+     */
+    function plugin_help() {
+        echo "Usage: php script/generate.php plugin plugin_name\n\n";
+        echo "Description:\n";
+        echo "\tGenerates a skelton plugin in vendor/plugins/plugin_name\n";
+    }
+
+    /**
      *  Output console help message for unrecognized command
      */
     function generator_help() {
@@ -984,7 +1032,10 @@ class TraxGenerator {
         echo "for more mailer info php script/generate.php mailer\n\n";
         echo "Generate Scaffold:\n";
         echo "php script/generate.php scaffold ModelName [controller_name] [view1 view2 ...]\n";
-        echo "for more scaffold info php script/generate.php scaffold\n\n";        
+        echo "for more scaffold info php script/generate.php scaffold\n\n";   
+        echo "Generate Plugin:\n";
+        echo "php script/generate.php plugin plugin_name\n";
+        echo "for more plugin info php script/generate.php plugin\n\n";                
     }
 }
 

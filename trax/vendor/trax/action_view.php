@@ -28,6 +28,10 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+include_once(TRAX_LIB_ROOT . "/action_view/view_handlers.php");
+
+include_once(TRAX_LIB_ROOT . "/action_view/asset_pipeline.php");
+
 /**
  * Include the base helper class
  */

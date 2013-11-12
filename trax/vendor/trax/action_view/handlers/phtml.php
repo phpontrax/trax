@@ -1,0 +1,6 @@
+<?
+
+class Phtml extends Html {
+}
+
+?>
