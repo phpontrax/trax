@@ -189,6 +189,7 @@ class Trax {
             #error_log("db settings:".print_r(ActiveRecord::$database_settings, true));
         }
 	    ActiveRecord::$environment = TRAX_ENV;
+        ActiveRecord::$logger = new Trax;
     }
 
     function include_env_config() {

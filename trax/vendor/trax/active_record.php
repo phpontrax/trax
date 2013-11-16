@@ -47,14 +47,14 @@ require_once('MDB2.php');
  *  in the Model section of the Model-View-Controller architecture.
  *  By convention, the name of each subclass is the CamelCase singular
  *  form of the table name, which is in the lower_case_underscore
- *  plural notation.  For example, 
+ *  plural notation.  For example,
  *  a table named "order_details" would be associated with a subclass
  *  of ActiveRecord named "OrderDetail", and a table named "people"
  *  would be associated with subclass "Person".  See the tutorial
  *  {@tutorial PHPonTrax/naming.pkg}</p>
  *
  *  <p>For a discussion of the ActiveRecord design pattern, see
- *  "Patterns of Enterprise 
+ *  "Patterns of Enterprise
  *  Application Architecture" by Martin Fowler, pp. 160-164.</p>
  *
  *  <p>Unit tester: {@link ActiveRecordTest}</p>
@@ -78,7 +78,7 @@ class ActiveRecord {
      *  Description of a row in the associated table in the database
      *
      *  <p>Retrieved from the RDBMS by {@link set_content_columns()}.
-     *  See {@link 
+     *  See {@link
      *  http://pear.php.net/package/MDB2/docs/2.3.0/MDB2/MDB2_Driver_Reverse_Common.html#methodtableInfo
      *  DB_common::tableInfo()} for the format.  <b>NOTE:</b> Some
      *  RDBMS's don't return all values.</p>
@@ -103,13 +103,13 @@ class ActiveRecord {
     /**
      *  Table columns key => values array
      *
-     *  Array to hold all the column names and values.  
+     *  Array to hold all the column names and values.
      *  @var array
      *  @see __get()
      *  @see __set()
      *  @see __unset()
-     *  @see __isset()  
-     */ 
+     *  @see __isset()
+     */
     private $attributes = array();
 
     /**
@@ -119,19 +119,19 @@ class ActiveRecord {
      *  <p>calling $user->changed => Array( 'first_name' )</p>
      *  <p>calling $user->first_name_change => array('original' => 'John', 'modified' => 'Matt')</p>
      *  <p>calling $user->first_name_changed => true</p>
-     * 
+     *
      *  @var array
      *  @see __get()
-     *  @see __set()    
-     */ 
+     *  @see __set()
+     */
     private $changed_attributes = array();
-    
+
     /**
-     *  Whether or not to use partial updates meaning only 
+     *  Whether or not to use partial updates meaning only
      *  update fields that have changed in UPDATE sql calls
      *
      *  @var boolean
-     */ 
+     */
     public $partial_updates = true;
 
     /**
@@ -139,18 +139,18 @@ class ActiveRecord {
      *
      *  Array to hold all the info about table columns.  Indexed on $table_name.
      *  @var array
-     */    
+     */
     public static $table_info = array();
 
     /**
      *  Class name
      *
      *  Name of the child class. (this is optional and will automatically be determined)
-     *  Normally set to the singular camel case form of the table name.  
+     *  Normally set to the singular camel case form of the table name.
      *  May be overridden.
      *  @var string
      */
-    public $class_name = null; 
+    public $class_name = null;
 
     /**
      *  Table name
@@ -161,7 +161,7 @@ class ActiveRecord {
      *  @var string
      */
     public $table_name = null;
-    
+
     /**
      *  Table prefix
      *
@@ -178,7 +178,7 @@ class ActiveRecord {
      *  @var string
      */
     public $database_name = null;
-    
+
     /**
      *  Index into the $connection_pool array
      *
@@ -186,7 +186,7 @@ class ActiveRecord {
      *  Mainly used if you want to connect to different databases between
      *  different models.
      *  @var string
-     */    
+     */
     public $connection_name = null;
 
     /**
@@ -196,7 +196,7 @@ class ActiveRecord {
      *  Mainly used if you want to force all reads(SELECT's) to goto a
      *  specific database server.
      *  @var string
-     */    
+     */
     public $read_only_connection_name = null;
 
     /**
@@ -204,7 +204,7 @@ class ActiveRecord {
      *
      *  Same as $read_only_connection_name but set for all models globally.
      *  @var string
-     */    
+     */
     public static $global_read_only_connection_name = null;
 
     /**
@@ -216,7 +216,7 @@ class ActiveRecord {
      * Stores the database settings
      */
     public static $database_settings = array();
-    
+
     /**
      * Stores the active read/write connections. Indexed on $connection_name.
      */
@@ -224,7 +224,7 @@ class ActiveRecord {
 
     /**
      * Stores the active read only connections. Indexed on $connection_name.
-     */ 
+     */
     public static $connection_pool_read_only = array();
 
     /**
@@ -245,24 +245,24 @@ class ActiveRecord {
     public $force_reconnect = false;
 
     /**
-     *  find_all() returns an array of objects, 
+     *  find_all() returns an array of objects,
      *  each object index is off of this field
      *
      *  @var string
-     */    
-    public $index_on = "id"; 
+     */
+    public $index_on = "id";
 
     /**
      *  Not yet implemented (page 222 Rails books)
      *
      *  @var boolean
-     */    
+     */
     public $lock_optimistically = true;
-    
+
     /**
      *  Composite custom user created objects
      *  @var mixed
-     */    
+     */
     public $composed_of = null;
 
     # Table associations
@@ -300,7 +300,7 @@ class ActiveRecord {
      *  @todo Document this property
      */
     protected $save_associations = array();
-    
+
     /**
      *  Whether or not to auto save defined associations if set
      *  @var boolean
@@ -347,7 +347,7 @@ class ActiveRecord {
      *
      *  The format for this should be compatiable with the php date() function.
      *  http://www.php.net/date
-     *  @var string 
+     *  @var string
      */
      public $date_format = "Y-m-d";
 
@@ -356,17 +356,17 @@ class ActiveRecord {
      *
      *  The format for this should be compatiable with the php date() function.
      *  http://www.php.net/date
-     *  @var string 
-     */    
+     *  @var string
+     */
      public $time_format = "H:i:s";
-       
+
     /**
      *  Whether to keep date/datetime fields NULL if not set
      *
      *  true => If date field is not set it try to preserve NULL
      *  false => Don't try to preserve NULL if field is already NULL
      *  @var boolean
-     */       
+     */
      protected $preserve_null_dates = true;
 
     /**
@@ -378,7 +378,7 @@ class ActiveRecord {
      *  @var string[]
      */
     protected $aggregations = array("count","sum","avg","max","min");
-               
+
     /**
      *  Primary key of the associated table
      *
@@ -409,7 +409,7 @@ class ActiveRecord {
 
     /**
      *  @todo Document this variable
-     */    
+     */
     public $pagination_count = 0;
 
     /**
@@ -424,42 +424,42 @@ class ActiveRecord {
      *     public $default_scope = array(
      *         'order' => 'last_name, first_name'
      *     ));
-     * } 
+     * }
      *
-     */     
+     */
     public $default_scope = array();
-    
+
     /**
-     * Adds a class method for retrieving and querying objects. 
-     * A scope represents a narrowing of a database query, such as 
+     * Adds a class method for retrieving and querying objects.
+     * A scope represents a narrowing of a database query, such as
      * 'conditions' => "first_name = 'John'"
      *
      * class Person extends ActiveRecord {
      *     public $named_scope = array(
      *         'people_named_john' => array(
-     *             'conditions' => "first_name = 'John'",     
+     *             'conditions' => "first_name = 'John'",
      *             'order' => 'last_name, first_name'
      *     ));
-     * } 
+     * }
      *
      * $person = new Person;
      * $person->people_named_john; # an array of AR objects people first_name = 'John'
      *
      */
     public $named_scope = array();
-    
+
 
     /**
      *  Description of non-fatal errors found
      *
      *  For every non-fatal error found, an element describing the
-     *  error is added to $errors.  Initialized to an empty array in 
+     *  error is added to $errors.  Initialized to an empty array in
      *  {@link valid()} before validating object.  When an error
      *  message is associated with a particular attribute, the message
      *  should be stored with the attribute name as its key.  If the
      *  message is independent of attributes, store it with a numeric
      *  key beginning with 0.
-     *  
+     *
      *  @var string[]
      *  @see add_error()
      *  @see get_errors()
@@ -487,16 +487,16 @@ class ActiveRecord {
 
     /**
      * An array of all the builtin validation function calls.
-     */    
+     */
     protected $builtin_validation_functions = array(
         'validates_acceptance_of',
         'validates_confirmation_of',
-        'validates_exclusion_of',        
+        'validates_exclusion_of',
         'validates_format_of',
-        'validates_inclusion_of',        
+        'validates_inclusion_of',
         'validates_length_of',
-        'validates_numericality_of',        
-        'validates_presence_of',        
+        'validates_numericality_of',
+        'validates_presence_of',
         'validates_uniqueness_of'
     );
 
@@ -516,8 +516,8 @@ class ActiveRecord {
 
     /**
      *  Auto delete $has_and_belongs_to_many associations
-     */    
-    public $auto_delete_habtm = true; 
+     */
+    public $auto_delete_habtm = true;
 
     /**
      *  Transactions (only use if your db supports it)
@@ -529,17 +529,30 @@ class ActiveRecord {
      *  Transactions (only use if your db supports it)
      *  This will issue a rollback command if any sql fails.
      */
-    public static $auto_rollback = false; 
-    
+    public static $auto_rollback = false;
+
     /**
      *  Keep a log of queries executed if in development env
-     */    
+     */
     public static $query_log = array();
-                                   
+
     /**
      *  Log all queries to the query_log array even not in development mode
      */
     public static $log_all = false;
+
+    /**
+     *  Log Object if set will call its log method
+     */
+    public static $logger = null;
+
+    /**
+     *  If logger is set and this set will use this as file name to log too.
+     *  Default is to use environment: production, development as filename
+     */
+    public $logger_log_file = null;
+
+    protected static $log_color = 35;
 
     /**
      *  Construct an ActiveRecord object
@@ -558,7 +571,7 @@ class ActiveRecord {
      *  @uses reset_attributes()
      *  @uses update_attributes()
      */
-    function __construct($attributes = null) { 
+    function __construct($attributes = null) {
         # Open the database connection for reads / writes
         self::$db = $this->establish_connection();
         if($this->read_only_connection_name) {
@@ -566,7 +579,7 @@ class ActiveRecord {
             $this->establish_connection($this->read_only_connection_name, true);
         } elseif(self::$global_read_only_connection_name) {
             # Open database connection for all reads
-            $this->establish_connection(self::$global_read_only_connection_name, true);            
+            $this->establish_connection(self::$global_read_only_connection_name, true);
         }
 
         # Set $table_name
@@ -583,12 +596,12 @@ class ActiveRecord {
         if(!is_null($attributes)) {
             $this->update_attributes($attributes);
         }
-        
+
         # If callback is defined in model run it.
         # this could hurt performance...
         if(method_exists($this, 'after_initialize')) {
-            $this->after_initialize();    
-        }        
+            $this->after_initialize();
+        }
     }
 
     /**
@@ -604,8 +617,8 @@ class ActiveRecord {
      *  @uses find_all_habtm()
      *  @uses find_one_belongs_to()
      *  @uses find_one_has_one()
-     */ 
-    function __get($key) {        
+     */
+    function __get($key) {
         if(array_key_exists($key, $this->attributes)) {
             #error_log("getting: {$key} = ".$this->attributes[$key]);
             return $this->attributes[$key];
@@ -619,25 +632,25 @@ class ActiveRecord {
                 case "has_one":
                     $parameters = is_array($this->has_one) ? $this->has_one[$key] : null;
                     $this->$key = $this->find_one_has_one($key, $parameters);
-                    if(is_null($this->$key)) unset($this->$key);                    
+                    if(is_null($this->$key)) unset($this->$key);
                     break;
                 case "belongs_to":
                     $parameters = is_array($this->belongs_to) ? $this->belongs_to[$key] : null;
                     $this->$key = $this->find_one_belongs_to($key, $parameters);
-                    if(is_null($this->$key)) unset($this->$key);                    
+                    if(is_null($this->$key)) unset($this->$key);
                     break;
-                case "has_and_belongs_to_many":  
+                case "has_and_belongs_to_many":
                     $parameters = is_array($this->has_and_belongs_to_many) ? $this->has_and_belongs_to_many[$key] : null;
-                    $this->$key = $this->find_all_habtm($key, $parameters); 
-                    break;            
-            }        
+                    $this->$key = $this->find_all_habtm($key, $parameters);
+                    break;
+            }
         } elseif(array_key_exists($key, $this->named_scope) && is_array($this->named_scope[$key])) {
             $this->$key = $this->find_all($this->named_scope[$key]);
-        } elseif($this->is_composite($key)) {            
+        } elseif($this->is_composite($key)) {
             $composite_object = $this->get_composite_object($key);
             if(is_object($composite_object)) {
-                $this->$key = $composite_object;    
-            }                                
+                $this->$key = $composite_object;
+            }
         } elseif($key == "changes") {
             return $this->changed_attributes;
         } elseif($key == "changed") {
@@ -652,12 +665,12 @@ class ActiveRecord {
         } elseif(substr($key, -8) == "_changed") {
             $attribute = substr($key, 0, -8);
             return array_key_exists($attribute, $this->changed_attributes) ? true : false;
-        } 
+        }
         //echo "<pre>getting: $key = ".$this->$key."<br></pre>";
 
         if(property_exists($this, $key))
             return $this->$key;
-        else 
+        else
             return null;
     }
 
@@ -684,45 +697,45 @@ class ActiveRecord {
                     $this->changed_attributes[$key]['modified'] = $value;
                 } else {
                     unset($this->changed_attributes[$key]);
-                }   
+                }
             } else {
                 $original = isset($this->attributes[$key]) ? $this->attributes[$key] : null;
                 $this->changed_attributes[$key] = array(
-                    'original' => $original, 
+                    'original' => $original,
                     'modified' => $value
                 );
-            }               
+            }
             $this->attributes[$key] = $value;
             return;
         } elseif($key == "table_name") {
-            $this->set_content_columns($value);           
+            $this->set_content_columns($value);
           # this elseif checks if first its an object if its parent is ActiveRecord
         } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
                 if($association_type == "belongs_to") {
-                    $primary_key = $value->primary_keys[0];                    
-                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) { 
-                        $foreign_key = $this->belongs_to[$key]['foreign_key']; 
-                    } else { 
+                    $primary_key = $value->primary_keys[0];
+                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) {
+                        $foreign_key = $this->belongs_to[$key]['foreign_key'];
+                    } else {
                         $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
                     }
-                    $this->$foreign_key = $value->$primary_key; 
+                    $this->$foreign_key = $value->$primary_key;
                 }
             }
-            # this elseif checks if its an array of objects and if its parent is ActiveRecord                
+            # this elseif checks if its an array of objects and if its parent is ActiveRecord
         } elseif(is_array($value) && $this->auto_save_associations) {
             if($association_type = $this->get_association_type($key)) {
                 $this->save_associations[$association_type][] = $value;
             }
-        }     
+        }
         #error_log("setting $key = $value");
         //  Assignment to something else, do it
         $this->$key = $value;
     }
 
     /**
-     *  Unsets an attribute or class member 
+     *  Unsets an attribute or class member
      *
      *  @uses $attributes
      */
@@ -746,7 +759,7 @@ class ActiveRecord {
             return isset($this->attributes[$key]);
         } else {
             return isset($this->$key);
-        } 
+        }
     }
 
     /**
@@ -772,30 +785,30 @@ class ActiveRecord {
             # ... first check for method names that match any of our explicitly
             # declared associations for this model ( e.g. public $has_many = "movies" ) ...
             if(isset($parameters[0]) && is_array($parameters[0])) {
-                $parameters = $parameters[0];    
+                $parameters = $parameters[0];
             }
             $association_type = $this->get_association_type($method_name);
             switch($association_type) {
                 case "has_many":
-                    $parameters = is_array($this->has_many) && @array_key_exists($method_name, $this->has_many) && !is_null($this->has_many[$method_name]) ? 
+                    $parameters = is_array($this->has_many) && @array_key_exists($method_name, $this->has_many) && !is_null($this->has_many[$method_name]) ?
                         array_merge($this->has_many[$method_name], $parameters) : $parameters;
                     $result = $this->find_all_has_many($method_name, $parameters);
                     break;
                 case "has_one":
-                    $parameters = is_array($this->has_one) && @array_key_exists($method_name, $this->has_one) && !is_null($this->has_one[$method_name]) ? 
+                    $parameters = is_array($this->has_one) && @array_key_exists($method_name, $this->has_one) && !is_null($this->has_one[$method_name]) ?
                         array_merge($this->has_one[$method_name], $parameters) : $parameters;
                     $result = $this->find_one_has_one($method_name, $parameters);
                     break;
                 case "belongs_to":
-                    $parameters = is_array($this->belongs_to) && @array_key_exists($method_name, $this->belongs_to) && !is_null($this->belongs_to[$method_name]) ? 
+                    $parameters = is_array($this->belongs_to) && @array_key_exists($method_name, $this->belongs_to) && !is_null($this->belongs_to[$method_name]) ?
                         array_merge($this->belongs_to[$method_name], $parameters) : $parameters;
                     $result = $this->find_one_belongs_to($method_name, $parameters);
                     break;
-                case "has_and_belongs_to_many":  
-                    $parameters = is_array($this->has_and_belongs_to_many) && @array_key_exists($method_name, $this->has_and_belongs_to_many) && !is_null($this->has_and_belongs_to_many[$method_name]) ? 
+                case "has_and_belongs_to_many":
+                    $parameters = is_array($this->has_and_belongs_to_many) && @array_key_exists($method_name, $this->has_and_belongs_to_many) && !is_null($this->has_and_belongs_to_many[$method_name]) ?
                         array_merge($this->has_and_belongs_to_many[$method_name], $parameters) : $parameters;
-                    $result = $this->find_all_habtm($method_name, $parameters); 
-                    break;            
+                    $result = $this->find_all_habtm($method_name, $parameters);
+                    break;
             }
 
             # check for the [count,sum,avg,etc...]_all magic functions
@@ -806,7 +819,7 @@ class ActiveRecord {
             # check for the named scopes being called as a function
             elseif(array_key_exists($method_name, $this->named_scope) && is_array($this->named_scope[$method_name])) {
                 $result = $this->find_all(array_merge($this->named_scope[$method_name], (array)$parameters));
-            }            
+            }
             # check for the find_all_by_* magic functions
             elseif(strlen($method_name) > 11 && substr($method_name, 0, 11) == "find_all_by") {
                 //echo "calling method: $method_name<br>";
@@ -819,14 +832,14 @@ class ActiveRecord {
             }
             # check for find_or_create_by_* magic functions
             elseif(strlen($method_name) > 17 && substr($method_name, 0, 17) == "find_or_create_by") {
-                $result = $this->find_by($method_name, $parameters, "find_or_create");        
+                $result = $this->find_by($method_name, $parameters, "find_or_create");
             }
         }
 
 
         return isset($result) ? $result : null;
     }
-    
+
     /**
      *  Find all records using a "has_and_belongs_to_many" relationship
      * (many-to-many with a join table in between).  Note that you can also
@@ -845,7 +858,7 @@ class ActiveRecord {
         $additional_conditions = $additional_joins = null;
         $options = array();
         # Use any passed-in parameters
-        if(!is_null($parameters)) {  
+        if(!is_null($parameters)) {
             if(@array_key_exists("conditions", $parameters)) {
                 $additional_conditions = " AND (".$parameters['conditions'].")";
             } elseif($parameters[0] != "") {
@@ -877,34 +890,34 @@ class ActiveRecord {
             }
             if(@array_key_exists("having", $parameters)) {
                 $options['having'] = $parameters['having'];
-            }                       
+            }
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
-            }            
+            }
             if(@array_key_exists("join_table", $parameters)) {
                 $join_table = $parameters['join_table'];
             }
             if(@array_key_exists("index_on", $parameters)) {
                 $index_on = $parameters['index_on'];
-            }             
+            }
             if(@array_key_exists("foreign_key", $parameters)) {
                 $this_foreign_key = $parameters['foreign_key'];
             }
             if(@array_key_exists("association_foreign_key", $parameters)) {
                 $other_foreign_key = $parameters['association_foreign_key'];
-            }            
+            }
             if(@array_key_exists("finder_sql", $parameters)) {
                 $finder_sql = $parameters['finder_sql'];
-            }   
+            }
         }
-        
+
         if(!is_null($other_object_name)) {
-            $other_class_name = Inflector::camelize($other_object_name);    
-            #$other_table_name = Inflector::tableize($other_object_name);    
+            $other_class_name = Inflector::camelize($other_object_name);
+            #$other_table_name = Inflector::tableize($other_object_name);
         } else {
             $other_class_name = Inflector::classify($other_table_name);
         }
-        
+
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
         $other_table_name = $other_class_object->table_prefix.$other_class_object->table_name;
@@ -914,17 +927,17 @@ class ActiveRecord {
 
         # If finder_sql is specified just use it instead of determining the joins/sql
         if(!is_null($finder_sql)) {
-            $conditions = $finder_sql;    
+            $conditions = $finder_sql;
         } else {
             # Prepare the join table name primary keys (fields) to do the join on
             if(is_null($join_table)) {
                 $join_table = $this->get_join_table_name($this->table_name, $other_table_name);
             }
-            
+
             # Primary keys
             $this_primary_key  = $this->primary_keys[0];
             $other_primary_key = $other_class_object->primary_keys[0];
-            
+
             # Foreign keys
             if(is_null($this_foreign_key)) {
                 $this_foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
@@ -932,10 +945,10 @@ class ActiveRecord {
             if(is_null($other_foreign_key)) {
                 $other_foreign_key = Inflector::singularize($other_table_name)."_".$other_primary_key;
             }
-            
+
             # Primary key value
             if($this->attribute_is_string($this_primary_key)) {
-                $this_primary_key_value = "'".$this->$this_primary_key."'";                    
+                $this_primary_key_value = "'".$this->$this_primary_key."'";
             } elseif(is_numeric($this->$this_primary_key)) {
                 $this_primary_key_value = $this->$this_primary_key;
             } else {
@@ -946,14 +959,14 @@ class ActiveRecord {
 
             if($this->habtm_sort_field) {
                 $options['order'] = (isset($options['order']) ? $options['order'].',':'')."{$join_table}.{$this->habtm_sort_field}";
-            } 
-            
+            }
+
             # Set up the SQL segments
             $conditions = "{$join_table}.{$this_foreign_key} = {$this_primary_key_value}".$additional_conditions;
             $options['joins'] = "LEFT JOIN {$join_table} ON {$other_table_name}.{$other_primary_key} = {$join_table}.{$other_foreign_key}".$additional_joins;
         }
         $options['conditions'] = $conditions;
-        
+
         # Get the list of other_class_name objects
         return $other_class_object->find_all($options);
     }
@@ -995,62 +1008,62 @@ class ActiveRecord {
             }
             if(@array_key_exists("per_page", $parameters)) {
                 $options['per_page'] = $parameters['per_page'];
-            }      
+            }
             if(@array_key_exists("index_on", $parameters)) {
                 $index_on = $parameters['index_on'];
-            }           
+            }
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
-            }    
+            }
             if(@array_key_exists("primary_key", $parameters)) {
                 $this_primary_key = $parameters['primary_key'];
-            }                     
+            }
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
-            }  
+            }
             if(@array_key_exists("finder_sql", $parameters)) {
                 $finder_sql = $parameters['finder_sql'];
-            }           
+            }
         }
 
         if(!is_null($other_object_name)) {
-            $other_class_name = Inflector::camelize($other_object_name);    
+            $other_class_name = Inflector::camelize($other_object_name);
         } else {
             $other_class_name = Inflector::classify($other_table_name);
         }
 
         # Instantiate an object to access find_all
-        $other_class_object = new $other_class_name(); 
+        $other_class_object = new $other_class_name();
         if(!is_null($index_on)) {
             $other_class_object->index_on = $index_on;
-        }        
-        
+        }
+
         # If finder_sql is specified just use it instead of determining the association
         if(!is_null($finder_sql)) {
-            $conditions = $finder_sql;  
-        } else {          
+            $conditions = $finder_sql;
+        } else {
             # This class primary key
             if(!$this_primary_key) {
                 $this_primary_key = $this->primary_keys[0];
             }
-                
+
             if(!$foreign_key) {
                 # this should end up being like user_id or account_id but if you specified
                 # a primaray key other than 'id' it will be like user_field
                 $foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
             }
-            
+
             $foreign_key_value = $this->$this_primary_key;
             if($other_class_object->attribute_is_string($foreign_key)) {
-                $conditions = "{$foreign_key} = '{$foreign_key_value}'";                    
+                $conditions = "{$foreign_key} = '{$foreign_key_value}'";
             } elseif(is_numeric($foreign_key_value)) {
                 $conditions = "{$foreign_key} = {$foreign_key_value}";
             } else {
                 #$conditions = "{$foreign_key} = 0";
                 # no primary key value so just return empty array same as find_all()
-                return array();                
-            }            
-            $conditions .= $additional_conditions; 
+                return array();
+            }
+            $conditions .= $additional_conditions;
         }
         $options['conditions'] = $conditions;
         #error_log("has_many:".print_r($options, true));
@@ -1066,7 +1079,7 @@ class ActiveRecord {
      *  Returns: An array of ActiveRecord objects. (e.g. Contact objects)
      *  @todo Document this API
      */
-    private function find_one_has_one($other_object_name, $parameters = null) {       
+    private function find_one_has_one($other_object_name, $parameters = null) {
         $additional_conditions = null;
         # Use any passed-in parameters
         if(is_array($parameters)) {
@@ -1086,14 +1099,14 @@ class ActiveRecord {
             }
             if(@array_key_exists("primary_key", $parameters)) {
                 $this_primary_key = $parameters['primary_key'];
-            }                     
+            }
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
-            }  
+            }
         }
-        
+
         $other_class_name = Inflector::camelize($other_object_name);
-        
+
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
 
@@ -1101,14 +1114,14 @@ class ActiveRecord {
         if(!$this_primary_key) {
             $this_primary_key = $this->primary_keys[0];
         }
-        
+
         if(!$foreign_key) {
             $foreign_key = Inflector::singularize($this->table_name)."_".$this_primary_key;
         }
 
         $foreign_key_value = $this->$this_primary_key;
         if($other_class_object->attribute_is_string($foreign_key)) {
-            $conditions = "{$foreign_key} = '{$foreign_key_value}'";                    
+            $conditions = "{$foreign_key} = '{$foreign_key_value}'";
         } elseif(is_numeric($foreign_key_value)) {
             $conditions = "{$foreign_key} = {$foreign_key_value}";
         } else {
@@ -1116,8 +1129,8 @@ class ActiveRecord {
             return null;
         }
 
-        $conditions .= $additional_conditions; 
-        
+        $conditions .= $additional_conditions;
+
         # Get the list of other_class_name objects
         return $other_class_object->find_first($conditions, $order);
     }
@@ -1149,32 +1162,32 @@ class ActiveRecord {
             }
             if(@array_key_exists("foreign_key", $parameters)) {
                 $foreign_key = $parameters['foreign_key'];
-            }  
+            }
             if(@array_key_exists("primary_key", $parameters)) {
                 $other_primary_key = $parameters['primary_key'];
-            }       
+            }
             if(@array_key_exists("class_name", $parameters)) {
                 $other_object_name = $parameters['class_name'];
-            }  
+            }
         }
-        
+
         $other_class_name = Inflector::camelize($other_object_name);
-     
+
         # Instantiate an object to access find_all
         $other_class_object = new $other_class_name();
 
-        # This class primary key   
+        # This class primary key
         if(!$other_primary_key) {
             $other_primary_key = $other_class_object->primary_keys[0];
-        }        
+        }
 
         if(!$foreign_key) {
             $foreign_key = $other_object_name."_".$other_primary_key;
         }
-        
+
         $other_primary_key_value = $this->$foreign_key;
         if($other_class_object->attribute_is_string($other_primary_key)) {
-            $conditions = "{$other_primary_key} = '{$other_primary_key_value}'";                    
+            $conditions = "{$other_primary_key} = '{$other_primary_key_value}'";
         } elseif(is_numeric($other_primary_key_value)) {
             $conditions = "{$other_primary_key} = {$other_primary_key_value}";
         } else {
@@ -1182,7 +1195,7 @@ class ActiveRecord {
             return null;
         }
         $conditions .= $additional_conditions;
-        
+
         # Get the list of other_class_name objects
         return $other_class_object->find_first($conditions, $order);
     }
@@ -1196,7 +1209,7 @@ class ActiveRecord {
      *  implement all of these functions.
      *  @param string $agrregrate_type SQL aggregate function to
      *    apply, suffixed '_all'.  The aggregate function is one of
-     *  the strings in {@link $aggregations}. 
+     *  the strings in {@link $aggregations}.
      *  @param string[] $parameters  Conditions to apply to the
      *    aggregate function.  If present, must be an array of three
      *    strings:<ol>
@@ -1216,27 +1229,27 @@ class ActiveRecord {
         $distinct = strtolower($aggregate_type) == 'count' ? 'DISTINCT ' : '';
         #($parameters[0]) ? $field = $parameters[0] : $field = "*";
         $field = (stristr($parameters[0], ".") ? $parameters[0] : "{$this->table_prefix}{$this->table_name}.".$parameters[0]);
-        $sql = "SELECT {$distinct}{$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";        
+        $sql = "SELECT {$distinct}{$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";
         # Use any passed-in parameters
         if(is_array($parameters[1])) {
-            extract($parameters[1]);   
+            extract($parameters[1]);
         } elseif(!is_null($parameters)) {
             $conditions = $parameters[1];
             $joins = isset($parameters[2]) ? $parameters[2] : null;
         }
         if(!empty($joins)) $sql .= " $joins ";
-        if(!empty($conditions)) $sql .= " WHERE $conditions ";  
+        if(!empty($conditions)) $sql .= " WHERE $conditions ";
         if(!empty($group)) $sql .= " GROUP BY {$group} ";
-        if(!empty($having)) $sql .= " HAVING {$having} ";       
-        
+        if(!empty($having)) $sql .= " HAVING {$having} ";
+
         #echo "$aggregate_type sql:$sql<br>";
         //print_r($parameters[0]);
-        //echo $sql; 
+        //echo $sql;
         #error_log("$aggregate_type:$sql");
         $rs = $this->query($sql, true);
         $row = $rs->fetchRow();
         if($row["agg_result"]) {
-            return $row["agg_result"];    
+            return $row["agg_result"];
         }
         return 0;
     }
@@ -1271,7 +1284,7 @@ class ActiveRecord {
     *  @todo Document this API
     */
     function column_for_attribute($attribute) {
-        return array_key_exists($attribute, (array)$this->content_columns) ? 
+        return array_key_exists($attribute, (array)$this->content_columns) ?
             $this->content_columns[$attribute] : null;
     }
 
@@ -1279,15 +1292,15 @@ class ActiveRecord {
     *  get the columns  data type.
     *  @uses column_for_attribute()
     *  @todo Document this API
-    */    
+    */
     function column_type($attribute) {
         $column = $this->column_for_attribute($attribute);
         if(isset($column['type'])) {
-            return $column['type'];    
-        }            
+            return $column['type'];
+        }
         return null;
     }
-    
+
     /**
      *  Check whether a column exists in the associated table
      *
@@ -1298,7 +1311,7 @@ class ActiveRecord {
      *  @uses content_columns
      */
     function column_attribute_exists($attribute) {
-        return array_key_exists($attribute, (array)$this->content_columns) ? true : false;    
+        return array_key_exists($attribute, (array)$this->content_columns) ? true : false;
     }
 
     /**
@@ -1326,9 +1339,16 @@ class ActiveRecord {
         if($this->column_attribute_exists($column) && ($conditions = $this->get_primary_key_conditions())) {
             # Run the query to grab a specific columns value.
             $sql = "SELECT {$column} FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions} LIMIT 1";
-            $this->log_query($sql);
             $db =& $this->get_connection(true);
+            if(self::$environment != 'production') {
+                $start = microtime(true);
+            }
             $result = $db->queryOne($sql);
+            $duration = nil;
+            if(self::$environment != 'production') {
+                $duration = (microtime(true) - $start)*1000;
+            }
+            $this->log_query($sql, $duration);
             if($this->is_error($result)) {
                 $this->raise($result->getMessage());
             }
@@ -1343,13 +1363,13 @@ class ActiveRecord {
      *  @todo Document this API
      */
     function begin() {
-        # check if transaction are supported by this driver    
+        # check if transaction are supported by this driver
         $db =& $this->get_connection();
-        if($db->supports('transactions')) {        
+        if($db->supports('transactions')) {
             $rs = $db->beginTransaction();
             if($this->is_error($rs)) {
                 $this->raise($rs->getMessage());
-            }      
+            }
             self::$in_transaction = true;
         }
     }
@@ -1359,22 +1379,22 @@ class ActiveRecord {
      *
      *  @uses $db
      *  @todo Document this API
-     */    
+     */
     function save_point($save_point) {
-        if(!is_null($save_point)) {          
+        if(!is_null($save_point)) {
             $db =& $this->get_connection();
             # check if transaction are supported by this driver
-            if($db->supports('transactions')) {            
+            if($db->supports('transactions')) {
                 # check if we are inside a transaction and if savepoints are supported
                 if($db->inTransaction() && $db->supports('savepoints')) {
                     # Set a savepoint
-                    $rs = $db->beginTransaction($save_point); 
+                    $rs = $db->beginTransaction($save_point);
                     if($this->is_error($rs)) {
                         $this->raise($rs->getMessage());
-                    }                
-                } 
-            }          
-        }        
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1383,16 +1403,16 @@ class ActiveRecord {
      *  @uses $db
      *  @todo Document this API
      */
-    function commit() {          
+    function commit() {
         $db =& $this->get_connection();
         # check if transaction are supported by this driver
         if($db->supports('transactions')) {
             # check if we are inside a transaction
             if($db->inTransaction()) {
-                $rs = $db->commit(); 
+                $rs = $db->commit();
                 if($this->is_error($rs)) {
                     $this->raise($rs->getMessage());
-                }        
+                }
                 self::$in_transaction = false;
             }
         }
@@ -1403,17 +1423,17 @@ class ActiveRecord {
      *
      *  @uses $db
      *  @todo Document this API
-     */    
-    function rollback() {     
+     */
+    function rollback() {
         $db =& $this->get_connection(true);
         # check if transaction are supported by this driver
         if($db->supports('transactions')) {
-            $rs = $db->rollback(); 
+            $rs = $db->rollback();
             if($this->is_error($rs)) {
                 $this->raise($rs->getMessage());
             }
             self::$in_transaction = false;
-        }               
+        }
     }
 
     /**
@@ -1429,9 +1449,16 @@ class ActiveRecord {
      */
     function query($sql, $read_only = false) {
         # Run the query
-        $this->log_query($sql);
         $db =& $this->get_connection($read_only);
+        if(self::$environment != 'production') {
+            $start = microtime(true);
+        }
         $rs =& $db->query($sql);
+        $duration = nil;
+        if(self::$environment != 'production') {
+            $duration = (microtime(true) - $start)*1000;
+        }
+        $this->log_query($sql, $duration);
         if($this->is_error($rs)) {
             if(self::$auto_rollback && self::$in_transaction) {
                 $this->rollback();
@@ -1443,7 +1470,7 @@ class ActiveRecord {
 
     /**
      *  Implement find_by_*() and =_* methods
-     *  
+     *
      *  Converts a method name beginning 'find_by_' or 'find_all_by_'
      *  into a query for rows matching the rest of the method name and
      *  the arguments to the function.  The part of the method name
@@ -1456,7 +1483,7 @@ class ActiveRecord {
      *    find_by_fname_and_lname('Ben','Dover')
      *  is converted to
      *    SELECT * ... WHERE fname='Ben' AND lname='Dover'
-     *  
+     *
      *  @uses find_all()
      *  @uses find_first()
      */
@@ -1466,7 +1493,7 @@ class ActiveRecord {
         } elseif($find_type == "all") {
             $explode_len = 12;
         } else {
-            $explode_len = 8;     
+            $explode_len = 8;
         }
         $method_name = substr(strtolower($method_name), $explode_len);
         $method_parts = explode("|", str_replace("_and_", "|AND|", $method_name));
@@ -1479,31 +1506,31 @@ class ActiveRecord {
                 if($part == "AND") {
                     $conditions .= " AND ";
                     $param_index++;
-                } else {    
+                } else {
                     $value = $this->quote_attribute($part, $parameters[$param_index]);
-                    #$value = $this->attribute_is_string($part) ? 
-                    #    "'".$parameters[$param_index]."'" : 
-                    #    $parameters[$param_index]; 
-                    #error_log("find_by: $part = $value") ;                 
-                    $create_fields[$part] = $parameters[$param_index];  
+                    #$value = $this->attribute_is_string($part) ?
+                    #    "'".$parameters[$param_index]."'" :
+                    #    $parameters[$param_index];
+                    #error_log("find_by: $part = $value") ;
+                    $create_fields[$part] = $parameters[$param_index];
                     $conditions .= "{$part} = {$value}";
-                } 
+                }
             }
-            # If last param exists and is a string set it as the ORDER BY clause            
+            # If last param exists and is a string set it as the ORDER BY clause
             # or if the last param is an array set it as the $options
             ++$param_index;
             if(isset($parameters[$param_index]) && ($last_param = $parameters[$param_index])) {
                 if(is_string($last_param)) {
-                    $options['order'] = $last_param;        
+                    $options['order'] = $last_param;
                 } elseif(is_array($last_param)) {
-                    $options = $last_param;    
+                    $options = $last_param;
                 }
-            }  
+            }
             # Set the conditions
             if(isset($options['conditions']) && $conditions) {
-                $options['conditions'] = "(".$options['conditions'].") AND (".$conditions.")";    
+                $options['conditions'] = "(".$options['conditions'].") AND (".$conditions.")";
             } else {
-                $options['conditions'] = $conditions;    
+                $options['conditions'] = $conditions;
             }
 
             # Now do the actual find with condtions from above
@@ -1512,12 +1539,12 @@ class ActiveRecord {
                 $object = $this->find($options);
                 if(is_object($object)) {
                     # we found a record with the specified parameters so return it
-                    return $object;    
-                } elseif(count($create_fields)) { 
-                    # can't find a record with specified parameters so create a new record 
-                    # and return new object       
+                    return $object;
+                } elseif(count($create_fields)) {
+                    # can't find a record with specified parameters so create a new record
+                    # and return new object
                     foreach($create_fields as $field => $value) {
-                        $this->$field = $value;    
+                        $this->$field = $value;
                     }
                     $this->save();
                     return $this->find($options);
@@ -1532,7 +1559,7 @@ class ActiveRecord {
 
     /**
      *  Builds a sql statement.
-     *  
+     *
      *  @uses $rows_per_page_default
      *  @uses $rows_per_page
      *  @uses $offset
@@ -1540,12 +1567,12 @@ class ActiveRecord {
      *
      */
     function build_sql($conditions = null, $order = null, $limit = null, $joins = null) {
-        
+
         $offset = null;
         $page = null;
         $per_page = null;
         $select = null;
-        $paginate = false; 
+        $paginate = false;
         $group = null;
         $having = null;
 
@@ -1553,31 +1580,31 @@ class ActiveRecord {
         # named parameters.
         if(is_array($conditions)) {
             if(@array_key_exists("per_page", $conditions) && !is_numeric($conditions['per_page'])) {
-                extract($conditions); 
-                $per_page = 0;   
+                extract($conditions);
+                $per_page = 0;
             } else {
-                extract($conditions);     
+                extract($conditions);
             }
             # If conditions wasn't in the array set it to null
             if(is_array($conditions)) {
-                $conditions = null;    
-            }  
+                $conditions = null;
+            }
         }
 
-        # Test source of SQL for query 
-        if(stristr($conditions, "SELECT ")) {        
+        # Test source of SQL for query
+        if(stristr($conditions, "SELECT ")) {
             # SQL completely specified in argument so use it as is
-            $sql = $conditions;      
+            $sql = $conditions;
         } else {
 
             # If select fields not specified just do a SELECT *
             if(is_null($select)) {
                 $select = "*";
-            } 
+            }
 
             # SQL will be built from specifications in argument
-            $sql  = "SELECT {$select} FROM {$this->table_prefix}{$this->table_name} ";         
-            
+            $sql  = "SELECT {$select} FROM {$this->table_prefix}{$this->table_name} ";
+
             # If join specified, include it
             if(!is_null($joins)) {
                 $sql .= " $joins ";
@@ -1585,22 +1612,22 @@ class ActiveRecord {
 
             # If conditions specified, include them
             if(!is_null($conditions)) {
-                if(array_key_exists('conditions', $this->default_scope) 
+                if(array_key_exists('conditions', $this->default_scope)
                    && !is_null($this->default_scope['conditions'])) {
                     $conditions = " ({$conditions}) AND (".$this->default_scope['conditions'].") ";
                 }
                 $sql .= "WHERE $conditions ";
-            } elseif(array_key_exists('conditions', $this->default_scope) 
+            } elseif(array_key_exists('conditions', $this->default_scope)
                      && !is_null($this->default_scope['conditions'])) {
                 $conditions = $this->default_scope['conditions'];
                 $sql .= "WHERE {$conditions} ";
             }
-            
+
             # If GROUP BY was specified
             if(!is_null($group)) {
                 $sql .= "GROUP BY {$group} ";
             }
-            
+
             # If HAVING clause is specified
             if(!is_null($having)) {
                 $sql .= "HAVING {$having} ";
@@ -1608,12 +1635,12 @@ class ActiveRecord {
 
             # If ordering specified, include it
             if(!is_null($order)) {
-                if(array_key_exists('order', $this->default_scope) 
+                if(array_key_exists('order', $this->default_scope)
                    && !is_null($this->default_scope['order'])) {
                     $order = " {$order},".$this->default_scope['order']." ";
-                }                
+                }
                 $sql .= "ORDER BY $order ";
-            } elseif(array_key_exists('order', $this->default_scope) 
+            } elseif(array_key_exists('order', $this->default_scope)
                      && !is_null($this->default_scope['order'])) {
                 $sql .= "ORDER BY ".$this->default_scope['order']." ";
             }
@@ -1622,18 +1649,18 @@ class ActiveRecord {
             if(is_numeric($limit) || is_numeric($offset) || is_numeric($per_page) || is_numeric($page)) {
                 #error_log("limit:$limit offset:$offset per_page:$per_page page:$page");
 
-                if(is_numeric($limit)) {    
-                    $this->rows_per_page = (int)$limit;        
+                if(is_numeric($limit)) {
+                    $this->rows_per_page = (int)$limit;
                 }
                 if(is_numeric($per_page)) {
-                    $this->rows_per_page = (int)$per_page; 
+                    $this->rows_per_page = (int)$per_page;
                     $paginate = true;
                 }
                 # Default for rows_per_page:
                 if ($this->rows_per_page <= 0) {
                     $this->rows_per_page = (int)self::$rows_per_page_default;
                 }
-                
+
                 # Only use request's page if you are calling from find_all_with_pagination() and if it is int
                 #if(isset($_REQUEST['page']) && strval(intval($_REQUEST['page'])) == $_REQUEST['page']) {
                     #$this->page = $_REQUEST['page'];
@@ -1642,53 +1669,53 @@ class ActiveRecord {
                     $this->page = (int)$page;
                     $paginate = true;
                 }
-                
+
                 if($this->page <= 0) {
                     $this->page = 1;
                 }
-                                
+
                 # Set the LIMIT string segment for the SQL
                 if(is_null($offset)) {
                     $offset = ($this->page - 1) * $this->rows_per_page;
                 }
 
-                if($paginate) {      
-                    #error_log("pagination sql:$sql");                          
-                    $pagination_rs = $this->query($sql); 
+                if($paginate) {
+                    #error_log("pagination sql:$sql");
+                    $pagination_rs = $this->query($sql);
                     if($count = $pagination_rs->numRows()) {
                         $this->pagination_count = $count;
                         $this->pages = (($count % $this->rows_per_page) == 0)
                             ? $count / $this->rows_per_page
-                            : floor($count / $this->rows_per_page) + 1; 
-                    } 
-                    /*                  
+                            : floor($count / $this->rows_per_page) + 1;
+                    }
+                    /*
                     #error_log("I am going to paginate.");
-                    # Set number of total pages in result set          
+                    # Set number of total pages in result set
                     $count_all_params = array(
                         'conditions' => $conditions,
                         'joins' => $joins,
                         'group' => $group,
                         'having' => $having
-                    );   
-                    
+                    );
+
                     if($count = $this->count_all($this->primary_keys[0], $count_all_params)) {
                         $this->pagination_count = $count;
                         $this->pages = (($count % $this->rows_per_page) == 0)
                             ? $count / $this->rows_per_page
-                            : floor($count / $this->rows_per_page) + 1; 
-                    }  
+                            : floor($count / $this->rows_per_page) + 1;
+                    }
                     */
-                }  
-                
+                }
+
                 $sql .= "LIMIT {$this->rows_per_page} OFFSET {$offset}";
-                # $sql .= "LIMIT $offset, $this->rows_per_page";                
-                
+                # $sql .= "LIMIT $offset, $this->rows_per_page";
+
             }
         }
-        
+
         return $sql;
     }
-    
+
     /**
      *  Returns same as find_all
      *
@@ -1702,7 +1729,7 @@ class ActiveRecord {
         }
         $options['paginate'] = true;
         return $this->find_all($options);
-    }   
+    }
 
     /**
      *  Return rows selected by $conditions
@@ -1719,7 +1746,7 @@ class ActiveRecord {
      *  @param string Argument to "ORDER BY" in query.
      *    If specified, the query will include
      *    "ORDER BY $order". If omitted, no ordering will be
-     *    applied.  
+     *    applied.
      *  @param integer[] Page, rows per page???
      *  @param string ???
      *  @todo Document the $limit and $joins parameters
@@ -1745,12 +1772,12 @@ class ActiveRecord {
         # echo "query: $sql\n";
         # error_log("ActiveRecord::find_all -> $sql");
         $rs = $this->query($sql, true);
-        
+
         $objects = array();
         $class_name = $this->get_class_name();
-        while($row = $rs->fetchRow()) {    
+        while($row = $rs->fetchRow()) {
             $object = new $class_name();
-            $object->new_record = false;            
+            $object->new_record = false;
             $objects_key = null;
             foreach($row as $field => $value) {
                 $object->$field = $value;
@@ -1762,13 +1789,13 @@ class ActiveRecord {
             if(is_null($objects_key)) {
                 $objects[] = $object;
             } else {
-                $objects[$objects_key] = $object;   
+                $objects[$objects_key] = $object;
             }
             # If callback is defined in model run it.
-            # this will probably hurt performance...  
-            if(method_exists($object, 'after_find')) { 
-                $object->after_find();    
-            } elseif(isset($this->after_find) && method_exists($object, $this->after_find)) {   
+            # this will probably hurt performance...
+            if(method_exists($object, 'after_find')) {
+                $object->after_find();
+            } elseif(isset($this->after_find) && method_exists($object, $this->after_find)) {
                 $object->{$this->after_find}();
             }
             unset($object);
@@ -1786,7 +1813,7 @@ class ActiveRecord {
      *    generated selecting all of the array values in column "id".
      *    If $id is a string containing "=" then the string value of
      *    $id will be inserted in a WHERE clause in the query.  If $id
-     *    is a scalar not containing "=" then a query will be generated 
+     *    is a scalar not containing "=" then a query will be generated
      *    selecting the first row WHERE id = '$id'.
      *    <b>NOTE</b> The column name "id" is used regardless of the
      *    value of {@link $primary_keys}.  Therefore if you need to
@@ -1803,7 +1830,7 @@ class ActiveRecord {
      *  @return mixed Results of query.  If $id was a scalar then the
      *    result is an object of the same class as this class and
      *    matching $id conditions, or if no row matched the result is
-     *    null. 
+     *    null.
      *
      *    If $id was an array then the result is an array containing
      *    objects of the same class as this class and matching the
@@ -1817,16 +1844,16 @@ class ActiveRecord {
             if(isset($id[0])) {
                 # passed in array of numbers array(1,2,4,23)
                 $primary_key = $this->primary_keys[0];
-                $primary_key_values = $this->attribute_is_string($primary_key) ? 
-                    "'".implode("','", $id)."'" : 
+                $primary_key_values = $this->attribute_is_string($primary_key) ?
+                    "'".implode("','", $id)."'" :
                     implode(",", $id);
                 $options['conditions'] = "{$primary_key} IN({$primary_key_values})";
                 $find_all = true;
             } else {
                 # passed in an options array
-                $options = $id;    
+                $options = $id;
             }
-        } elseif(stristr($id, "=")) { 
+        } elseif(stristr($id, "=")) {
             # has an "=" so must be a WHERE clause
             $options['conditions'] = $id;
         } else {
@@ -1835,7 +1862,7 @@ class ActiveRecord {
             $primary_key_value = $this->attribute_is_string($primary_key) ? "'".$id."'" : $id ;
             $options['conditions'] = "{$primary_key} = {$primary_key_value}";
         }
-        if(!is_null($order)) $options['order'] = $order; 
+        if(!is_null($order)) $options['order'] = $order;
         if(!is_null($limit)) $options['limit'] = $limit;
         if(!is_null($joins)) $options['joins'] = $joins;
 
@@ -1861,7 +1888,7 @@ class ActiveRecord {
      *  @param string $order Argument to "ORDER BY" in query.
      *    If specified, the query will include
      *    "ORDER BY $order". If omitted, no ordering will be
-     *    applied.  
+     *    applied.
      *  FIXME This parameter doesn't seem to make sense
      *  @param integer[] $limit Page, rows per page??? @todo Document this parameter
      *  FIXME This parameter doesn't seem to make sense
@@ -1873,16 +1900,16 @@ class ActiveRecord {
      */
     function find_first($conditions = null, $order = null, $limit = 1, $joins = null) {
         if(is_array($conditions)) {
-            $options = $conditions;    
+            $options = $conditions;
         } else {
-            $options['conditions'] = $conditions;    
+            $options['conditions'] = $conditions;
         }
-        if(!is_null($order)) $options['order'] = $order; 
+        if(!is_null($order)) $options['order'] = $order;
         if(!is_null($limit)) $options['limit'] = $limit;
         if(!is_null($joins)) $options['joins'] = $joins;
 
         $result = @current($this->find_all($options));
-        return (is_object($result) ? $result : null);        
+        return (is_object($result) ? $result : null);
     }
 
     /**
@@ -1919,7 +1946,7 @@ class ActiveRecord {
      *  Loads into current object values from the database.
      */
     function load($conditions = null) {
-        return $this->reload($conditions);        
+        return $this->reload($conditions);
     }
 
     /**
@@ -1937,7 +1964,7 @@ class ActiveRecord {
     }
 
     /**
-     *  Finds the record from the passed id, instantly saves it with the passed attributes 
+     *  Finds the record from the passed id, instantly saves it with the passed attributes
      *  (if the validation permits it). Returns true on success and false on error.
      *  @todo Document this API
      */
@@ -1953,9 +1980,9 @@ class ActiveRecord {
     }
 
     /**
-     *  Updates all records with the SET-part of an SQL update statement in updates and 
-     *  returns an integer with the number of rows updates. A subset of the records can 
-     *  be selected by specifying conditions. 
+     *  Updates all records with the SET-part of an SQL update statement in updates and
+     *  returns an integer with the number of rows updates. A subset of the records can
+     *  be selected by specifying conditions.
      *  Example:
      *    $model->update_all("category = 'cooldude', approved = 1", "author = 'John'");
      *  @uses is_error()
@@ -1983,7 +2010,7 @@ class ActiveRecord {
      *  @param string[] $attributes List of name => value pairs giving
      *    name and value of attributes to set.
      *  @param boolean $dont_validate true => Don't call validation
-     *    routines before saving the row.  If false or omitted, all 
+     *    routines before saving the row.  If false or omitted, all
      *    applicable validation routines are called.
      *  @uses add_record_or_update_record()
      *  @uses update_attributes()
@@ -2003,7 +2030,7 @@ class ActiveRecord {
                 $this->clear_changed_attributes();
                 return true;
             }
-        } 
+        }
         return false;
     }
 
@@ -2026,13 +2053,13 @@ class ActiveRecord {
      *            <li>false => insert failed</li>
      *          </ul>
      */
-    private function add_record_or_update_record() { 
+    private function add_record_or_update_record() {
         //error_log('add_record_or_update_record()');
         $this->before_save();
         if($this->new_record) {
             $this->before_create();
-            $result = $this->add_record();   
-            $this->after_create(); 
+            $result = $this->add_record();
+            $this->after_create();
         } else {
             $this->before_update();
             $result = $this->update_record();
@@ -2065,10 +2092,10 @@ class ActiveRecord {
      *          </ul>
      *  @throws {@link ActiveRecordError}
      */
-    private function add_record() { 
+    private function add_record() {
         $db =& $this->get_connection();
-        $db->loadModule('Extended', null, true);   
-        $primary_key = $this->primary_keys[0];             
+        $db->loadModule('Extended', null, true);
+        $primary_key = $this->primary_keys[0];
         # $primary_key_value may either be a quoted integer or php null
         $primary_key_value = $db->getBeforeID("{$this->table_prefix}{$this->table_name}", $primary_key);
         if($this->is_error($primary_key_value)) {
@@ -2081,22 +2108,22 @@ class ActiveRecord {
         $sql = "INSERT INTO {$this->table_prefix}{$this->table_name} ({$fields}) VALUES ({$values})";
         //echo "add_record: SQL: $sql<br>";
         #error_log("add_record: SQL: $sql");
-        $result = $this->query($sql);  
+        $result = $this->query($sql);
         $habtm_result = true;
-        
+
         # $primary_key_value is now equivalent to the value in the id field that was inserted
         $primary_key_value = $db->getAfterID($primary_key_value, "{$this->table_prefix}{$this->table_name}", $primary_key);
         if($this->is_error($primary_key_value)) {
             $this->raise($primary_key_value->getMessage());
-        }            
-        $this->$primary_key = $primary_key_value;  
+        }
+        $this->$primary_key = $primary_key_value;
         $this->new_record = false;
         if($primary_key_value != '') {
             if($this->auto_save_habtm) {
                 $habtm_result = $this->add_habtm_records($primary_key_value);
             }
             $this->save_associations();
-        }          
+        }
         return ($result && $habtm_result);
     }
 
@@ -2133,17 +2160,17 @@ class ActiveRecord {
         $sql = "UPDATE {$this->table_prefix}{$this->table_name} SET {$updates} WHERE {$conditions}";
         //echo "update_record:$sql<br>";
         #error_log("update_record: SQL: $sql");
-        if($updates && $conditions) { 
+        if($updates && $conditions) {
             $result = $this->query($sql);
             $habtm_result = true;
             $primary_key = $this->primary_keys[0];
             $primary_key_value = $this->$primary_key;
-            if($primary_key_value > 0) { 
+            if($primary_key_value > 0) {
                 if($this->auto_save_habtm) {
                     $habtm_result = $this->update_habtm_records($primary_key_value);
                 }
                 $this->save_associations();
-            }         
+            }
         }
         return ($result && $habtm_result);
     }
@@ -2151,43 +2178,43 @@ class ActiveRecord {
     /**
      *  Loads the model values into composite object
      *  @todo Document this API
-     */    
+     */
     private function get_composite_object($name) {
         $composite_object = null;
         $composite_attributes = array();
-        if(is_array($this->composed_of)) { 
+        if(is_array($this->composed_of)) {
             if(array_key_exists($name, $this->composed_of)) {
-                $class_name = Inflector::classify(($this->composed_of[$name]['class_name'] ? 
-                    $this->composed_of[$name]['class_name'] : $name));           
+                $class_name = Inflector::classify(($this->composed_of[$name]['class_name'] ?
+                    $this->composed_of[$name]['class_name'] : $name));
 
                 $mappings = $this->composed_of[$name]['mapping'];
                 if(is_array($mappings)) {
                     foreach($mappings as $database_name => $composite_name) {
-                        $composite_attributes[$composite_name] = $this->$database_name;                      
-                    }    
-                }   
-            }    
+                        $composite_attributes[$composite_name] = $this->$database_name;
+                    }
+                }
+            }
         } elseif($this->composed_of == $name) {
             $class_name = $name;
-            $composite_attributes[$name] = $this->$name;        
-        } 
-        
-        if(class_exists($class_name)) {                     
-            $composite_object = new $class_name;        
+            $composite_attributes[$name] = $this->$name;
+        }
+
+        if(class_exists($class_name)) {
+            $composite_object = new $class_name;
             if($composite_object->auto_map_attributes !== false) {
                 //echo "auto_map_attributes<br>";
                 foreach($composite_attributes as $name => $value) {
-                    $composite_object->$name = $value;    
-                }                                      
-            }           
+                    $composite_object->$name = $value;
+                }
+            }
             if(method_exists($composite_object, '__construct')) {
                 //echo "calling constructor<br>";
-                $composite_object->__construct($composite_attributes);       
-            }         
-        } 
+                $composite_object->__construct($composite_attributes);
+            }
+        }
         return $composite_object;
     }
-    
+
     /**
      *  returns the association type if defined in child class or null
      *  @todo Document this API
@@ -2209,73 +2236,73 @@ class ActiveRecord {
         if($association_name != '') {
             if(is_string($this->has_many)) {
                 if(preg_match("/\b$association_name\b/", $this->has_many)) {
-                    $type = "has_many";    
+                    $type = "has_many";
                 }
             } elseif(is_array($this->has_many)) {
                 if(array_key_exists($association_name, $this->has_many)) {
-                    $type = "has_many";     
+                    $type = "has_many";
                 }
             }
             if(is_string($this->has_one)) {
                 if(preg_match("/\b$association_name\b/", $this->has_one)) {
-                    $type = "has_one";     
+                    $type = "has_one";
                 }
             } elseif(is_array($this->has_one)) {
                 if(array_key_exists($association_name, $this->has_one)) {
-                    $type = "has_one";     
+                    $type = "has_one";
                 }
             }
-            if(is_string($this->belongs_to)) { 
+            if(is_string($this->belongs_to)) {
                 if(preg_match("/\b$association_name\b/", $this->belongs_to)) {
-                    $type = "belongs_to";      
+                    $type = "belongs_to";
                 }
             } elseif(is_array($this->belongs_to)) {
                 if(array_key_exists($association_name, $this->belongs_to)) {
-                    $type = "belongs_to";      
+                    $type = "belongs_to";
                 }
             }
             if(is_string($this->has_and_belongs_to_many)) {
                 if(preg_match("/\b$association_name\b/", $this->has_and_belongs_to_many)) {
-                    $type = "has_and_belongs_to_many";      
+                    $type = "has_and_belongs_to_many";
                 }
             } elseif(is_array($this->has_and_belongs_to_many)) {
                 if(array_key_exists($association_name, $this->has_and_belongs_to_many)) {
-                    $type = "has_and_belongs_to_many";      
+                    $type = "has_and_belongs_to_many";
                 }
-            }            
-        }  
-        return $type;   
+            }
+        }
+        return $type;
     }
-    
+
     /**
      *  Saves any associations objects assigned to this instance
      *  @uses $auto_save_associations
      *  @todo Document this API
      */
-    private function save_associations() {      
+    private function save_associations() {
         if(count($this->save_associations) && $this->auto_save_associations) {
             foreach(array_keys($this->save_associations) as $type) {
                 if(count($this->save_associations[$type])) {
                     foreach($this->save_associations[$type] as $object_or_array) {
                         if(is_object($object_or_array)) {
-                            $this->save_association($object_or_array, $type);     
+                            $this->save_association($object_or_array, $type);
                         } elseif(is_array($object_or_array)) {
                             foreach($object_or_array as $object) {
-                                $this->save_association($object, $type);    
-                            }    
+                                $this->save_association($object, $type);
+                            }
                         }
                     }
                 }
-            }    
-        }       
+            }
+        }
     }
-    
+
     /**
      *  save the association to the database
      *  @todo Document this API
      */
     private function save_association($object, $type) {
-        if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {     
+        if(is_object($object) && get_parent_class($object) == __CLASS__ && $type) {
             if($object->changed) {
                 //echo get_class($object)." - type:$type<br>";
                 switch($type) {
@@ -2283,13 +2310,13 @@ class ActiveRecord {
                     case "has_one":
                         $primary_key = $this->primary_keys[0];
                         $foreign_key = Inflector::singularize($this->table_name)."_".$primary_key;
-                        $object->$foreign_key = $this->$primary_key; 
+                        $object->$foreign_key = $this->$primary_key;
                         //echo "fk:$foreign_key = ".$this->$primary_key."<br>";
                         break;
                 }
-                $object->save();   
-            }     
-        }            
+                $object->save();
+            }
+        }
     }
 
     /**
@@ -2308,14 +2335,14 @@ class ActiveRecord {
             # Primary key's where clause from already loaded values
             $conditions = $this->get_primary_key_conditions();
             $deleted_ids[] = $this->$primary_key;
-        } elseif(!is_array($id)) {         
+        } elseif(!is_array($id)) {
             $deleted_ids[] = $id;
             $id = $this->attribute_is_string($primary_key) ? "'".$id."'" : $id;
             $conditions = "{$primary_key} = {$id}";
         } elseif(is_array($id)) {
             $deleted_ids = $id;
-            $ids = ($this->attribute_is_string($primary_key)) ? 
-                "'".implode("','", $id)."'" : 
+            $ids = ($this->attribute_is_string($primary_key)) ?
+                "'".implode("','", $id)."'" :
                 implode(',', $id);
             $conditions = "{$primary_key} IN ({$ids})";
         }
@@ -2332,18 +2359,18 @@ class ActiveRecord {
                         if(is_string($this->has_and_belongs_to_many)) {
                             $habtms = explode(",", $this->has_and_belongs_to_many);
                             foreach($habtms as $other_table_name) {
-                                $this->delete_all_habtm_records(trim($other_table_name), $id);                             
+                                $this->delete_all_habtm_records(trim($other_table_name), $id);
                             }
                         } elseif(is_array($this->has_and_belongs_to_many)) {
                             foreach($this->has_and_belongs_to_many as $other_table_name => $values) {
-                                $this->delete_all_habtm_records($other_table_name, $id);                             
+                                $this->delete_all_habtm_records($other_table_name, $id);
                             }
-                        } 
+                        }
                     }
                 }
                 $this->after_delete();
-            }            
-        }        
+            }
+        }
         return $result;
     }
 
@@ -2368,13 +2395,13 @@ class ActiveRecord {
         if(is_null($conditions)) {
             $this->add_error("No conditions specified to delete on.");
             return false;
-        } 
+        }
         if(!is_null($limit)) {
             $limit = "LIMIT {$limit}";
         }
         # Delete the record(s)
         $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions} {$limit}");
-        # reset this to a new record    
+        # reset this to a new record
         $this->new_record = true;
         return true;
     }
@@ -2432,12 +2459,12 @@ class ActiveRecord {
                     foreach($other_foreign_values as $other_foreign_value) {
                         unset($attributes);
                         $attributes[$this_foreign_key] = $this_foreign_value;
-                        $attributes[$other_foreign_key] = $other_foreign_value;   
+                        $attributes[$other_foreign_key] = $other_foreign_value;
                         #error_log("HABTM - this_foreign_value:$this_foreign_value other_foreign_value:$other_foreign_value");
                         if(in_array('', array($this_foreign_value, $other_foreign_value))) {
                             # this will cause an error so don't insert
                             continue;
-                        }                         
+                        }
                         if($sort_field) {
                             $attributes[$sort_field] = $sort_value;
                             $sort_value++;
@@ -2471,14 +2498,14 @@ class ActiveRecord {
         }
         return true;
     }
-    
+
     private function delete_all_habtm_records($other_table_name, $this_foreign_value) {
         if($other_table_name && $this_foreign_value > 0) {
             $habtm_table_name = $this->get_join_table_name($this->table_name,$other_table_name);
             $this_foreign_key = Inflector::singularize($this->table_name)."_id";
             $sql = "DELETE FROM {$habtm_table_name} WHERE {$this_foreign_key} = {$this_foreign_value}";
             //echo "delete_all_habtm_records: SQL: $sql<br>";
-            $this->query($sql);           
+            $this->query($sql);
         }
     }
 
@@ -2503,7 +2530,7 @@ class ActiveRecord {
      *  @return mixed Current date and time or $value
      */
     private function check_datetime($field, $value) {
-        if($this->auto_timestamps) {    
+        if($this->auto_timestamps) {
             if(array_key_exists($field, (array)$this->content_columns)) {
                 if(stristr($this->content_columns[$field]['type'], "date")) {
                     $format = ($this->content_columns[$field]['type'] == "date") ? $this->date_format : "{$this->date_format} {$this->time_format}";
@@ -2513,16 +2540,16 @@ class ActiveRecord {
                             $this->$field = $date;
                             return $date;
                         } elseif($this->preserve_null_dates && is_null($value) && !stristr($this->content_columns[$field]['flags'], "not_null")) {
-                            return null;    
+                            return null;
                         }
                     } elseif(!$this->new_record) {
                         if(in_array($field, $this->auto_update_timestamps)) {
                             return date($format);
                         } elseif($this->preserve_null_dates && is_null($value) && !stristr($this->content_columns[$field]['flags'], "not_null")) {
-                            return null;    
+                            return null;
                         }
                     }
-                }               
+                }
             }
         }
         return $value;
@@ -2554,22 +2581,22 @@ class ActiveRecord {
                     $datetime_field = substr($field, 0, strpos($field, "("));
                     if(!in_array($datetime_field, $datetime_fields)) {
                         $datetime_fields[] = $datetime_field;
-                    }                                             
-                    # this elseif checks if first its an object if its parent is ActiveRecord            
+                    }
+                    # this elseif checks if first its an object if its parent is ActiveRecord
                 } elseif(is_object($value) && get_parent_class($value) == __CLASS__ && $this->auto_save_associations) {
                     if($association_type = $this->get_association_type($field)) {
                         $this->save_associations[$association_type][] = $value;
                         if($association_type == "belongs_to") {
-                            $primary_key = $value->primary_keys[0];                                
-                            if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) { 
-                                $foreign_key = $this->belongs_to[$key]['foreign_key']; 
-                            } else { 
+                            $primary_key = $value->primary_keys[0];
+                            if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) {
+                                $foreign_key = $this->belongs_to[$key]['foreign_key'];
+                            } else {
                                 $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
-                            }                            
-                            $this->$foreign_key = $value->$primary_key; 
+                            }
+                            $this->$foreign_key = $value->$primary_key;
                         }
                     }
-                    # this elseif checks if its an array of objects and if its parent is ActiveRecord                
+                    # this elseif checks if its an array of objects and if its parent is ActiveRecord
                 } elseif(is_array($value) && $this->auto_save_associations) {
                     if($association_type = $this->get_association_type($field)) {
                         $this->save_associations[$association_type][] = $value;
@@ -2595,13 +2622,13 @@ class ActiveRecord {
                         . "-" . $attributes[$datetime_field."(2i)"]
                         . "-" . $attributes[$datetime_field."(3i)"];
                         $datetime_format = $this->date_format;
-                    } 
+                    }
                     # for expiration dates Year & Month
                     elseif($attributes[$datetime_field."(1i)"]
                              && $attributes[$datetime_field."(2i)"]) {
                         $datetime_value = $attributes[$datetime_field."(1i)"]
-                        . "-" . $attributes[$datetime_field."(2i)"]."-01";  
-                        $datetime_format = $this->date_format;                  
+                        . "-" . $attributes[$datetime_field."(2i)"]."-01";
+                        $datetime_format = $this->date_format;
                     }
                     $datetime_value .= " ";
                     # Time Hour & Minutes
@@ -2609,21 +2636,21 @@ class ActiveRecord {
                         && $attributes[$datetime_field."(5i)"]) {
                         $datetime_value .= $attributes[$datetime_field."(4i)"]
                         . ":" . $attributes[$datetime_field."(5i)"];
-                        $datetime_format .= " ".$this->time_format;                        
-                    }    
+                        $datetime_format .= " ".$this->time_format;
+                    }
                     if($datetime_value = trim($datetime_value)) {
                         $datetime_value = date($datetime_format, strtotime($datetime_value));
                         //error_log("($field) $datetime_field = $datetime_value");
-                        $this->$datetime_field = $datetime_value;    
+                        $this->$datetime_field = $datetime_value;
                     }
-                }    
+                }
             }
             $this->set_habtm_attributes($attributes);
         }
     }
-    
+
     /**
-     * If a composite object was specified via $composed_of, then its values 
+     * If a composite object was specified via $composed_of, then its values
      * mapped to the model will overwrite the models values.
      *
      */
@@ -2634,13 +2661,13 @@ class ActiveRecord {
                 if(is_array($options) && is_object($composite_object)) {
                     if(is_array($options['mapping'])) {
                         foreach($options['mapping'] as $database_name => $composite_name) {
-                            $this->$database_name = $composite_object->$composite_name;                          
-                        }    
-                    }        
-                }       
-            }    
-        }    
-    }    
+                            $this->$database_name = $composite_object->$composite_name;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /**
      *  Return pairs of column-name:column-value
@@ -2672,14 +2699,14 @@ class ActiveRecord {
      *  is the column name and the value is the column value with
      *  automatic timestamp updating applied and characters special to
      *  SQL quoted.
-     *  
+     *
      *  If $attributes is null or omitted, return all columns as
      *  currently stored in {@link content_columns()}.  Otherwise,
      *  return the name:value pairs in $attributes.
      *  @param string[] $attributes Name:value pairs to return.
      *    If null or omitted, return the column names and values
      *    of the object as stored in $content_columns.
-     *  @return string[] 
+     *  @return string[]
      *  @uses get_attributes()
      *  @see set_content_columns()
      */
@@ -2688,7 +2715,7 @@ class ActiveRecord {
             $attributes = $this->get_attributes();
         }
         $return = array();
-        foreach($attributes as $name => $value) {           
+        foreach($attributes as $name => $value) {
             $return[$name] = $this->quote_attribute($name, $value);
         }
         return $return;
@@ -2697,31 +2724,31 @@ class ActiveRecord {
     /**
      *  Quotes a single attribute for use in an sql statement.
      *
-     */    
+     */
     function quote_attribute($attribute, $value = null) {
         $value = is_null($value) ? $this->$attribute : $value;
-        $value = $this->check_datetime($attribute, $value);        
+        $value = $this->check_datetime($attribute, $value);
         $column = $this->column_for_attribute($attribute);
         if(isset($column['mdb2type'])) {
             $type = $column['mdb2type'];
         } else {
-            $type = $this->attribute_is_string($attribute, $column) ? 
-                "text" : is_float($attribute) ? "float" : "integer"; 
-        }            
-        $value = self::$db->quote($value, $type);    
+            $type = $this->attribute_is_string($attribute, $column) ?
+                "text" : is_float($attribute) ? "float" : "integer";
+        }
+        $value = self::$db->quote($value, $type);
         if($value === 'NULL' && stristr($column['flags'], "not_null")) {
-            $value = "''";    
-        } 
-        return $value;               
+            $value = "''";
+        }
+        return $value;
     }
 
     /**
      *  Escapes a string for use in an sql statement.
      *
-     */    
+     */
     function escape($string) {
         return(self::$db->escape($string));
-    }    
+    }
 
     /**
      *  Return argument for a "WHERE" clause specifying this row
@@ -2747,7 +2774,7 @@ class ActiveRecord {
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
                 if(in_array($key, $this->primary_keys) && isset($value) && $value != "''") {
-                    $conditions[] = "{$key} {$operator} {$value}";    
+                    $conditions[] = "{$key} {$operator} {$value}";
                 }
             }
             $conditions = implode(" AND ", $conditions);
@@ -2793,13 +2820,13 @@ class ActiveRecord {
                 $attributes[$key] = $changes['modified'];
             }
             #error_log("modified attributes:".print_r($attributes, true));
-            # make sure the auto timestamps are in there 
+            # make sure the auto timestamps are in there
             foreach($this->content_columns as $column_name => $column) {
                 if(stristr($column['type'], "date") && in_array($column_name, $this->auto_update_timestamps) && !array_key_exists($column_name, $attributes)) {
                     $attributes[$column_name] = $this->$column_name;
                 }
             }
-            #error_log("modified attributes with dates:".print_r($attributes, true));                        
+            #error_log("modified attributes with dates:".print_r($attributes, true));
         }
         $attributes = $this->quoted_attributes($attributes);
         if(count($attributes) > 0) {
@@ -2834,19 +2861,19 @@ class ActiveRecord {
     }
 
     /**
-     *  Get class name of child object 
+     *  Get class name of child object
      *
      *  this will return the manually set name or get_class($this)
      *  @return string child class name
-     */    
+     */
     private function get_class_name() {
-        return !is_null($this->class_name) ? $this->class_name : get_class($this);                
+        return !is_null($this->class_name) ? $this->class_name : get_class($this);
     }
 
     /**
-     *  Populate object with information about the table it represents 
+     *  Populate object with information about the table it represents
      *
-     *  Call {@link 
+     *  Call {@link
      *  http://pear.php.net/manual/en/package.database.db.db-common.tableinfo.php
      *  DB_common::tableInfo()} to get a description of the table and
      *  store it in {@link $content_columns}.  Add a more human
@@ -2864,19 +2891,19 @@ class ActiveRecord {
         if(isset(self::$table_info[$table_name])) {
             $this->content_columns = self::$table_info[$table_name];
             #error_log("using cached content_columns");
-        } else {       
-            $db =& $this->get_connection(true);                                      
+        } else {
+            $db =& $this->get_connection(true);
             $db->loadModule('Reverse', null, true);
             $content_columns = $db->reverse->tableInfo($table_name);
             if($this->is_error($content_columns)) {
-                $this->raise($content_columns->getMessage());        
+                $this->raise($content_columns->getMessage());
             }
             if(is_array($content_columns)) {
                 $this->content_columns = array();
                 foreach($content_columns as $column) {
                     $column['human_name'] = $this->human_attribute_name($column['name']);
                     $this->content_columns[$column['name']] = $column;
-                }        
+                }
                 self::$table_info[$table_name] = $this->content_columns;
             }
         }
@@ -2891,14 +2918,14 @@ class ActiveRecord {
      *  @throws {@link ActiveRecordError}
      */
     function get_insert_id() {
-        // fetch the last inserted id via autoincrement or current value of a sequence 
+        // fetch the last inserted id via autoincrement or current value of a sequence
         $db =& $this->get_connection();
         if($db->supports('auto_increment') === true) {
-            $id = $db->lastInsertID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);   
+            $id = $db->lastInsertID("{$this->table_prefix}{$this->table_name}", $this->primary_keys[0]);
             if($this->is_error($id)) {
                 $this->raise($id->getMessage());
-            } 
-            return $id;                
+            }
+            return $id;
         }
 
         return null;
@@ -2911,8 +2938,8 @@ class ActiveRecord {
      *  $database_settings which is set in {@link
      *  environment.php} by reading file config/database.ini. The
      *  database name may be overridden by assigning a different name
-     *  to {@link $database_name}. 
-     *  
+     *  to {@link $database_name}.
+     *
      *  If there is a connection now open, as indicated by the saved
      *  value of a MDB2 object in $connection_pool[$connection_name], and
      *  {@link force_reconnect} is not true, then set the database
@@ -2928,11 +2955,11 @@ class ActiveRecord {
      *  @uses is_error()
      *  @throws {@link ActiveRecordError}
      */
-    function establish_connection($connection_name = null, $read_only = false) { 
+    function establish_connection($connection_name = null, $read_only = false) {
         #error_log("trying connection name:$connection_name");
-        $connection_name = $this->get_connection_name($connection_name); 
-        #error_log("got connection name:$connection_name read only:".($read_only ? 'true' : 'false')); 
-        if($read_only) { 
+        $connection_name = $this->get_connection_name($connection_name);
+        #error_log("got connection name:$connection_name read only:".($read_only ? 'true' : 'false'));
+        if($read_only) {
             $connection =& self::$connection_pool_read_only[$connection_name];
         } else {
             $connection =& self::$connection_pool[$connection_name];
@@ -2945,7 +2972,7 @@ class ActiveRecord {
                 if(array_key_exists("use", self::$database_settings[$connection_name])) {
                     $connection_settings = self::$database_settings[self::$database_settings[$connection_name]['use']];
                 } else {
-                    # Custom defined db settings in database.ini 
+                    # Custom defined db settings in database.ini
                     $connection_settings = self::$database_settings[$connection_name];
                 }
             } else {
@@ -2957,8 +2984,8 @@ class ActiveRecord {
             }
             # Override database name if param is set
             if($this->database_name) {
-                $connection_settings['database'] = $this->database_name;               
-            }            
+                $connection_settings['database'] = $this->database_name;
+            }
             # Set optional Pear parameters
             if(isset($connection_settings['persistent'])) {
                 $connection_options['persistent'] = $connection_settings['persistent'];
@@ -2966,7 +2993,7 @@ class ActiveRecord {
             # Connect to the database and throw an error if the connect fails.
             $connection =& MDB2::Connect($connection_settings, $connection_options);
             #static $connect_cnt;  $connect_cnt++; error_log("establish_connection($connection_name, $read_only) #".$connect_cnt);
-            
+
             # For Postgres schemas (http://www.postgresql.org/docs/8.0/interactive/ddl-schemas.html)
             if(isset($connection_settings['schema_search_path'])){
                 if(!$this->is_error($connection)) {
@@ -2974,96 +3001,96 @@ class ActiveRecord {
                     # First strip out all the whitespace
                     $connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
                 }
-            } 
-        } 
+            }
+        }
         if(!$this->is_error($connection)) {
             $connection->setFetchMode($this->fetch_mode);
             if($read_only) {
-                self::$connection_pool_read_only[$connection_name] =& $connection; 
+                self::$connection_pool_read_only[$connection_name] =& $connection;
                 $pool_size = count(self::$connection_pool_read_only);
                 $this->read_only_connection_name = $connection_name;
             } else {
-                self::$connection_pool[$connection_name] =& $connection;  
+                self::$connection_pool[$connection_name] =& $connection;
                 $pool_size = count(self::$connection_pool);
                 $this->connection_name = $connection_name;
-            }  
-            
+            }
+
             if($pool_size > 1 || $this->database_name != '') {
-                $dsn = $connection->getDSN('array', true);     
+                $dsn = $connection->getDSN('array', true);
                 #error_log("dsn:".print_r($dsn, true));
-                if($this->database_name != '') { 
-                    #$type = "database defined"; 
-                    $database_name = $this->database_name; 
-                } elseif($dsn['database'] != '') {  
+                if($this->database_name != '') {
+                    #$type = "database defined";
+                    $database_name = $this->database_name;
+                } elseif($dsn['database'] != '') {
                     #$type = "dsn";
                     $database_name = $dsn['database'];
                 }
                 if($database_name) {
                     #error_log("connect $type switch database to {$database_name}");
-                    $connection->setDatabase($database_name);            
+                    $connection->setDatabase($database_name);
                 }
-            }                                    
-        } else {   
+            }
+        } else {
             $this->raise($connection->getMessage());
-        }      
+        }
         return $connection;
     }
 
     /**
-     *  Set the name of the database connection to use. 
-     */    
+     *  Set the name of the database connection to use.
+     */
     function get_connection_name($connection_name = null) {
         if(is_null($connection_name)) {
             if(!is_null($this->connection_name)) {
-                $connection_name = $this->connection_name;      
+                $connection_name = $this->connection_name;
             } else {
                 $connection_name = self::$environment ? self::$environment : 'development';
-            } 
+            }
         }
-        return $connection_name; 
+        return $connection_name;
     }
 
     /**
-     *  Gets the database connection whether its read only or read/write    
-     */    
-    function get_connection($read_only = false) { 
-        if($read_only && $this->read_only_connection_name && 
+     *  Gets the database connection whether its read only or read/write
+     */
+    function get_connection($read_only = false) {
+        if($read_only && $this->read_only_connection_name &&
            array_key_exists($this->read_only_connection_name, self::$connection_pool_read_only)) {
-            $db =& self::$connection_pool_read_only[$this->read_only_connection_name]; 
+            $db =& self::$connection_pool_read_only[$this->read_only_connection_name];
             $pool_size = count(self::$connection_pool_read_only);
             #error_log("get_connection pool:$pool_size - using read only:".$this->read_only_connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
         } elseif(array_key_exists($this->connection_name, self::$connection_pool)) {
-            $db =& self::$connection_pool[$this->connection_name];   
+            $db =& self::$connection_pool[$this->connection_name];
             $pool_size = count(self::$connection_pool);
             #error_log("get_connection pool:$pool_size - using read/write from pool:".$this->connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
         } else {
-            $db =& self::$db;   
+            $db =& self::$db;
             $pool_size = 1;
             #error_log("get_connection pool:1 - using read/write default:".$this->connection_name." dbname:".$db->database_name." table_name:".$this->table_name);
-        }  
-            
+        }
+
         if($pool_size > 1 || $this->database_name != '') {
-            $dsn = $db->getDSN('array', true);     
+            $dsn = $db->getDSN('array', true);
             #error_log("dsn:".print_r($dsn, true));
-            if($this->database_name != '') { 
-                $type = "database defined"; 
-                $database_name = $this->database_name; 
-            } elseif($dsn['database'] != '') {  
+            if($this->database_name != '') {
+                $type = "database defined";
+                $database_name = $this->database_name;
+            } elseif($dsn['database'] != '') {
                 $type = "dsn";
                 $database_name = $dsn['database'];
             }
             if($database_name) {
                 #error_log("get_connection $type switch database to {$database_name} table:".$this->table_name);
-                $db->setDatabase($database_name);            
+                $db->setDatabase($database_name);
             }
         }
-                    
+
         return $db;
-    }   
+    }
 
     /**
      *  Clears all database connections
-     */    
+     */
     function clear_all_connections() {
         foreach((array)self::$connection_pool as $connection) {
             if(is_object($connection)) {
@@ -3074,19 +3101,19 @@ class ActiveRecord {
             if(is_object($connection)) {
                 $connection->disconnect();
             }
-        }        
+        }
         self::$connection_pool = array();
-        self::$connection_pool_read_only = array();  
-    }  
+        self::$connection_pool_read_only = array();
+    }
 
     /**
-     *  Select a different database   
+     *  Select a different database
      *
      * @param   string  name of the database that should be selected
      * @return  string  name of the database previously connected to
-     * @access  public     
-     */    
-    function set_database($database_name) {    
+     * @access  public
+     */
+    function set_database($database_name) {
         $db =& $this->get_connection(true);
         if($database_name && is_object($db)) {
             return $db->setDatabase($database_name);
@@ -3097,7 +3124,7 @@ class ActiveRecord {
      *  Determine if passed in attribute (table column) is a string
      *  @param string $attribute Name of the table column
      *  @uses column_for_attribute()
-     */    
+     */
     function attribute_is_string($attribute, $column = null) {
         $column = is_null($column) ? $this->column_for_attribute($attribute) : $column;
         switch(strtolower($column['mdb2type'])) {
@@ -3107,24 +3134,24 @@ class ActiveRecord {
             case 'time':
             case 'blob':
             case 'clob':
-                return true;       
+                return true;
         }
-        return false;        
+        return false;
     }
 
     /**
      *  Determine if passed in name is a composite class or not
      *  @param string $name Name of the composed_of mapping
      *  @uses $composed_of
-     */    
+     */
     private function is_composite($name) {
         if(is_array($this->composed_of)) {
             if(array_key_exists($name, $this->composed_of)) {
-                return true;     
+                return true;
             }
-        }        
+        }
         return false;
-    }    
+    }
 
     /**
      *  Runs validation routines for update or create
@@ -3140,8 +3167,8 @@ class ActiveRecord {
      *  @uses validate();
      *  @uses validate_model_attributes();
      *  @uses validate_builtin();
-     *  @uses validate_on_create(); 
-     *  @return boolean 
+     *  @uses validate_on_create();
+     *  @return boolean
      *    <ul>
      *      <li>true => Valid, no errors found.
      *        {@link $errors} is empty</li>
@@ -3157,9 +3184,9 @@ class ActiveRecord {
             $this->before_validation_on_create();
             $this->validate();
             $this->validate_model_attributes();
-            $this->validate_builtin();            
+            $this->validate_builtin();
             $this->after_validation();
-            $this->validate_on_create(); 
+            $this->validate_on_create();
             $this->after_validation_on_create();
         } else {
             $this->before_validation();
@@ -3185,7 +3212,7 @@ class ActiveRecord {
      *  succeeded), and whose second element is the error message to
      *  display if the first element is false.
      *
-     *  @return boolean 
+     *  @return boolean
      *    <ul>
      *      <li>true => Valid, no errors found.
      *        {@link $errors} is empty</li>
@@ -3229,8 +3256,8 @@ class ActiveRecord {
             }
         }
         return $validated_ok;
-    }  
-    
+    }
+
     /**
      *  Overwrite this method for validation checks on all saves and
      *  use $this->add_error("My error message.", 'attribute');
@@ -3336,10 +3363,10 @@ class ActiveRecord {
 
 
     /**
-     *  Validates any builtin validates_* functions defined as 
+     *  Validates any builtin validates_* functions defined as
      *  class variables in child model class.
      *
-     *  eg. 
+     *  eg.
      *  public $validates_presence_of = array(
      *      'first_name' => array(
      *          'message' => "is not optional.",
@@ -3357,7 +3384,7 @@ class ActiveRecord {
         foreach($this->builtin_validation_functions as $method_name) {
             $validation_name = $this->$method_name;
             if(is_string($validation_name)) {
-                $validation_name = explode(",", $validation_name);    
+                $validation_name = explode(",", $validation_name);
             }
             if(method_exists($this, $method_name) && is_array($validation_name)) {
                 foreach($validation_name as $attribute_name => $options) {
@@ -3366,65 +3393,65 @@ class ActiveRecord {
                         $options = array();
                     } elseif(!is_array($options)) {
                         $options = array();
-                    }               
-                    $attribute_name = trim($attribute_name);     
+                    }
+                    $attribute_name = trim($attribute_name);
                     $parameters = array();
                     $on = array_key_exists('on', $options) ? $options['on'] : 'save';
-                    $message = array_key_exists('message', $options) ? $options['message'] : null;   
+                    $message = array_key_exists('message', $options) ? $options['message'] : null;
                     switch($method_name) {
                         case 'validates_acceptance_of':
                             $accept = array_key_exists('accept', $options) ? $options['accept'] : 1;
                             $parameters = array($attribute_name, $message, $accept);
                             break;
                         case 'validates_confirmation_of':
-                            $parameters = array($attribute_name, $message);                            
+                            $parameters = array($attribute_name, $message);
                             break;
-                        case 'validates_exclusion_of': 
+                        case 'validates_exclusion_of':
                             $in = array_key_exists('in', $options) ? $options['in'] : array();
-                            $parameters = array($attribute_name, $in, $message);  
-                            break;     
+                            $parameters = array($attribute_name, $in, $message);
+                            break;
                         case 'validates_format_of':
                             $with = array_key_exists('with', $options) ? $options['with'] : '';
                             $parameters = array($attribute_name, $with, $message);
                             break;
-                        case 'validates_inclusion_of':   
+                        case 'validates_inclusion_of':
                             $in = array_key_exists('in', $options) ? $options['in'] : array();
-                            $parameters = array($attribute_name, $in, $message);   
-                            break;  
+                            $parameters = array($attribute_name, $in, $message);
+                            break;
                         case 'validates_length_of':
                             $parameters = array($attribute_name, $options);
                             break;
-                        case 'validates_numericality_of':  
-                            $only_integer = array_key_exists('only_integer', $options) ? 
+                        case 'validates_numericality_of':
+                            $only_integer = array_key_exists('only_integer', $options) ?
                                 $options['only_integer'] : false;
-                            $allow_null = array_key_exists('allow_null', $options) ? 
-                                $options['allow_null'] : false;                          
+                            $allow_null = array_key_exists('allow_null', $options) ?
+                                $options['allow_null'] : false;
                             $parameters = array($attribute_name, $message, $only_integer, $allow_null);
-                            break;      
-                        case 'validates_presence_of':   
-                            $parameters = array($attribute_name, $message);  
-                            break;   
-                        case 'validates_uniqueness_of':  
+                            break;
+                        case 'validates_presence_of':
                             $parameters = array($attribute_name, $message);
-                            break;                       
+                            break;
+                        case 'validates_uniqueness_of':
+                            $parameters = array($attribute_name, $message);
+                            break;
                     }
-                    if(count($parameters)) { 
+                    if(count($parameters)) {
                         $call = false;
                         if($on == 'create' && $this->new_record) {
                             $call = true;
                         } elseif($on == 'update' && !$this->new_record) {
                             $call = true;
                         } elseif($on == 'save') {
-                            $call = true;         
-                        }       
+                            $call = true;
+                        }
                         if($call) {
                             # error_log("calling $method_name(".implode(",",$parameters).")");
-                            call_user_func_array(array($this, $method_name), $parameters);        
-                        }                              
+                            call_user_func_array(array($this, $method_name), $parameters);
+                        }
                     }
                 }
-            }             
-        }        
+            }
+        }
     }
 
     /**
@@ -3436,12 +3463,12 @@ class ActiveRecord {
      * @param string $accept
      */
     function validates_acceptance_of($attribute_names, $message = null, $accept = 1) {
-        $message = $this->get_error_message_for_validation($message, 'acceptance');     
-        foreach((array) $attribute_names as $attribute_name) {                  
+        $message = $this->get_error_message_for_validation($message, 'acceptance');
+        foreach((array) $attribute_names as $attribute_name) {
             if($this->$attribute_name != $accept) {
                 #$attribute_human = $this->human_attribute_name($attribute_name);
                 #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                $this->add_error($message, $attribute_name);                
+                $this->add_error($message, $attribute_name);
             }
         }
     }
@@ -3455,7 +3482,7 @@ class ActiveRecord {
      */
     function validates_confirmation_of($attribute_names, $message = null) {
         $message = $this->get_error_message_for_validation($message, 'confirmation');
-        foreach((array) $attribute_names as $attribute_name) {          
+        foreach((array) $attribute_names as $attribute_name) {
             $attribute_confirmation = $attribute_name . '_confirmation';
             if($this->$attribute_confirmation != $this->$attribute_name) {
                 #$attribute_human = $this->human_attribute_name($attribute_name);
@@ -3475,13 +3502,13 @@ class ActiveRecord {
      */
     function validates_exclusion_of($attribute_names, $in = array(), $message = null) {
         $message = $this->get_error_message_for_validation($message, 'exclusion');
-        foreach((array) $attribute_names as $attribute_name) {                  
+        foreach((array) $attribute_names as $attribute_name) {
             if(is_string($in)) {
                 list($minimum, $maximum) = explode('..', $in);
                 if($this->$attribute_name >= $minimum && $this->$attribute_name <= $maximum) {
                     #$attribute_human = $this->human_attribute_name($attribute_name);
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                    $this->add_error($message, $attribute_name);       
+                    $this->add_error($message, $attribute_name);
                 }
             } elseif(is_array($in)) {
                 if(in_array($this->$attribute_name, $in)) {
@@ -3489,7 +3516,7 @@ class ActiveRecord {
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
                     $this->add_error($message, $attribute_name);
                 }
-            }   
+            }
         }
     }
 
@@ -3502,9 +3529,9 @@ class ActiveRecord {
      * @param string $message
      */
     function validates_format_of($attribute_names, $regex, $message = null) {
-        $message = $this->get_error_message_for_validation($message, 'invalid');        
-        foreach((array) $attribute_names as $attribute_name) {                              
-            $value = $this->$attribute_name;        
+        $message = $this->get_error_message_for_validation($message, 'invalid');
+        foreach((array) $attribute_names as $attribute_name) {
+            $value = $this->$attribute_name;
             # Was there an error?
             if(!preg_match($regex, $value)) {
                 #$attribute_human = $this->human_attribute_name($attribute_name);
@@ -3524,13 +3551,13 @@ class ActiveRecord {
      */
     function validates_inclusion_of($attribute_names, $in = array(), $message = null) {
         $message = $this->get_error_message_for_validation($message, 'inclusion');
-        foreach((array) $attribute_names as $attribute_name) {                  
+        foreach((array) $attribute_names as $attribute_name) {
             if(is_string($in)) {
                 list($minimum, $maximum) = explode('..', $in);
                 if(!($this->$attribute_name >= $minimum && $this->$attribute_name <= $maximum)) {
                     #$attribute_human = $this->human_attribute_name($attribute_name);
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                    $this->add_error($message, $attribute_name);      
+                    $this->add_error($message, $attribute_name);
                 }
             } elseif(is_array($in)) {
                 if(!in_array($this->$attribute_name, $in)) {
@@ -3538,7 +3565,7 @@ class ActiveRecord {
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
                     $this->add_error($message, $attribute_name);
                 }
-            } 
+            }
         }
     }
 
@@ -3548,9 +3575,9 @@ class ActiveRecord {
      *
      * @param string|array $attribute_names
      * @param array $options
-     */ 
+     */
     function validates_length_of($attribute_names, $options = array(
-        'too_short' => null, 'too_long' => null, 'wrong_length' => null, 'message' => null)) {                      
+        'too_short' => null, 'too_long' => null, 'wrong_length' => null, 'message' => null)) {
         # Convert 'in' to 'minimum' and 'maximum'
         if(isset($options['in'])) {
             list($options['minimum'], $options['maximum']) = explode('..', $options['in']);
@@ -3559,38 +3586,38 @@ class ActiveRecord {
         if(isset($options['message'])) {
             if(!isset($options['too_short'])) $options['too_short'] = $options['message'];
             if(!isset($options['too_long'])) $options['too_long'] = $options['message'];
-            if(!isset($options['wrong_length'])) $options['wrong_length'] = $options['message'];        
+            if(!isset($options['wrong_length'])) $options['wrong_length'] = $options['message'];
         }
-                
-        foreach((array) $attribute_names as $attribute_name) {          
+
+        foreach((array) $attribute_names as $attribute_name) {
             # Attribute string length
             $len = strlen($this->$attribute_name);
             #$attribute_human = $this->human_attribute_name($attribute_name);
-            
+
             # If you have set the min length option
             if(isset($options['minimum'])) {
                 $message = $this->get_error_message_for_validation($options['too_short'], 'too_short', $options['minimum']);
                 if($len < $options['minimum']) {
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                    $this->add_error($message, $attribute_name);                    
+                    $this->add_error($message, $attribute_name);
                 }
             }
-            
+
             # If you have set the max length option
             if(isset($options['maximum'])) {
                 $message = $this->get_error_message_for_validation($options['too_long'], 'too_long', $options['maximum']);
                 if($len > $options['maximum']) {
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                    $this->add_error($message, $attribute_name);                    
+                    $this->add_error($message, $attribute_name);
                 }
             }
-            
+
             # If you have set an exact length option
             if(isset($options['is'])) {
                 $message = $this->get_error_message_for_validation($options['wrong_length'], 'wrong_length', $options['is']);
                 if($len != $options['is']) {
                     #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                    $this->add_error($message, $attribute_name);                    
+                    $this->add_error($message, $attribute_name);
                 }
             }
         }
@@ -3603,13 +3630,13 @@ class ActiveRecord {
      * @param string|array $attribute_names
      * @param string $message
      */
-    function validates_numericality_of($attribute_names, $message = null, $only_integer = false, $allow_null = false) {      
-        foreach((array) $attribute_names as $attribute_name) {  
-            $value = $this->$attribute_name;                
+    function validates_numericality_of($attribute_names, $message = null, $only_integer = false, $allow_null = false) {
+        foreach((array) $attribute_names as $attribute_name) {
+            $value = $this->$attribute_name;
             # Skip validation if you allow null
             if($allow_null && is_null($value)) {
                 break;
-            }           
+            }
             if($only_integer) {
                 $message = $this->get_error_message_for_validation($message, 'not_an_integer');
                 if(!is_integer($value)) {
@@ -3627,7 +3654,7 @@ class ActiveRecord {
             }
         }
     }
-        
+
     /**
      * Validates that specified attributes are not blank
      * eg. validates_presence_of(array('firstname', 'lastname'))
@@ -3636,8 +3663,8 @@ class ActiveRecord {
      * @param string $message
      */
     function validates_presence_of($attribute_names, $message = null) {
-        $message = $this->get_error_message_for_validation($message, 'empty');      
-        foreach((array) $attribute_names as $attribute_name) {              
+        $message = $this->get_error_message_for_validation($message, 'empty');
+        foreach((array) $attribute_names as $attribute_name) {
             if($this->$attribute_name === '' || is_null($this->$attribute_name)) {
                 #$attribute_human = $this->human_attribute_name($attribute_name);
                 #$this->add_error("{$attribute_human} {$message}", $attribute_name);
@@ -3645,7 +3672,7 @@ class ActiveRecord {
             }
         }
     }
-    
+
     /**
      * Validates that specified attributes are unique in the model database table
      * eg. validates_uniqueness_of('username')
@@ -3655,23 +3682,23 @@ class ActiveRecord {
      */
     function validates_uniqueness_of($attribute_names, $message = null) {
         $message = $this->get_error_message_for_validation($message, 'taken');
-        foreach((array) $attribute_names as $attribute_name) {                      
+        foreach((array) $attribute_names as $attribute_name) {
             $quoted_value = $this->quote_attribute($attribute_name);
             # Conditions for new and existing record
             if($this->new_record) {
                 $conditions = sprintf("%s = %s", $attribute_name, $quoted_value);
             } else {
-                $conditions = sprintf("%s = %s AND %s", $attribute_name, 
+                $conditions = sprintf("%s = %s AND %s", $attribute_name,
                     $quoted_value, $this->get_primary_key_conditions("!="));
-            }   
+            }
             if($this->find_first($conditions)) {
                 #$attribute_human = $this->human_attribute_name($attribute_name);
                 #$this->add_error("{$attribute_human} {$message}", $attribute_name);
-                $this->add_error($message, $attribute_name);                
+                $this->add_error($message, $attribute_name);
             }
         }
     }
-        
+
     /**
      * Return the error message for a validation function
      *
@@ -3684,7 +3711,7 @@ class ActiveRecord {
         if(is_null($message)) {
             # Return default error message
             return sprintf($this->default_error_messages[$key], $value);
-        } else { 
+        } else {
             # Return your custom error message
             return $message;
         }
@@ -3711,10 +3738,10 @@ class ActiveRecord {
      */
     function raise($message) {
         $error_message  = "Model Class: ".$this->get_class_name()."<br>Error Message:";
-        if(is_object(self::$db)) {        
-            list(,$error_code_db, $error_msg_db) = self::$db->errorInfo(); 
+        if(is_object(self::$db)) {
+            list(,$error_code_db, $error_msg_db) = self::$db->errorInfo();
             $error_message .= " ({$error_code_db}) {$error_msg_db}";
-        }   
+        }
         if(!$error_code_db) {
             $error_message .= " ".$message;
         }
@@ -3731,11 +3758,11 @@ class ActiveRecord {
         }
         return $full_messages;
     }
-    
+
     function errors_on($attribute) {
         $errors = isset($this->errors[$attribute]) ? $this->errors[$attribute] : null;
         return ((is_array($errors) && count($errors) == 1) ? current($errors) : $errors);
-    }   
+    }
 
     /**
      *  Add or overwrite description of an error to the list of errors
@@ -3789,7 +3816,19 @@ class ActiveRecord {
      */
     function get_errors_as_string($seperator = "<br>") {
         return $this->get_errors(true, $seperator);
-    }  
+    }
+
+    private function _log($message) {
+        if((self::$environment != 'production' || self::$log_all) && $message) {
+            $logger = self::$logger;
+            if(is_object($logger)) {
+                $filename = $this->logger_log_file ? $this->logger_log_file : self::$environment;
+                $logger->log($message, $filename);
+            } else {
+                error_log($message);
+            }
+        }
+    }
 
     /**
      *  Log SQL query in development mode
@@ -3797,17 +3836,22 @@ class ActiveRecord {
      *  If running in development mode, log the query to self::$query_log
      *  @param string SQL to be logged
      */
-    function log_query($query) {    
+    function log_query($query, $duration = nil) {
         if((self::$environment != 'production' || self::$log_all) && $query) {
-            self::$query_log[] = $query;       
-        }    
+            self::$log_color = self::$log_color == 35 ? 36 : 35;
+            $color = self::$log_color;
+            $bold = $color == 36 ? "\e[1m" : '';
+            $duration = is_numeric($duration) ? " (".round($duration, 1)."ms)" : '';
+            self::$query_log[] = $query;
+            self::_log("\e[{$color}m".get_class($this)."{$duration}\e[0m {$bold}".$query."\e[0m");
+        }
     }
 
     /**
      *  For debugging to see what the attributes for this object are.
      *
      *  echo User => Array([id] => 1, [name] => John)
-     */    
+     */
     function __toString() {
         return print_r($this->get_attributes(), true);
     }
@@ -3815,7 +3859,7 @@ class ActiveRecord {
 	function to_array() {
 	    return $this->get_attributes();
 	}
-	
+
 	function to_json() {
 	    return json_encode($this->get_attributes());
 	}

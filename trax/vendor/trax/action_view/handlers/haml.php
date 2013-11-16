@@ -44,8 +44,6 @@ class Haml {
                 $this->parser->assign($key, $value);
             }
         }
-        $this->parser->assign("controller", Trax::$current_controller_name);
-        $this->parser->assign("action", Trax::$current_action_name);
         echo $this->parser->display($path);
     }
 

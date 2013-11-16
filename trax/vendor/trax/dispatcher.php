@@ -59,6 +59,9 @@ class Dispatcher {
      *  @uses Session::start()
      */
     function dispatch() {
+        if(TRAX_ENV != 'production') {
+            $start = microtime(true);
+        }
         try {
             InputFilter::process_all();
             Session::start();
@@ -66,6 +69,11 @@ class Dispatcher {
             $ac->process_route();
         } catch(Exception $e) {
             ActionController::process_with_exception($e);
+        }
+        if(TRAX_ENV != 'production') {
+            $duration = "(".round((microtime(true) - $start)*1000, 1)."ms)";
+            $url = parse_url($_SERVER['REQUEST_URI']);
+            Trax::log("\e[1mRendered {$url['path']} {$duration}\e[0m");
         }
     }
 

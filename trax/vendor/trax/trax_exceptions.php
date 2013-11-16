@@ -56,4 +56,14 @@ class ActiveRecordError extends TraxError {}
  */
 class ActionControllerError extends TraxError {}
 
+register_shutdown_function('log_php_errors');
+function log_php_errors() {
+    $error = error_get_last();
+    # fatal errors
+    if($error["type"] == 1) {
+        $message = "\033[1;31mPHP Fatal Error:\033[0m {$error["message"]}\nFile: {$error["file"]}\nLine: {$error['line']}";
+        Trax::log($message);
+    }
+}
+
 ?>
