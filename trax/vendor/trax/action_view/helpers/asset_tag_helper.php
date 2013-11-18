@@ -65,7 +65,6 @@ class AssetTagHelper extends Helpers {
      *  @uses ActionController::asset_host
      */
     private function compute_public_path($source, $dir, $ext) {
-
         //  Test whether source is a URL, ie. starts something://
         if(!preg_match('/^[-a-z]+:\/\//', $source)) {
 
@@ -73,9 +72,10 @@ class AssetTagHelper extends Helpers {
             //  If path doesn't start with '/', prefix /$dir/
             if($source{0} != '/') {
                 if(!stristr($source, $dir)) {
-                    $source = "/{$dir}";
+                    $source = "/{$dir}/{$source}";
+                } else {
+                    $source = "/{$source}";
                 }
-                $source = "/{$source}";
             }
 
             //  If no '.' in source file name, add '.ext'
@@ -161,7 +161,7 @@ class AssetTagHelper extends Helpers {
             $contents = array();
             foreach($sources as $source) {
                 $ap = new AssetPipeline;
-                if($source == 'application' && $ap->enabled()) {
+                if($source == 'application' && $ap->compile()) {
                     $js_files = $ap->get_files_from_manifest(Trax::$assets_path."/javascripts/application.js");
                 } else {
                     $js_files = array($source);
