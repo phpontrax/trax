@@ -20,14 +20,14 @@ class ViewHandlers {
         return self::$extensions;
     }
 
-    static function render($context, $path, $locals = array()) {
+    static function render($path, $locals = array()) {
         if($view_path = self::view_path($path)) {
             $class = Inflector::camelize(self::file_extension($view_path));
-            $view_handler = new $class($context);
+            $view_handler = new $class();
             $view_handler->render($view_path, $locals);
             return true;
         } else {
-            $context->raise("Missing template '".self::file_name($path)."' with handlers (".implode(",", self::$extensions)."). Searched in ".self::file_path($path), "Template is missing", "404");
+            Trax::$current_controller_object->raise("Missing template '".self::file_name($path)."' with handlers (".implode(",", self::$extensions)."). Searched in ".self::file_path($path), "Template is missing", "404");
         }
         return false;
     }
@@ -39,7 +39,7 @@ class ViewHandlers {
         foreach(self::extensions() as $extension) {
             $view_file = "{$view_path}.{$extension}";
             if(file_exists($view_file)) {
-                return  $view_file;
+                return $view_file;
             }
         }
         return false;

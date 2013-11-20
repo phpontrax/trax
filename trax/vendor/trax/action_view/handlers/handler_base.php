@@ -1,12 +1,7 @@
 <?
 class HandlerBase {
 
-    protected $context = null;
     protected static $vars = array();
-
-    function __construct($context) {
-        $this->context = $context;
-    }
 
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
@@ -19,7 +14,8 @@ class HandlerBase {
     }
 
     function __get($key) {
-        if(in_array($key, self::$vars)) {
+        echo "get $key";
+        if(array_key_exists($key, self::$vars)) {
             return self::$vars[$key];
         } elseif(property_exists($this, $key)) {
             return $this->$key;

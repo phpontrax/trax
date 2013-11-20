@@ -1217,8 +1217,18 @@ class ActionController {
         if(is_array($controller_locals)) {
             $locals = array_merge($controller_locals, $locals);
         }
-        $this->render_performed = ViewHandlers::render($this, $path, $locals);
-        return $this->render_performed;
+        if(count($locals)) {
+            foreach($locals as $tmp_key => $tmp_value) {
+                ${$tmp_key} = $tmp_value;
+            }
+            unset($tmp_key);
+            unset($tmp_value);
+        }
+        include($path);
+        $this->render_performed = true;
+        return true;
+        #$this->render_performed = ViewHandlers::render($path, $locals);
+        #return $this->render_performed;
     }
 
     /**
