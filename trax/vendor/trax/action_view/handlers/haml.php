@@ -3,9 +3,9 @@
 class Haml {
 
     private $parser = null;
-    private $context = null;
 
     function __construct($context) {
+        parent::__construct($context);
         if(file_exists(Trax::$vendor_path."/phphaml/includes/haml/HamlParser.class.php")) {
             $haml_compile_path = Trax::$tmp_path."/haml";
             if(!is_dir($haml_compile_path)) {
@@ -17,24 +17,6 @@ class Haml {
             $this->context = $context;
         } else {
             $context->raise("Missing phphaml in ".Trax::$vendor_path."<br />Please run 'git clone git@github.com:phpontrax/phphaml.git' from inside your apps vendor folder.", "HAML parser", "500");
-        }
-    }
-
-    function __call($method_name, $parameters) {
-        if(method_exists($this, $method_name)) {
-            # If the method exists, just call it
-            $result = call_user_func_array(array($this, $method_name), $parameters);
-        } elseif(method_exists(Trax::$current_controller_object, $method_name)) {
-            $result = call_user_func_array(array(Trax::$current_controller_object, $method_name), $parameters);
-        }
-        return $result;
-    }
-
-    function __get($key) {
-        if(property_exists($this, $key)) {
-            return $this->$key;
-        } elseif(property_exists(Trax::$current_controller_object, $key)) {
-            return Trax::$current_controller_object->{$key};
         }
     }
 

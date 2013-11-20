@@ -1,5 +1,7 @@
 <?
 
+include_once(TRAX_LIB_ROOT."/action_view/handlers/handler_base.php");
+
 class ViewHandlers {
 
     private static $extensions = array();
