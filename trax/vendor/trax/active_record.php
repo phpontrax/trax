@@ -554,6 +554,8 @@ class ActiveRecord {
 
     protected static $log_color = 35;
 
+    protected static $query_cache = array();
+
     /**
      *  Construct an ActiveRecord object
      *
@@ -1246,8 +1248,13 @@ class ActiveRecord {
         //print_r($parameters[0]);
         //echo $sql;
         #error_log("$aggregate_type:$sql");
-        $rs = $this->query($sql, true);
-        $row = $rs->fetchRow();
+        if(!$rows = $this->get_query_cache($sql)) {
+            $rs = $this->query($sql, true);
+            if(!$this->is_error($rs)) {
+                $rows = $this->set_query_cache($sql, $rs);
+            }
+        }
+        $row = reset($rows);
         if($row["agg_result"]) {
             return $row["agg_result"];
         }
@@ -1343,8 +1350,13 @@ class ActiveRecord {
             if(self::$environment != 'production') {
                 $start = microtime(true);
             }
-            $result = $db->queryOne($sql);
-            $duration = nil;
+            if(!$result = $this->get_query_cache($sql)) {
+                $result = $db->queryOne($sql);
+                if(!$this->is_error($result)) {
+                    $this->set_query_cache($sql, $result);
+                }
+            }
+            $duration = null;
             if(self::$environment != 'production') {
                 $duration = (microtime(true) - $start)*1000;
             }
@@ -1454,7 +1466,7 @@ class ActiveRecord {
             $start = microtime(true);
         }
         $rs =& $db->query($sql);
-        $duration = nil;
+        $duration = null;
         if(self::$environment != 'production') {
             $duration = (microtime(true) - $start)*1000;
         }
@@ -1592,7 +1604,7 @@ class ActiveRecord {
         }
 
         # Test source of SQL for query
-        if(stristr($conditions, "SELECT ")) {
+        if(strtoupper(substr(trim($conditions), 0, 7)) == "SELECT ") {
             # SQL completely specified in argument so use it as is
             $sql = $conditions;
         } else {
@@ -1681,8 +1693,12 @@ class ActiveRecord {
 
                 if($paginate) {
                     #error_log("pagination sql:$sql");
-                    $pagination_rs = $this->query($sql);
-                    if($count = $pagination_rs->numRows()) {
+                    if(!$count = $this->get_query_cache($sql)) {
+                        $pagination_rs = $this->query($sql);
+                        $count = $pagination_rs->numRows();
+                        $this->set_query_cache($sql, $count);
+                    }
+                    if($count) {
                         $this->pagination_count = $count;
                         $this->pages = (($count % $this->rows_per_page) == 0)
                             ? $count / $this->rows_per_page
@@ -1771,11 +1787,16 @@ class ActiveRecord {
         # echo "ActiveRecord::find_all() - sql: $sql\n<br>";
         # echo "query: $sql\n";
         # error_log("ActiveRecord::find_all -> $sql");
-        $rs = $this->query($sql, true);
+        if(!$rows = $this->get_query_cache($sql)) {
+            $rs = $this->query($sql, true);
+            if(!$this->is_error($rs)) {
+                $rows = $this->set_query_cache($sql, $rs);
+            }
+        }
 
         $objects = array();
         $class_name = $this->get_class_name();
-        while($row = $rs->fetchRow()) {
+        foreach((array)$rows as $row) {
             $object = new $class_name();
             $object->new_record = false;
             $objects_key = null;
@@ -3836,14 +3857,15 @@ class ActiveRecord {
      *  If running in development mode, log the query to self::$query_log
      *  @param string SQL to be logged
      */
-    function log_query($query, $duration = nil) {
+    function log_query($query, $duration = null, $name = null) {
         if((self::$environment != 'production' || self::$log_all) && $query) {
             self::$log_color = self::$log_color == 35 ? 36 : 35;
             $color = self::$log_color;
             $bold = $color == 36 ? "\e[1m" : '';
             $duration = is_numeric($duration) ? " (".round($duration, 1)."ms)" : '';
             self::$query_log[] = $query;
-            self::_log("\e[{$color}m".get_class($this)."{$duration}\e[0m {$bold}".$query."\e[0m");
+            $name = $name ? $name : get_class($this)." Load";
+            self::_log("\e[{$color}m{$name}{$duration}\e[0m {$bold}".$query."\e[0m");
         }
     }
 
@@ -3863,6 +3885,50 @@ class ActiveRecord {
 	function to_json() {
 	    return json_encode($this->get_attributes());
 	}
+
+    protected function get_query_cache($sql, $log = true) {
+        # disable cache for now (need to implement dirty)
+        return false;
+        if($log && self::$environment != 'production') {
+            $start = microtime(true);
+        }
+        $key = md5($sql);
+        $rows = array();
+        if(array_key_exists($key, ActiveRecord::$query_cache)) {
+            $rows = ActiveRecord::$query_cache[$key];
+            if($log) {
+                $duration = null;
+                if(self::$environment != 'production') {
+                    $duration = (microtime(true) - $start)*1000;
+                }
+                $this->log_query($sql, $duration, "CACHE");
+            }
+        }
+        return $rows;
+    }
+
+    protected function set_query_cache($sql, $rs) {
+        $rows = array();
+        if(is_object($rs)) {
+            while($row = $rs->fetchRow()) {
+                $rows[] = $row;
+            }
+        } elseif($rs) {
+            $rows = $rs;
+        }
+        if(count($rows)) {
+            ActiveRecord::$query_cache[md5($sql)] = $rows;
+        }
+        return $rows;
+    }
+
+    protected function clear_query_cache($key = null) {
+        if($key) {
+            unset(ActiveRecord::$query_cache[md5($key)]);
+        } else {
+            ActiveRecord::$query_cache = array();
+        }
+    }
 
 }
 
