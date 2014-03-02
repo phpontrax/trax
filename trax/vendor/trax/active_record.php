@@ -552,6 +552,8 @@ class ActiveRecord {
      */
     public $logger_log_file = null;
 
+    public static $log_line_max_length = 512;
+
     protected static $log_color = 35;
 
     protected static $query_cache = array();
@@ -3841,6 +3843,9 @@ class ActiveRecord {
 
     private function _log($message) {
         if((self::$environment != 'production' || self::$log_all) && $message) {
+            if(strlen($message) > ActiveRecord::$log_line_max_length) {
+                $message = substr($message, 0, ActiveRecord::$log_line_max_length)."...";
+            }
             $logger = self::$logger;
             if(is_object($logger)) {
                 $filename = $this->logger_log_file ? $this->logger_log_file : self::$environment;
