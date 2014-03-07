@@ -46,13 +46,13 @@ class ActionMailer {
         $mime_params = array(), # params for charset
         $errors = array(); # array to hold any errors
     public
-        $smtp_settings = array( 
+        $smtp_settings = array(
             'host'      => 'localhost', # The server to connect.
             'port'      => 25,  # The port to connect.
             'persist'   => false, # Indicates whether or not the SMTP connection should persist over multiple sends.
             'auth'      => false, # Whether or not to use SMTP authentication.
             'username'  => null, # The username to use for SMTP authentication.
-            'password'  => null, # The password to use for SMTP authentication.            
+            'password'  => null, # The password to use for SMTP authentication.
         ),
         $sendmail_settings = array(
             'path' => '/usr/sbin/sendmail',
@@ -66,7 +66,7 @@ class ActionMailer {
         $text_charset = null, # charset for text email body.
 		$head_encoding = "quoted-printable", # encoding to use for the headers: quoted-printable, base64
 		$text_encoding = "7bit", # encoding to use for plain text: 7bit, 8bit, base64, quoted-printable
-		$html_encoding = "quoted-printable", # encoding to use for html: 7bit, 8bit, base64, quoted-printable        
+		$html_encoding = "quoted-printable", # encoding to use for html: 7bit, 8bit, base64, quoted-printable
         $template = null, # view file to use for body of email.
         $template_root = null, # template_root determines the base from which template references will be made.
         $deliveries = array(), # if delivery_method is "test" it will not deliver but store emails in this array.
@@ -83,15 +83,15 @@ class ActionMailer {
     /**
      *  ActionMailer constructor.
      *  @todo Document this API
-     */ 
+     */
     function __construct() {
-        $this->mail_mime = new Mail_mime($this->crlf);               
+        $this->mail_mime = new Mail_mime($this->crlf);
     }
 
     /**
      *  Override call() to do some magic where you can call create_*() and deliver_*().
      *  @todo Document this API
-     */     
+     */
     function __call($method_name, $parameters) {
         if(method_exists($this, $method_name)) {
             # If the method exists, just call it
@@ -99,10 +99,10 @@ class ActionMailer {
         } else {
             if(preg_match("/^create_([_a-z]\w*)/", $method_name, $matches)) {
                 $result = $this->create_mail($matches[1], $parameters);
-            } elseif(preg_match("/^deliver_([_a-z]\w*)/", $method_name, $matches)) {              
+            } elseif(preg_match("/^deliver_([_a-z]\w*)/", $method_name, $matches)) {
                 $result = $this->create_mail($matches[1], $parameters);
                 if(!$this->deliver($result)) {
-                    $result = false;    
+                    $result = false;
                 }
             }
         }
@@ -112,34 +112,36 @@ class ActionMailer {
     /**
      *  Set all the necessary email headers
      *  @todo Document this API
-     */     
+     */
     private function set_headers() {
         if(!is_null($this->recipients)) {
             $recipients = $this->format_emails($this->recipients, "To");
-            $this->set_header_line("To", $recipients); 
-        }
-        
-        if(!is_null($this->cc)) {
-            $cc = $this->format_emails($this->cc, "Cc");
-            $this->set_header_line("Cc", $cc);            
+            $this->set_header_line("To", $recipients);
         }
 
-        if(!is_null($this->bcc)) {
+        if(!is_null($this->cc)) {
+            $cc = $this->format_emails($this->cc, "Cc");
+            $this->set_header_line("Cc", $cc);
+        }
+
+        if(!is_null($this->bcc) && $this->delivery_method != "smtp") {
             $bcc = $this->format_emails($this->bcc, "Bcc");
-            $this->set_header_line("Bcc", $bcc);            
+            $this->set_header_line("Bcc", $bcc);
+        } elseif(!is_null($this->bcc) && $this->delivery_method == "smtp") {
+            $this->bcc = $this->format_emails($this->bcc, "Bcc");
         }
 
         if(!is_null($this->reply_to)) {
             $reply_to = $this->format_emails($this->reply_to, "Reply-To");
-            $this->set_header_line("Reply-To", $reply_to);            
+            $this->set_header_line("Reply-To", $reply_to);
         }
-        
+
         if(is_null($this->from) || $this->from == '') {
-            $this->from = $this->default_from;            
-        } 
+            $this->from = $this->default_from;
+        }
         $from = $this->format_emails($this->from, "From");
         $this->set_header_line("From", $from);
-        
+
         if(!is_null($this->subject))  {
             $this->set_header_line("Subject", str_replace(array("\r","\n"), '', $this->subject));
         } else {
@@ -149,53 +151,53 @@ class ActionMailer {
         if(!array_key_exists("Date", $this->headers)) {
             $this->set_header_line("Date", date("r"));
         }
-        
+
         if(!array_key_exists("Return-Path", $this->headers) && !is_null($this->from_address)) {
             $this->set_header_line("Return-Path", $this->from_address);
-        }  
-          
+        }
+
         if(!array_key_exists("Reply-To", $this->headers) && !is_null($this->from_address)) {
-            $this->set_header_line("Reply-To", $this->from_address);            
+            $this->set_header_line("Reply-To", $this->from_address);
         }
     }
 
     /**
      *  Format an array of emails into a correct string / validate emails.
      *  @todo Document this API
-     */    
+     */
     private function format_emails($emails, $type = null) {
-     
-        $email_addresses = null;     
+
+        $email_addresses = null;
         if(!is_null($emails) && is_string($emails)) {
             if(strstr($emails, ",")) {
-                $emails = explode(",", $emails);        
+                $emails = explode(",", $emails);
             } else {
-                $emails = array($emails);    
-            }    
-        }        
+                $emails = array($emails);
+            }
+        }
         if(is_array($emails)) {
             foreach($emails as $email) {
                 if($this->validate_email($email)) {
                     $email_addresses[] = $email;
                 } else {
                     if($type) {
-                        $type = "$type ";    
+                        $type = "$type ";
                     }
-                    $this->errors[] = "Invalid ".$type."email address: ".$email;    
+                    $this->errors[] = "Invalid ".$type."email address: ".$email;
                 }
             }
             if(is_array($email_addresses)) {
                 $email_addresses = implode(",", $email_addresses);
-            }                     
-        }      
+            }
+        }
 
-        return $email_addresses;           
+        return $email_addresses;
     }
 
     /**
      *  Set the text body of the email.
      *  @todo Document this API
-     */    
+     */
     private function set_text_body($text) {
         if(strlen($text) > 0) {
             $this->mail_mime->setTxtBody($text);
@@ -210,68 +212,68 @@ class ActionMailer {
         if(strlen($html) > 0) {
             $this->mail_mime->setHTMLBody($html);
         }
-    }    
+    }
 
     /**
      *  Sets up default class variables for this mailer.  Classes extending
      *  ActionMailer can override these values.
      *  @todo Document this API
      */
-    private function initialize_defaults($method_name) {       
+    private function initialize_defaults($method_name) {
         $this->template_root = Trax::$views_path;
         $this->template_path = "{$this->template_root}/".Inflector::underscore(get_class($this));
-        $this->template = $this->template ? $this->template : $method_name;        
+        $this->template = $this->template ? $this->template : $method_name;
         #$this->headers = $this->headers ? $this->headers : array();
 		$this->headers = array();
-        #$this->body = $this->body ? $this->body : array();    
+        #$this->body = $this->body ? $this->body : array();
 		$this->body = null;
         $this->default_from = "nobody@".($_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : 'domain.com');
         $this->head_charset = $this->head_charset ? $this->head_charset : $this->default_charset;
         $this->html_charset = $this->html_charset ? $this->html_charset : $this->default_charset;
-        $this->text_charset = $this->text_charset ? $this->text_charset : $this->default_charset;        
+        $this->text_charset = $this->text_charset ? $this->text_charset : $this->default_charset;
     }
 
     /**
      *  Sets up and creates the email for deliver().
      *  @todo Document this API
      */
-    private function create_mail($method_name, $parameters = array()) {  
+    private function create_mail($method_name, $parameters = array()) {
         $this->initialize_defaults($method_name);
         if(method_exists($this, $method_name)) {
             //echo "calling $method_name<br>";
-            call_user_func_array(array($this, $method_name), $parameters);   
-        } 
+            call_user_func_array(array($this, $method_name), $parameters);
+        }
         $this->mime_params = array(
-            'head_charset' => $this->head_charset, 
+            'head_charset' => $this->head_charset,
             'html_charset' =>  $this->html_charset,
             'text_charset' =>  $this->text_charset,
             'head_encoding' => $this->head_encoding,
             'text_encoding' => $this->text_encoding,
             'html_encoding' => $this->html_encoding
-        );            
+        );
         $this->set_headers();
         $body = $this->preparse_body = $this->body;
         if(!is_string($body)) {
             $body = $this->render_message($method_name, $body);
         }
         if($this->content_type == "html") {
-            $this->set_html_body($body);       
+            $this->set_html_body($body);
         } elseif($this->content_type == "both") {
-            $this->set_html_body($body); 
-            $this->set_text_body($body);   
+            $this->set_html_body($body);
+            $this->set_text_body($body);
         } else {
-            $this->set_text_body($body);        
+            $this->set_text_body($body);
         }
-           
-        $this->body = $this->mail_mime->get($this->mime_params);      
-        $this->headers = $this->mail_mime->headers($this->headers, true);  
+
+        $this->body = $this->mail_mime->get($this->mime_params);
+        $this->headers = $this->mail_mime->headers($this->headers, true);
 
         if($this->delivery_method == "sendmail") {
             $this->mail =& Mail::factory("sendmail", $this->sendmail_settings);
         } elseif($this->delivery_method == "smtp") {
             $this->mail =& Mail::factory("smtp", $this->smtp_settings);
         } else {
-            $this->mail =& Mail::factory("mail");    
+            $this->mail =& Mail::factory("mail");
         }
 
         return $this;
@@ -290,46 +292,46 @@ class ActionMailer {
 
         if(file_exists($template)) {
             # start to buffer output
-            ob_start(); 
+            ob_start();
             if(count($body)) {
-                extract($body);  
+                extract($body);
             }
             include($template);
             $result = ob_get_contents();
             ob_end_clean();
         }
-        return $result;        
+        return $result;
     }
 
     /**
      *  Uses ActionControllers render_partial method.
      *  @todo Document this API
-     */      
+     */
     function render_partial($path, $options = array()) {
         $locals = $this->preparse_body;
         if(is_array($options['locals']) && is_array($locals)) {
             $options['locals'] = array_merge($locals, $options['locals']);
         } elseif(is_array($locals)) {
-            $options['locals'] = $locals;    
+            $options['locals'] = $locals;
         }
         $ar = new ActionController();
         $ar->views_path = $this->template_path;
-        $ar->render_partial($path, $options);                     
+        $ar->render_partial($path, $options);
     }
 
     /**
      *  Return a text version of the email currently loaded.
      *  @todo Document this API
-     */    
-    function encoded($add_pre_tags = false) {                   
+     */
+    function encoded($add_pre_tags = false) {
         if(!count($this->errors)) {
             list(, $text_headers) = $this->mail->prepareHeaders($this->headers);
             $email = $text_headers.$this->crlf.$this->crlf.$this->body;
             if($add_pre_tags) {
-                $email = "<pre>".$email."</pre>";    
+                $email = "<pre>".$email."</pre>";
             }
         } else {
-            $email = $this->get_errors_as_string("\n");    
+            $email = $this->get_errors_as_string("\n");
         }
         return $email;
     }
@@ -337,23 +339,27 @@ class ActionMailer {
     /**
      *  Sends the email loaded into this object via create_mail().
      *  @todo Document this API
-     */    
+     */
     function deliver($mail = null) {
-        if(is_null($mail)) {  
-            $mail =& $this;               
-        } 
+        if(is_null($mail)) {
+            $mail =& $this;
+        }
         if($this->perform_deliveries) {
             if($this->delivery_method == "test") {
                 $this->deliveries[] = $mail->encoded();
-                return true;    
+                return true;
             }
-            if(!count($this->errors)) {  
+            if(!count($this->errors)) {
 				#error_log("delivering message to:".$mail->headers['To']);
-                $result = $mail->mail->send($mail->headers['To'], $mail->headers, $mail->body);
-                if(is_object($result)) { 
+                $to = array($mail->headers['To']);
+                if($this->delivery_method == "smtp" && $this->bcc) {
+                    $to = array_merge($to, explode(",", $this->bcc));
+                }
+                $result = $mail->mail->send($to, $mail->headers, $mail->body);
+                if(is_object($result)) {
                     $this->errors[] = $result->getMessage();
                     return false;
-                } 
+                }
             } else {
                 return false;
             }
@@ -375,7 +381,7 @@ class ActionMailer {
      *  @param string $email
      *    Validates the input $email is in format:
      *      user@domain.com or "John Smith <user@domain.com>"
-     *  @return boolean 
+     *  @return boolean
      *    <ul>
      *      <li>true => Valid email, no errors found.
      *      <li>false => Email not valid</li>
@@ -396,14 +402,14 @@ class ActionMailer {
      *  @param string $header_key
      *    key for the header line (To:, From:, Subject:, etc)
      *  @param string $header_value
-     *    value for the $header_key 
+     *    value for the $header_key
      */
     function set_header_line($header_key, $header_value) {
         if($header_key && $header_value) {
             $this->headers[$header_key] = $header_value;
         }
     }
-    
+
     /**
      *  Add or overwrite description of an error to the list of errors
      *  @param string $error Error message text
@@ -415,13 +421,13 @@ class ActionMailer {
      *  @uses $errors
      */
     function add_error($error, $key = null) {
-        if(!is_null($key)) { 
+        if(!is_null($key)) {
             $this->errors[$key] = $error;
         } else {
             $this->errors[] = $error;
         }
     }
-    
+
     /**
      *  Return description of non-fatal errors
      *
