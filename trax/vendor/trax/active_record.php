@@ -1621,6 +1621,14 @@ class ActiveRecord {
 
             # If join specified, include it
             if(!is_null($joins)) {
+                if(array_key_exists('joins', $this->default_scope)
+                   && !is_null($this->default_scope['joins'])) {
+                    $joins = "{$joins}, {$this->default_scope['joins']}";
+                }
+                $sql .= " $joins ";
+            } elseif(array_key_exists('joins', $this->default_scope)
+                     && !is_null($this->default_scope['joins'])) {
+                $joins = $this->default_scope['joins'];
                 $sql .= " $joins ";
             }
 
