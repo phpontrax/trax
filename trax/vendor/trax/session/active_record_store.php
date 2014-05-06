@@ -51,6 +51,8 @@ class ActiveRecordStore extends ActiveRecord {
 
 	public $table_name = 'sessions';
 
+	public $cache_enabled = false;
+
     function open($save_path, $session_name) {
         return true;
     }

@@ -558,6 +558,10 @@ class ActiveRecord {
 
     protected static $query_cache = array();
 
+    public static $query_cache_enabled = true;
+
+    public $cache_enabled = true;
+
     /**
      *  Construct an ActiveRecord object
      *
@@ -1058,9 +1062,9 @@ class ActiveRecord {
             }
 
             $foreign_key_value = $this->$this_primary_key;
-            if($other_class_object->attribute_is_string($foreign_key)) {
+            if($other_class_object->attribute_is_string($foreign_key) && $foreign_key_value != '') {
                 $conditions = "{$foreign_key} = '{$foreign_key_value}'";
-            } elseif(is_numeric($foreign_key_value)) {
+            } elseif(is_numeric($foreign_key_value) && $foreign_key_value > 0) {
                 $conditions = "{$foreign_key} = {$foreign_key_value}";
             } else {
                 #$conditions = "{$foreign_key} = 0";
@@ -1124,9 +1128,9 @@ class ActiveRecord {
         }
 
         $foreign_key_value = $this->$this_primary_key;
-        if($other_class_object->attribute_is_string($foreign_key)) {
+        if($other_class_object->attribute_is_string($foreign_key) && $foreign_key_value != '') {
             $conditions = "{$foreign_key} = '{$foreign_key_value}'";
-        } elseif(is_numeric($foreign_key_value)) {
+        } elseif(is_numeric($foreign_key_value) && $foreign_key_value > 0) {
             $conditions = "{$foreign_key} = {$foreign_key_value}";
         } else {
             #$conditions = "{$foreign_key} = 0";
@@ -1190,9 +1194,9 @@ class ActiveRecord {
         }
 
         $other_primary_key_value = $this->$foreign_key;
-        if($other_class_object->attribute_is_string($other_primary_key)) {
+        if($other_class_object->attribute_is_string($other_primary_key) && $other_primary_key_value != '') {
             $conditions = "{$other_primary_key} = '{$other_primary_key_value}'";
-        } elseif(is_numeric($other_primary_key_value)) {
+        } elseif(is_numeric($other_primary_key_value) && $other_primary_key_value > 0) {
             $conditions = "{$other_primary_key} = {$other_primary_key_value}";
         } else {
             #$conditions = "{$other_primary_key} = 0";
@@ -2004,6 +2008,7 @@ class ActiveRecord {
             foreach($id as $update_id) {
                 $this->update($update_id, $attributes[$update_id], $dont_validate);
             }
+            $this->clear_query_cache($this->table_name);
         } else {
             $object = $this->find($id);
             return $object->save($attributes, $dont_validate);
@@ -2024,6 +2029,7 @@ class ActiveRecord {
     function update_all($updates, $conditions = null) {
         $sql = "UPDATE {$this->table_prefix}{$this->table_name} SET {$updates} WHERE {$conditions}";
         $this->query($sql);
+        $this->clear_query_cache($this->table_name);
         return true;
     }
 
@@ -2059,6 +2065,7 @@ class ActiveRecord {
         if($dont_validate || $this->valid()) {
             if($this->add_record_or_update_record()) {
                 $this->clear_changed_attributes();
+                $this->clear_query_cache($this->table_name);
                 return true;
             }
         }
@@ -2434,6 +2441,7 @@ class ActiveRecord {
         $this->query("DELETE FROM {$this->table_prefix}{$this->table_name} WHERE {$conditions} {$limit}");
         # reset this to a new record
         $this->new_record = true;
+        $this->clear_query_cache($this->table_name);
         return true;
     }
 
@@ -2507,6 +2515,7 @@ class ActiveRecord {
                         #error_log("add_habtm_records: SQL: $sql");
                         $this->query($sql);
                     }
+                    $this->clear_query_cache($table_name);
                 }
             }
         }
@@ -2537,6 +2546,7 @@ class ActiveRecord {
             $sql = "DELETE FROM {$habtm_table_name} WHERE {$this_foreign_key} = {$this_foreign_value}";
             //echo "delete_all_habtm_records: SQL: $sql<br>";
             $this->query($sql);
+            $this->clear_query_cache($habtm_table_name);
         }
     }
 
@@ -3901,14 +3911,16 @@ class ActiveRecord {
 
     protected function get_query_cache($sql, $log = true) {
         # disable cache for now (need to implement dirty)
-        return false;
+        if(ActiveRecord::$query_cache_enabled && !$this->cache_enabled) {
+            return false;
+        }
         if($log && self::$environment != 'production') {
             $start = microtime(true);
         }
         $key = md5($sql);
         $rows = array();
-        if(array_key_exists($key, ActiveRecord::$query_cache)) {
-            $rows = ActiveRecord::$query_cache[$key];
+        if(array_key_exists($key, ActiveRecord::$query_cache[$this->table_name])) {
+            $rows = ActiveRecord::$query_cache[$this->table_name][$key];
             if($log) {
                 $duration = null;
                 if(self::$environment != 'production') {
@@ -3929,17 +3941,25 @@ class ActiveRecord {
         } elseif($rs) {
             $rows = $rs;
         }
-        if(count($rows)) {
-            ActiveRecord::$query_cache[md5($sql)] = $rows;
+        if(ActiveRecord::$query_cache_enabled && $this->cache_enabled && count($rows)) {
+            ActiveRecord::$query_cache[$this->table_name][md5($sql)] = $rows;
         }
         return $rows;
     }
 
-    protected function clear_query_cache($key = null) {
-        if($key) {
-            unset(ActiveRecord::$query_cache[md5($key)]);
+    public function clear_query_cache($table_name = null, $key = null) {
+        if(ActiveRecord::$query_cache_enabled && !$this->cache_enabled) {
+            return false;
+        }
+        if($table_name && $key) {
+            unset(ActiveRecord::$query_cache[$table_name][md5($key)]);
+            $this->log_query("Query: $key", null, "CACHE CLEARED");
+        } elseif($table_name) {
+            ActiveRecord::$query_cache[$table_name] = array();
+            $this->log_query("Table: $table_name", null, "CACHE CLEARED");
         } else {
             ActiveRecord::$query_cache = array();
+            $this->log_query("All tables cache cleared", null, "CACHE CLEARED");
         }
     }
 
