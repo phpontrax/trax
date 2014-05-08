@@ -3910,23 +3910,22 @@ class ActiveRecord {
 	}
 
     protected function get_query_cache($sql, $log = true) {
-        # disable cache for now (need to implement dirty)
-        if(ActiveRecord::$query_cache_enabled && !$this->cache_enabled) {
-            return false;
-        }
-        if($log && self::$environment != 'production') {
-            $start = microtime(true);
-        }
-        $key = md5($sql);
         $rows = array();
-        if(array_key_exists($key, ActiveRecord::$query_cache[$this->table_name])) {
-            $rows = ActiveRecord::$query_cache[$this->table_name][$key];
-            if($log) {
-                $duration = null;
-                if(self::$environment != 'production') {
-                    $duration = (microtime(true) - $start)*1000;
+        # disable cache for now (need to implement dirty)
+        if(ActiveRecord::$query_cache_enabled && $this->cache_enabled) {
+            if($log && self::$environment != 'production') {
+                $start = microtime(true);
+            }
+            $key = md5($sql);
+            if(array_key_exists($key, ActiveRecord::$query_cache[$this->table_name])) {
+                $rows = ActiveRecord::$query_cache[$this->table_name][$key];
+                if($log) {
+                    $duration = null;
+                    if(self::$environment != 'production') {
+                        $duration = (microtime(true) - $start)*1000;
+                    }
+                    $this->log_query($sql, $duration, "CACHE");
                 }
-                $this->log_query($sql, $duration, "CACHE");
             }
         }
         return $rows;
@@ -3948,18 +3947,17 @@ class ActiveRecord {
     }
 
     public function clear_query_cache($table_name = null, $key = null) {
-        if(ActiveRecord::$query_cache_enabled && !$this->cache_enabled) {
-            return false;
-        }
-        if($table_name && $key) {
-            unset(ActiveRecord::$query_cache[$table_name][md5($key)]);
-            $this->log_query("Query: $key", null, "CACHE CLEARED");
-        } elseif($table_name) {
-            ActiveRecord::$query_cache[$table_name] = array();
-            $this->log_query("Table: $table_name", null, "CACHE CLEARED");
-        } else {
-            ActiveRecord::$query_cache = array();
-            $this->log_query("All tables cache cleared", null, "CACHE CLEARED");
+        if(ActiveRecord::$query_cache_enabled && $this->cache_enabled) {
+            if($table_name && $key) {
+                unset(ActiveRecord::$query_cache[$table_name][md5($key)]);
+                $this->log_query("Query: $key", null, "CACHE CLEARED");
+            } elseif($table_name) {
+                ActiveRecord::$query_cache[$table_name] = array();
+                $this->log_query("Table: $table_name", null, "CACHE CLEARED");
+            } else {
+                ActiveRecord::$query_cache = array();
+                $this->log_query("All tables cache cleared", null, "CACHE CLEARED");
+            }
         }
     }
 
