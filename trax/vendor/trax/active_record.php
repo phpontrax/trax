@@ -3917,7 +3917,7 @@ class ActiveRecord {
                 $start = microtime(true);
             }
             $key = md5($sql);
-            if(array_key_exists($key, ActiveRecord::$query_cache[$this->table_name])) {
+            if(array_key_exists($key, (array)ActiveRecord::$query_cache[$this->table_name])) {
                 $rows = ActiveRecord::$query_cache[$this->table_name][$key];
                 if($log) {
                     $duration = null;
