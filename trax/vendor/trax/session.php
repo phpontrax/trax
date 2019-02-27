@@ -110,10 +110,10 @@ class Session {
 		ini_set('session.auto_start', 0);
 
 		if(Trax::$session_store == 'active_record_store') {
-			ini_set('session.save_handler', 'user');
+            // ini_set('session.save_handler', 'user');
 			include_once("session/active_record_store.php");
 			$session_class_name = Trax::$session_class_name ? Trax::$session_class_name : 'ActiveRecordStore';
-			$ar_session = new $session_class_name;
+            $ar_session = new $session_class_name;
 			session_set_save_handler(
 	            array(&$ar_session, 'open'),
 	            array(&$ar_session, 'close'),
