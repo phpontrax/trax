@@ -7,7 +7,7 @@ class AssetPipeline {
 
     private $manifest_file = null;
 
-    public function __construct($context) {
+    public function __construct($context = null) {
         $this->context = $context;
     }
 
