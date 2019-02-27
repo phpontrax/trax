@@ -530,7 +530,7 @@ class InputFilter {
      *  @return string Input string, with entities converted to characters
      *  @uses chr()
      *  @uses html_entity_decode()
-     *  @uses preg_replace()
+     *  @uses preg_replace_callback()
      */
     protected function decode($source) {
         // url decode
