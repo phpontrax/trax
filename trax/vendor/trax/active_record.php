@@ -3132,7 +3132,7 @@ class ActiveRecord {
     /**
      *  Clears all database connections
      */
-    function clear_all_connections() {
+    public static function clear_all_connections() {
         foreach((array)self::$connection_pool as $connection) {
             if(is_object($connection)) {
                 $connection->disconnect();

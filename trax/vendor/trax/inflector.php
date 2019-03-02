@@ -56,7 +56,7 @@ class Inflector {
      *  @param  int $count How many of these $words are there
      *  @return string  Plural of $singular_word
      */
-    function pluralize($singular_word, $count = 0, $plural_word = null) {
+    public static function pluralize($singular_word, $count = 0, $plural_word = null) {
 		if($count != 1) {
 			if(is_null($plural_word)) {	
 				$plural_word = $singular_word;	
@@ -84,7 +84,7 @@ class Inflector {
      *  @param  string $plural_word  Word to be singularized
      *  @return string  Singular of $plural_word
      */
-    function singularize($plural_word) {
+    public static function singularize($plural_word) {
 		$singular_word = $plural_word;  
         if(isset(self::$cache['singular'][$plural_word])) {
 			$singular_word = self::$cache['singular'][$plural_word];
@@ -108,7 +108,7 @@ class Inflector {
      *                                                  convert
      *  @return string  Camel case form of the phrase
      */
-    function camelize($lower_case_and_underscored_word) {
+    public static function camelize($lower_case_and_underscored_word) {
         return str_replace(" ","",ucwords(str_replace("_"," ",$lower_case_and_underscored_word)));
     }
 
@@ -118,7 +118,7 @@ class Inflector {
      *  @param string $word  A word or phrase
      *  @return string A string that has all words capitalized and splits on existing caps.
      */    
-    function titleize($word) {
+    public static function titleize($word) {
 		return ucwords(self::humanize(self::underscore($word)));
     }
 
@@ -135,7 +135,7 @@ class Inflector {
      *  @param string $camel_cased_word  Phrase to convert
      *  @return string Lower case and underscored form of the phrase
      */
-    function underscore($camel_cased_word) {
+    public static function underscore($camel_cased_word) {
 		$camel_cased_word = str_replace('::','/',$camel_cased_word);
         $camel_cased_word = preg_replace('/([A-Z]+)([A-Z])/','\1_\2',$camel_cased_word);
         return strtolower(preg_replace('/([a-z\d])([A-Z])/','\1_\2',$camel_cased_word));
@@ -147,7 +147,7 @@ class Inflector {
      *  @param string $underscored_word  Word to convert
      *  @return string All underscores converted to dashes
      */    
-    function dasherize($underscored_word) {
+    public static function dasherize($underscored_word) {
         return str_replace('_', '-', self::underscore($underscored_word));
     }
 
@@ -159,7 +159,7 @@ class Inflector {
      *  @return string The input value with underscores replaced by
      *  blanks and the first letter of each word capitalized
      */
-    function humanize($lower_case_and_underscored_word) {
+    public static function humanize($lower_case_and_underscored_word) {
 		if(count(Inflections::$humans) > 0) {
 	        $original = $lower_case_and_underscored_word;   
 	        foreach(Inflections::$humans as $human_rule) {
@@ -178,7 +178,7 @@ class Inflector {
      *  	Inflector::demodulize("Inflections") => "Inflections"
      * 
 	 */
-	function demodulize($class_name_in_module) {
+	public static function demodulize($class_name_in_module) {
 		return preg_replace("/^.*::/", '', $class_name_in_module);
     }
 
@@ -191,7 +191,7 @@ class Inflector {
      *  @param string $class_name  Name of {@link ActiveRecord} sub-class
      *  @return string Pluralized lower_case_underscore form of name
      */
-    function tableize($class_name) {
+    public static function tableize($class_name) {
         return self::pluralize(self::underscore($class_name));
     }
 
@@ -201,7 +201,7 @@ class Inflector {
      *  @param string $table_name Name of table in the database
      *  @return string Singular CamelCase form of $table_name
      */
-    function classify($table_name) {
+    public static function classify($table_name) {
         return self::camelize(self::singularize($table_name));
     }
 
@@ -211,7 +211,7 @@ class Inflector {
      *  @param  string $word  Word to be capitalized
      *  @return string Capitalized $word
      */
-    function capitalize($word) {
+    public static function capitalize($word) {
     	return ucfirst(strtolower($word));     
     }
     
@@ -221,7 +221,7 @@ class Inflector {
      *  @param string $table_name Name of table referenced by foreign key
      *  @return string Column name of the foreign key column
      */
-    function foreign_key($class_name) {
+    public static function foreign_key($class_name) {
         return self::underscore(self::demodulize($class_name)) . "_id";
     }
 
@@ -232,7 +232,7 @@ class Inflector {
      *  @param integer $number Number to append to key
      *  @return string Number formatted with correct st, nd, rd, or th
      */    
-    function ordinalize($number) {
+    public static function ordinalize($number) {
         $number = intval($number);
 		if(in_array(($number % 100), range(11, 13))) {
             $number = "{$number}th";
@@ -260,7 +260,7 @@ class Inflector {
      *  @param none
      *  @return nothing
      */
-	function clear_cache() {
+	public static function clear_cache() {
 		self::$cache = array(
 			'plural' => array(), 
 			'singular' => array()

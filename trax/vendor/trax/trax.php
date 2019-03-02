@@ -78,7 +78,7 @@ class Trax {
         $assets_compress = false,
         $assets_compile = false;
 
-    function initialize() {
+    public static function initialize() {
 
         self::register_autoload();
 
@@ -143,7 +143,7 @@ class Trax {
         ViewHandlers::register_extension('phtml');
     }
 
-    function add_include_path($path, $prepend = false, $use_trax_root = false) {
+    public static function add_include_path($path, $prepend = false, $use_trax_root = false) {
         if(is_array($path)) {
             foreach($path as $new_path) {
                 if(!in_array($new_path, self::$include_paths)) {
@@ -165,7 +165,7 @@ class Trax {
         }
     }
 
-    function set_default_include_paths() {
+    public static function set_default_include_paths() {
         # first clear out all the current paths
         self::$include_paths = array();
         # now add the default paths
@@ -180,7 +180,7 @@ class Trax {
         ));
     }
 
-    function load_active_record_connections_config() {
+    public static function load_active_record_connections_config() {
         # Make sure database settings are cleared out
         ActiveRecord::$database_settings = array();
         ActiveRecord::clear_all_connections();
@@ -193,14 +193,14 @@ class Trax {
         ActiveRecord::$logger = new Trax;
     }
 
-    function include_env_config() {
+    public static function include_env_config() {
         # Include the application environment specific config file
         if(file_exists(self::$environments_path."/".TRAX_ENV.".php")) {
             include_once(self::$environments_path."/".TRAX_ENV.".php");
         }
     }
 
-    function load_plugins($plugins = array()) {
+    public static function load_plugins($plugins = array()) {
         $plugins = count($plugins) ? $plugins : Trax::$plugins;
         foreach((array)$plugins as $plugin) {
             if(file_exists(self::$plugins_path."/{$plugin}/init.php")) {
@@ -211,11 +211,11 @@ class Trax {
         Trax::$plugins = (array)$loaded_plugins;
     }
 
-    function version() {
+    public static function version() {
         return implode('.', array(self::MAJOR, self::MINOR, self::TINY));
     }
 
-    function log($message, $filename = '') {
+    public static function log($message, $filename = '') {
         $date = date("[d-M-Y H:i:s]");
         $message = "$date $message\n";
         $log_file = self::$log_path.'/'.($filename != '' ? $filename : TRAX_ENV).'.log';
@@ -227,7 +227,7 @@ class Trax {
         }
     }
 
-    function register_autoload() {
+    public static function register_autoload() {
         if(function_exists('spl_autoload_register')) {
             if(function_exists('__autoload')) {
                 # Register any existing autoloader function with SPL, so we don't get any clashes

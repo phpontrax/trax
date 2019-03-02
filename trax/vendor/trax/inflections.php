@@ -102,13 +102,13 @@ class Inflections {
 
     # Specifies a new pluralization rule and its replacement. The rule can either be a string or a regular expression. 
     # The replacement should always be a string that may include references to the matched data from the rule.
-    function plural($rule, $replacement) {
+    public static function plural($rule, $replacement) {
         array_unshift(self::$plurals, array("rule" => $rule, "replacement" => $replacement));
     }
     
     # Specifies a new singularization rule and its replacement. The rule can either be a string or a regular expression. 
     # The replacement should always be a string that may include references to the matched data from the rule.
-    function singular($rule, $replacement) {
+    public static function singular($rule, $replacement) {
         array_unshift(self::$singulars, array("rule" => $rule, "replacement" => $replacement));
     }
     
@@ -118,7 +118,7 @@ class Inflections {
     # Examples:
     #   Inflections::irregular('octopus', 'octopi')
     #   Inflections::irregular('person', 'people')
-    function irregular($singular, $plural) {
+    public static function irregular($singular, $plural) {
         self::plural('/('.preg_quote(substr($singular,0,1)).')'.preg_quote(substr($singular,1)).'$/i', '\1'.preg_quote(substr($plural,1)));
         self::singular('/('.preg_quote(substr($plural,0,1)).')'.preg_quote(substr($plural,1)).'$/i', '\1'.preg_quote(substr($singular,1)));
     }
@@ -129,7 +129,7 @@ class Inflections {
     #   Inflections::uncountable("money")
     #   Inflections::uncountable("money", "information")
     #   Inflections::uncountable(array("money", "information", "rice"))
-    function uncountable() {
+    public static function uncountable() {
 		$args = func_get_args();
         if(is_array($args[0])) {
             $args = $args[0];    
@@ -146,7 +146,7 @@ class Inflections {
     # Examples:
     # 	Inflections::human("/_cnt$/i", "\1_count")
     # 	Inflections::human("legacy_col_person_name", "Name")
-    function human($rule, $replacement) {
+    public static function human($rule, $replacement) {
 		array_unshift(self::$humans, array("rule" => $rule, "replacement" => $replacement));
     }
     
@@ -156,7 +156,7 @@ class Inflections {
     # Examples:
     #   Inflections::clear("all")
     #   Inflections::clear("plurals")
-    function clear($scope = "all") {
+    public static function clear($scope = "all") {
         if($scope == "all") {
             self::$plurals = self::$singulars = self::$uncountables = self::$humans = array();
         } else {
