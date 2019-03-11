@@ -365,7 +365,7 @@ class ActiveRecordHelper extends Helpers {
      *  @uses object()
      *  @uses tag_without_error_wrapping()
      */
-    function tag($name, $options = array()) {
+    function tag($name, $options = array(), $junk = false) {
         if(count($this->object()->errors)) {
             return $this->error_wrapping($this->tag_without_error_wrapping($name, $options), $this->object()->errors[$this->attribute_name]);
         } else {
