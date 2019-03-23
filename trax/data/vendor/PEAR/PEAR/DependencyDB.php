@@ -551,11 +551,11 @@ class PEAR_DependencyDB
         }
 
         $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // set_magic_quotes_runtime(0);
         clearstatcache();
         fclose($fp);
         $data = unserialize(file_get_contents($this->_depdb));
-        set_magic_quotes_runtime($rt);
+        // set_magic_quotes_runtime($rt);
         $this->_cache = $data;
         return $data;
     }
@@ -578,9 +578,9 @@ class PEAR_DependencyDB
         }
 
         $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // set_magic_quotes_runtime(0);
         fwrite($fp, serialize($deps));
-        set_magic_quotes_runtime($rt);
+        // set_magic_quotes_runtime($rt);
         fclose($fp);
         $this->_unlock();
         $this->_cache = $deps;

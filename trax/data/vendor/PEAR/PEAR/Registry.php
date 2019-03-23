@@ -783,11 +783,11 @@ class PEAR_Registry extends PEAR
 
         clearstatcache();
         $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // set_magic_quotes_runtime(0);
         $fsize = filesize($this->filemap);
         fclose($fp);
         $data = file_get_contents($this->filemap);
-        set_magic_quotes_runtime($rt);
+        // set_magic_quotes_runtime($rt);
         $tmp = unserialize($data);
         if (!$tmp && $fsize > 7) {
             return $this->raiseError('PEAR_Registry: invalid filemap data', PEAR_REGISTRY_ERROR_FORMAT, null, null, $data);
@@ -1137,11 +1137,11 @@ class PEAR_Registry extends PEAR
         }
 
         $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // set_magic_quotes_runtime(0);
         clearstatcache();
         $this->_closePackageFile($fp);
         $data = file_get_contents($this->_packageFileName($package, $channel));
-        set_magic_quotes_runtime($rt);
+        // set_magic_quotes_runtime($rt);
         $data = unserialize($data);
         if ($key === null) {
             return $data;
@@ -1176,11 +1176,11 @@ class PEAR_Registry extends PEAR
         }
 
         $rt = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // set_magic_quotes_runtime(0);
         clearstatcache();
         $this->_closeChannelFile($fp);
         $data = file_get_contents($this->_channelFileName($channel));
-        set_magic_quotes_runtime($rt);
+        // set_magic_quotes_runtime($rt);
         $data = unserialize($data);
         return $data;
     }
