@@ -134,7 +134,7 @@ class PEAR_Command
             return $a;
         }
         $ui =& PEAR_Command::getFrontendObject();
-        $obj = &new $class($ui, $config);
+        $obj = new $class($ui, $config);
         return $obj;
     }
 
@@ -149,9 +149,9 @@ class PEAR_Command
         if (!class_exists($class)) {
             return PEAR::raiseError("unknown command `$command'");
         }
-        $ui =& PEAR_Command::getFrontendObject();
-        $config = &PEAR_Config::singleton();
-        $obj = &new $class($ui, $config);
+        $ui = PEAR_Command::getFrontendObject();
+        $config = PEAR_Config::singleton();
+        $obj = new $class($ui, $config);
         return $obj;
     }
 
@@ -166,7 +166,7 @@ class PEAR_Command
      */
     function &getFrontendObject()
     {
-        $a = &PEAR_Frontend::singleton();
+        $a = PEAR_Frontend::singleton();
         return $a;
     }
 

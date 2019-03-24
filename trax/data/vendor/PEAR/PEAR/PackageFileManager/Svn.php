@@ -210,7 +210,7 @@ class PEAR_PackageFileManager_Svn extends PEAR_PackageFileManager_File
                 XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE    => true,
                 XML_UNSERIALIZER_OPTION_ATTRIBUTES_ARRAYKEY => false
             );
-            $unserializer = &new XML_Unserializer($options);
+            $unserializer = new XML_Unserializer($options);
             $status = $unserializer->unserialize($content);
             if (PEAR::isError($status)) {
                 return false;

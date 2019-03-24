@@ -1737,7 +1737,7 @@ class PEAR_PackageFileManager2 extends PEAR_PackageFile_v2_rw
             }
 
             include_once 'PEAR/PackageFile/Parser/v2.php';
-            $pkg = &new PEAR_PackageFile_Parser_v2();
+            $pkg = new PEAR_PackageFile_Parser_v2();
             $z = &PEAR_Config::singleton();
             $pkg->setConfig($z);
             $pf = &$pkg->parse($contents, $path . $packagefile, false,
@@ -1799,7 +1799,7 @@ class PEAR_PackageFileManager2 extends PEAR_PackageFile_v2_rw
      */
     function &_generateNewPackageXML()
     {
-        $pf = &new PEAR_PackageFileManager2();
+        $pf = new PEAR_PackageFileManager2();
         $pf->_oldPackageFile = false;
         return $pf;
     }

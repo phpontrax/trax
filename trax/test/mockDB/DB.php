@@ -383,7 +383,7 @@ class DB {
 
         // only support MySQL at the moment
         PHPUnit2_Framework_Assert::assertEquals($type,'mysql');
-        @$obj =& new DB_mysql;
+        @$obj = new DB_mysql;
 
         foreach ($options as $option => $value) {
             $test = $obj->setOption($option, $value);
@@ -2401,7 +2401,7 @@ class DB_result
 //                if ($object_class == 'stdClass') {
 //                    $arr = (object) $arr;
 //                } else {
-//                    $arr = &new $object_class($arr);
+//                    $arr = new $object_class($arr);
 //                }
 //            }
 //            return $arr;
