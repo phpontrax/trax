@@ -243,9 +243,12 @@ class Trax {
 ###################################################################
 # Auto include model / controller / other app specific libs files
 ###################################################################
-if(!function_exists('spl_autoload_register')) {
-    function __autoload($class_name) {
-        trax_autoload($class_name);
+if(version_compare(PHP_VERSION, '7.2.0') < 0) {
+    // __autoload is now depricated (https://www.php.net/manual/en/function.autoload.php)
+    if(!function_exists('spl_autoload_register')) {
+        function __autoload($class_name) {
+            trax_autoload($class_name);
+        }
     }
 }
 function trax_autoload($class_name) {
