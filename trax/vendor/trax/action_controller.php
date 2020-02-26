@@ -496,7 +496,9 @@ class ActionController {
                     //  ':controller' in route params overrides URL
                     $this->controller = $route_params[":controller"];
                     if(stristr($route_params[":controller"], "/")) {
-
+                        $controller_path_parts = explode("/", $route_params[":controller"]);
+                        $this->controller = array_pop($controller_path_parts);
+                        $this->controllers_path .= ("/" .  implode("/", $controller_path_parts));
                     }
                 } elseif(is_array($route_path)
                          && in_array(":controller",$route_path)
