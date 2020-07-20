@@ -335,7 +335,7 @@ class InputFilter {
      *  @uses $tagsMethod
      *  @uses $xssAuto
      */
-	protected function filterTags($source) {
+	protected static function filterTags($source) {
 		// filter pass setup
 		$preTag = null;
 		$postTag = $source;
@@ -463,7 +463,7 @@ class InputFilter {
      *  @uses $attrMethod
      *  @uses $xssAuto
      */
-	protected function filterAttr($attrSet) {	
+	protected static function filterAttr($attrSet) {	
 		$newSet = array();
 		// process attributes
 		for ($i = 0; $i <count($attrSet); $i++) {

@@ -478,7 +478,7 @@ class ActionController {
                 //  controller and action from route and URL
                 #print_r($this->router);
                 #echo "<br>";
-                if($route['plugin']) {
+                if(isset($route['plugin'])) {
                     $this->plugin = $route['plugin'];
                     $this->controllers_path = Trax::$plugins_path."/{$route['plugin']}/app/controllers";
                     $this->helpers_path = $this->helpers_base_path = Trax::$plugins_path."/{$route['plugin']}/app/helpers";

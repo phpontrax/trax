@@ -92,7 +92,7 @@ class Session {
      *  @uses Trax::$session_lifetime
 	 *  @uses Trax::$session_maxlifetime_minutes
      */
-	function init() {
+	public static function init() {
         Trax::$session_name = Trax::$session_name ? Trax::$session_name : self::TRAX_SESSION_NAME;
         Trax::$session_lifetime = Trax::$session_lifetime ? Trax::$session_lifetime : self::TRAX_SESSION_LIFETIME;
         Trax::$session_maxlifetime_minutes = Trax::$session_maxlifetime_minutes ? Trax::$session_maxlifetime_minutes : self::TRAX_SESSION_MAXLIFETIME_MINUTES;
@@ -143,7 +143,7 @@ class Session {
      *  @uses get_hash()
      *  @uses is_valid_host()
      */
-    function get($key) {
+    public static function get($key) {
         if(self::is_valid_host()) {
             return $_SESSION[self::get_hash()][$key];
         }
@@ -163,7 +163,7 @@ class Session {
      *  @uses is_valid_host()
      *
      */
-    function set($key, $value) {
+    public static function set($key, $value) {
         if(self::is_valid_host()) {
             $_SESSION[self::get_hash()][$key] = $value;
         }
@@ -183,7 +183,7 @@ class Session {
      *            <li>false => User host NOT as expected</li>
      *          </ul>
      */
-    function is_valid_host() {
+    public static function is_valid_host() {
         if(self::get_client_ip() == self::$ip &&
            $_SERVER['HTTP_USER_AGENT'] == self::$user_agent) {
             return true;
@@ -196,7 +196,7 @@ class Session {
      *
      *  @return $ipaddress
      */
-    function get_client_ip() {
+    public static function get_client_ip() {
         $ipaddress = '';
         if($_SERVER['HTTP_CLIENT_IP']) {
             $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
@@ -222,7 +222,7 @@ class Session {
      *  @uses md5()
      *  @uses session_id()
      */
-    function get_hash() {
+    public static function get_hash() {
         $key = session_id().$_SERVER['HTTP_USER_AGENT'].self::get_client_ip();
         // error_log('get_hash() returns '.md5($key));
         return md5($key);
@@ -233,7 +233,7 @@ class Session {
 	 *
 	 *  @uses start()
 	 */
-    function start() {
+    public static function start() {
 		self::start_session();
     }
 
@@ -247,7 +247,7 @@ class Session {
      *  @uses session_start()
      *  @uses $user_agent
      */
-	function start_session() {
+	public static function start_session() {
 
         if(!self::$started) {
 
@@ -278,7 +278,7 @@ class Session {
 	 *
 	 *  @uses destroy_session()
 	 */
-    function destroy() {
+    public static function destroy() {
 		return self::destroy_session();
     }
 
@@ -289,7 +289,7 @@ class Session {
      *
      *  @uses session_destroy()
      */
-    function destroy_session() {
+    public static function destroy_session() {
         session_destroy();
 		#self::init();
     }
@@ -300,7 +300,7 @@ class Session {
      *  @uses get_hash()
      *  @uses session_unset()
      */
-    function unset_session() {
+    public static function unset_session() {
         $_SESSION[self::get_hash()] = array();
     }
 
@@ -313,7 +313,7 @@ class Session {
      *  @uses get_hash()
      *  @uses is_valid_host()
      */
-    function unset_var($key) {
+    public static function unset_var($key) {
          // error_log('Session::unset_var("'.$key.'")');
         if(self::is_valid_host()) {
             // error_log('before unsetting SESSION='.var_export($_SESSION,true));
@@ -340,7 +340,7 @@ class Session {
      *  @uses get_hash()
      *  @uses is_valid_host()
      */
-    function isset_var($key) {
+    public static function isset_var($key) {
         if(self::is_valid_host()) {
             if(isset($_SESSION[self::get_hash()][$key])) {
                 return true;
@@ -366,7 +366,7 @@ class Session {
      *  @uses get_hash()
      *  @uses is_valid_host()
      */
-    function isset_flash($key) {
+    public static function isset_flash($key) {
         if(self::is_valid_host()) {
 			$hash = self::get_hash();
 			if(isset($_SESSION[$hash]['flash'][$key])) {
@@ -399,7 +399,7 @@ class Session {
      *  @uses get_hash()
      *  @uses is_valid_host()
      */
-    function flash($key, $value = null) {
+    public static function flash($key, $value = null) {
         if(self::is_valid_host()) {
 			$hash = self::get_hash();
             if($value) {
@@ -419,7 +419,7 @@ class Session {
      *
      *  @param boolean $screen Display dump to screen
      */
-	function debug($screen = false) {
+	public static function debug($screen = false) {
 		$msg = "Session::debug() => ".print_r($_SESSION, true);
 		error_log($msg);
 		if($screen) {
