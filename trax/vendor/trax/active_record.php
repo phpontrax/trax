@@ -3043,6 +3043,11 @@ class ActiveRecord {
                     $connection->query('SET search_path TO '.preg_replace('/\s+/', '', $connection_settings['schema_search_path']));
                 }
             }
+
+            # Run any SET commands such as SET @@sql_model=''
+            if(isset($connection_settings['set_command']) && stristr($connection_settings['set_command'], 'set') !== false) {
+                $connection->query($connection_settings['set_command']);
+            }
         }
         if(!$this->is_error($connection)) {
             $connection->setFetchMode($this->fetch_mode);
