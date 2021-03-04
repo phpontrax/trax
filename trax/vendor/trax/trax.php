@@ -229,12 +229,10 @@ class Trax {
 
     public static function register_autoload() {
         if(function_exists('spl_autoload_register')) {
-            if(function_exists('__autoload')) {
-                # Register any existing autoloader function with SPL, so we don't get any clashes
-                spl_autoload_register('__autoload');
-            }
             # Register ourselves with SPL
             return spl_autoload_register('trax_autoload');
+        } else {
+            throw new Exception("Your php install must support spl_autoload_register");
         }
     }
 
@@ -243,14 +241,6 @@ class Trax {
 ###################################################################
 # Auto include model / controller / other app specific libs files
 ###################################################################
-if(version_compare(PHP_VERSION, '7.2.0') < 0) {
-    // __autoload is now depricated (https://www.php.net/manual/en/function.autoload.php)
-    if(!function_exists('spl_autoload_register')) {
-        function __autoload($class_name) {
-            trax_autoload($class_name);
-        }
-    }
-}
 function trax_autoload($class_name) {
     $file = Inflector::underscore($class_name).".php";
     $file_org = $class_name.".php";
