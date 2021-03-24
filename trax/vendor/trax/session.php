@@ -122,7 +122,12 @@ class Session {
 	            array(&$ar_session, 'destroy'),
 	            array(&$ar_session, 'gc')
 			);
-		} else {
+		} elseif(in_array(Trax::$session_store, ['redis', 'memcache', 'memcached']) && !empty(Trax::$session_save_path)) { 
+            ini_set('session.save_handler',  Trax::$session_store);
+            // Redis - tcp://127.0.0.1:6379?auth=yourredispassword
+            // Memcache - tcp://127.0.0.1:11211
+            ini_set('session.save_path', Trax::$session_save_path);
+        } else {
 			# file store
 			ini_set('session.save_handler', 'files');
 			if(Trax::$session_save_path) {
