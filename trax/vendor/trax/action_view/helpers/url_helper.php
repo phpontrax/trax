@@ -60,7 +60,7 @@ class UrlHelper extends Helpers {
             $this->convert_confirm_option_to_javascript($html_options);
         if(is_string($options)) {
             $href = array("href" => $options);
-            if(count($html_options) > 0) {
+            if(count((array)$html_options) > 0) {
                 $html_options = array_merge($html_options, $href);
             } else {
                 $html_options = $href;
@@ -75,7 +75,7 @@ class UrlHelper extends Helpers {
                 $name = $url;
             }
             $href = array("href" => $url);
-            if(count($html_options) > 0) {
+            if(count((array)$html_options) > 0) {
                 $html_options = array_merge($html_options, $href);
             } else {
                 $html_options = $href;
@@ -245,7 +245,7 @@ class UrlHelper extends Helpers {
             //  Insert value of Trax::$url_prefix
             if(!is_null(Trax::$url_prefix)) {
                 $prefix = Trax::$url_prefix;
-                if($prefix{0} != "/") {
+                if($prefix[0] != "/") {
                     $prefix = "/$prefix";
                 }
                 $url_base .= $prefix;

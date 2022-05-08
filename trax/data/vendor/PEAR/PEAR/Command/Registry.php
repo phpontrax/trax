@@ -440,7 +440,7 @@ installed package.'
             $obj = &$pkg->fromAnyFile($params[0], PEAR_VALIDATE_NORMAL);
             PEAR::staticPopErrorHandling();
             if (PEAR::isError($obj)) {
-                $uinfo = $obj->getUserInfo();
+                $uinfo = method_exists($obj, 'getUserInfo') ? $obj->getUserInfo() : null;
                 if (is_array($uinfo)) {
                     foreach ($uinfo as $message) {
                         if (is_array($message)) {
@@ -586,8 +586,7 @@ installed package.'
                     case 'configure_options' : {
                         foreach ($info[$key] as $i => $p) {
                             $info[$key][$i] = array_map(null, array_keys($p), array_values($p));
-                            $info[$key][$i] = array_map(create_function('$a',
-                                'return join(" = ",$a);'), $info[$key][$i]);
+                            $info[$key][$i] = array_map(function($a){ return join(" = ", $a); }, $info[$key][$i]);
                             $info[$key][$i] = implode(', ', $info[$key][$i]);
                         }
                         $info[$key] = implode("\n", $info[$key]);
@@ -909,7 +908,7 @@ installed package.'
 
         if (isset($deps['required']['os'])) {
             if (isset($deps['required']['os']['name'])) {
-                $dep['required']['os']['name'] = array($dep['required']['os']['name']);
+                $dep['required']['os']['name'] = array($deps['required']['os']['name']);
             }
 
             foreach ($dep['required']['os'] as $os) {

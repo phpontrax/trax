@@ -723,7 +723,7 @@ class ActiveRecord {
                 $this->save_associations[$association_type][] = $value;
                 if($association_type == "belongs_to") {
                     $primary_key = $value->primary_keys[0];
-                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) {
+                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', (array)$this->belongs_to[$key])) {
                         $foreign_key = $this->belongs_to[$key]['foreign_key'];
                     } else {
                         $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
@@ -1240,7 +1240,7 @@ class ActiveRecord {
         $sql = "SELECT {$distinct}{$aggregate_type}({$field}) AS agg_result FROM {$this->table_prefix}{$this->table_name} ";
         # Use any passed-in parameters
         if(is_array($parameters[1])) {
-            extract($parameters[1]);
+            extract((array)$parameters[1]);
         } elseif(!is_null($parameters)) {
             $conditions = $parameters[1];
             $joins = isset($parameters[2]) ? $parameters[2] : null;
@@ -2495,7 +2495,7 @@ class ActiveRecord {
                     $table_name = $this->get_join_table_name($this->table_name,$other_table_name);
                     $other_foreign_key = Inflector::singularize($other_table_name)."_id";
                     $this_foreign_key = Inflector::singularize($this->table_name)."_id";
-                    foreach($other_foreign_values as $other_foreign_value) {
+                    foreach((array)$other_foreign_values as $other_foreign_value) {
                         unset($attributes);
                         $attributes[$this_foreign_key] = $this_foreign_value;
                         $attributes[$other_foreign_key] = $other_foreign_value;
@@ -2629,8 +2629,8 @@ class ActiveRecord {
                         $this->save_associations[$association_type][] = $value;
                         if($association_type == "belongs_to") {
                             $primary_key = $value->primary_keys[0];
-                            if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', $this->belongs_to[$key])) {
-                                $foreign_key = $this->belongs_to[$key]['foreign_key'];
+                            if(is_array($this->belongs_to[$field]) && array_key_exists('foreign_key', (array)$this->belongs_to[$field])) {
+                                $foreign_key = $this->belongs_to[$field]['foreign_key'];
                             } else {
                                 $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
                             }
@@ -2774,7 +2774,7 @@ class ActiveRecord {
             $type = $column['mdb2type'];
         } else {
             $type = $this->attribute_is_string($attribute, $column) ?
-                "text" : is_float($attribute) ? "float" : "integer";
+                "text" : (is_float($attribute) ? "float" : "integer");
         }
         $value = self::$db->quote($value, $type);
         if($value === 'NULL' && stristr($column['flags'], "not_null")) {

@@ -70,7 +70,7 @@ class AssetTagHelper extends Helpers {
 
             //  Source is not a URL.
             //  If path doesn't start with '/', prefix /$dir/
-            if($source{0} != '/') {
+            if($source[0] != '/') {
                 if(!stristr($source, $dir)) {
                     $source = "/{$dir}/{$source}";
                 } else {
@@ -86,7 +86,7 @@ class AssetTagHelper extends Helpers {
             //  If Trax::$url_prefix non-null, prefix it to path
             if(!is_null(Trax::$url_prefix)) {
                 $prefix = Trax::$url_prefix;
-                if($prefix{0} != "/") {
+                if($prefix[0] != "/") {
                     $prefix = "/$prefix";
                 }
                 $source = $prefix . ((substr($prefix, -1) == "/")

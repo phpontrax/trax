@@ -94,7 +94,7 @@ class PEAR_Autoloader extends PEAR
     function addAutoload($method, $classname = null)
     {
         if (is_array($method)) {
-            array_walk($method, create_function('$a,&$b', '$b = strtolower($b);'));
+            array_walk($method, function($a, &$b){ $b = strtolower($b); });
             $this->_autoload_map = array_merge($this->_autoload_map, $method);
         } else {
             $this->_autoload_map[strtolower($method)] = $classname;
@@ -148,7 +148,7 @@ class PEAR_Autoloader extends PEAR
         $methods = get_class_methods($classname);
         foreach ($methods as $method) {
             // don't import priviate methods and constructors
-            if ($method{0} != '_' && $method != $classname) {
+            if ($method[0] != '_' && $method != $classname) {
                 $this->_method_map[$method] = $obj;
             }
         }
@@ -171,7 +171,7 @@ class PEAR_Autoloader extends PEAR
         $ok = false;
         $classname = strtolower($classname);
         reset($this->_method_map);
-        while (list($method, $obj) = each($this->_method_map)) {
+        foreach($this->_method_map as $method => $obj) {
             if (is_a($obj, $classname)) {
                 unset($this->_method_map[$method]);
                 $ok = true;

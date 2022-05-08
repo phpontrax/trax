@@ -233,7 +233,7 @@ class PEAR_PackageFileManager_File extends PEAR_PackageFileManager_Plugins
             return is_file($directory . '/' . $entry) || (is_dir($directory . '/' . $entry) && !in_array($entry, array('.', '..')));
         }
 
-        return $entry{0} != '.';
+        return $entry[0] != '.';
     }
 
     /**

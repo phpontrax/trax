@@ -105,7 +105,7 @@ class ActiveRecordHelper extends Helpers {
      */
     function form($record_name, $options = array()) {
         $record = $this->object($record_name);
-        $options["action"] = $options[":action"] ? $options[":action"] : $record->is_new_record() ? "add" : "save";
+        $options["action"] = $options[":action"] ? $options[":action"] : ($record->is_new_record() ? "add" : "save");
         $action = url_for(array(':action' => $options[':action'], ':id' => $record->id));
         $submit_value = (isset($options['submit_value']) ? $options['submit_value'] : ucfirst(preg_replace('/[^\w]/', '', $options[':action'])));
 
@@ -179,7 +179,9 @@ class ActiveRecordHelper extends Helpers {
                     sprintf($header_message, Inflector::pluralize("error", count($errors)), Inflector::humanize($object_name))
                 ) .
                 $this->content_tag("p", $header_sub_message) .
-                $this->content_tag("ul", array_reduce($errors, create_function('$v,$w', 'return ($v ? $v : "") . content_tag("li", $w);'), '')),
+                $this->content_tag("ul", array_reduce($errors, function($v, $w) {
+                    return ($v ? $v : "") . content_tag("li", $w);
+                })),
                 array("id" => $id, "class" => $class)
             );
         }
@@ -355,7 +357,7 @@ class ActiveRecordHelper extends Helpers {
      */
     function tag_without_error_wrapping() {
         $args = func_get_args();
-        return call_user_func_array(array(parent, 'tag'), $args);
+        return call_user_func_array(array('parent', 'tag'), $args);
     }
 
     /**
