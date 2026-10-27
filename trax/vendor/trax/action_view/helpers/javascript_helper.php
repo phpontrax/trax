@@ -49,7 +49,7 @@ class JavaScriptHelper extends Helpers {
     protected function options_for_javascript($options) {
         $javascript = array();
         if(is_array($options)) {
-            $javascript = array_map(create_function('$k, $v', 'return "{$k}:{$v}";'), array_keys($options), array_values($options));
+            $javascript = array_map(function($k, $v) { return "{$k}:{$v}"; }, array_keys($options), array_values($options));
             sort($javascript);
         }
         return '{' . implode(', ', $javascript) . '}';
@@ -414,7 +414,7 @@ class JavaScriptHelper extends Helpers {
         
         # load prototype.js and all .js files
         $prototype_libs = glob($this->javascript_path.'/*.js');
-        if(count($prototype_libs)) {
+        if(count((array)$prototype_libs)) {
             rsort($prototype_libs);
             foreach($prototype_libs as $filename) { 
                 $javascript .= "\n" . file_get_contents($filename);

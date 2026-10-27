@@ -24,7 +24,7 @@ class Directives {
         $this->name = ($name) ? $name[0] : 'unknown';
         $param = strstr($this->line, " ");
         $this->param = ($param) ? substr($param, 1) : $param;
-        return count($this->files) > 0;
+        return count((array)$this->files) > 0;
     }
 
     public function process_basic($line) {

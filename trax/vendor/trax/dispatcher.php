@@ -33,6 +33,7 @@
  *
  *  @tutorial PHPonTrax/Dispatcher.cls
  */
+#[\AllowDynamicProperties]
 class Dispatcher {
 
     /**

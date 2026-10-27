@@ -80,6 +80,8 @@ class Trax {
 
     public static function initialize() {
 
+        include_once(dirname(__FILE__)."/php_compat.php");
+
         self::register_autoload();
 
         self::$version = self::version();
@@ -201,7 +203,7 @@ class Trax {
     }
 
     public static function load_plugins($plugins = array()) {
-        $plugins = count($plugins) ? $plugins : Trax::$plugins;
+        $plugins = count((array)$plugins) ? $plugins : Trax::$plugins;
         foreach((array)$plugins as $plugin) {
             if(file_exists(self::$plugins_path."/{$plugin}/init.php")) {
                 include_once(self::$plugins_path."/{$plugin}/init.php");

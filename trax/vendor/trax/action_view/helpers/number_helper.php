@@ -127,7 +127,7 @@ class NumberHelper extends Helpers {
     #  number_with_precision(111.2345)    => 111.235
     #  number_with_precision(111.2345, 2) => 111.24
     public static function number_with_precision($number, $precision = 3) {
-        return sprintf("%01.${precision}f", $number);
+        return sprintf("%01.{$precision}f", $number);
     }
     
     # Formats the bytes in +size+ into a more understandable representation.
@@ -143,14 +143,14 @@ class NumberHelper extends Helpers {
     #  number_to_human_size(1234567890123) => 1.1 TB
     #  number_to_human_size(1234567, 2)    => 1.18 MB
     public static function number_to_human_size($size, $precision = 1) {
-        $size = float($size);
+        $size = (float)$size;
         $return = null;
         if ($size == 1) $return = "1 Byte";
         elseif ($size < 1024) $return = sprintf("%d Bytes", $size);
-        elseif ($size < 1024 * 1024) $return = sprintf("%.${precision}f KB", $size / (1024 * 1024));
-        elseif ($size < 1024 * 1024 * 1024) $return = sprinf("%.${precision}f MB", $size / (1024 * 1024 * 1024));
-        elseif ($size < 1024 * 1024 * 1024 * 1024) $return = sprinf("%.${precision}f GB", $size / (1024 * 1024 * 1024 * 1024));
-        else $return = sprintf("%.${precision}f TB", $size / (1024 * 1024 * 1024 * 1024 * 1024));
+        elseif ($size < 1024 * 1024) $return = sprintf("%.{$precision}f KB", $size / 1024);
+        elseif ($size < 1024 * 1024 * 1024) $return = sprintf("%.{$precision}f MB", $size / (1024 * 1024));
+        elseif ($size < 1024 * 1024 * 1024 * 1024) $return = sprintf("%.{$precision}f GB", $size / (1024 * 1024 * 1024));
+        else $return = sprintf("%.{$precision}f TB", $size / (1024 * 1024 * 1024 * 1024));
         return str_replace(".0", "", $return);
     }
 }

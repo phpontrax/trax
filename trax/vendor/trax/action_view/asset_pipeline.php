@@ -163,7 +163,7 @@ class AssetPipeline {
         }
     }
 
-    public function include_path_type($filename) {
+    public static function include_path_type($filename) {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         if($extension == 'js' || strpos('.js', $filename) !== false) {
             return 'javascripts';

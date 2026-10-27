@@ -178,7 +178,7 @@ class FormOptionsHelper extends FormHelper {
 					$priority_countries = array()) {
         $country_options = "";
         
-        if(count($priority_countries)) {
+        if(count((array)$priority_countries)) {
             $country_options .= $this->options_for_select($priority_countries,
 							  $selected);
             $country_options .= "<option value=\"\">-------------</option>\n";

@@ -171,13 +171,13 @@ class InputFilter {
      *  @uses $tagsArray
      *  @uses $tagsMethod
      */
-	public function init($tagsArray = array(), $attrArray = array(),
+	public static function init($tagsArray = array(), $attrArray = array(),
                                 $tagsMethod = true, $attrMethod = true,
                                 $xssAuto = true) { 
                                     
 		// make sure user defined arrays are in lowercase
-		for ($i = 0; $i < count($tagsArray); $i++) $tagsArray[$i] = strtolower($tagsArray[$i]);
-		for ($i = 0; $i < count($attrArray); $i++) $attrArray[$i] = strtolower($attrArray[$i]);
+		for ($i = 0; $i < count((array)$tagsArray); $i++) $tagsArray[$i] = strtolower($tagsArray[$i]);
+		for ($i = 0; $i < count((array)$attrArray); $i++) $attrArray[$i] = strtolower($attrArray[$i]);
 		// assign to member vars
 		self::$tagsArray = (array) $tagsArray;
 		self::$attrArray = (array) $attrArray;
@@ -190,7 +190,7 @@ class InputFilter {
      *  Adds a field to exclude from filtering
      *
      */	
-	public function add_field_exception($field) {
+	public static function add_field_exception($field) {
 	    if($field) {
 	        self::$exception_fields[] = $field;   
 	    }
@@ -200,7 +200,7 @@ class InputFilter {
      *  Clears all previous field exceptions
      *
      */		
-	public function clear_field_exceptions() {
+	public static function clear_field_exceptions() {
 	    self::$exception_fields = array();        
 	} 
 
@@ -250,7 +250,7 @@ class InputFilter {
      *  @uses process()
      *  @todo Check out FIXMEs
      */
-    public function process_all($tagsArray = array(), $attrArray = array(),
+    public static function process_all($tagsArray = array(), $attrArray = array(),
                                 $tagsMethod = true, $attrMethod = true,
                                 $xssAuto = true) {
         self::init($tagsArray, $attrArray, $tagsMethod,
@@ -276,7 +276,7 @@ class InputFilter {
      *  @uses decode()
      *  @uses remove()
      */
-	public function process($source, $extra_key = null) {
+	public static function process($source, $extra_key = null) {
 		// clean all elements in this array
 		if(is_array($source)) {
 			foreach($source as $key => $value) {
@@ -307,7 +307,7 @@ class InputFilter {
      *  @return string 'cleaned' version of $source
      *  @uses filterTags()
      */
-	protected function remove($source) {
+	protected static function remove($source) {
 		// provides nested-tag protection
 		while($source != self::filterTags($source)) {
 			$source = self::filterTags($source);
@@ -417,7 +417,7 @@ class InputFilter {
 				if (!$isCloseTag) {
 					$attrSet = self::filterAttr($attrSet);
 					$preTag .= '<' . $tagName;
-					for ($i = 0; $i < count($attrSet); $i++)
+					for ($i = 0; $i < count((array)$attrSet); $i++)
 						$preTag .= ' ' . $attrSet[$i];
 					// reformat single tags to XHTML
 					if (strpos($fromTagOpen, "</" . $tagName)) $preTag .= '>';
@@ -466,7 +466,7 @@ class InputFilter {
 	protected static function filterAttr($attrSet) {	
 		$newSet = array();
 		// process attributes
-		for ($i = 0; $i <count($attrSet); $i++) {
+		for ($i = 0; $i <count((array)$attrSet); $i++) {
 			// skip blank spaces in tag
 			if (!$attrSet[$i]) continue;
 			// split into attr name and value
@@ -532,14 +532,14 @@ class InputFilter {
      *  @uses html_entity_decode()
      *  @uses preg_replace_callback()
      */
-    protected function decode($source) {
+    protected static function decode($source) {
         // url decode
         $source = html_entity_decode($source, ENT_QUOTES, "ISO-8859-1");
         // convert decimal &#DDD; to character DDD
         $source = preg_replace_callback(
             '/&#(\d+);/m',
             function ($matches) {
-                return chr($matches[1]);
+                return chr((int)$matches[1] % 256);
             },
             $source
         );
@@ -547,7 +547,7 @@ class InputFilter {
         $source = preg_replace_callback(
             '/&#x([a-f0-9]+);/mi',
             function ($matches) {
-                return chr("0x".$matches[1]);
+                return chr(hexdec($matches[1]) % 256);
             },
             $source
         );

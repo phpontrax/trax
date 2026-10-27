@@ -38,6 +38,7 @@ include_once( "Mail/mime.php" );
  *
  *  @package PHPonTrax
  */
+#[\AllowDynamicProperties]
 class ActionMailer {
 
     private
@@ -293,7 +294,7 @@ class ActionMailer {
         if(file_exists($template)) {
             # start to buffer output
             ob_start();
-            if(count($body)) {
+            if(count((array)$body)) {
                 extract($body);
             }
             include($template);
@@ -324,7 +325,7 @@ class ActionMailer {
      *  @todo Document this API
      */
     function encoded($add_pre_tags = false) {
-        if(!count($this->errors)) {
+        if(!count((array)$this->errors)) {
             list(, $text_headers) = $this->mail->prepareHeaders($this->headers);
             $email = $text_headers.$this->crlf.$this->crlf.$this->body;
             if($add_pre_tags) {
@@ -349,7 +350,7 @@ class ActionMailer {
                 $this->deliveries[] = $mail->encoded();
                 return true;
             }
-            if(!count($this->errors)) {
+            if(!count((array)$this->errors)) {
 				#error_log("delivering message to:".$mail->headers['To']);
                 $to = array($mail->headers['To']);
                 if($this->delivery_method == "smtp" && $this->bcc) {
@@ -444,7 +445,7 @@ class ActionMailer {
      *  @return mixed Error description(s), if any
      */
     function get_errors($return_string = false, $seperator = "<br>") {
-        if($return_string && count($this->errors) > 0) {
+        if($return_string && count((array)$this->errors) > 0) {
             return implode($seperator, $this->errors);
         } else {
             return $this->errors;
