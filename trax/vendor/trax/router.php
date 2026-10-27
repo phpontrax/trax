@@ -32,6 +32,7 @@
  *  Convert a URL to an action
  *  @tutorial PHPonTrax/Router.cls
  */
+#[\AllowDynamicProperties]
 class Router {
 
     /**
@@ -93,7 +94,7 @@ class Router {
         if($plugin) $this->routes[$this->routes_count]['plugin'] = $plugin;
         $this->routes[$this->routes_count]['path'] = $path;
         $this->routes[$this->routes_count]['params'] = $params;
-        $this->routes_count = count($this->routes);
+        $this->routes_count = count((array)$this->routes);
     }
 
     /**
@@ -186,7 +187,7 @@ class Router {
         }
         #error_log("route path:\n".var_export($route_path,true));
         #echo "route path:\n".var_export($route_path,true)."<br>";
-        if(count($route_path) > 0) {
+        if(count((array)$route_path) > 0) {
             foreach($route_path as $path_element) {
                 if(preg_match('/:[a-z0-9_\-]+/',$path_element)) {
                     $reg_exp[] = '[a-z0-9_\-]+';

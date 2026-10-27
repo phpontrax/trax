@@ -1,4 +1,5 @@
 <?
+#[\AllowDynamicProperties]
 class HandlerBase {
 
     protected static $vars = array();

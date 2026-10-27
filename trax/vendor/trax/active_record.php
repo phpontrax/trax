@@ -61,6 +61,7 @@ require_once('MDB2.php');
  *
  *  @tutorial PHPonTrax/ActiveRecord.cls
  */
+#[\AllowDynamicProperties]
 class ActiveRecord {
 
     /**
@@ -1515,7 +1516,7 @@ class ActiveRecord {
         }
         $method_name = substr(strtolower($method_name), $explode_len);
         $method_parts = explode("|", str_replace("_and_", "|AND|", $method_name));
-        if(count($method_parts)) {
+        if(count((array)$method_parts)) {
             $conditions = null;
             $options = array();
             $create_fields = array();
@@ -1558,7 +1559,7 @@ class ActiveRecord {
                 if(is_object($object)) {
                     # we found a record with the specified parameters so return it
                     return $object;
-                } elseif(count($create_fields)) {
+                } elseif(count((array)$create_fields)) {
                     # can't find a record with specified parameters so create a new record
                     # and return new object
                     foreach($create_fields as $field => $value) {
@@ -2318,9 +2319,9 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function save_associations() {
-        if(count($this->save_associations) && $this->auto_save_associations) {
+        if(count((array)$this->save_associations) && $this->auto_save_associations) {
             foreach(array_keys($this->save_associations) as $type) {
-                if(count($this->save_associations[$type])) {
+                if(count((array)$this->save_associations[$type])) {
                     foreach($this->save_associations[$type] as $object_or_array) {
                         if(is_object($object_or_array)) {
                             $this->save_association($object_or_array, $type);
@@ -2484,7 +2485,7 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function add_habtm_records($this_foreign_value) {
-        if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
+        if($this_foreign_value > 0 && count((array)$this->habtm_attributes) > 0) {
             if($this->delete_habtm_records($this_foreign_value)) {
                 reset($this->habtm_attributes);
                 if($this->habtm_sort_field) {
@@ -2530,7 +2531,7 @@ class ActiveRecord {
      *  @todo Document this API
      */
     private function delete_habtm_records($this_foreign_value) {
-        if($this_foreign_value > 0 && count($this->habtm_attributes) > 0) {
+        if($this_foreign_value > 0 && count((array)$this->habtm_attributes) > 0) {
             reset($this->habtm_attributes);
             foreach($this->habtm_attributes as $other_table_name => $values) {
                 $this->delete_all_habtm_records($other_table_name, $this_foreign_value);
@@ -2651,7 +2652,7 @@ class ActiveRecord {
             //  If any date/time fields were found, assign the
             //  accumulated values to corresponding attributes
             //  1i = Year, 2i = Month, 3i = Day, 4i = Hour, 5i = Minute
-            if(count($datetime_fields)) {
+            if(count((array)$datetime_fields)) {
                 foreach($datetime_fields as $datetime_field) {
                     $datetime_format = '';
                     $datetime_value = '';
@@ -2810,7 +2811,7 @@ class ActiveRecord {
     function get_primary_key_conditions($operator = "=") {
         $conditions = null;
         $attributes = $this->quoted_attributes();
-        if(count($attributes) > 0) {
+        if(count((array)$attributes) > 0) {
             $conditions = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
@@ -2870,7 +2871,7 @@ class ActiveRecord {
             #error_log("modified attributes with dates:".print_r($attributes, true));
         }
         $attributes = $this->quoted_attributes($attributes);
-        if(count($attributes) > 0) {
+        if(count((array)$attributes) > 0) {
             $updates = array();
             # run through our fields and join them with their values
             foreach($attributes as $key => $value) {
@@ -3045,7 +3046,7 @@ class ActiveRecord {
             }
 
             # Run any SET commands such as SET @@sql_model=''
-            if(isset($connection_settings['set_command']) && stristr($connection_settings['set_command'], 'set') !== false) {
+            if(isset($connection_settings['set_command']) && stristr($connection_settings['set_command'], 'set') !== false && !$this->is_error($connection)) {
                 $connection->query($connection_settings['set_command']);
             }
         }
@@ -3245,7 +3246,7 @@ class ActiveRecord {
             $this->after_validation_on_update();
         }
 
-        return count($this->errors) ? false : true;
+        return count((array)$this->errors) ? false : true;
     }
 
     /**
@@ -3481,7 +3482,7 @@ class ActiveRecord {
                             $parameters = array($attribute_name, $message);
                             break;
                     }
-                    if(count($parameters)) {
+                    if(count((array)$parameters)) {
                         $call = false;
                         if($on == 'create' && $this->new_record) {
                             $call = true;
@@ -3807,7 +3808,7 @@ class ActiveRecord {
 
     function errors_on($attribute) {
         $errors = isset($this->errors[$attribute]) ? $this->errors[$attribute] : null;
-        return ((is_array($errors) && count($errors) == 1) ? current($errors) : $errors);
+        return ((is_array($errors) && count((array)$errors) == 1) ? current($errors) : $errors);
     }
 
     /**
@@ -3844,7 +3845,7 @@ class ActiveRecord {
      *  @return mixed Error description(s), if any
      */
     function get_errors($return_string = false, $seperator = "<br>") {
-        if($return_string && count($this->errors) > 0) {
+        if($return_string && count((array)$this->errors) > 0) {
             return implode($seperator, $this->errors);
         } else {
             return $this->errors;
@@ -3945,7 +3946,7 @@ class ActiveRecord {
         } elseif($rs) {
             $rows = $rs;
         }
-        if(ActiveRecord::$query_cache_enabled && $this->cache_enabled && count($rows)) {
+        if(ActiveRecord::$query_cache_enabled && $this->cache_enabled && count((array)$rows)) {
             ActiveRecord::$query_cache[$this->table_name][md5($sql)] = $rows;
         }
         return $rows;

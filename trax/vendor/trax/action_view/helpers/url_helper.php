@@ -272,7 +272,7 @@ class UrlHelper extends Helpers {
             }
 
             //  If controller found, get action from $options
-            if(count($url)) {
+            if(count((array)$url)) {
                 if(array_key_exists(":action", $options)) {
                     if($action = $options[":action"]) {
                         if(!is_null(Trax::$url_word_seperator)) {
@@ -284,7 +284,7 @@ class UrlHelper extends Helpers {
             }
 
             //  If controller and action found, get id from $actions
-            if(count($url) > 1) {
+            if(count((array)$url) > 1) {
                 if(array_key_exists(":id", $options)) {
                     if(is_object($options[":id"])) {
                         if($id = $options[":id"]->id) {
@@ -304,7 +304,7 @@ class UrlHelper extends Helpers {
                 }
             }
             
-            if(count($options)) {
+            if(count((array)$options)) {
                 foreach($options as $key => $value) {
                     if(!strstr($key, ":")) {
                         $extra_params[$key] = $value; 
@@ -313,11 +313,11 @@ class UrlHelper extends Helpers {
             }
         }
         
-        if(count($url) && substr($url_base,-1) != "/") {
+        if(count((array)$url) && substr($url_base,-1) != "/") {
             $url_base .= "/";    
         } 
         return $url_base . implode("/", $url)
-            . (count($extra_params)
+            . (count((array)$extra_params)
                ? "?".http_build_query($extra_params) : null);
     }    
 

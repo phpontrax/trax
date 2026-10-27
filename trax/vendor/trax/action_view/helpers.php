@@ -33,6 +33,7 @@
  *
  *  A collection of methods used to generate basic HTML/XML.
  */
+#[\AllowDynamicProperties]
 class Helpers {
 
     /**
@@ -181,7 +182,7 @@ class Helpers {
      *  @return string
      */
     protected function tag_options($options) {
-        if(count($options)) {
+        if(count((array)$options)) {
             $html = array();
             foreach($options as $key => $value) {
                 $html[] = "$key=\"".@htmlspecialchars($value, ENT_COMPAT)."\"";

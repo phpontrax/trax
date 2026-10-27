@@ -176,7 +176,7 @@ class ActiveRecordHelper extends Helpers {
             return $this->content_tag("div",
                 $this->content_tag(
                     $header_tag,
-                    sprintf($header_message, Inflector::pluralize("error", count($errors)), Inflector::humanize($object_name))
+                    sprintf($header_message, Inflector::pluralize("error", count((array)$errors)), Inflector::humanize($object_name))
                 ) .
                 $this->content_tag("p", $header_sub_message) .
                 $this->content_tag("ul", array_reduce($errors, function($v, $w) {

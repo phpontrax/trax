@@ -72,22 +72,12 @@ while($__shell->input()) {
         if ($__shell->parse() == 0) {
             ## we have a full command, execute it
 
-            if ($__shell->isAutoloadEnabled() && !function_exists('__autoload')) {
-                /**
-                * default autoloader
-                *
-                * If a class doesn't exist try to load it by guessing the filename
-                * class PHP_Shell should be located in PHP/Shell.php.
-                *
-                * you can set your own autoloader by defining __autoload() before including
-                * this file
-                * 
-                * @param string $classname name of the class
-                */
-
-                function __autoload($classname) {
-                    include str_replace('_', '/', $classname).'.php';
-                }
+            if ($__shell->isAutoloadEnabled() && !isset($__shell_autoload_registered)) {
+                # default autoloader: class PHP_Shell is looked for in PHP/Shell.php
+                spl_autoload_register(function ($classname) {
+                    @include str_replace('_', '/', $classname).'.php';
+                });
+                $__shell_autoload_registered = true;
             }
 
             $__shell_retval = eval($__shell->getCode());        

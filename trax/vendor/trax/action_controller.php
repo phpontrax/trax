@@ -44,6 +44,7 @@
  *  For details see the
  *  {@tutorial PHPonTrax/ActionController.cls class tutorial}
  */
+#[\AllowDynamicProperties]
 class ActionController {
 
     /**
@@ -502,7 +503,7 @@ class ActionController {
                     }
                 } elseif(is_array($route_path)
                          && in_array(":controller",$route_path)
-                         && (count($this->url_path)>0)) {
+                         && (count((array)$this->url_path)>0)) {
 
                     //  Set controller from URL if that field exists
                     $this->controller = strtolower($this->url_path[array_search(":controller", $route_path)]);
@@ -538,7 +539,7 @@ class ActionController {
                 } elseif(@in_array(":id",$route_path)) {
                     #print_r($this->url_path);
                     #print_r($route_path);
-                    #if(count($this->extra_path)) {
+                    #if(count((array)$this->extra_path)) {
                         #foreach(array_reverse($this->extra_path) as $extra_path) {
                             #array_unshift($this->url_path, $extra_path);
                         #}
@@ -667,7 +668,7 @@ class ActionController {
                 }
 
                 # Include any extra helper files defined in this controller
-                if(count($this->controller_object->helpers) > 0) {
+                if(count((array)$this->controller_object->helpers) > 0) {
                     foreach($this->controller_object->helpers as $helper) {
                         if(strstr($helper, "/")) {
                             $file = substr(strrchr($helper, "/"), 1);
@@ -727,7 +728,7 @@ class ActionController {
                         $this->controller_object->index();
                     } else {
                         //error_log('no action');
-                        $methods_size = count($action_methods);
+                        $methods_size = count((array)$action_methods);
                         if($methods_size > 1) {
                             $last_method = ($methods_size > 2 ? "," : '')." and ".array_pop($action_methods);
                         }
@@ -833,7 +834,7 @@ class ActionController {
      */
     function set_paths() {
         if(is_array($this->url_path)) {
-            $path_size = count($this->url_path) - 1;
+            $path_size = count((array)$this->url_path) - 1;
             $test_path = $this->controllers_path;
             $url_path = $this->url_path;
             foreach($url_path as $position => $path) {
@@ -882,7 +883,7 @@ class ActionController {
         #error_log("before_filters:".print_r($this->before_filters, true));
         #error_log("before_filter_options:".print_r($this->before_filter_options, true));
         $return = true;
-        if(count($this->before_filters) > 0) {
+        if(count((array)$this->before_filters) > 0) {
             $action = $this->action ? $this->action : "index";
             foreach($this->before_filters as $filter_function) {
                 if(array_key_exists($filter_function, $this->before_filter_options)) {
@@ -929,8 +930,8 @@ class ActionController {
                 } else {
                     array_push($this->before_filters, $filter_function_name);
                 }
-                if(count($options)) {
-                    if(count($this->before_filter_options[$filter_function_name])) {
+                if(count((array)$options)) {
+                    if(count((array)$this->before_filter_options[$filter_function_name])) {
                         $this->before_filter_options[$filter_function_name] = array_merge($this->before_filter_options[$filter_function_name], $options);
                     } else {
                         $this->before_filter_options[$filter_function_name] = $options;
@@ -945,8 +946,8 @@ class ActionController {
                     } else {
                         array_push($this->before_filters, $filter_name);
                     }
-                    if(count($options)) {
-                        if(count($this->before_filter_options[$filter_name])) {
+                    if(count((array)$options)) {
+                        if(count((array)$this->before_filter_options[$filter_name])) {
                             $this->before_filter_options[$filter_name] = array_merge($this->before_filter_options[$filter_name], $options);
                         } else {
                             $this->before_filter_options[$filter_name] = $options;
@@ -973,7 +974,7 @@ class ActionController {
         #error_log("after_filters:".print_r($this->after_filters, true));
         #error_log("after_filter_options:".print_r($this->after_filter_options, true));
         $return = true;
-        if(count($this->after_filters) > 0) {
+        if(count((array)$this->after_filters) > 0) {
             $action = $this->action ? $this->action : "index";
             foreach($this->after_filters as $filter_function) {
                 if(array_key_exists($filter_function, $this->after_filter_options)) {
@@ -1020,8 +1021,8 @@ class ActionController {
                 } else {
                     array_push($this->after_filters, $filter_function_name);
                 }
-                if(count($options)) {
-                    if(count($this->after_filter_options[$filter_function_name])) {
+                if(count((array)$options)) {
+                    if(count((array)$this->after_filter_options[$filter_function_name])) {
                         $this->after_filter_options[$filter_function_name] = array_merge($this->after_filter_options[$filter_function_name], $options);
                     } else {
                         $this->after_filter_options[$filter_function_name] = $options;
@@ -1036,8 +1037,8 @@ class ActionController {
                     } else {
                         array_push($this->after_filters, $filter_name);
                     }
-                    if(count($options)) {
-                        if(count($this->after_filter_options[$filter_name])) {
+                    if(count((array)$options)) {
+                        if(count((array)$this->after_filter_options[$filter_name])) {
                             $this->after_filter_options[$filter_name] = array_merge($this->after_filter_options[$filter_name], $options);
                         } else {
                             $this->after_filter_options[$filter_name] = $options;
@@ -1219,7 +1220,7 @@ class ActionController {
         if(is_array($controller_locals)) {
             $locals = array_merge($controller_locals, $locals);
         }
-        if(count($locals)) {
+        if(count((array)$locals)) {
             foreach($locals as $tmp_key => $tmp_value) {
                 ${$tmp_key} = $tmp_value;
             }
@@ -1305,7 +1306,7 @@ class ActionController {
                     unset($tmp_value);
                     $this->render_performed = false;
                     $this->render_file($file_with_path, false, $locals);
-                    if($add_spacer && (${$file."_counter"} < count($options['collection']))) {
+                    if($add_spacer && (${$file."_counter"} < count((array)$options['collection']))) {
                         $this->render_performed = false;
                         $this->render_file($spacer_file_with_file, false, $locals);
                     }
@@ -1456,7 +1457,7 @@ class ActionController {
      *  to the variable $content_for_"name"
      */
     function end_content_for() {
-        if(count($this->content_for_open_blocks)) {
+        if(count((array)$this->content_for_open_blocks)) {
             if($name = array_pop($this->content_for_open_blocks)) {
                 $content = ob_get_contents();
                 ob_end_clean();
@@ -1482,7 +1483,7 @@ class ActionController {
     /**
      *  Generate an HTML page describing an error
      */
-    function process_with_exception(&$exception) {
+    static function process_with_exception(&$exception) {
         $error_code = $exception->error_code;
         $error_heading = $exception->error_heading;
         $error_message = $exception->error_message;

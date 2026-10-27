@@ -1263,7 +1263,7 @@ class DateHelper extends Helpers {
         //  HTML for each menu is in an element of $date_select[].
         //  Join the pieces of HTML with an optional field separator
         //  (default blank)
-        if(count($date_select)) {
+        if(count((array)$date_select)) {
             $separator = array_key_exists('field_separator',$options)
                 ? $options['field_separator'] : " ";
             $date_select = implode($separator, $date_select);
