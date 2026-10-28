@@ -724,7 +724,7 @@ class ActiveRecord {
                 $this->save_associations[$association_type][] = $value;
                 if($association_type == "belongs_to") {
                     $primary_key = $value->primary_keys[0];
-                    if(is_array($this->belongs_to[$key]) && array_key_exists('foreign_key', (array)$this->belongs_to[$key])) {
+                    if(is_array($this->belongs_to) && is_array($this->belongs_to[$key] ?? null) && array_key_exists('foreign_key', $this->belongs_to[$key])) {
                         $foreign_key = $this->belongs_to[$key]['foreign_key'];
                     } else {
                         $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
@@ -2630,7 +2630,7 @@ class ActiveRecord {
                         $this->save_associations[$association_type][] = $value;
                         if($association_type == "belongs_to") {
                             $primary_key = $value->primary_keys[0];
-                            if(is_array($this->belongs_to[$field]) && array_key_exists('foreign_key', (array)$this->belongs_to[$field])) {
+                            if(is_array($this->belongs_to) && is_array($this->belongs_to[$field] ?? null) && array_key_exists('foreign_key', $this->belongs_to[$field])) {
                                 $foreign_key = $this->belongs_to[$field]['foreign_key'];
                             } else {
                                 $foreign_key = Inflector::singularize($value->table_name)."_".$primary_key;
